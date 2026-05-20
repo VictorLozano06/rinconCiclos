@@ -47,7 +47,16 @@ export class SidebarCoordinadorComponent implements OnInit {
   }
 
   private buildMenu(categorias: CategoriaDto[]): SidebarItem[] {
-    const categoriasContenido = categorias.filter((cat) => cat.nombre !== 'Inicio');
+    const catReuniones = categorias.find((cat) => cat.nombre === 'Reuniones de Equipo');
+
+    let subCategoriasReuniones: SidebarItem[] = [];
+    if (catReuniones && catReuniones.subcategorias) {
+      subCategoriasReuniones = this.mapCategorias(
+        catReuniones.subcategorias,
+        '/coordinador',
+        '/coordinador/reuniones-de-equipo'
+      );
+    }
 
     return [
       {
@@ -59,11 +68,77 @@ export class SidebarCoordinadorComponent implements OnInit {
         deshabilitado: false
       },
       {
-        nombre: 'Categorias',
+        nombre: 'Gestión de Ciclos',
+        icono: 'categorias',
+        ruta: '/coordinador/gestion-de-ciclos',
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
+        nombre: 'Gestión de Cursos',
+        icono: 'categoria-generica',
+        ruta: '/coordinador/gestion-de-cursos',
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
+        nombre: 'Categorías',
         icono: 'categorias',
         ruta: null,
         abierto: true,
-        subcategorias: this.mapCategorias(categoriasContenido, '/coordinador'),
+        subcategorias: [
+          {
+            nombre: 'Crear categoría',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/categorias/crear',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          },
+          {
+            nombre: 'Modificar categoría',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/categorias/modificar',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          }
+        ],
+        deshabilitado: false
+      },
+      {
+        nombre: 'Reuniones',
+        icono: 'reuniones',
+        ruta: null,
+        abierto: true,
+        subcategorias: subCategoriasReuniones,
+        deshabilitado: false
+      },
+      {
+        nombre: 'Recursos',
+        icono: 'tag',
+        ruta: null,
+        abierto: true,
+        subcategorias: [
+          {
+            nombre: 'Crear recurso',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/recursos/crear',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          },
+          {
+            nombre: 'Editar recurso',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/recursos/editar',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          }
+        ],
         deshabilitado: false
       }
     ];
