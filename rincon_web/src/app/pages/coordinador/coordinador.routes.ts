@@ -3,6 +3,7 @@ import { CoordinadorLayoutComponent } from './layout/coordinador-layout.componen
 import { InicioComponent } from './inicio/inicio.component';
 import { ConvocatoriasComponent } from './convocatorias/convocatorias.component';
 import { RecursosCategoriaComponent } from './recursos-categoria/recursos-categoria.component';
+import { CiclosCursosComponent } from '../../components/ciclos-cursos/ciclos-cursos.component';
 
 export const COORDINADOR_ROUTES: Routes = [
   {
@@ -15,6 +16,8 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/convocatorias/crear', component: ConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id/editar', component: ConvocatoriasComponent },
+      { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
+      { path: 'gestion-de-cursos', component: CiclosCursosComponent },
       { path: ':section', component: RecursosCategoriaComponent },
       { path: ':section/:subsection', component: RecursosCategoriaComponent }
     ]

@@ -10,7 +10,7 @@ class ConexionBD {
 
     // Lee los datos de conexión configurados en el archivo local .env
     public function __construct() {
-        $this->servidor = $_ENV['DB_HOST'] ?? 'localhost';
+        $this->servidor = $_ENV['DB_HOST'] ?? null;
         $this->nombre_bd = $_ENV['DB_NAME'] ?? null;
         $this->usuario = $_ENV['DB_USER'] ?? null;
         $this->clave = $_ENV['DB_PASS'] ?? '';
@@ -36,6 +36,11 @@ class ConexionBD {
                     }
                 }
             }
+        }
+
+        // Si no se definió en $_ENV ni en el .env, usamos 'localhost'
+        if (!$this->servidor) {
+            $this->servidor = 'localhost';
         }
     }
 

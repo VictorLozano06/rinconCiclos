@@ -47,12 +47,20 @@
           <div class="categoria-bloque">
             <div class="categoria-fila">
               <a
+                *ngIf="!categoria.deshabilitado"
                 [routerLink]="categoria.ruta"
                 (click)="closeSidebar()"
                 routerLinkActive="enlace-activo"
                 class="item-subcategoria item-subcategoria-principal">
                 {{ categoria.nombre }}
               </a>
+
+              <span
+                *ngIf="categoria.deshabilitado"
+                class="item-subcategoria item-subcategoria-principal sub-deshabilitada"
+                title="Seccion en desarrollo">
+                {{ categoria.nombre }}
+              </span>
 
               <button
                 *ngIf="hasChildren(categoria)"
