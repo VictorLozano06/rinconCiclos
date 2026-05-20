@@ -5,8 +5,7 @@
 /rincon_web/.angular/cache
 /rincon_back/storage/*.log
 /backups/
-/rincon_web/public/assets/sql/*.sql
-!/rincon_web/public/assets/sql/.gitkeep
+/SQL.sql
 
 # Secrets
 .env
