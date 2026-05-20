@@ -67,3 +67,22 @@ El framework Bootstrap 5 y su libreria de iconos estan integrados de manera glob
 - **Uso**: Compatible de forma directa en las plantillas HTML de cualquier componente del sistema sin necesidad de declaraciones adicionales.
 
 Para ser consistentes con los disenos utilizamos las clases para grid de bootstrap como: contenedores (`.container-fluid`), filas (`.row`) y columnas (`.col-12`, `.col-md-6`).
+
+### DTOs (Data Transfer Objects)
+
+**Las interfaces que se usan en múltiples componentes DEBEN estar en la carpeta `src/app/dto/`**
+
+Esto evita duplicación de código y mantiene el proyecto escalable. Los archivos de tipos reutilizables van en `dto/` con la extensión `.dto.ts`.
+
+#### Ejemplo:
+```
+en src/app/dto/convocatoria.dto.ts
+export interface ConvocatoriaDetalle {
+  idConvocatoria: number;
+  fecha: string;
+  // ... más propiedades
+}
+
+// En componentes, importar desde dto:
+import { ConvocatoriaDetalle } from '../../../dto/convocatoria.dto';
+```

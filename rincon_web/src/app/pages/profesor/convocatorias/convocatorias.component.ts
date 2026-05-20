@@ -2,48 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ConvocatoriaService } from '../../../services/convocatoria.service';
-
-interface Participante {
-  idProfesor: number;
-  nombre: string;
-}
-
-interface OrdenDiaItem {
-  numOrden: number;
-  minutos: number | null;
-  descripcion: string;
-  objetivo: string;
-  idLugar: number;
-  idProfesorDinamiza: number;
-  lugar: string;
-  dinamiza: string;
-  participantes: Participante[];
-}
-
-interface ConvocatoriaDetalle {
-  idConvocatoria: number;
-  fecha: string;
-  idLugar: number;
-  idCurso: number;
-  idProfesorRedactaActa: number;
-  idProfesorIniciaReunion: number;
-  lugar: string;
-  anioInicio: string;
-  anioFin: string;
-  redacta: string;
-  inicia: string;
-  ordenDia: OrdenDiaItem[];
-}
-
-interface ConvocatoriaListaItem {
-  idConvocatoria: number;
-  fecha: string;
-  lugar: string;
-  anioInicio: string;
-  anioFin: string;
-  redacta: string;
-  inicia: string;
-}
+import {
+  ConvocatoriaDetalle,
+  ConvocatoriaListaItem,
+  OrdenDiaItemProfesor
+} from '../../../dto/convocatoria.dto';
 
 @Component({
   selector: 'app-convocatorias-profesor',

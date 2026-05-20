@@ -9,19 +9,10 @@ import {
   LugarOption,
   ProfesorOption
 } from '../../../services/convocatoria.service';
-
-interface OrdenDiaItem {
-  minutos: number | null;
-  ordenDia: string;
-  objetivo: string;
-  dinamizaId: number | null;
-  lugarId: number | null;
-  participaIds: number[];
-  participaQuery: string;
-  participaOpen: boolean;
-}
-
-type ProfesorField = 'redacta' | 'inicia';
+import {
+  OrdenDiaItemCoordinador,
+  ProfesorField
+} from '../../../dto/convocatoria.dto';
 
 @Component({
   selector: 'app-convocatorias-coordinador',
@@ -62,7 +53,7 @@ export class ConvocatoriasComponent implements OnInit {
   iniciaOpen = false;
   iniciaQuery = '';
 
-  ordenDia: OrdenDiaItem[] = [this.createEmptyFila()];
+  ordenDia: OrdenDiaItemCoordinador[] = [this.createEmptyFila()];
 
   constructor(
     private convocatoriaService: ConvocatoriaService,
@@ -266,11 +257,11 @@ export class ConvocatoriasComponent implements OnInit {
     this.iniciaOpen = false;
   }
 
-  toggleParticipa(item: OrdenDiaItem): void {
+  toggleParticipa(item: OrdenDiaItemCoordinador): void {
     item.participaOpen = !item.participaOpen;
   }
 
-  getProfesoresFiltrados(item: OrdenDiaItem): ProfesorOption[] {
+  getProfesoresFiltrados(item: OrdenDiaItemCoordinador): ProfesorOption[] {
     const query = item.participaQuery.trim().toLowerCase();
 
     return this.profesores
@@ -279,7 +270,7 @@ export class ConvocatoriasComponent implements OnInit {
       .slice(0, 8);
   }
 
-  addProfesor(item: OrdenDiaItem, profesorId: number): void {
+  addProfesor(item: OrdenDiaItemCoordinador, profesorId: number): void {
     if (!item.participaIds.includes(profesorId)) {
       item.participaIds.push(profesorId);
     }
@@ -288,8 +279,8 @@ export class ConvocatoriasComponent implements OnInit {
     item.participaOpen = true;
   }
 
-  removeProfesor(item: OrdenDiaItem, profesorId: number): void {
-    item.participaIds = item.participaIds.filter((selected) => selected !== profesorId);
+  removeProfesor(item: OrdenDiaItemCoordinador, profesorId: number): void {
+    item.participaIds = item.participaIds.filter((selected: number) => selected !== profesorId);
   }
 
   guardarConvocatoria(): void {
@@ -407,7 +398,7 @@ export class ConvocatoriasComponent implements OnInit {
       .filter((nombre) => nombre !== '');
   }
 
-  private createEmptyFila(): OrdenDiaItem {
+  private createEmptyFila(): OrdenDiaItemCoordinador {
     return {
       minutos: null,
       ordenDia: '',
