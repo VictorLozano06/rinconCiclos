@@ -12,39 +12,86 @@
       No se pudieron cargar las categorias del backend.
     </p>
 
-    <div *ngFor="let cat of categorias" class="grupo-navegacion">
-      <button
-        class="item-menu"
-        (click)="toggleMenu(cat)"
-        [routerLink]="cat.subcategorias.length === 0 ? cat.ruta : null"
-        [class.enlace-activo]="cat.subcategorias.length === 0"
-        routerLinkActive="enlace-activo">
+    <div *ngFor="let item of menuItems" class="grupo-navegacion">
+      <a
+        *ngIf="!hasChildren(item)"
+        [routerLink]="item.ruta"
+        (click)="closeSidebar()"
+        routerLinkActive="enlace-activo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="item-menu item-menu-enlace">
         <div class="contenido-item">
           <span class="icono-item">
-            <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
+            <img [src]="'assets/icons/' + item.icono + '.svg'" [alt]="item.nombre" class="imagen-icono">
           </span>
-          <span class="texto-item">{{ cat.nombre }}</span>
+          <span class="texto-item">{{ item.nombre }}</span>
         </div>
+      </a>
+
+      <button
+        *ngIf="hasChildren(item)"
+        type="button"
+        class="item-menu"
+        (click)="toggleMenu(item)">
+        <div class="contenido-item">
+          <span class="icono-item">
+            <img [src]="'assets/icons/' + item.icono + '.svg'" [alt]="item.nombre" class="imagen-icono">
+          </span>
+          <span class="texto-item">{{ item.nombre }}</span>
+        </div>
+        <i class="bi" [ngClass]="item.abierto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
       </button>
 
-      <div *ngIf="cat.abierto && cat.subcategorias.length > 0" class="lista-subcategorias">
-        <ng-container *ngFor="let sub of cat.subcategorias">
-          <a
-            *ngIf="!sub.deshabilitado"
-            [routerLink]="sub.ruta"
-            (click)="closeSidebar()"
-            routerLinkActive="enlace-activo"
-            class="item-subcategoria">
-            {{ sub.nombre }}
-          </a>
+      <div *ngIf="item.abierto && hasChildren(item)" class="lista-subcategorias">
+        <ng-container *ngFor="let categoria of item.subcategorias">
+          <div class="categoria-bloque">
+            <div class="categoria-fila">
+              <a
+                *ngIf="!categoria.deshabilitado"
+                [routerLink]="categoria.ruta"
+                (click)="closeSidebar()"
+                routerLinkActive="enlace-activo"
+                class="item-subcategoria item-subcategoria-principal">
+                {{ categoria.nombre }}
+              </a>
 
-          <span
-            *ngIf="sub.deshabilitado"
-            class="item-subcategoria sub-deshabilitada"
-            title="Seccion en desarrollo"
-            style="opacity: 0.5; cursor: not-allowed; display: block; padding: 6px 12px 6px 44px; font-size: 0.9rem; color: var(--color-texto-secundario);">
-            {{ sub.nombre }}
-          </span>
+              <span
+                *ngIf="categoria.deshabilitado"
+                class="item-subcategoria item-subcategoria-principal sub-deshabilitada"
+                title="Seccion en desarrollo">
+                {{ categoria.nombre }}
+              </span>
+
+              <button
+                *ngIf="hasChildren(categoria)"
+                type="button"
+                class="boton-subcategoria"
+                (click)="toggleMenu(categoria)"
+                [attr.aria-label]="'Mostrar subcategorias de ' + categoria.nombre">
+                <i class="bi" [ngClass]="categoria.abierto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+              </button>
+            </div>
+
+            <div *ngIf="categoria.abierto && hasChildren(categoria)" class="lista-subcategorias lista-subcategorias-anidada">
+              <ng-container *ngFor="let sub of categoria.subcategorias">
+                <a
+                  *ngIf="!sub.deshabilitado"
+                  [routerLink]="sub.ruta"
+                  (click)="closeSidebar()"
+                  routerLinkActive="enlace-activo"
+                  class="item-subcategoria">
+                  {{ sub.nombre }}
+                </a>
+
+                <span
+                  *ngIf="sub.deshabilitado"
+                  class="item-subcategoria sub-deshabilitada"
+                  title="Seccion en desarrollo">
+                  {{ sub.nombre }}
+                </span>
+              </ng-container>
+            </div>
+          </div>
         </ng-container>
       </div>
     </div>
