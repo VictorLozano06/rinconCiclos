@@ -15,4 +15,5 @@ export class RecursoItemComponent {
   @Input() fechaPublicacion: string = '';
   @Input() categoria: string = '';
   @Input() detalleRuta: string | (string | number)[] = '';
+  @Input() enlace: string = '';
 }

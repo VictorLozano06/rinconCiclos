@@ -8,9 +8,18 @@
     <p class="descripcion-recurso">{{ descripcion }}</p>
   </div>
   <div class="accion-recurso">
-    <a [routerLink]="detalleRuta" class="boton-ver">
+    <a *ngIf="detalleRuta; else enlaceExterno" [routerLink]="detalleRuta" class="boton-ver">
       <img src="assets/icons/arrow-circle.svg" alt="Ver" class="icono-accion">
       Ver recurso
     </a>
+    <ng-template #enlaceExterno>
+      <a *ngIf="enlace; else sinAccion" [href]="enlace" target="_blank" rel="noopener noreferrer" class="boton-ver">
+        <img src="assets/icons/arrow-circle.svg" alt="Ver" class="icono-accion">
+        Ver recurso
+      </a>
+    </ng-template>
+    <ng-template #sinAccion>
+      <span class="text-muted small">Sin vista disponible</span>
+    </ng-template>
   </div>
 </div>
