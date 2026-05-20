@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-sidebar-profesor',
@@ -15,6 +14,7 @@ import { CategoriaDto } from '../../dto/categoria.dto';
 export class SidebarProfesorComponent implements OnInit {
   @Input() mobileOpen = false;
   @Output() requestClose = new EventEmitter<void>();
+
   public categorias: any[] = [];
 
   constructor(private categoriaService: CategoriaService) {}
@@ -26,7 +26,6 @@ export class SidebarProfesorComponent implements OnInit {
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
-        // Carga directa de los datos dinamicos de la base de datos
         this.categorias = this.mapCategorias(data, '/profesor');
       },
       error: (err) => {
@@ -35,10 +34,7 @@ export class SidebarProfesorComponent implements OnInit {
     });
   }
 
-  /*Mapear rutas de forma dinamica con lo que venga de la bd*/
-
   private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): any[] {
-    /*Iconos solo para las predeterminadas*/
     const iconMap: { [key: string]: string } = {
       'Inicio': 'home',
       'Reuniones de Equipo': 'reuniones',
@@ -49,19 +45,16 @@ export class SidebarProfesorComponent implements OnInit {
 
     const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
 
-    return cats.map(cat => {
+    return cats.map((cat) => {
       const nombre = cat.nombre;
-      
-      // Generación automática de slug URL amigable 
-      const slug = nombre.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // elimina acentos
-        .replace(/º/g, "") // los elimina los simbolos º
-        .replace(/ª/g, "") // los elimina los simbolos ª
-        .replace(/\s+/g, '-') // convierte espacios en guiones
-        .replace(/[^a-z0-9-]/g, ''); // elimina caracteres no deseados
+      const slug = nombre
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[ºª]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
 
-      // Construcción de la ruta
       let ruta = '';
       if (nombre === 'Inicio') {
         ruta = `${prefix}/inicio`;
@@ -72,15 +65,14 @@ export class SidebarProfesorComponent implements OnInit {
       }
 
       const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
-      const deshabilitado = disabledSubs.includes(nombre);
-      
+
       return {
-        nombre: nombre,
+        nombre,
         icono: iconMap[nombre] || 'categoria-generica',
-        ruta: ruta,
+        ruta,
         abierto: false,
-        subcategorias: subcategorias,
-        deshabilitado: deshabilitado
+        subcategorias,
+        deshabilitado: disabledSubs.includes(nombre)
       };
     });
   }

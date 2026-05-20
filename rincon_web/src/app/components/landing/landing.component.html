@@ -1,21 +1,18 @@
 <div class="contenedor-inicio">
   <div class="envoltura-contenido">
     <header class="cabecera">
-      <h1 class="titulo">Rincón de Ciclos</h1>
+      <h1 class="titulo">Rincon de Ciclos</h1>
       <p class="subtitulo">Selecciona tu rol</p>
     </header>
 
     <div class="rejilla-seleccion">
-      <button class="tarjeta-rol" [routerLink]="['/profesor']">
+      <a class="tarjeta-rol" routerLink="/profesor">
         <h2>Profesor</h2>
-      </button>
+      </a>
 
-      <button class="tarjeta-rol" [routerLink]="['/coordinador']">
+      <a class="tarjeta-rol" routerLink="/coordinador">
         <h2>Coordinador</h2>
-      </button>
+      </a>
     </div>
-
   </div>
 </div>
-
-

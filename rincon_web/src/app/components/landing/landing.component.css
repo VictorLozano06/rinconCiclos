@@ -27,11 +27,14 @@
 }
 
 .tarjeta-rol {
+  display: block;
   padding: 20px 40px;
   cursor: pointer;
   background: white;
   border: 1px solid #ccc;
   border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .tarjeta-rol:hover {

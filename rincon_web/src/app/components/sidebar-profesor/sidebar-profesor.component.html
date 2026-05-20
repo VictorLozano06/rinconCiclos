@@ -1,8 +1,8 @@
 <aside class="barra-lateral" [class.barra-lateral-abierta]="mobileOpen">
   <div class="cabecera-sidebar">
-    <h1 class="titulo-web">RincÃ³n de Ciclos</h1>
+    <h1 class="titulo-web">Rincón de Ciclos</h1>
     <p class="subtitulo-web">Portal Docente</p>
-    <button type="button" class="cerrar-sidebar" (click)="closeSidebar()" aria-label="Cerrar menu">
+    <button type="button" class="cerrar-sidebar" (click)="closeSidebar()" aria-label="Cerrar menú">
       <i class="bi bi-x-lg"></i>
     </button>
   </div>
@@ -36,7 +36,7 @@
           <span
             *ngIf="sub.deshabilitado"
             class="item-subcategoria sub-deshabilitada"
-            title="SecciÃ³n en desarrollo"
+            title="Sección en desarrollo"
             style="opacity: 0.5; cursor: not-allowed; display: block; padding: 6px 12px 6px 44px; font-size: 0.9rem; color: var(--color-texto-secundario);">
             {{ sub.nombre }}
           </span>
