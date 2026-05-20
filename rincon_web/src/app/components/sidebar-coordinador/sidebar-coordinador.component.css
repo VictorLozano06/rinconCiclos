@@ -65,12 +65,18 @@
   padding: 10px 20px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
   color: #475569;
   transition: 0.2s;
+}
+
+.item-menu-enlace {
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
 .item-menu:hover {
@@ -99,21 +105,71 @@
 }
 
 .lista-subcategorias {
-  padding-left: 52px;
+  padding-left: 28px;
+  padding-right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   margin: 5px 0 10px 0;
+}
+
+.categoria-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.categoria-fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.boton-subcategoria {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.boton-subcategoria:hover {
+  background: #e2e8f0;
+  color: #1e293b;
 }
 
 .item-subcategoria {
   text-decoration: none;
   color: #64748b;
   font-size: 13px;
+  display: block;
+  line-height: 1.35;
 }
 
 .item-subcategoria:hover {
   color: #1e293b;
+}
+
+.item-subcategoria-principal {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.lista-subcategorias-anidada {
+  margin: 0;
+  padding: 2px 0 0 14px;
+  gap: 6px;
+  border-left: 1px solid #e2e8f0;
+}
+
+.sub-deshabilitada {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .enlace-activo {
@@ -157,7 +213,7 @@
   }
 
   .lista-subcategorias {
-    padding-left: 44px;
+    padding-left: 20px;
     padding-right: 16px;
   }
 }
