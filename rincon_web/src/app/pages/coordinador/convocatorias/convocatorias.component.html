@@ -73,7 +73,12 @@
         <button type="button" class="primary-button btn-sm flex-grow-1" (click)="verConvocatoria(conv.idConvocatoria)">
           Ver detalle
         </button>
-        <button type="button" class="secondary-button btn-sm px-3" (click)="editarConvocatoria(conv.idConvocatoria)" title="Editar convocatoria">
+        <button
+          type="button"
+          class="secondary-button btn-sm px-3"
+          (click)="editarConvocatoria(conv.idConvocatoria)"
+          [disabled]="esFechaPasada(conv.fecha)"
+          [title]="esFechaPasada(conv.fecha) ? 'Las convocatorias pasadas no se pueden modificar' : 'Editar convocatoria'">
           <i class="bi bi-pencil-square"></i>
         </button>
         <button type="button" class="secondary-button btn-sm px-3 text-danger border-danger" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="Eliminar convocatoria">
@@ -220,7 +225,11 @@
         <button type="button" class="primary-button" (click)="volverAlListado()">
           <i class="bi bi-arrow-left me-2"></i> Volver al listado
         </button>
-        <button type="button" class="secondary-button" (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)"
+          [disabled]="esFechaPasada(convocatoriaSeleccionada.fecha)">
           <i class="bi bi-pencil-square me-2"></i> Editar convocatoria
         </button>
       </div>

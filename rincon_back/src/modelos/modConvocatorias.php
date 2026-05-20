@@ -72,6 +72,10 @@ class ModConvocatorias {
 
         try {
             if ($idConvocatoria) {
+                if ($this->esConvocatoriaPasada($idConvocatoria)) {
+                    throw new InvalidArgumentException('No se puede modificar una convocatoria pasada.');
+                }
+
                 $sqlConvocatoria = "UPDATE convocatoria SET
                                     fecha = :fecha,
                                     idLugar = :idLugar,
@@ -299,5 +303,20 @@ class ModConvocatorias {
         }
 
         return date('Y-m-d H:i:s', $timestamp);
+    }
+
+    private function esConvocatoriaPasada($idConvocatoria) {
+        $stmt = $this->db->prepare("SELECT fecha FROM convocatoria WHERE idConvocatoria = :idConvocatoria");
+        $stmt->execute([':idConvocatoria' => $idConvocatoria]);
+        $fecha = $stmt->fetchColumn();
+
+        if (!$fecha) {
+            return false;
+        }
+
+        $fechaConvocatoria = strtotime($fecha);
+        $inicioHoy = strtotime(date('Y-m-d 00:00:00'));
+
+        return $fechaConvocatoria !== false && $fechaConvocatoria < $inicioHoy;
     }
 }

@@ -124,6 +124,13 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   editarConvocatoria(id: number): void {
+    const convocatoria = this.convocatorias.find((item) => item.idConvocatoria === id) || this.convocatoriaSeleccionada;
+    if (convocatoria?.fecha && this.esFechaPasada(convocatoria.fecha)) {
+      this.feedback = 'No se puede modificar una convocatoria pasada.';
+      this.feedbackError = true;
+      return;
+    }
+
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id, 'editar']);
   }
 
@@ -162,6 +169,13 @@ export class ConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
+        if (this.esFechaPasada(data.fecha)) {
+          this.feedback = 'No se puede modificar una convocatoria pasada.';
+          this.feedbackError = true;
+          this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id]);
+          return;
+        }
+
         this.convocatoria = {
           idConvocatoria: data.idConvocatoria,
           titulo: 'Editar Convocatoria',
@@ -306,6 +320,12 @@ export class ConvocatoriasComponent implements OnInit {
     this.feedback = '';
     this.feedbackError = false;
 
+    if (this.convocatoria.idConvocatoria && this.esFechaPasada(this.convocatoria.fechaHora)) {
+      this.feedback = 'No se puede modificar una convocatoria pasada.';
+      this.feedbackError = true;
+      return;
+    }
+
     const payload: GuardarConvocatoriaPayload = {
       idConvocatoria: this.convocatoria.idConvocatoria || undefined,
       fechaHora: this.convocatoria.fechaHora,
@@ -340,6 +360,15 @@ export class ConvocatoriasComponent implements OnInit {
         this.feedbackError = true;
       }
     });
+  }
+
+  esFechaPasada(fechaStr: string): boolean {
+    if (!fechaStr) return false;
+    const fechaConvocatoria = new Date(fechaStr);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    fechaConvocatoria.setHours(0, 0, 0, 0);
+    return fechaConvocatoria < hoy;
   }
 
   formatFecha(fechaStr: string): string {
