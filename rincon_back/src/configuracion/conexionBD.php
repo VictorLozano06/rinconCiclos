@@ -13,14 +13,37 @@ class ConexionBD {
         $this->servidor = $_ENV['DB_HOST'] ?? 'localhost';
         $this->nombre_bd = $_ENV['DB_NAME'] ?? null;
         $this->usuario = $_ENV['DB_USER'] ?? null;
-        $this->clave = $_ENV['DB_PASS'] ?? null;
+        $this->clave = $_ENV['DB_PASS'] ?? '';
+
+        // Fallback: si las variables no están disponibles en $_ENV, intentar cargar el .env local
+        if ((!$this->nombre_bd || !$this->usuario) && file_exists(__DIR__ . '/../../.env')) {
+            foreach (file(__DIR__ . '/../../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $linea) {
+                if (strpos($linea, '=') !== false && strpos(trim($linea), '#') !== 0) {
+                    list($nombre, $valor) = explode('=', $linea, 2);
+                    $nombre = trim($nombre);
+                    $valor = trim($valor);
+                    if ($nombre === 'DB_HOST' && !$this->servidor) {
+                        $this->servidor = $valor;
+                    }
+                    if ($nombre === 'DB_NAME' && !$this->nombre_bd) {
+                        $this->nombre_bd = $valor;
+                    }
+                    if ($nombre === 'DB_USER' && !$this->usuario) {
+                        $this->usuario = $valor;
+                    }
+                    if ($nombre === 'DB_PASS' && $this->clave === '') {
+                        $this->clave = $valor;
+                    }
+                }
+            }
+        }
     }
 
     // Abre la conexión y la devuelve lista para ejecutar consultas SQL
     public function obtenerConexion() {
         $this->conexion = null;
 
-        if (!$this->nombre_bd || !$this->usuario || !$this->clave) {
+        if (!$this->nombre_bd || !$this->usuario) {
             http_response_code(500);
             echo json_encode(["error" => "Configuración de base de datos incompleta"]);
             exit;
