@@ -2,17 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import {
-  ConvocatoriaService,
-  CursoOption,
-  GuardarConvocatoriaPayload,
-  LugarOption,
-  ProfesorOption
-} from '../../../services/convocatoria.service';
-import {
-  OrdenDiaItemCoordinador,
-  ProfesorField
-} from '../../../dto/convocatoria.dto';
+import { ConvocatoriaService } from '../../../services/convocatoria.service';
+import { CursoOptionDto } from '../../../dto/curso-option.dto';
+import { GuardarConvocatoriaPayloadDto } from '../../../dto/guardar-convocatoria-payload.dto';
+import { LugarOptionDto } from '../../../dto/lugar-option.dto';
+import { ProfesorOptionDto } from '../../../dto/profesor-option.dto';
+import { OrdenDiaCoordinadorDto } from '../../../dto/orden-dia-coordinador.dto';
+import { ProfesorField } from '../../../dto/profesor-field.type';
 
 @Component({
   selector: 'app-convocatorias-coordinador',
@@ -38,9 +34,9 @@ export class ConvocatoriasComponent implements OnInit {
     cursoId: null as number | null
   };
 
-  cursosAcademicos: CursoOption[] = [];
-  lugares: LugarOption[] = [];
-  profesores: ProfesorOption[] = [];
+  cursosAcademicos: CursoOptionDto[] = [];
+  lugares: LugarOptionDto[] = [];
+  profesores: ProfesorOptionDto[] = [];
 
   cargandoFormulario = true;
   guardando = false;
@@ -53,7 +49,7 @@ export class ConvocatoriasComponent implements OnInit {
   iniciaOpen = false;
   iniciaQuery = '';
 
-  ordenDia: OrdenDiaItemCoordinador[] = [this.createEmptyFila()];
+  ordenDia: OrdenDiaCoordinadorDto[] = [this.createEmptyFila()];
 
   constructor(
     private convocatoriaService: ConvocatoriaService,
@@ -250,7 +246,7 @@ export class ConvocatoriasComponent implements OnInit {
     this.redactaOpen = false;
   }
 
-  getProfesoresFieldFiltrados(field: ProfesorField): ProfesorOption[] {
+  getProfesoresFieldFiltrados(field: ProfesorField): ProfesorOptionDto[] {
     const query = (field === 'redacta' ? this.redactaQuery : this.iniciaQuery).trim().toLowerCase();
 
     return this.profesores
@@ -271,11 +267,11 @@ export class ConvocatoriasComponent implements OnInit {
     this.iniciaOpen = false;
   }
 
-  toggleParticipa(item: OrdenDiaItemCoordinador): void {
+  toggleParticipa(item: OrdenDiaCoordinadorDto): void {
     item.participaOpen = !item.participaOpen;
   }
 
-  getProfesoresFiltrados(item: OrdenDiaItemCoordinador): ProfesorOption[] {
+  getProfesoresFiltrados(item: OrdenDiaCoordinadorDto): ProfesorOptionDto[] {
     const query = item.participaQuery.trim().toLowerCase();
 
     return this.profesores
@@ -284,7 +280,7 @@ export class ConvocatoriasComponent implements OnInit {
       .slice(0, 8);
   }
 
-  addProfesor(item: OrdenDiaItemCoordinador, profesorId: number): void {
+  addProfesor(item: OrdenDiaCoordinadorDto, profesorId: number): void {
     if (!item.participaIds.includes(profesorId)) {
       item.participaIds.push(profesorId);
     }
@@ -293,7 +289,7 @@ export class ConvocatoriasComponent implements OnInit {
     item.participaOpen = true;
   }
 
-  removeProfesor(item: OrdenDiaItemCoordinador, profesorId: number): void {
+  removeProfesor(item: OrdenDiaCoordinadorDto, profesorId: number): void {
     item.participaIds = item.participaIds.filter((selected: number) => selected !== profesorId);
   }
 
@@ -326,7 +322,7 @@ export class ConvocatoriasComponent implements OnInit {
       return;
     }
 
-    const payload: GuardarConvocatoriaPayload = {
+    const payload: GuardarConvocatoriaPayloadDto = {
       idConvocatoria: this.convocatoria.idConvocatoria || undefined,
       fechaHora: this.convocatoria.fechaHora,
       lugarId: this.convocatoria.lugarId,
@@ -446,7 +442,7 @@ export class ConvocatoriasComponent implements OnInit {
       .filter((nombre) => nombre !== '');
   }
 
-  private createEmptyFila(): OrdenDiaItemCoordinador {
+  private createEmptyFila(): OrdenDiaCoordinadorDto {
     return {
       minutos: null,
       ordenDia: '',

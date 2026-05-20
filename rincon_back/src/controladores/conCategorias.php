@@ -10,7 +10,7 @@ class ConCategorias extends ControladorBase {
         $this->modelo = new ModCategorias($db);
     }
 
-    // Método para devolver la lista de categorías en formato de árbol JSON
+    // Devuelve el arbol de categorias que usan los sidebars de ambos roles.
     public function listar() {
         try {
             $datos = $this->modelo->listar();

@@ -9,6 +9,7 @@ class ConConvocatorias extends ControladorBase {
         $this->modelo = new ModConvocatorias($db);
     }
 
+    // Devuelve los datos base que necesitan los formularios de alta y edicion.
     public function formulario() {
         try {
             $this->enviarRespuesta($this->modelo->obtenerFormulario());
@@ -17,6 +18,7 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
+    // Guarda convocatorias que llegan desde el frontend en JSON.
     public function guardar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -34,6 +36,7 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
+    // Lista las convocatorias para la pantalla principal del coordinador.
     public function listar() {
         try {
             $this->enviarRespuesta($this->modelo->listarConvocatorias());
@@ -42,6 +45,7 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
+    // Devuelve el detalle completo de una convocatoria.
     public function detalle() {
         try {
             $id = $_GET['id'] ?? null;
@@ -59,6 +63,7 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
+    // Elimina una convocatoria y su orden del dia.
     public function eliminar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {

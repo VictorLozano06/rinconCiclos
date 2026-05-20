@@ -19,23 +19,43 @@
     </div>
   </div>
 
-  <div *ngIf="!cargando && !errorCarga && recursos.length; else sinRecursos" class="lista-recursos">
-    <app-recurso-item
-      *ngFor="let recurso of recursos"
-      [categoria]="recurso.categoriaNombre"
-      [fechaPublicacion]="recurso.fechaPublicacion"
-      [nombre]="recurso.nombre"
-      [descripcion]="recurso.descripcion"
-      [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
-    </app-recurso-item>
-  </div>
+  <ng-container *ngIf="!cargando && !errorCarga">
+    <div class="filtros-recursos">
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Filtrar por curso</span>
+        <select class="filtro-select" [value]="filtroCurso" (change)="cambiarCurso($event)">
+          <option *ngFor="let curso of cursosFiltro" [value]="curso.idCurso">{{ curso.etiqueta }}</option>
+        </select>
+      </label>
+
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Filtrar por ciclo</span>
+        <select class="filtro-select" [value]="filtroCiclo" (change)="cambiarCiclo($event)">
+          <option *ngFor="let ciclo of ciclosFiltro" [value]="ciclo.idCiclo">{{ ciclo.nombre }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div *ngIf="recursosFiltrados.length; else sinRecursos" class="lista-recursos">
+      <app-recurso-item
+        *ngFor="let recurso of recursosFiltrados"
+        [categoria]="recurso.categoriaNombre"
+        [fechaPublicacion]="recurso.fechaPublicacion"
+        [nombre]="recurso.nombre"
+        [descripcion]="recurso.descripcion"
+        [curso]="formatearCurso(recurso)"
+        [ciclos]="formatearCiclos(recurso)"
+        [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
+      </app-recurso-item>
+    </div>
+  </ng-container>
 
   <ng-template #sinRecursos>
     <div *ngIf="!cargando && !errorCarga" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
       <div class="card-body">
         <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>
         <h4 class="card-title text-secondary">Categoria sin recursos</h4>
-        <p class="card-text text-muted mb-0">Aun no se han publicado recursos en esta seccion.</p>
+        <p class="card-text text-muted mb-0">Aun no se han publicado recursos en esta seccion o no coinciden con los filtros.</p>
       </div>
     </div>
   </ng-template>

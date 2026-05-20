@@ -6,6 +6,11 @@
     </div>
     <h3 class="titulo-recurso">{{ nombre }}</h3>
     <p class="descripcion-recurso">{{ descripcion }}</p>
+    <p *ngIf="curso || ciclos" class="detalle-recurso">
+      <span *ngIf="curso">{{ curso }}</span>
+      <span *ngIf="curso && ciclos"> · </span>
+      <span *ngIf="ciclos">{{ ciclos }}</span>
+    </p>
   </div>
   <div class="accion-recurso">
     <a *ngIf="detalleRuta; else enlaceExterno" [routerLink]="detalleRuta" class="boton-ver">

@@ -8,18 +8,18 @@ class ModCategorias {
     }
 
     /**
-     * Recupera todas las categorías y monta un árbol jerárquico recursivo
+     * Recupera todas las categorias y monta el arbol de navegacion del sidebar.
+     * El orden final no depende de la BD, sino de la estructura padre/hijo.
      */
     public function listar() {
-        // Consulta simple para traer todas las categorías ordenadas por su ID
         $sql = "SELECT idCategoria, nombre, predeterminada, idCategoriaPadre FROM categoria ORDER BY idCategoria";
         $declaracion = $this->db->prepare($sql);
         $declaracion->execute();
         $filas = $declaracion->fetchAll(PDO::FETCH_ASSOC);
 
         $categorias = [];
-        
-        // Mapeamos los registros y los indexamos por el idCategoria para acceso directo en memoria
+
+        // Indexamos por id para poder colgar hijos de forma rapida sin volver a consultar la BD.
         foreach ($filas as $fila) {
             $id = (int)$fila['idCategoria'];
             $categorias[$id] = [
@@ -32,17 +32,15 @@ class ModCategorias {
         }
 
         $arbol = [];
-        
-        // Construimos la estructura jerárquica en base a referencias en memoria (&) para evitar duplicados
+
+        // Recorremos una sola vez y vamos enlazando nodos hijos a su padre.
         foreach ($categorias as $id => &$cat) {
             $idPadre = $cat['idCategoriaPadre'];
-            
-            // La categoría con ID 1 es la categoría 'Raíz' general.
-            // Los elementos principales del menú son los que tienen idCategoriaPadre = 1 (pero no el propio 1).
+
+            // La categoria 1 actua como raiz tecnica del arbol.
             if ($idPadre === 1 && $id !== 1) {
-                $arbol[] = &$cat; // Es una categoría principal
+                $arbol[] = &$cat;
             } else if ($id !== 1 && $idPadre !== $id) {
-                // Es una subcategoría de nivel inferior, la agregamos a su categoría padre correspondiente
                 if (isset($categorias[$idPadre])) {
                     $categorias[$idPadre]['subcategorias'][] = &$cat;
                 }

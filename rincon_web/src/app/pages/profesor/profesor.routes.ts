@@ -14,7 +14,7 @@ export const PROFESOR_ROUTES: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'reuniones-de-equipo/convocatorias', component: ProfesorConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ProfesorConvocatoriasComponent },
-      { path: 'recurso/:idCategoria/:numRecurso', component: RecursoDetalleComponent },
+      { path: 'recurso/:idCategoria/:numRecurso', component: RecursoDetalleComponent, data: { basePath: '/profesor', homeRoute: '/profesor/inicio' } },
       { path: ':section', component: RecursosCategoriaComponent },
       { path: ':section/:subsection', component: RecursosCategoriaComponent }
     ]

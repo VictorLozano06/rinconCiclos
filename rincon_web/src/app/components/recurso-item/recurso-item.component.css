@@ -37,6 +37,13 @@
   color: #777;
 }
 
+.detalle-recurso {
+  margin: 6px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #8b95a7;
+}
+
 .boton-ver {
   display: flex;
   align-items: center;

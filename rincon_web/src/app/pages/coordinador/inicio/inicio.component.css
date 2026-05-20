@@ -1,0 +1,44 @@
+.seccion-recursos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cabecera-inicio {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+}
+
+.titulo-seccion {
+  margin: 0;
+}
+
+.texto-descripcion {
+  margin: 0.35rem 0 0 0;
+  color: #707eae;
+}
+
+.enlace-ver-todos {
+  color: #2b3674;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.enlace-ver-todos:hover {
+  text-decoration: underline;
+}
+
+.lista-recursos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .cabecera-inicio {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

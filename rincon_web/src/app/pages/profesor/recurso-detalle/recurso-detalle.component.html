@@ -1,8 +1,8 @@
 <section class="recurso-detalle" *ngIf="!cargando && recurso; else estadoCarga">
   <nav class="breadcrumb-detalle" aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let item of breadcrumbs; let last = last" [class.active]="last">
-        <ng-container *ngIf="!last; else crumbActual">
+      <li class="breadcrumb-item" *ngFor="let item of breadcrumbs; let last = last" [class.active]="last || !item.ruta">
+        <ng-container *ngIf="item.ruta && !last; else crumbActual">
           <a [routerLink]="item.ruta">{{ item.nombre }}</a>
         </ng-container>
         <ng-template #crumbActual>
@@ -16,6 +16,10 @@
     <span class="badge-categoria">{{ recurso.categoriaNombre }}</span>
     <h1 class="titulo-detalle">{{ recurso.nombre }}</h1>
     <p class="descripcion-detalle">{{ recurso.descripcion }}</p>
+    <p *ngIf="obtenerCiclos().length > 0" class="texto-ciclos">
+      <strong>Ciclos:</strong>
+      <span>{{ obtenerCiclos().join(' · ') }}</span>
+    </p>
   </div>
 
   <div class="contenido-detalle">
