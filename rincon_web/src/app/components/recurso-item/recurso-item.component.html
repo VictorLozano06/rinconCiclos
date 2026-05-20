@@ -2,13 +2,13 @@
   <div class="info-recurso">
     <div class="etiqueta-recurso">
       <img src="assets/icons/tag.svg" alt="Etiqueta" class="icono-etiqueta">
-      <span>{{ categoria }} • {{ fechaPublicacion }}</span>
+      <span>{{ categoria }} • {{ fechaPublicacion | date:'dd/MM/yyyy' }}</span>
     </div>
     <h3 class="titulo-recurso">{{ nombre }}</h3>
     <p class="descripcion-recurso">{{ descripcion }}</p>
   </div>
   <div class="accion-recurso">
-    <a href="https://www.google.com" target="_blank" class="boton-ver">
+    <a [routerLink]="detalleRuta" class="boton-ver">
       <img src="assets/icons/arrow-circle.svg" alt="Ver" class="icono-accion">
       Ver recurso
     </a>

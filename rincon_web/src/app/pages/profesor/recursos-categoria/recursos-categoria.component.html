@@ -1,16 +1,42 @@
 <section class="seccion-recursos">
   <div class="cabecera-seccion-categoria mb-4">
-    <h2 class="titulo-seccion text-capitalize">{{ section }}</h2>
+    <h2 class="titulo-seccion text-capitalize">{{ categoriaActual || section }}</h2>
     <p *ngIf="subsection" class="ruta-seccion mt-2">
-      Subcategoría: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subsection }}</span>
+      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subsection }}</span>
     </p>
   </div>
 
-  <div class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
     <div class="card-body">
-      <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>
-      <h4 class="card-title text-secondary">Categoría sin recursos</h4>
-      <p class="card-text text-muted">Aún no se han publicado actas, convocatorias ni documentos en esta sección.</p>
+      <p class="text-muted mb-0">Cargando recursos...</p>
     </div>
   </div>
+
+  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <h4 class="card-title text-secondary">No se han podido cargar los recursos</h4>
+      <p class="card-text text-muted mb-0">Revisa la conexion con la API de PHP y vuelve a intentarlo.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && !errorCarga && recursos.length; else sinRecursos" class="lista-recursos">
+    <app-recurso-item
+      *ngFor="let recurso of recursos"
+      [categoria]="recurso.categoriaNombre"
+      [fechaPublicacion]="recurso.fechaPublicacion"
+      [nombre]="recurso.nombre"
+      [descripcion]="recurso.descripcion"
+      [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
+    </app-recurso-item>
+  </div>
+
+  <ng-template #sinRecursos>
+    <div *ngIf="!cargando && !errorCarga" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+      <div class="card-body">
+        <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>
+        <h4 class="card-title text-secondary">Categoria sin recursos</h4>
+        <p class="card-text text-muted mb-0">Aun no se han publicado recursos en esta seccion.</p>
+      </div>
+    </div>
+  </ng-template>
 </section>
