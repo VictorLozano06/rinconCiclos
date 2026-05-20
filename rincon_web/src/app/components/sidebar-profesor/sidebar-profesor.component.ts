@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CategoriaService } from '../../services/categoria.service';
@@ -12,6 +13,8 @@ import { CategoriaDto } from '../../dto/categoria.dto';
   styleUrl: './sidebar-profesor.component.css'
 })
 export class SidebarProfesorComponent implements OnInit {
+  @Input() mobileOpen = false;
+  @Output() requestClose = new EventEmitter<void>();
   public categorias: any[] = [];
 
   constructor(private categoriaService: CategoriaService) {}
@@ -75,7 +78,7 @@ export class SidebarProfesorComponent implements OnInit {
         nombre: nombre,
         icono: iconMap[nombre] || 'categoria-generica',
         ruta: ruta,
-        abierto: subcategorias.length > 0, // abierto por defecto si tiene hijos
+        abierto: false,
         subcategorias: subcategorias,
         deshabilitado: deshabilitado
       };
@@ -86,5 +89,18 @@ export class SidebarProfesorComponent implements OnInit {
     if (cat.subcategorias.length > 0) {
       cat.abierto = !cat.abierto;
     }
+  }
+
+  handleCategoriaClick(cat: any): void {
+    if (cat.subcategorias.length === 0) {
+      this.closeSidebar();
+      return;
+    }
+
+    this.toggleMenu(cat);
+  }
+
+  closeSidebar(): void {
+    this.requestClose.emit();
   }
 }

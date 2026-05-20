@@ -7,10 +7,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  width: 100%;
 }
 
 .info-recurso {
   flex: 1;
+  min-width: 0;
 }
 
 .etiqueta-recurso {
@@ -55,4 +58,20 @@
 
 .icono-accion {
   width: 18px;
+}
+
+@media (max-width: 768px) {
+  .tarjeta-recurso {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .accion-recurso {
+    width: 100%;
+  }
+
+  .boton-ver {
+    width: 100%;
+    justify-content: center;
+  }
 }

@@ -2,32 +2,51 @@
   display: flex;
   min-height: 100vh;
   background-color: #f8fafc;
+  position: relative;
 }
 
-/* Sidebar fijo a la izquierda */
-.barra-lateral {
-  flex: 0 0 280px; /* Ancho fijo de 280px */
-  background-color: #fff;
-  border-right: 1px solid #e2e8f0;
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.sidebar-overlay-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .contenedor-principal {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Evita que el contenido desborde */
+  min-width: 0;
 }
 
 .barra-superior {
   height: 90px;
-
   display: flex;
   align-items: center;
+  gap: 16px;
   padding: 0 40px;
   background: white;
   border-bottom: 1px solid #e2e8f0;
 }
 
+.boton-sidebar {
+  display: none;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #d9e2f0;
+  border-radius: 14px;
+  background: #f8fbff;
+  color: #243043;
+  font-size: 1.4rem;
+}
 
 .contenedor-contenido {
   padding: 40px;
@@ -35,13 +54,44 @@
   overflow-y: auto;
 }
 
-/* Limitamos el ancho del contenido para que no se estire infinito */
 .ajuste-ancho {
   max-width: 1100px;
-  margin: 0; /* Mantenemos alineación a la izquierda como en el buscador */
+  margin: 0;
 }
 
 app-buscador {
   width: 100%;
-  max-width: 1100px; /* Misma anchura que el contenido */
+  max-width: 1100px;
+}
+
+@media (max-width: 1024px) {
+  .barra-superior {
+    height: auto;
+    padding: 18px 20px;
+  }
+
+  .contenedor-contenido {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .boton-sidebar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .barra-superior {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .contenedor-contenido {
+    padding: 18px 14px 24px;
+  }
 }

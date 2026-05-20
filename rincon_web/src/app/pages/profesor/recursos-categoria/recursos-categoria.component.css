@@ -8,3 +8,49 @@
   color: var(--color-texto-secundario, #64748b);
   font-size: 0.95rem;
 }
+
+.filtros-recursos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.filtro-bloque {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.filtro-etiqueta {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a8797;
+}
+
+.filtro-select {
+  width: 100%;
+  border: 1px solid #d8e0ea;
+  background: #fff;
+  color: #1f2937;
+  border-radius: 0.9rem;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  outline: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.03);
+}
+
+.filtro-select:focus {
+  border-color: #1f4e79;
+  box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.12);
+}
+
+@media (max-width: 768px) {
+  .filtros-recursos {
+    grid-template-columns: 1fr;
+  }
+}
