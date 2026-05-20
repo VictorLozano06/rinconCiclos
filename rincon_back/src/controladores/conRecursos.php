@@ -10,6 +10,7 @@ class ConRecursos extends ControladorBase {
         $this->modelo = new ModRecursos($db);
     }
 
+    // Devuelve los recursos mas recientes para la portada del profesor.
     public function listarRecientesProfesor() {
         try {
             $limite = isset($_GET['limite']) ? max(1, min(20, (int)$_GET['limite'])) : 5;
@@ -20,6 +21,17 @@ class ConRecursos extends ControladorBase {
         }
     }
 
+    // Devuelve todos los recursos para la vista centralizada del coordinador.
+    public function listarTodos() {
+        try {
+            $datos = $this->modelo->listarTodos();
+            $this->enviarRespuesta($datos);
+        } catch (Exception $e) {
+            $this->enviarError($e);
+        }
+    }
+
+    // Filtra recursos por la categoria seleccionada en el sidebar.
     public function listarPorCategoria() {
         try {
             if (!isset($_GET['idCategoria'])) {
@@ -38,6 +50,7 @@ class ConRecursos extends ControladorBase {
         }
     }
 
+    // Carga la ficha detallada del recurso individual.
     public function detalle() {
         try {
             if (!isset($_GET['idCategoria']) || !isset($_GET['numRecurso'])) {

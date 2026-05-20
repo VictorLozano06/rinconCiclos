@@ -13,6 +13,7 @@ export class CategoriaService {
     private apiService: ApiService
   ) {}
 
+  // Carga el arbol de categorias que usan los sidebars y rutas dinamicas.
   getCategorias(): Observable<CategoriaDto[]> {
     return this.http.get<CategoriaDto[]>(`${this.apiService.baseUrl}?c=Categorias&m=listar`);
   }

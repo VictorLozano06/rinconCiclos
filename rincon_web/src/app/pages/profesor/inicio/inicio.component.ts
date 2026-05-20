@@ -12,6 +12,7 @@ import { RecursoDto } from '../../../dto/recurso.dto';
   styleUrl: './inicio.component.css'
 })
 export class InicioComponent implements OnInit {
+  // Recursos que aparecen en la portada del profesor.
   public recursosRecientes: RecursoDto[] = [];
   public cargandoRecursos = true;
   public errorRecursos = false;
@@ -22,6 +23,7 @@ export class InicioComponent implements OnInit {
     this.cargarRecursos();
   }
 
+  // Carga los recursos recientes desde la API.
   cargarRecursos(): void {
     this.cargandoRecursos = true;
     this.errorRecursos = false;

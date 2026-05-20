@@ -6,6 +6,7 @@ class ModConvocatorias {
         $this->db = $db;
     }
 
+    // Devuelve los datos basicos que necesita el formulario de alta/edicion.
     public function obtenerFormulario() {
         return [
             'cursos' => $this->obtenerCursos(),
@@ -15,6 +16,7 @@ class ModConvocatorias {
         ];
     }
 
+    // Guarda o actualiza una convocatoria y rehace el orden del dia en una transaccion.
     public function guardar($payload) {
         $idConvocatoria = isset($payload['idConvocatoria']) ? (int)$payload['idConvocatoria'] : null;
         $cursoId = (int)($payload['cursoId'] ?? 0);
@@ -72,6 +74,7 @@ class ModConvocatorias {
 
         try {
             if ($idConvocatoria) {
+                // Si es edicion, se protege la convocatoria ya publicada y se limpian los detalles previos.
                 if ($this->esConvocatoriaPasada($idConvocatoria)) {
                     throw new InvalidArgumentException('No se puede modificar una convocatoria pasada.');
                 }
@@ -102,6 +105,7 @@ class ModConvocatorias {
                 $stmtDelOrden = $this->db->prepare($sqlDelOrden);
                 $stmtDelOrden->execute([':idConvocatoria' => $idConvocatoria]);
             } else {
+                // En alta nueva, primero insertamos la cabecera para obtener el id.
                 $sqlConvocatoria = "INSERT INTO convocatoria (fecha, idLugar, idCurso, idProfesorRedactaActa, idProfesorIniciaReunion)
                                     VALUES (:fecha, :idLugar, :idCurso, :idRedacta, :idInicia)";
                 $stmtConvocatoria = $this->db->prepare($sqlConvocatoria);
@@ -120,6 +124,7 @@ class ModConvocatorias {
                          VALUES (:idConvocatoria, :numOrden, :minutos, :descripcion, :objetivo, :idLugar, :idProfesorDinamiza)";
             $stmtOrden = $this->db->prepare($sqlOrden);
 
+            // Cada linea valida del orden del dia genera su entrada y sus participantes asociados.
             $sqlParticipa = "INSERT INTO participanteParticipa (idConvocatoria, numOrden, idParticipanteParticipa)
                              VALUES (:idConvocatoria, :numOrden, :idParticipante)";
             $stmtParticipa = $this->db->prepare($sqlParticipa);
@@ -151,6 +156,7 @@ class ModConvocatorias {
                 'message' => $idConvocatoria ? 'Convocatoria actualizada correctamente.' : 'Convocatoria guardada correctamente.'
             ];
         } catch (Exception $e) {
+            // Si algo falla, dejamos la BD como estaba para no mezclar cabecera y lineas a medias.
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
             }
@@ -159,6 +165,7 @@ class ModConvocatorias {
         }
     }
 
+    // Lista convocatorias para la pantalla principal del coordinador.
     public function listarConvocatorias() {
         $sql = "SELECT c.idConvocatoria, c.fecha,
                        l.nombre AS lugar,
@@ -174,6 +181,7 @@ class ModConvocatorias {
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Devuelve una convocatoria concreta con su orden del dia y participantes.
     public function obtenerConvocatoria($idConvocatoria) {
         $sql = "SELECT c.idConvocatoria, c.fecha, c.idLugar, c.idCurso, c.idProfesorRedactaActa, c.idProfesorIniciaReunion,
                        l.nombre AS lugar,
@@ -233,6 +241,7 @@ class ModConvocatorias {
         return $convocatoria;
     }
 
+    // Borra primero las dependencias manuales para que la eliminacion quede limpia.
     public function eliminar($idConvocatoria) {
         $this->db->beginTransaction();
 
@@ -263,6 +272,7 @@ class ModConvocatorias {
         }
     }
 
+    // Obtiene el catalogo que usa el formulario de convocatorias.
     private function obtenerCursos() {
         $sql = "SELECT idCurso, anioInicio, anioFin FROM cursoAcademico ORDER BY anioInicio DESC";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -281,6 +291,7 @@ class ModConvocatorias {
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Calcula el curso que toca por calendario escolar.
     private function obtenerCursoActualId() {
         $cursos = $this->obtenerCursos();
         $anioActual = (int)date('Y');
@@ -296,6 +307,7 @@ class ModConvocatorias {
         return isset($cursos[0]) ? (int)$cursos[0]['idCurso'] : null;
     }
 
+    // Normaliza la fecha que llega del frontend al formato SQL.
     private function normalizarFechaHora($fechaHora) {
         $timestamp = strtotime($fechaHora);
         if ($timestamp === false) {
@@ -305,6 +317,7 @@ class ModConvocatorias {
         return date('Y-m-d H:i:s', $timestamp);
     }
 
+    // Evita editar convocatorias ya pasadas.
     private function esConvocatoriaPasada($idConvocatoria) {
         $stmt = $this->db->prepare("SELECT fecha FROM convocatoria WHERE idConvocatoria = :idConvocatoria");
         $stmt->execute([':idConvocatoria' => $idConvocatoria]);

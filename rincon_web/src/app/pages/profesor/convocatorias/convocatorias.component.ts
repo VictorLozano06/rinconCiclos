@@ -2,11 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { ConvocatoriaService } from '../../../services/convocatoria.service';
-import {
-  ConvocatoriaDetalle,
-  ConvocatoriaListaItem,
-  OrdenDiaItemProfesor
-} from '../../../dto/convocatoria.dto';
+import { ConvocatoriaDetalleDto } from '../../../dto/convocatoria-detalle.dto';
+import { ConvocatoriaListaItemDto } from '../../../dto/convocatoria-lista-item.dto';
 
 @Component({
   selector: 'app-convocatorias-profesor',
@@ -16,8 +13,8 @@ import {
   styleUrl: './convocatorias.component.css'
 })
 export class ProfesorConvocatoriasComponent implements OnInit {
-  convocatoras: ConvocatoriaListaItem[] = [];
-  convocatoriaSeleccionada: ConvocatoriaDetalle | null = null;
+  convocatoras: ConvocatoriaListaItemDto[] = [];
+  convocatoriaSeleccionada: ConvocatoriaDetalleDto | null = null;
   cargandoListado = true;
   cargandoDetalle = false;
   errorMsg = '';

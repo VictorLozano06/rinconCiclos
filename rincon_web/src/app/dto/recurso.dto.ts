@@ -1,3 +1,5 @@
+import { CicloRecursoDto } from './ciclo-recurso.dto';
+
 export interface RecursoDto {
   idCategoria: number;
   numRecurso: number;
@@ -10,7 +12,7 @@ export interface RecursoDto {
   categoriaNombre: string;
   urls: string[];
   archivos: string[];
+  // Un recurso puede estar asociado a varios ciclos.
+  ciclos: CicloRecursoDto[];
   enlacePrincipal: string;
 }
-
-export interface RecursoDetalleDto extends RecursoDto {}

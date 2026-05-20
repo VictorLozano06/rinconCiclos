@@ -5,11 +5,11 @@ import { forkJoin } from 'rxjs';
 import { CategoriaService } from '../../../services/categoria.service';
 import { RecursoService } from '../../../services/recurso.service';
 import { CategoriaDto } from '../../../dto/categoria.dto';
-import { RecursoDetalleDto } from '../../../dto/recurso.dto';
+import { RecursoDto } from '../../../dto/recurso.dto';
 
 interface BreadcrumbItem {
   nombre: string;
-  ruta: string | any[];
+  ruta: string | any[] | null;
 }
 
 @Component({
@@ -20,10 +20,13 @@ interface BreadcrumbItem {
   styleUrl: './recurso-detalle.component.css'
 })
 export class RecursoDetalleComponent implements OnInit {
-  public recurso: RecursoDetalleDto | null = null;
+  // Ficha completa del recurso que se muestra en pantalla.
+  public recurso: RecursoDto | null = null;
   public breadcrumbs: BreadcrumbItem[] = [];
   public cargando = true;
   public errorCarga = false;
+  public basePath = '/profesor';
+  public homeRoute = '/profesor/inicio';
 
   private idCategoria = 0;
   private numRecurso = 0;
@@ -38,10 +41,13 @@ export class RecursoDetalleComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.idCategoria = Number(params['idCategoria'] || 0);
       this.numRecurso = Number(params['numRecurso'] || 0);
+      this.basePath = this.route.snapshot.data['basePath'] || '/profesor';
+      this.homeRoute = this.route.snapshot.data['homeRoute'] || '/profesor/inicio';
       this.cargarDetalle();
     });
   }
 
+  // Trae categorias y detalle del recurso para construir la vista final.
   cargarDetalle(): void {
     this.cargando = true;
     this.errorCarga = false;
@@ -71,6 +77,7 @@ export class RecursoDetalleComponent implements OnInit {
     });
   }
 
+  // Devuelve los enlaces externos asociados al recurso.
   obtenerEnlaces(): string[] {
     if (!this.recurso) {
       return [];
@@ -79,6 +86,7 @@ export class RecursoDetalleComponent implements OnInit {
     return this.recurso.urls || [];
   }
 
+  // Devuelve los archivos adjuntos asociados al recurso.
   obtenerArchivos(): string[] {
     if (!this.recurso) {
       return [];
@@ -87,21 +95,31 @@ export class RecursoDetalleComponent implements OnInit {
     return this.recurso.archivos || [];
   }
 
+  // Devuelve los ciclos asociados al recurso en formato visual.
+  obtenerCiclos(): string[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    return (this.recurso.ciclos || []).map((ciclo) => ciclo.nombre);
+  }
+
+  // Extrae el nombre legible de un archivo o ruta.
   getNombreArchivo(archivo: string): string {
     const limpio = archivo.replace(/\\/g, '/');
     return limpio.split('/').pop() || archivo;
   }
 
+  // Construye el breadcrumb a partir de la categoria real del recurso.
   private construirBreadcrumbs(categorias: CategoriaDto[], idCategoria: number, nombreRecurso: string): BreadcrumbItem[] {
     const ruta = this.buscarRutaCategoria(categorias, idCategoria);
-    const breadcrumbs: BreadcrumbItem[] = [{ nombre: 'Inicio', ruta: ['/profesor', 'inicio'] }];
+    const breadcrumbs: BreadcrumbItem[] = [{ nombre: 'Inicio', ruta: this.homeRoute }];
 
     if (ruta.length > 0) {
       ruta.forEach((nombre, index) => {
-        const path = ruta.slice(0, index + 1).map((valor) => this.slug(valor));
         breadcrumbs.push({
           nombre,
-          ruta: path.length > 0 ? ['/profesor', ...path] : ['/profesor']
+          ruta: index === ruta.length - 1 ? null : this.homeRoute
         });
       });
     }
@@ -110,6 +128,7 @@ export class RecursoDetalleComponent implements OnInit {
     return breadcrumbs;
   }
 
+  // Localiza la ruta jerarquica de una categoria dentro del arbol.
   private buscarRutaCategoria(categorias: CategoriaDto[], idCategoria: number): string[] {
     for (const categoria of categorias) {
       if (categoria.idCategoria === idCategoria) {
@@ -125,14 +144,5 @@ export class RecursoDetalleComponent implements OnInit {
     }
 
     return [];
-  }
-
-  private slug(valor: string): string {
-    return valor
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9-]/g, '');
   }
 }
