@@ -1,0 +1,139 @@
+.recurso-detalle {
+  padding: 1.5rem 0 2rem;
+}
+
+.breadcrumb-detalle {
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumb {
+  margin-bottom: 0;
+  font-size: 0.92rem;
+}
+
+.breadcrumb a {
+  color: #5c677d;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.cabecera-detalle {
+  margin-bottom: 2rem;
+}
+
+.badge-categoria {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: #e9eef3;
+  color: #556070;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.titulo-detalle {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.descripcion-detalle {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #667085;
+  max-width: 62rem;
+}
+
+.contenido-detalle {
+  display: grid;
+  gap: 2rem;
+}
+
+.bloque-detalle h2 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #97a0ad;
+  margin-bottom: 1rem;
+}
+
+.lista-elementos {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.elemento-detalle {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  border: 1px solid #edf1f5;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.elemento-detalle:hover {
+  border-color: #d7dee7;
+  transform: translateY(-1px);
+}
+
+.icono-elemento {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: #eff4f8;
+  color: #52607a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.texto-elemento {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.texto-elemento strong {
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.texto-elemento small {
+  color: #8a94a6;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.accion-elemento {
+  color: #5f6b7c;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .elemento-detalle {
+    grid-template-columns: auto 1fr;
+  }
+
+  .accion-elemento {
+    grid-column: 1 / -1;
+    padding-left: 3.5rem;
+  }
+}

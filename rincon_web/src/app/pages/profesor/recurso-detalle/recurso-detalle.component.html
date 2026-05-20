@@ -1,0 +1,80 @@
+<section class="recurso-detalle" *ngIf="!cargando && recurso; else estadoCarga">
+  <nav class="breadcrumb-detalle" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" *ngFor="let item of breadcrumbs; let last = last" [class.active]="last">
+        <ng-container *ngIf="!last; else crumbActual">
+          <a [routerLink]="item.ruta">{{ item.nombre }}</a>
+        </ng-container>
+        <ng-template #crumbActual>
+          <span>{{ item.nombre }}</span>
+        </ng-template>
+      </li>
+    </ol>
+  </nav>
+
+  <div class="cabecera-detalle">
+    <span class="badge-categoria">{{ recurso.categoriaNombre }}</span>
+    <h1 class="titulo-detalle">{{ recurso.nombre }}</h1>
+    <p class="descripcion-detalle">{{ recurso.descripcion }}</p>
+  </div>
+
+  <div class="contenido-detalle">
+    <section class="bloque-detalle" *ngIf="obtenerEnlaces().length > 0">
+      <h2>Enlaces de interes</h2>
+      <div class="lista-elementos">
+        <a
+          *ngFor="let enlace of obtenerEnlaces()"
+          class="elemento-detalle enlace-detalle"
+          [href]="enlace"
+          target="_blank"
+          rel="noopener noreferrer">
+          <span class="icono-elemento">
+            <i class="bi bi-link-45deg"></i>
+          </span>
+          <span class="texto-elemento">
+            <strong>Enlace externo</strong>
+            <small>{{ enlace }}</small>
+          </span>
+          <span class="accion-elemento">Abrir</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="bloque-detalle" *ngIf="obtenerArchivos().length > 0">
+      <h2>Documentos adjuntos</h2>
+      <div class="lista-elementos">
+        <a
+          *ngFor="let archivo of obtenerArchivos()"
+          class="elemento-detalle archivo-detalle"
+          [href]="archivo"
+          download>
+          <span class="icono-elemento">
+            <i class="bi bi-file-earmark-text"></i>
+          </span>
+          <span class="texto-elemento">
+            <strong>{{ getNombreArchivo(archivo) }}</strong>
+            <small>{{ archivo }}</small>
+          </span>
+          <span class="accion-elemento">Descargar</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<ng-template #estadoCarga>
+  <section class="recurso-detalle">
+    <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+      <div class="card-body">
+        <p class="text-muted mb-0">Cargando detalle del recurso...</p>
+      </div>
+    </div>
+
+    <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+      <div class="card-body">
+        <h4 class="card-title text-secondary">No se ha podido cargar el recurso</h4>
+        <p class="card-text text-muted mb-0">Revisa la conexion con la API de PHP y vuelve a intentarlo.</p>
+      </div>
+    </div>
+  </section>
+</ng-template>
