@@ -191,21 +191,21 @@ class ModConvocatorias {
         }
 
         $sqlOrden = "SELECT od.numOrden, od.minutos, od.descripcion, od.objetivo, od.idLugar, od.idProfesorDinamiza,
-                            l.nombre AS lugar,
-                            pd.nombre AS dinamiza
-                     FROM ordenDia od
-                     LEFT JOIN lugar l ON l.idLugar = od.idLugar
-                     LEFT JOIN participantes pd ON pd.idParticipante = od.idProfesorDinamiza
-                     WHERE od.idConvocatoria = :idConvocatoria
-                     ORDER BY od.numOrden ASC";
+                             l.nombre AS lugar,
+                             pd.nombre AS dinamiza
+                      FROM ordenDia od
+                      LEFT JOIN lugar l ON l.idLugar = od.idLugar
+                      LEFT JOIN participantes pd ON pd.idParticipante = od.idProfesorDinamiza
+                      WHERE od.idConvocatoria = :idConvocatoria
+                      ORDER BY od.numOrden ASC";
         $stmtOrden = $this->db->prepare($sqlOrden);
         $stmtOrden->execute([':idConvocatoria' => $idConvocatoria]);
         $puntos = $stmtOrden->fetchAll(PDO::FETCH_ASSOC);
 
         $sqlParticipantes = "SELECT pp.numOrden, pp.idParticipanteParticipa, pa.nombre
-                             FROM participanteParticipa pp
-                             INNER JOIN participantes pa ON pa.idParticipante = pp.idParticipanteParticipa
-                             WHERE pp.idConvocatoria = :idConvocatoria";
+                              FROM participanteParticipa pp
+                              INNER JOIN participantes pa ON pa.idParticipante = pp.idParticipanteParticipa
+                              WHERE pp.idConvocatoria = :idConvocatoria";
         $stmtPart = $this->db->prepare($sqlParticipantes);
         $stmtPart->execute([':idConvocatoria' => $idConvocatoria]);
         $participantes = $stmtPart->fetchAll(PDO::FETCH_ASSOC);
@@ -227,6 +227,36 @@ class ModConvocatorias {
         $convocatoria['ordenDia'] = $puntos;
 
         return $convocatoria;
+    }
+
+    public function eliminar($idConvocatoria) {
+        $this->db->beginTransaction();
+
+        try {
+            // Se eliminan los participantes de los puntos del orden del día
+            $sqlDelParticipa = "DELETE FROM participanteParticipa WHERE idConvocatoria = :idConvocatoria";
+            $stmtDelParticipa = $this->db->prepare($sqlDelParticipa);
+            $stmtDelParticipa->execute([':idConvocatoria' => $idConvocatoria]);
+
+            // Se eliminan los puntos del orden del día
+            $sqlDelOrden = "DELETE FROM ordenDia WHERE idConvocatoria = :idConvocatoria";
+            $stmtDelOrden = $this->db->prepare($sqlDelOrden);
+            $stmtDelOrden->execute([':idConvocatoria' => $idConvocatoria]);
+
+            // Finalmente se elimina la convocatoria
+            $sqlDelConvocatoria = "DELETE FROM convocatoria WHERE idConvocatoria = :idConvocatoria";
+            $stmtDelConvocatoria = $this->db->prepare($sqlDelConvocatoria);
+            $stmtDelConvocatoria->execute([':idConvocatoria' => $idConvocatoria]);
+
+            $this->db->commit();
+
+            return ['message' => 'Convocatoria y su orden del día eliminados correctamente.'];
+        } catch (Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            throw $e;
+        }
     }
 
     private function obtenerCursos() {

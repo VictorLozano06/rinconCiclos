@@ -12,6 +12,7 @@
   </div>
 
   <div *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</div>
+  <p *ngIf="feedback" class="feedback mb-4" [class.feedback-error]="feedbackError">{{ feedback }}</p>
 
   <!-- Loading State -->
   <div *ngIf="cargandoListado" class="loading-state text-center py-5">
@@ -74,6 +75,9 @@
         </button>
         <button type="button" class="secondary-button btn-sm px-3" (click)="editarConvocatoria(conv.idConvocatoria)" title="Editar convocatoria">
           <i class="bi bi-pencil-square"></i>
+        </button>
+        <button type="button" class="secondary-button btn-sm px-3 text-danger border-danger" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="Eliminar convocatoria">
+          <i class="bi bi-trash3"></i>
         </button>
       </div>
     </div>

@@ -72,4 +72,8 @@ export class ConvocatoriaService {
   getConvocatoria(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiService.baseUrl}?c=Convocatorias&m=detalle&id=${id}`);
   }
+
+  eliminar(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiService.baseUrl}?c=Convocatorias&m=eliminar&id=${id}`);
+  }
 }

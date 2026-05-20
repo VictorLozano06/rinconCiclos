@@ -58,4 +58,21 @@ class ConConvocatorias extends ControladorBase {
             $this->enviarError($e);
         }
     }
+
+    public function eliminar() {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+                $this->enviarRespuesta(['error' => 'Metodo no permitido.'], 405);
+            }
+
+            $id = $_GET['id'] ?? null;
+            if (!$id) {
+                throw new InvalidArgumentException('El parametro ID es obligatorio.');
+            }
+
+            $this->enviarRespuesta($this->modelo->eliminar((int)$id));
+        } catch (Exception $e) {
+            $this->enviarError($e);
+        }
+    }
 }

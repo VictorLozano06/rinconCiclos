@@ -283,6 +283,25 @@ export class ConvocatoriasComponent implements OnInit {
     item.participaIds = item.participaIds.filter((selected: number) => selected !== profesorId);
   }
 
+  eliminarConvocatoria(id: number, event: Event): void {
+    event.stopPropagation();
+    if (confirm('¿Estás seguro de que deseas eliminar esta convocatoria y todo su orden del día?')) {
+      this.convocatoriaService.eliminar(id).subscribe({
+        next: (response) => {
+          this.feedback = response.message;
+          this.feedbackError = false;
+          this.cargarConvocatorias();
+          setTimeout(() => (this.feedback = ''), 3000);
+        },
+        error: (error) => {
+          this.feedback = error?.error?.message || 'No se pudo eliminar la convocatoria.';
+          this.feedbackError = true;
+          setTimeout(() => (this.feedback = ''), 3000);
+        }
+      });
+    }
+  }
+
   guardarConvocatoria(): void {
     this.feedback = '';
     this.feedbackError = false;
