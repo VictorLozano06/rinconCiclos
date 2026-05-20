@@ -1,0 +1,484 @@
+<!-- LIST VIEW -->
+<section class="convocatoria-page" *ngIf="vista === 'listado'">
+  <div class="header-container hero flex-between-center">
+    <div>
+      <p class="hero-kicker">Reuniones de equipo</p>
+      <h1 class="hero-title">Convocatorias</h1>
+      <p class="hero-subtitle">Visualiza y edita las convocatorias de reuniones programadas para el ciclo.</p>
+    </div>
+    <button type="button" class="primary-button" (click)="crearNueva()">
+      <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
+    </button>
+  </div>
+
+  <div *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</div>
+
+  <!-- Loading State -->
+  <div *ngIf="cargandoListado" class="loading-state text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando convocatorias...</span>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!cargandoListado && convocatorias.length === 0" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+    <div class="card-body">
+      <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>
+      <h4 class="card-title text-secondary">No hay convocatorias</h4>
+      <p class="card-text text-muted">Aún no se han registrado convocatorias de reuniones. Pulsa el botón superior para crear una.</p>
+    </div>
+  </div>
+
+  <!-- List Grid -->
+  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="convocatorias-grid">
+    <div *ngFor="let conv of convocatorias" class="surface-card convocatoria-card">
+      <div class="card-header-main">
+        <div class="fecha-badge">
+          <i class="bi bi-calendar3"></i>
+          <span>{{ formatFecha(conv.fecha) }}</span>
+        </div>
+        <div class="curso-tag">
+          <span>Curso {{ conv.anioInicio }}/{{ conv.anioFin }}</span>
+        </div>
+      </div>
+
+      <div class="card-details mt-3">
+        <div class="detail-item">
+          <i class="bi bi-geo-alt-fill"></i>
+          <div>
+            <strong>Lugar</strong>
+            <span>{{ conv.lugar || 'Sin asignar' }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item mt-2">
+          <i class="bi bi-person-fill"></i>
+          <div>
+            <strong>Inicia</strong>
+            <span>{{ conv.inicia || 'Sin asignar' }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item mt-2">
+          <i class="bi bi-pencil-square"></i>
+          <div>
+            <strong>Redacta acta</strong>
+            <span>{{ conv.redacta || 'Sin asignar' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions mt-4 d-flex gap-2">
+        <button type="button" class="primary-button btn-sm flex-grow-1" (click)="verConvocatoria(conv.idConvocatoria)">
+          Ver detalle
+        </button>
+        <button type="button" class="secondary-button btn-sm px-3" (click)="editarConvocatoria(conv.idConvocatoria)" title="Editar convocatoria">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAIL VIEW -->
+<section class="convocatoria-page" *ngIf="vista === 'detalle' && convocatoriaSeleccionada">
+  <header class="hero">
+    <div>
+      <p class="hero-kicker">Reuniones de equipo</p>
+      <h1 class="hero-title">Detalle Convocatoria</h1>
+      <p class="hero-subtitle">Visualiza la información general y el orden del día establecido.</p>
+    </div>
+
+    <div class="hero-badge">
+      <span class="badge-label">Curso</span>
+      <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>
+    </div>
+  </header>
+
+  <div *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</div>
+
+  <div class="surface-card group-summary">
+    <div>
+      <p class="summary-label">Convocatoria</p>
+      <h2 class="summary-title">Datos base de la reunión y su orden del día</h2>
+    </div>
+
+    <div class="summary-meta">
+      <div>
+        <span>Fecha y hora</span>
+        <strong>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</strong>
+      </div>
+      <div>
+        <span>Lugar</span>
+        <strong>{{ convocatoriaSeleccionada.lugar || 'Sin asignar' }}</strong>
+      </div>
+      <div>
+        <span>Curso</span>
+        <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card section-card">
+    <div class="section-header">
+      <div>
+        <h3>Información general</h3>
+        <p>Campos base de la convocatoria y responsables de la sesión.</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Curso académico</strong>
+        <p>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>
+      </div>
+
+      <div class="info-item">
+        <strong>Fecha y hora</strong>
+        <p>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</p>
+      </div>
+
+      <div class="info-item">
+        <strong>Redacta la convocatoria</strong>
+        <p>{{ convocatoriaSeleccionada.redacta || 'Sin asignar' }}</p>
+      </div>
+
+      <div class="info-item">
+        <strong>Inicia la reunión</strong>
+        <p>{{ convocatoriaSeleccionada.inicia || 'Sin asignar' }}</p>
+      </div>
+
+      <div class="info-item">
+        <strong>Lugar</strong>
+        <p>{{ convocatoriaSeleccionada.lugar || 'Sin asignar' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card section-card">
+    <div class="section-header">
+      <div>
+        <h3>Orden del día</h3>
+        <p>Estructura temporal y organizativa de la sesión.</p>
+      </div>
+    </div>
+
+    <div class="table-shell">
+      <table class="agenda-table">
+        <thead>
+          <tr>
+            <th>Min.</th>
+            <th>Punto / Descripción</th>
+            <th>Objetivo</th>
+            <th>Dinamiza</th>
+            <th>Lugar</th>
+            <th>Participa</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of convocatoriaSeleccionada.ordenDia">
+            <td class="minutos-cell" data-label="Min.">
+              <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || '0' }} min</span>
+            </td>
+            <td data-label="Punto / Descripción">
+              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || 'Sin descripción' }}</p>
+            </td>
+            <td data-label="Objetivo">
+              <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || 'Sin objetivo' }}</p>
+            </td>
+            <td data-label="Dinamiza">
+              <span class="text-secondary font-weight-bold">{{ item.dinamiza || 'Sin asignar' }}</span>
+            </td>
+            <td data-label="Lugar">
+              <span>{{ item.lugar || 'Sin asignar' }}</span>
+            </td>
+            <td data-label="Participa">
+              <div class="participants-list row-participants">
+                <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
+                <article *ngFor="let prof of item.participantes" class="participant-chip chip-view">
+                  <strong>{{ prof.nombre }}</strong>
+                </article>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="agenda-footer">
+      <div class="total-badge">
+        <span>Total previsto</span>
+        <strong>{{ minutosTotalesDetalle }} minutos</strong>
+      </div>
+
+      <div class="footer-actions">
+        <button type="button" class="primary-button" (click)="volverAlListado()">
+          <i class="bi bi-arrow-left me-2"></i> Volver al listado
+        </button>
+        <button type="button" class="secondary-button" (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">
+          <i class="bi bi-pencil-square me-2"></i> Editar convocatoria
+        </button>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<!-- FORM VIEW (CREATE/EDIT) -->
+<section class="convocatoria-page" *ngIf="vista === 'formulario'">
+  <p *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</p>
+  <p *ngIf="feedback" class="feedback" [class.feedback-error]="feedbackError">{{ feedback }}</p>
+
+  <header class="hero">
+    <div>
+      <p class="hero-kicker">Reuniones de equipo</p>
+      <h1 class="hero-title">{{ convocatoria.titulo }}</h1>
+      <p class="hero-subtitle">{{ convocatoria.subtitulo }}</p>
+    </div>
+
+    <div class="hero-badge">
+      <span class="badge-label">Curso</span>
+      <strong>{{ cursoActualLabel }}</strong>
+    </div>
+  </header>
+
+  <div class="surface-card group-summary">
+    <div>
+      <p class="summary-label">Convocatoria</p>
+      <h2 class="summary-title">Datos base de la reunión y su orden del día</h2>
+    </div>
+
+    <div class="summary-meta">
+      <div>
+        <span>Fecha y hora</span>
+        <strong>{{ fechaHoraResumen }}</strong>
+      </div>
+      <div>
+        <span>Lugar</span>
+        <strong>{{ getLugarNombre(convocatoria.lugarId) || 'Sin asignar' }}</strong>
+      </div>
+      <div>
+        <span>Curso</span>
+        <strong>{{ cursoActualLabel }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card section-card">
+    <div class="section-header">
+      <div>
+        <h3>Información general</h3>
+        <p>Campos base de la convocatoria y responsables de la sesión.</p>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <label class="field">
+        <span>Curso académico</span>
+        <select [(ngModel)]="convocatoria.cursoId" [disabled]="cargandoFormulario">
+          <option *ngFor="let curso of cursosAcademicos" [ngValue]="curso.idCurso">{{ getCursoLabel(curso.idCurso) }}</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Fecha y hora</span>
+        <input type="datetime-local" [(ngModel)]="convocatoria.fechaHora">
+      </label>
+
+      <label class="field">
+        <span>Redacta la convocatoria</span>
+        <div class="single-select">
+          <button
+            type="button"
+            class="participa-toggle"
+            (click)="toggleProfesorDropdown('redacta')"
+            [attr.aria-expanded]="redactaOpen">
+            <span class="participa-toggle-text">{{ redactaLabel }}</span>
+            <i class="bi" [ngClass]="redactaOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </button>
+
+          <div *ngIf="redactaOpen" class="participa-dropdown">
+            <input
+              type="text"
+              [(ngModel)]="redactaQuery"
+              placeholder="Buscar profesor">
+
+            <div class="search-results row-results">
+              <button
+                type="button"
+                *ngFor="let profesor of getProfesoresFieldFiltrados('redacta')"
+                class="search-result"
+                (click)="selectProfesor('redacta', profesor.idProfesor)">
+                <span>{{ profesor.nombre }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Inicia la reunión</span>
+        <div class="single-select">
+          <button
+            type="button"
+            class="participa-toggle"
+            (click)="toggleProfesorDropdown('inicia')"
+            [attr.aria-expanded]="iniciaOpen">
+            <span class="participa-toggle-text">{{ iniciaLabel }}</span>
+            <i class="bi" [ngClass]="iniciaOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </button>
+
+          <div *ngIf="iniciaOpen" class="participa-dropdown">
+            <input
+              type="text"
+              [(ngModel)]="iniciaQuery"
+              placeholder="Buscar profesor">
+
+            <div class="search-results row-results">
+              <button
+                type="button"
+                *ngFor="let profesor of getProfesoresFieldFiltrados('inicia')"
+                class="search-result"
+                (click)="selectProfesor('inicia', profesor.idProfesor)">
+                <span>{{ profesor.nombre }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>Lugar</span>
+        <select [(ngModel)]="convocatoria.lugarId" [disabled]="cargandoFormulario">
+          <option [ngValue]="null">Selecciona un lugar</option>
+          <option *ngFor="let lugar of lugares" [ngValue]="lugar.idLugar">{{ lugar.nombre }}</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="surface-card section-card">
+    <div class="section-header">
+      <div>
+        <h3>Orden del día</h3>
+        <p>Estructura temporal y organizativa de la sesión.</p>
+      </div>
+
+      <button type="button" class="ghost-button" (click)="addFila()">
+        <i class="bi bi-plus-lg"></i>
+        Añadir fila
+      </button>
+    </div>
+
+    <div class="table-shell">
+      <table class="agenda-table">
+        <thead>
+          <tr>
+            <th>Min.</th>
+            <th>Orden del día</th>
+            <th>Objetivo</th>
+            <th>Dinamiza</th>
+            <th>Lugar</th>
+            <th>Participa</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of ordenDia; let i = index">
+            <td class="minutos-cell" data-label="Min.">
+              <input type="number" min="0" [(ngModel)]="item.minutos" placeholder="0">
+            </td>
+            <td data-label="Orden del día">
+              <textarea rows="2" [(ngModel)]="item.ordenDia" placeholder="Descripción del tema"></textarea>
+            </td>
+            <td data-label="Objetivo">
+              <textarea rows="2" [(ngModel)]="item.objetivo" placeholder="Qué se espera conseguir"></textarea>
+            </td>
+            <td data-label="Dinamiza">
+              <select [(ngModel)]="item.dinamizaId">
+                <option [ngValue]="null">Selecciona</option>
+                <option *ngFor="let profesor of profesores" [ngValue]="profesor.idProfesor">{{ profesor.nombre }}</option>
+              </select>
+            </td>
+            <td data-label="Lugar">
+              <select [(ngModel)]="item.lugarId">
+                <option [ngValue]="null">Selecciona</option>
+                <option *ngFor="let lugar of lugares" [ngValue]="lugar.idLugar">{{ lugar.nombre }}</option>
+              </select>
+            </td>
+            <td data-label="Participa">
+              <div class="participa-cell">
+                <button
+                  type="button"
+                  class="participa-toggle"
+                  (click)="toggleParticipa(item)"
+                  [attr.aria-expanded]="item.participaOpen">
+                  <span class="participa-toggle-text">
+                    {{ item.participaIds.length > 0 ? (item.participaIds.length + ' profesores') : 'Seleccionar profesores' }}
+                  </span>
+                  <i class="bi" [ngClass]="item.participaOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="item.participaOpen" class="participa-dropdown">
+                  <input
+                    type="text"
+                    [(ngModel)]="item.participaQuery"
+                    placeholder="Buscar profesor">
+
+                  <div *ngIf="getProfesoresFiltrados(item).length > 0" class="search-results row-results">
+                    <button
+                      type="button"
+                      *ngFor="let profesor of getProfesoresFiltrados(item)"
+                      class="search-result"
+                      (click)="addProfesor(item, profesor.idProfesor)">
+                      <span>{{ profesor.nombre }}</span>
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </div>
+
+                  <div class="participants-list row-participants" *ngIf="item.participaIds.length > 0">
+                    <article *ngFor="let profesor of getParticipanteNombres(item.participaIds); let idx = index" class="participant-chip">
+                      <strong>{{ profesor }}</strong>
+                      <button
+                        type="button"
+                        class="chip-remove"
+                        (click)="removeProfesor(item, item.participaIds[idx])"
+                        aria-label="Quitar profesor">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="actions-cell" data-label="Acciones">
+              <button
+                type="button"
+                class="delete-button"
+                (click)="removeFila(i)"
+                [disabled]="ordenDia.length === 1"
+                aria-label="Eliminar fila">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="agenda-footer">
+      <div class="total-badge">
+        <span>Total previsto</span>
+        <strong>{{ minutosTotales }} minutos</strong>
+      </div>
+
+      <div class="footer-actions">
+        <button type="button" (click)="volverAlListado()" class="secondary-button">Cancelar</button>
+        <button type="button" class="primary-button" (click)="guardarConvocatoria()" [disabled]="guardando || cargandoFormulario">
+          {{ guardando ? 'Guardando...' : 'Guardar convocatoria' }}
+        </button>
+      </div>
+    </footer>
+  </div>
+</section>

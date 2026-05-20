@@ -1,0 +1,52 @@
+<aside class="barra-lateral" [class.barra-lateral-abierta]="mobileOpen">
+  <div class="cabecera-sidebar">
+    <h1 class="titulo-web">Rincon de Ciclos</h1>
+    <p class="subtitulo-web">Portal Coordinacion</p>
+    <button type="button" class="cerrar-sidebar" (click)="closeSidebar()" aria-label="Cerrar menu">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <nav class="navegacion-sidebar">
+    <p *ngIf="errorCarga" class="estado-sidebar">
+      No se pudieron cargar las categorias del backend.
+    </p>
+
+    <div *ngFor="let cat of categorias" class="grupo-navegacion">
+      <button
+        class="item-menu"
+        (click)="toggleMenu(cat)"
+        [routerLink]="cat.subcategorias.length === 0 ? cat.ruta : null"
+        [class.enlace-activo]="cat.subcategorias.length === 0"
+        routerLinkActive="enlace-activo">
+        <div class="contenido-item">
+          <span class="icono-item">
+            <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
+          </span>
+          <span class="texto-item">{{ cat.nombre }}</span>
+        </div>
+      </button>
+
+      <div *ngIf="cat.abierto && cat.subcategorias.length > 0" class="lista-subcategorias">
+        <ng-container *ngFor="let sub of cat.subcategorias">
+          <a
+            *ngIf="!sub.deshabilitado"
+            [routerLink]="sub.ruta"
+            (click)="closeSidebar()"
+            routerLinkActive="enlace-activo"
+            class="item-subcategoria">
+            {{ sub.nombre }}
+          </a>
+
+          <span
+            *ngIf="sub.deshabilitado"
+            class="item-subcategoria sub-deshabilitada"
+            title="Seccion en desarrollo"
+            style="opacity: 0.5; cursor: not-allowed; display: block; padding: 6px 12px 6px 44px; font-size: 0.9rem; color: var(--color-texto-secundario);">
+            {{ sub.nombre }}
+          </span>
+        </ng-container>
+      </div>
+    </div>
+  </nav>
+</aside>

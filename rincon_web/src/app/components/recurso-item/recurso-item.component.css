@@ -1,0 +1,58 @@
+.tarjeta-recurso {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-recurso {
+  flex: 1;
+}
+
+.etiqueta-recurso {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.icono-etiqueta {
+  width: 14px;
+}
+
+.titulo-recurso {
+  font-size: 18px;
+  margin: 5px 0;
+  color: #333;
+}
+
+.descripcion-recurso {
+  font-size: 14px;
+  color: #777;
+}
+
+.boton-ver {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0f0f0;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.boton-ver:hover {
+  background: #e0e0e0;
+}
+
+.icono-accion {
+  width: 18px;
+}

@@ -1,0 +1,46 @@
+.contenedor-inicio {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  font-family: Arial, sans-serif;
+}
+
+.envoltura-contenido {
+  text-align: center;
+}
+
+.titulo {
+  margin-bottom: 5px;
+}
+
+.subtitulo {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.rejilla-seleccion {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.tarjeta-rol {
+  padding: 20px 40px;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.tarjeta-rol:hover {
+  background: #f9f9f9;
+}
+
+.tarjeta-rol h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+

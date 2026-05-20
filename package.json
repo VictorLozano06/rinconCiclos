@@ -1,0 +1,14 @@
+{
+  "name": "rincon-de-ciclos",
+  "private": true,
+  "workspaces": [
+    "rincon_web"
+  ],
+  "scripts": {
+    "back:start": "php -S 127.0.0.1:8000 -t rincon_back",
+    "back:start:detached": "powershell -NoProfile -Command \"Start-Process -FilePath php -ArgumentList '-S','127.0.0.1:8000','-t','rincon_back' -WorkingDirectory (Get-Location).Path\"",
+    "web:install": "npm install --prefix rincon_web",
+    "web:start": "npm run back:start:detached && npm run start --prefix rincon_web",
+    "web:build": "npm run build --prefix rincon_web"
+  }
+}

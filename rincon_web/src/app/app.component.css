@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  color: #2b3674;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fe;
+}
+
+.shell {
+  flex: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-bar {
+  padding: 30px 40px 10px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.content-container {
+  flex: 1;
+  padding: 0 40px 40px 40px;
+  overflow-y: auto;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #707eae;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #2b3674;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  max-width: 640px;
+  font-size: 1.1rem;
+  color: #707eae;
+  line-height: 1.6;
+}
+
+.status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.status article {
+  padding: 24px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0px 18px 40px rgba(112, 144, 176, 0.12);
+}
+
+.titulo-seccion {
+  font-size: 32px;
+  color: #2b3674;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  letter-spacing: -0.02em;
+}
+
+.lista-recursos {
+  display: flex;
+  flex-direction: column;
+}

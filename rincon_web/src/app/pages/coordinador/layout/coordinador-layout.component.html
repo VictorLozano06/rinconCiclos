@@ -1,0 +1,28 @@
+<div class="diseno-app">
+  <div
+    class="sidebar-overlay"
+    [class.sidebar-overlay-visible]="sidebarOpen"
+    (click)="closeSidebar()"></div>
+
+  <app-sidebar-coordinador
+    [mobileOpen]="sidebarOpen"
+    (requestClose)="closeSidebar()" />
+
+  <main class="contenedor-principal">
+    <header class="barra-superior">
+      <button type="button" class="boton-sidebar" (click)="openSidebar()" aria-label="Abrir menu lateral">
+        <i class="bi bi-list"></i>
+      </button>
+
+      <app-buscador />
+    </header>
+
+    <div class="contenedor-contenido">
+      <div class="ajuste-ancho">
+        <router-outlet />
+      </div>
+    </div>
+  </main>
+</div>
+
+
