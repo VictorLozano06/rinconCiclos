@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
 import { CoordinadorLayoutComponent } from './layout/coordinador-layout.component';
 import { InicioComponent } from './inicio/inicio.component';
-import { ConvocatoriasComponent } from './convocatorias/convocatorias.component';
 import { RecursosCategoriaComponent } from './recursos-categoria/recursos-categoria.component';
-import { CiclosCursosComponent } from '../../components/ciclos-cursos/ciclos-cursos.component';
+import { CiclosCursosComponent } from './ciclos-cursos/ciclos-cursos.component';
 
 export const COORDINADOR_ROUTES: Routes = [
   {
@@ -12,12 +11,7 @@ export const COORDINADOR_ROUTES: Routes = [
     children: [
       { path: '', component: InicioComponent },
       { path: 'inicio', component: InicioComponent },
-      { path: 'reuniones-de-equipo/convocatorias', component: ConvocatoriasComponent },
-      { path: 'reuniones-de-equipo/convocatorias/crear', component: ConvocatoriasComponent },
-      { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
-      { path: 'reuniones-de-equipo/convocatorias/:id/editar', component: ConvocatoriasComponent },
       { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
-      { path: 'gestion-de-cursos', component: CiclosCursosComponent },
       { path: ':section', component: RecursosCategoriaComponent },
       { path: ':section/:subsection', component: RecursosCategoriaComponent }
     ]

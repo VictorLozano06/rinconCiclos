@@ -75,14 +75,7 @@ export class SidebarCoordinadorComponent implements OnInit {
         subcategorias: [],
         deshabilitado: false
       },
-      {
-        nombre: 'Gestión de Cursos',
-        icono: 'categoria-generica',
-        ruta: '/coordinador/gestion-de-cursos',
-        abierto: false,
-        subcategorias: [],
-        deshabilitado: false
-      },
+
       {
         nombre: 'Categorías',
         icono: 'categorias',
