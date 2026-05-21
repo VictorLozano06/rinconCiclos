@@ -1,0 +1,16 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "rincon_web/src/app"
+  ],
+  "entryPointStrategy": "expand",
+  "tsconfig": "rincon_web/tsconfig.json",
+  "out": "docs/frontend",
+  "exclude": [
+    "**/*.spec.ts"
+  ],
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "readme": "none",
+  "name": "Rincon de Ciclos - Frontend"
+}

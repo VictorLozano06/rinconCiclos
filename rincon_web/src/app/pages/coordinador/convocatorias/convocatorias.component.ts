@@ -119,10 +119,14 @@ export class ConvocatoriasComponent implements OnInit {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/crear']);
   }
 
+  irAConvocatoriasCanceladas(): void {
+    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/canceladas']);
+  }
+
   editarConvocatoria(id: number): void {
     const convocatoria = this.convocatorias.find((item) => item.idConvocatoria === id) || this.convocatoriaSeleccionada;
-    if (convocatoria?.fecha && this.esFechaPasada(convocatoria.fecha)) {
-      this.feedback = 'No se puede modificar una convocatoria pasada.';
+    if (convocatoria?.cancelada) {
+      this.feedback = 'No se puede modificar una convocatoria cancelada.';
       this.feedbackError = true;
       return;
     }
@@ -165,8 +169,8 @@ export class ConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
-        if (this.esFechaPasada(data.fecha)) {
-          this.feedback = 'No se puede modificar una convocatoria pasada.';
+        if (data.cancelada) {
+          this.feedback = 'No se puede modificar una convocatoria cancelada.';
           this.feedbackError = true;
           this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id]);
           return;
@@ -175,7 +179,7 @@ export class ConvocatoriasComponent implements OnInit {
         this.convocatoria = {
           idConvocatoria: data.idConvocatoria,
           titulo: 'Editar Convocatoria',
-          subtitulo: 'Modifica los campos del orden del día y responsables de la sesión.',
+          subtitulo: 'Modifica los campos del orden del dia y responsables de la sesion.',
           fechaHora: data.fecha ? data.fecha.substring(0, 16) : '',
           lugarId: data.idLugar ? Number(data.idLugar) : null,
           redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
@@ -293,34 +297,9 @@ export class ConvocatoriasComponent implements OnInit {
     item.participaIds = item.participaIds.filter((selected: number) => selected !== profesorId);
   }
 
-  eliminarConvocatoria(id: number, event: Event): void {
-    event.stopPropagation();
-    if (confirm('¿Estás seguro de que deseas eliminar esta convocatoria y todo su orden del día?')) {
-      this.convocatoriaService.eliminar(id).subscribe({
-        next: (response) => {
-          this.feedback = response.message;
-          this.feedbackError = false;
-          this.cargarConvocatorias();
-          setTimeout(() => (this.feedback = ''), 3000);
-        },
-        error: (error) => {
-          this.feedback = error?.error?.message || 'No se pudo eliminar la convocatoria.';
-          this.feedbackError = true;
-          setTimeout(() => (this.feedback = ''), 3000);
-        }
-      });
-    }
-  }
-
   guardarConvocatoria(): void {
     this.feedback = '';
     this.feedbackError = false;
-
-    if (this.convocatoria.idConvocatoria && this.esFechaPasada(this.convocatoria.fechaHora)) {
-      this.feedback = 'No se puede modificar una convocatoria pasada.';
-      this.feedbackError = true;
-      return;
-    }
 
     const payload: GuardarConvocatoriaPayloadDto = {
       idConvocatoria: this.convocatoria.idConvocatoria || undefined,
@@ -361,10 +340,7 @@ export class ConvocatoriasComponent implements OnInit {
   esFechaPasada(fechaStr: string): boolean {
     if (!fechaStr) return false;
     const fechaConvocatoria = new Date(fechaStr);
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    fechaConvocatoria.setHours(0, 0, 0, 0);
-    return fechaConvocatoria < hoy;
+    return fechaConvocatoria.getTime() <= Date.now();
   }
 
   formatFecha(fechaStr: string): string {

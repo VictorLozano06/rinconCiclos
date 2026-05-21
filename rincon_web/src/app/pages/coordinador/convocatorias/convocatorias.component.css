@@ -65,6 +65,13 @@
   border-radius: 16px;
 }
 
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .hero-badge {
   min-width: 140px;
   padding: 14px 16px;

@@ -1,0 +1,12 @@
+{
+    "name": "rincon-ciclos/backend",
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^3.8"
+    },
+    "scripts": {
+        "docs": [
+            "@php scripts/prepare_phpdoc.php",
+            "@php -d error_reporting=8191 vendor/bin/phpdoc -c phpdoc.xml"
+        ]
+    }
+}

@@ -3,6 +3,7 @@ import { OrdenDiaProfesorDto } from './orden-dia-profesor.dto';
 export interface ConvocatoriaDetalleDto {
   idConvocatoria: number;
   fecha: string;
+  cancelada: number;
   idLugar: number;
   idCurso: number;
   idProfesorRedactaActa: number;

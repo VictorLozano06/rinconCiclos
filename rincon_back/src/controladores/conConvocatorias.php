@@ -9,7 +9,6 @@ class ConConvocatorias extends ControladorBase {
         $this->modelo = new ModConvocatorias($db);
     }
 
-    // Devuelve los datos base que necesitan los formularios de alta y edicion.
     public function formulario() {
         try {
             $this->enviarMensajes($this->modelo->obtenerFormulario());
@@ -18,7 +17,6 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
-    // Guarda convocatorias que llegan desde el frontend en JSON.
     public function guardar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -36,7 +34,6 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
-    // Lista las convocatorias para la pantalla principal del coordinador.
     public function listar() {
         try {
             $this->enviarMensajes($this->modelo->listarConvocatorias());
@@ -45,7 +42,6 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
-    // Devuelve el detalle completo de una convocatoria.
     public function detalle() {
         try {
             $id = $_GET['id'] ?? null;
@@ -58,6 +54,21 @@ class ConConvocatorias extends ControladorBase {
             } else {
                 $this->enviarMensajes($convocatoria);
             }
+
+            return $convocatoria;
+        });
+    }
+
+    public function eliminar() {
+        $this->ejecutar(function () {
+            $this->requerirMetodo('DELETE');
+            return $this->modelo->eliminar($this->leerId());
+        });
+    }
+
+    private function ejecutar(callable $accion, $codigo = 200) {
+        try {
+            $this->enviarRespuesta($accion(), $codigo);
         } catch (Exception $e) {
             $this->montarMensajes('No se han podido cargar los detalles de la convocatoria.');
         }
@@ -79,5 +90,7 @@ class ConConvocatorias extends ControladorBase {
         } catch (Exception $e) {
             $this->montarMensajes('No se ha podido eliminar la convocatoria.');
         }
+
+        return (int)$id;
     }
 }
