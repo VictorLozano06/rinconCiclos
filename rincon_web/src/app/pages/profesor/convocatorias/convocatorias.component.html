@@ -1,215 +1,90 @@
 <section class="convocatoria-page" *ngIf="!convocatoriaSeleccionada">
-  <div class="header-container hero">
+  <div class="page-header">
     <div>
-      <p class="hero-kicker">Reuniones de equipo</p>
-      <h1 class="hero-title">Convocatorias</h1>
-      <p class="hero-subtitle">Visualiza las convocatorias de reuniones programadas para el ciclo.</p>
+      <p class="page-kicker">Reuniones de equipo</p>
+      <h1>Convocatorias</h1>
+      <p class="page-text">Visualiza las convocatorias de reuniones programadas para el ciclo.</p>
     </div>
   </div>
 
-  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>
+  <div *ngIf="errorMsg" class="message message-error">{{ errorMsg }}</div>
 
-  <!-- Loading State -->
-  <div *ngIf="cargandoListado" class="loading-state text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando convocatorias...</span>
-    </div>
+  <div *ngIf="cargandoListado" class="box">Cargando convocatorias...</div>
+
+  <div *ngIf="!cargandoListado && convocatorias.length === 0" class="box empty-box">
+    <h2>No hay convocatorias</h2>
+    <p>Aun no se han registrado convocatorias de reuniones.</p>
   </div>
 
-  <!-- Empty state -->
-  <div *ngIf="!cargandoListado && convocatoras.length === 0" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
-    <div class="card-body">
-      <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>
-      <h4 class="card-title text-secondary">No hay convocatorias</h4>
-      <p class="card-text text-muted">Aún no se han registrado convocatorias de reuniones.</p>
-    </div>
-  </div>
+  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="cards">
+    <div *ngFor="let conv of convocatorias" class="box card-box">
+      <p><strong>Fecha:</strong> {{ formatFecha(conv.fecha) }}</p>
+      <p><strong>Curso:</strong> {{ conv.anioInicio }}/{{ conv.anioFin }}</p>
+      <p><strong>Lugar:</strong> {{ conv.lugar || 'Sin asignar' }}</p>
+      <p><strong>Inicia:</strong> {{ conv.inicia || 'Sin asignar' }}</p>
+      <p><strong>Redacta:</strong> {{ conv.redacta || 'Sin asignar' }}</p>
 
-  <!-- List Grid -->
-  <div *ngIf="!cargandoListado && convocatoras.length > 0" class="convocatorias-grid">
-    <div *ngFor="let conv of convocatoras" class="surface-card convocatoria-card">
-      <div class="card-header-main">
-        <div class="fecha-badge">
-          <i class="bi bi-calendar3"></i>
-          <span>{{ formatFecha(conv.fecha) }}</span>
-        </div>
-        <div class="curso-tag">
-          <span>Curso {{ conv.anioInicio }}/{{ conv.anioFin }}</span>
-        </div>
-      </div>
-
-      <div class="card-details mt-3">
-        <div class="detail-item">
-          <i class="bi bi-geo-alt-fill"></i>
-          <div>
-            <strong>Lugar</strong>
-            <span>{{ conv.lugar || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-person-fill"></i>
-          <div>
-            <strong>Inicia</strong>
-            <span>{{ conv.inicia || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-pencil-square"></i>
-          <div>
-            <strong>Redacta acta</strong>
-            <span>{{ conv.redacta || 'Sin asignar' }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-actions mt-4">
-        <button type="button" class="primary-button btn-sm w-100" (click)="seleccionarConvocatoria(conv.idConvocatoria)">
-          Ver convocatoria <i class="bi bi-arrow-right ms-2"></i>
-        </button>
+      <div class="page-actions">
+        <button type="button" class="primary-button" (click)="seleccionarConvocatoria(conv.idConvocatoria)">Ver convocatoria</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Detail View -->
 <section class="convocatoria-page" *ngIf="convocatoriaSeleccionada">
-  <header class="hero">
+  <div class="page-header">
     <div>
-      <p class="hero-kicker">Reuniones de equipo</p>
-      <h1 class="hero-title">Detalle Convocatoria</h1>
-      <p class="hero-subtitle">Visualiza la información general y el orden del día establecido.</p>
-    </div>
-
-    <div class="hero-badge">
-      <span class="badge-label">Curso</span>
-      <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>
-    </div>
-  </header>
-
-  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>
-
-  <div class="surface-card group-summary">
-    <div>
-      <p class="summary-label">Convocatoria</p>
-      <h2 class="summary-title">Datos base de la reunión y su orden del día</h2>
-    </div>
-
-    <div class="summary-meta">
-      <div>
-        <span>Fecha y hora</span>
-        <strong>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</strong>
-      </div>
-      <div>
-        <span>Lugar</span>
-        <strong>{{ convocatoriaSeleccionada.lugar || 'Sin asignar' }}</strong>
-      </div>
-      <div>
-        <span>Curso</span>
-        <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>
-      </div>
+      <p class="page-kicker">Reuniones de equipo</p>
+      <h1>Detalle convocatoria</h1>
+      <p class="page-text">Visualiza la informacion general y el orden del dia.</p>
     </div>
   </div>
 
-  <div class="surface-card section-card">
-    <div class="section-header">
-      <div>
-        <h3>Información general</h3>
-        <p>Campos base de la convocatoria y responsables de la sesión.</p>
-      </div>
-    </div>
+  <div *ngIf="errorMsg" class="message message-error">{{ errorMsg }}</div>
 
-    <div class="info-grid">
-      <div class="info-item">
-        <strong>Curso académico</strong>
-        <p>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>
-      </div>
-
-      <div class="info-item">
-        <strong>Fecha y hora</strong>
-        <p>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</p>
-      </div>
-
-      <div class="info-item">
-        <strong>Redacta la convocatoria</strong>
-        <p>{{ convocatoriaSeleccionada.redacta || 'Sin asignar' }}</p>
-      </div>
-
-      <div class="info-item">
-        <strong>Inicia la reunión</strong>
-        <p>{{ convocatoriaSeleccionada.inicia || 'Sin asignar' }}</p>
-      </div>
-
-      <div class="info-item">
-        <strong>Lugar</strong>
-        <p>{{ convocatoriaSeleccionada.lugar || 'Sin asignar' }}</p>
-      </div>
-    </div>
+  <div class="box">
+    <p><strong>Curso:</strong> {{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>
+    <p><strong>Fecha y hora:</strong> {{ formatFecha(convocatoriaSeleccionada.fecha) }}</p>
+    <p><strong>Lugar:</strong> {{ convocatoriaSeleccionada.lugar || 'Sin asignar' }}</p>
+    <p><strong>Redacta:</strong> {{ convocatoriaSeleccionada.redacta || 'Sin asignar' }}</p>
+    <p><strong>Inicia:</strong> {{ convocatoriaSeleccionada.inicia || 'Sin asignar' }}</p>
   </div>
 
-  <div class="surface-card section-card">
-    <div class="section-header">
-      <div>
-        <h3>Orden del día</h3>
-        <p>Estructura temporal y organizativa de la sesión.</p>
-      </div>
-    </div>
+  <div class="box">
+    <h2>Orden del dia</h2>
 
-    <div class="table-shell">
-      <table class="agenda-table">
+    <div class="table-wrap">
+      <table class="simple-table">
         <thead>
           <tr>
             <th>Min.</th>
-            <th>Punto / Descripción</th>
+            <th>Descripcion</th>
             <th>Objetivo</th>
             <th>Dinamiza</th>
             <th>Lugar</th>
             <th>Participa</th>
           </tr>
         </thead>
-
         <tbody>
           <tr *ngFor="let item of convocatoriaSeleccionada.ordenDia">
-            <td class="minutos-cell" data-label="Min.">
-              <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || '0' }} min</span>
-            </td>
-            <td data-label="Punto / Descripción">
-              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || 'Sin descripción' }}</p>
-            </td>
-            <td data-label="Objetivo">
-              <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || 'Sin objetivo' }}</p>
-            </td>
-            <td data-label="Dinamiza">
-              <span class="text-secondary font-weight-bold">{{ item.dinamiza || 'Sin asignar' }}</span>
-            </td>
-            <td data-label="Lugar">
-              <span>{{ item.lugar || 'Sin asignar' }}</span>
-            </td>
+            <td data-label="Min.">{{ item.minutos || '0' }}</td>
+            <td data-label="Descripcion">{{ item.descripcion || 'Sin descripcion' }}</td>
+            <td data-label="Objetivo">{{ item.objetivo || 'Sin objetivo' }}</td>
+            <td data-label="Dinamiza">{{ item.dinamiza || 'Sin asignar' }}</td>
+            <td data-label="Lugar">{{ item.lugar || 'Sin asignar' }}</td>
             <td data-label="Participa">
-              <div class="participants-list row-participants">
-                <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
-                <article *ngFor="let prof of item.participantes" class="participant-chip chip-view">
-                  <strong>{{ prof.nombre }}</strong>
-                </article>
-              </div>
+              <div *ngIf="item.participantes.length === 0">Nadie asignado</div>
+              <div *ngFor="let prof of item.participantes" class="tag">{{ prof.nombre }}</div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <footer class="agenda-footer">
-      <div class="total-badge">
-        <span>Total previsto</span>
-        <strong>{{ minutosTotales }} minutos</strong>
-      </div>
+    <p class="total-text"><strong>Total previsto:</strong> {{ minutosTotales }} minutos</p>
 
-      <div class="footer-actions">
-        <button type="button" class="primary-button" (click)="volverAlListado()">
-          <i class="bi bi-arrow-left me-2"></i> Volver al listado
-        </button>
-      </div>
-    </footer>
+    <div class="page-actions">
+      <button type="button" class="primary-button" (click)="volverAlListado()">Volver al listado</button>
+    </div>
   </div>
 </section>

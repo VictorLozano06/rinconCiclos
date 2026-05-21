@@ -13,7 +13,7 @@ import { ConvocatoriaListaItemDto } from '../../../dto/convocatoria-lista-item.d
   styleUrl: './convocatorias.component.css'
 })
 export class ProfesorConvocatoriasComponent implements OnInit {
-  convocatoras: ConvocatoriaListaItemDto[] = [];
+  convocatorias: ConvocatoriaListaItemDto[] = [];
   convocatoriaSeleccionada: ConvocatoriaDetalleDto | null = null;
   cargandoListado = true;
   cargandoDetalle = false;
@@ -42,17 +42,16 @@ export class ProfesorConvocatoriasComponent implements OnInit {
     this.errorMsg = '';
     this.convocatoriaService.listarConvocatorias().subscribe({
       next: (data) => {
-        this.convocatoras = data;
+        this.convocatorias = data;
         this.cargandoListado = false;
       },
       error: (error) => {
         this.cargandoListado = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar el listado de convocatorias.';
+        this.errorMsg = error?.error?.message || 'No se han podido cargar las convocatorias.';
       }
     });
   }
 
-  // Navigation triggered from UI
   seleccionarConvocatoria(id: number): void {
     this.router.navigate(['/profesor/reuniones-de-equipo/convocatorias', id]);
   }
@@ -61,7 +60,6 @@ export class ProfesorConvocatoriasComponent implements OnInit {
     this.router.navigate(['/profesor/reuniones-de-equipo/convocatorias']);
   }
 
-  // Route initializer
   iniciarDetalle(id: number): void {
     this.cargandoDetalle = true;
     this.errorMsg = '';
@@ -74,7 +72,7 @@ export class ProfesorConvocatoriasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoDetalle = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar los detalles de la convocatoria.';
+        this.errorMsg = error?.error?.message || 'No se han podido cargar los detalles de la convocatoria.';
       }
     });
   }

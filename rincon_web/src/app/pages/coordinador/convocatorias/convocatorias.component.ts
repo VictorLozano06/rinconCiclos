@@ -95,7 +95,7 @@ export class ConvocatoriasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoFormulario = false;
-        this.errorFormulario = error?.error?.message || 'No se pudieron cargar los datos del formulario.';
+        this.errorFormulario = error?.error?.message || 'No se han podido cargar los datos del formulario.';
       }
     });
   }
@@ -109,12 +109,11 @@ export class ConvocatoriasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoListado = false;
-        this.errorFormulario = error?.error?.message || 'Error al cargar el listado de convocatorias.';
+        this.errorFormulario = error?.error?.message || 'No se han podido cargar las convocatorias.';
       }
     });
   }
 
-  // Navigation triggered from UI
   crearNueva(): void {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/crear']);
   }
@@ -142,7 +141,6 @@ export class ConvocatoriasComponent implements OnInit {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias']);
   }
 
-  // Route initializers
   iniciarCreacion(): void {
     this.convocatoria = {
       idConvocatoria: null,
@@ -206,7 +204,7 @@ export class ConvocatoriasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoFormulario = false;
-        this.errorFormulario = error?.error?.message || 'Error al cargar los detalles de la convocatoria.';
+        this.errorFormulario = error?.error?.message || 'No se han podido cargar los detalles de la convocatoria.';
       }
     });
   }
@@ -224,7 +222,7 @@ export class ConvocatoriasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoListado = false;
-        this.errorFormulario = error?.error?.message || 'Error al cargar los detalles de la convocatoria.';
+        this.errorFormulario = error?.error?.message || 'No se han podido cargar los detalles de la convocatoria.';
       }
     });
   }

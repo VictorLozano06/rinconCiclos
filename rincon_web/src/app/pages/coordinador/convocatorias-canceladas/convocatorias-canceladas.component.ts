@@ -51,7 +51,7 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoListado = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar las convocatorias canceladas.';
+        this.errorMsg = error?.error?.message || 'No se han podido cargar las convocatorias canceladas.';
       }
     });
   }
@@ -87,7 +87,7 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoDetalle = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar los detalles de la convocatoria cancelada.';
+        this.errorMsg = error?.error?.message || 'No se han podido cargar los detalles de la convocatoria.';
       }
     });
   }

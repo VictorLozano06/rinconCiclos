@@ -118,10 +118,14 @@ class ModConvocatorias {
             $dinamizaId = (int)($item['dinamizaId'] ?? 0);
             $lugarId = (int)($item['lugarId'] ?? 0);
             $minutos = $item['minutos'] ?? null;
-            $participaIds = array_values(array_filter(
-                array_map('intval', $item['participaIds'] ?? []),
-                fn ($id) => $id > 0
-            ));
+            $participaIds = [];
+
+            foreach (($item['participaIds'] ?? []) as $participanteId) {
+                $participanteId = (int)$participanteId;
+                if ($participanteId > 0) {
+                    $participaIds[] = $participanteId;
+                }
+            }
 
             $estaVacia = $descripcion === '' && $objetivo === '' && !$dinamizaId && !$lugarId && empty($participaIds) && !$minutos;
             if ($estaVacia) {
@@ -271,21 +275,23 @@ class ModConvocatorias {
 
     private function listarPorEstado($cancelada) {
         $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    (c.cancelada + 0) AS cancelada,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                LEFT JOIN lugar l ON l.idLugar = c.idLugar
-                LEFT JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                LEFT JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                LEFT JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                WHERE (c.cancelada + 0) = :cancelada
-                ORDER BY c.fecha DESC";
+                    convocatoria.idConvocatoria,
+                    convocatoria.fecha,
+                    (convocatoria.cancelada + 0) AS cancelada,
+                    lugar.nombre AS lugar,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    participanteRedacta.nombre AS redacta,
+                    participanteInicia.nombre AS inicia
+                FROM convocatoria
+                LEFT JOIN lugar ON lugar.idLugar = convocatoria.idLugar
+                LEFT JOIN cursoAcademico ON cursoAcademico.idCurso = convocatoria.idCurso
+                LEFT JOIN participantes AS participanteRedacta
+                    ON participanteRedacta.idParticipante = convocatoria.idProfesorRedactaActa
+                LEFT JOIN participantes AS participanteInicia
+                    ON participanteInicia.idParticipante = convocatoria.idProfesorIniciaReunion
+                WHERE (convocatoria.cancelada + 0) = :cancelada
+                ORDER BY convocatoria.fecha DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':cancelada' => (int)$cancelada]);
@@ -294,24 +300,26 @@ class ModConvocatorias {
 
     private function obtenerCabeceraConvocatoria($idConvocatoria) {
         $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    (c.cancelada + 0) AS cancelada,
-                    c.idLugar,
-                    c.idCurso,
-                    c.idProfesorRedactaActa,
-                    c.idProfesorIniciaReunion,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                LEFT JOIN lugar l ON l.idLugar = c.idLugar
-                LEFT JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                LEFT JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                LEFT JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                WHERE c.idConvocatoria = :idConvocatoria";
+                    convocatoria.idConvocatoria,
+                    convocatoria.fecha,
+                    (convocatoria.cancelada + 0) AS cancelada,
+                    convocatoria.idLugar,
+                    convocatoria.idCurso,
+                    convocatoria.idProfesorRedactaActa,
+                    convocatoria.idProfesorIniciaReunion,
+                    lugar.nombre AS lugar,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    participanteRedacta.nombre AS redacta,
+                    participanteInicia.nombre AS inicia
+                FROM convocatoria
+                LEFT JOIN lugar ON lugar.idLugar = convocatoria.idLugar
+                LEFT JOIN cursoAcademico ON cursoAcademico.idCurso = convocatoria.idCurso
+                LEFT JOIN participantes AS participanteRedacta
+                    ON participanteRedacta.idParticipante = convocatoria.idProfesorRedactaActa
+                LEFT JOIN participantes AS participanteInicia
+                    ON participanteInicia.idParticipante = convocatoria.idProfesorIniciaReunion
+                WHERE convocatoria.idConvocatoria = :idConvocatoria";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':idConvocatoria' => $idConvocatoria]);
@@ -320,19 +328,20 @@ class ModConvocatorias {
 
     private function obtenerOrdenDia($idConvocatoria) {
         $sql = "SELECT
-                    od.numOrden,
-                    od.minutos,
-                    od.descripcion,
-                    od.objetivo,
-                    od.idLugar,
-                    od.idProfesorDinamiza,
-                    l.nombre AS lugar,
-                    pd.nombre AS dinamiza
-                FROM ordenDia od
-                LEFT JOIN lugar l ON l.idLugar = od.idLugar
-                LEFT JOIN participantes pd ON pd.idParticipante = od.idProfesorDinamiza
-                WHERE od.idConvocatoria = :idConvocatoria
-                ORDER BY od.numOrden ASC";
+                    ordenDia.numOrden,
+                    ordenDia.minutos,
+                    ordenDia.descripcion,
+                    ordenDia.objetivo,
+                    ordenDia.idLugar,
+                    ordenDia.idProfesorDinamiza,
+                    lugar.nombre AS lugar,
+                    participanteDinamiza.nombre AS dinamiza
+                FROM ordenDia
+                LEFT JOIN lugar ON lugar.idLugar = ordenDia.idLugar
+                LEFT JOIN participantes AS participanteDinamiza
+                    ON participanteDinamiza.idParticipante = ordenDia.idProfesorDinamiza
+                WHERE ordenDia.idConvocatoria = :idConvocatoria
+                ORDER BY ordenDia.numOrden ASC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':idConvocatoria' => $idConvocatoria]);
@@ -350,12 +359,13 @@ class ModConvocatorias {
 
     private function obtenerParticipantesPorOrden($idConvocatoria) {
         $sql = "SELECT
-                    pp.numOrden,
-                    pp.idParticipanteParticipa,
-                    pa.nombre
-                FROM participanteParticipa pp
-                INNER JOIN participantes pa ON pa.idParticipante = pp.idParticipanteParticipa
-                WHERE pp.idConvocatoria = :idConvocatoria";
+                    participanteParticipa.numOrden,
+                    participanteParticipa.idParticipanteParticipa,
+                    participante.nombre
+                FROM participanteParticipa
+                INNER JOIN participantes AS participante
+                    ON participante.idParticipante = participanteParticipa.idParticipanteParticipa
+                WHERE participanteParticipa.idConvocatoria = :idConvocatoria";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':idConvocatoria' => $idConvocatoria]);
@@ -384,10 +394,10 @@ class ModConvocatorias {
     }
 
     private function obtenerProfesores() {
-        $sql = "SELECT p.idProfesor, pa.nombre
-                FROM profesor p
-                INNER JOIN participantes pa ON pa.idParticipante = p.idProfesor
-                ORDER BY pa.nombre";
+        $sql = "SELECT profesor.idProfesor, participante.nombre
+                FROM profesor
+                INNER JOIN participantes AS participante ON participante.idParticipante = profesor.idProfesor
+                ORDER BY participante.nombre";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -418,9 +428,9 @@ class ModConvocatorias {
 
     private function convocatoriaBloqueada($idConvocatoria) {
         $stmt = $this->db->prepare(
-            "SELECT fecha, (cancelada + 0) AS cancelada
+            "SELECT convocatoria.fecha, (convocatoria.cancelada + 0) AS cancelada
              FROM convocatoria
-             WHERE idConvocatoria = :idConvocatoria"
+             WHERE convocatoria.idConvocatoria = :idConvocatoria"
         );
         $stmt->execute([':idConvocatoria' => $idConvocatoria]);
         $fila = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -439,9 +449,9 @@ class ModConvocatorias {
 
     private function sincronizarConvocatorias() {
         $sql = "UPDATE convocatoria
-                SET cancelada = 1
-                WHERE (cancelada + 0) = 0
-                  AND fecha <= NOW()";
+                SET convocatoria.cancelada = 1
+                WHERE (convocatoria.cancelada + 0) = 0
+                  AND convocatoria.fecha <= NOW()";
 
         $this->db->exec($sql);
     }
