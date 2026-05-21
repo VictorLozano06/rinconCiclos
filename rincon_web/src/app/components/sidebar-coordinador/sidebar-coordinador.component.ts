@@ -33,6 +33,7 @@ export class SidebarCoordinadorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+  // Carga categorias para construir el menu lateral de coordinador.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
@@ -46,6 +47,7 @@ export class SidebarCoordinadorComponent implements OnInit {
     });
   }
 
+  // Monta los grupos del sidebar, incluyendo accesos fijos y categorias dinamicas.
   private buildMenu(categorias: CategoriaDto[]): SidebarItem[] {
     const catReuniones = categorias.find((cat) => cat.nombre === 'Reuniones de Equipo');
 
@@ -123,6 +125,14 @@ export class SidebarCoordinadorComponent implements OnInit {
         abierto: true,
         subcategorias: [
           {
+            nombre: 'Ver todos',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/recursos',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          },
+          {
             nombre: 'Crear recurso',
             icono: 'categoria-generica',
             ruta: '/coordinador/recursos/crear',
@@ -144,6 +154,7 @@ export class SidebarCoordinadorComponent implements OnInit {
     ];
   }
 
+  // Convierte categorias anidadas en items navegables.
   private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): SidebarItem[] {
     const iconMap: { [key: string]: string } = {
       'Inicio': 'home',
@@ -158,6 +169,7 @@ export class SidebarCoordinadorComponent implements OnInit {
 
     return cats.map((cat) => {
       const nombre = cat.nombre;
+
       const slug = nombre
         .toLowerCase()
         .normalize('NFD')
@@ -188,16 +200,19 @@ export class SidebarCoordinadorComponent implements OnInit {
     });
   }
 
+  // Abre o cierra el bloque de menu que corresponda.
   toggleMenu(cat: SidebarItem): void {
     if (cat.subcategorias.length > 0) {
       cat.abierto = !cat.abierto;
     }
   }
 
+  // Indica si un item tiene hijos para decidir si se pinta como boton o enlace.
   hasChildren(cat: SidebarItem): boolean {
     return cat.subcategorias.length > 0;
   }
 
+  // Cierra el sidebar en mobile.
   closeSidebar(): void {
     this.requestClose.emit();
   }

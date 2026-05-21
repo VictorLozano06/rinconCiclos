@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RecursoItemComponent } from '../../../components/recurso-item/recurso-item.component';
+import { RecursoService } from '../../../services/recurso.service';
+import { RecursoDto } from '../../../dto/recurso.dto';
 
 @Component({
   selector: 'app-inicio-profesor',
@@ -10,23 +12,32 @@ import { RecursoItemComponent } from '../../../components/recurso-item/recurso-i
   styleUrl: './inicio.component.css'
 })
 export class InicioComponent implements OnInit {
-  public recursosRecientes = [
-    {
-      categoria: '1ª Evaluación',
-      fechaPublicacion: 'Hace 2 días',
-      nombre: 'Actas y Notas 1ª Evaluación Automoción',
-      descripcion: 'Adjunto los enlaces a los horarios y el acta oficial de la reunión.'
-    },
-    {
-      categoria: 'Objetivos',
-      fechaPublicacion: 'Hace 5 días',
-      nombre: 'Planificación Docente Segundo Semestre',
-      descripcion: 'Guía de contenidos y objetivos para el siguiente periodo académico.'
-    }
-  ];
+  // Recursos que aparecen en la portada del profesor.
+  public recursosRecientes: RecursoDto[] = [];
+  public cargandoRecursos = true;
+  public errorRecursos = false;
 
-  constructor() {}
+  constructor(private recursoService: RecursoService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cargarRecursos();
+  }
+
+  // Carga los recursos recientes desde la API.
+  cargarRecursos(): void {
+    this.cargandoRecursos = true;
+    this.errorRecursos = false;
+
+    this.recursoService.getRecientesProfesor().subscribe({
+      next: (recursos) => {
+        this.recursosRecientes = recursos;
+        this.cargandoRecursos = false;
+      },
+      error: (err) => {
+        this.errorRecursos = true;
+        this.cargandoRecursos = false;
+        console.error('Error al cargar los recursos recientes del profesorado:', err);
+      }
+    });
+  }
 }
-

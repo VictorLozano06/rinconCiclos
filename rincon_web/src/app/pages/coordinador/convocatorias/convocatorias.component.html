@@ -6,12 +6,18 @@
       <h1 class="hero-title">Convocatorias</h1>
       <p class="hero-subtitle">Visualiza y edita las convocatorias de reuniones programadas para el ciclo.</p>
     </div>
-    <button type="button" class="primary-button" (click)="crearNueva()">
-      <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
-    </button>
+    <div class="hero-actions">
+      <button type="button" class="secondary-button" (click)="irAConvocatoriasCanceladas()">
+        <i class="bi bi-slash-circle me-2"></i> Convocatorias canceladas
+      </button>
+      <button type="button" class="primary-button" (click)="crearNueva()">
+        <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
+      </button>
+    </div>
   </div>
 
   <div *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</div>
+  <p *ngIf="feedback" class="feedback mb-4" [class.feedback-error]="feedbackError">{{ feedback }}</p>
 
   <!-- Loading State -->
   <div *ngIf="cargandoListado" class="loading-state text-center py-5">
@@ -72,7 +78,12 @@
         <button type="button" class="primary-button btn-sm flex-grow-1" (click)="verConvocatoria(conv.idConvocatoria)">
           Ver detalle
         </button>
-        <button type="button" class="secondary-button btn-sm px-3" (click)="editarConvocatoria(conv.idConvocatoria)" title="Editar convocatoria">
+        <button
+          type="button"
+          class="secondary-button btn-sm px-3"
+          (click)="editarConvocatoria(conv.idConvocatoria)"
+          [disabled]="conv.cancelada"
+          [title]="conv.cancelada ? 'Las convocatorias canceladas no se pueden modificar' : 'Editar convocatoria'">
           <i class="bi bi-pencil-square"></i>
         </button>
       </div>
@@ -216,7 +227,11 @@
         <button type="button" class="primary-button" (click)="volverAlListado()">
           <i class="bi bi-arrow-left me-2"></i> Volver al listado
         </button>
-        <button type="button" class="secondary-button" (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)"
+          [disabled]="convocatoriaSeleccionada.cancelada">
           <i class="bi bi-pencil-square me-2"></i> Editar convocatoria
         </button>
       </div>

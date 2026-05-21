@@ -20,10 +20,10 @@ export class SidebarProfesorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+  // Carga categorias y las transforma en enlaces del sidebar.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
-        // Carga directa de los datos dinamicos de la base de datos
         this.categorias = this.mapCategorias(data, '/profesor');
       },
       error: (err) => {
@@ -32,13 +32,12 @@ export class SidebarProfesorComponent implements OnInit {
     });
   }
 
-  /*Mapear rutas de forma dinamica con lo que venga de la bd*/
-
+  // Convierte el arbol de categorias en items navegables.
   private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): any[] {
-    /*Iconos solo para las predeterminadas*/
     const iconMap: { [key: string]: string } = {
       'Inicio': 'home',
       'Reuniones de Equipo': 'reuniones',
+      'Tutorias': 'tutorias',
       'Tutorías': 'tutorias',
       'Evaluaciones': 'evaluaciones',
       'Otros': 'otros'
@@ -46,19 +45,18 @@ export class SidebarProfesorComponent implements OnInit {
 
     const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
 
-    return cats.map(cat => {
+    return cats.map((cat) => {
       const nombre = cat.nombre;
-      
-      // Generación automática de slug URL amigable 
-      const slug = nombre.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // elimina acentos
-        .replace(/º/g, "") // los elimina los simbolos º
-        .replace(/ª/g, "") // los elimina los simbolos ª
-        .replace(/\s+/g, '-') // convierte espacios en guiones
-        .replace(/[^a-z0-9-]/g, ''); // elimina caracteres no deseados
 
-      // Construcción de la ruta
+      // Slug simple para construir rutas limpias.
+      const slug = nombre.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[ºª]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
+
+      // Construye la ruta segun el nivel de la categoria.
       let ruta = '';
       if (nombre === 'Inicio') {
         ruta = `${prefix}/inicio`;
@@ -69,15 +67,14 @@ export class SidebarProfesorComponent implements OnInit {
       }
 
       const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
-      const deshabilitado = disabledSubs.includes(nombre);
-      
+
       return {
-        nombre: nombre,
+        nombre,
         icono: iconMap[nombre] || 'categoria-generica',
-        ruta: ruta,
-        abierto: subcategorias.length > 0, // abierto por defecto si tiene hijos
-        subcategorias: subcategorias,
-        deshabilitado: deshabilitado
+        ruta,
+        abierto: subcategorias.length > 0,
+        subcategorias,
+        deshabilitado: disabledSubs.includes(nombre)
       };
     });
   }

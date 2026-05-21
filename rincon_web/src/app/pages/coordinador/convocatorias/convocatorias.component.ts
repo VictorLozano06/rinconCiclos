@@ -2,26 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import {
-  ConvocatoriaService,
-  CursoOption,
-  GuardarConvocatoriaPayload,
-  LugarOption,
-  ProfesorOption
-} from '../../../services/convocatoria.service';
-
-interface OrdenDiaItem {
-  minutos: number | null;
-  ordenDia: string;
-  objetivo: string;
-  dinamizaId: number | null;
-  lugarId: number | null;
-  participaIds: number[];
-  participaQuery: string;
-  participaOpen: boolean;
-}
-
-type ProfesorField = 'redacta' | 'inicia';
+import { ConvocatoriaService } from '../../../services/convocatoria.service';
+import { CursoOptionDto } from '../../../dto/curso-option.dto';
+import { GuardarConvocatoriaPayloadDto } from '../../../dto/guardar-convocatoria-payload.dto';
+import { LugarOptionDto } from '../../../dto/lugar-option.dto';
+import { ProfesorOptionDto } from '../../../dto/profesor-option.dto';
+import { OrdenDiaCoordinadorDto } from '../../../dto/orden-dia-coordinador.dto';
+import { ProfesorField } from '../../../dto/profesor-field.type';
 
 @Component({
   selector: 'app-convocatorias-coordinador',
@@ -47,9 +34,9 @@ export class ConvocatoriasComponent implements OnInit {
     cursoId: null as number | null
   };
 
-  cursosAcademicos: CursoOption[] = [];
-  lugares: LugarOption[] = [];
-  profesores: ProfesorOption[] = [];
+  cursosAcademicos: CursoOptionDto[] = [];
+  lugares: LugarOptionDto[] = [];
+  profesores: ProfesorOptionDto[] = [];
 
   cargandoFormulario = true;
   guardando = false;
@@ -62,7 +49,7 @@ export class ConvocatoriasComponent implements OnInit {
   iniciaOpen = false;
   iniciaQuery = '';
 
-  ordenDia: OrdenDiaItem[] = [this.createEmptyFila()];
+  ordenDia: OrdenDiaCoordinadorDto[] = [this.createEmptyFila()];
 
   constructor(
     private convocatoriaService: ConvocatoriaService,
@@ -132,7 +119,18 @@ export class ConvocatoriasComponent implements OnInit {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/crear']);
   }
 
+  irAConvocatoriasCanceladas(): void {
+    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/canceladas']);
+  }
+
   editarConvocatoria(id: number): void {
+    const convocatoria = this.convocatorias.find((item) => item.idConvocatoria === id) || this.convocatoriaSeleccionada;
+    if (convocatoria?.cancelada) {
+      this.feedback = 'No se puede modificar una convocatoria cancelada.';
+      this.feedbackError = true;
+      return;
+    }
+
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id, 'editar']);
   }
 
@@ -171,10 +169,17 @@ export class ConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
+        if (data.cancelada) {
+          this.feedback = 'No se puede modificar una convocatoria cancelada.';
+          this.feedbackError = true;
+          this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id]);
+          return;
+        }
+
         this.convocatoria = {
           idConvocatoria: data.idConvocatoria,
           titulo: 'Editar Convocatoria',
-          subtitulo: 'Modifica los campos del orden del día y responsables de la sesión.',
+          subtitulo: 'Modifica los campos del orden del dia y responsables de la sesion.',
           fechaHora: data.fecha ? data.fecha.substring(0, 16) : '',
           lugarId: data.idLugar ? Number(data.idLugar) : null,
           redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
@@ -245,7 +250,7 @@ export class ConvocatoriasComponent implements OnInit {
     this.redactaOpen = false;
   }
 
-  getProfesoresFieldFiltrados(field: ProfesorField): ProfesorOption[] {
+  getProfesoresFieldFiltrados(field: ProfesorField): ProfesorOptionDto[] {
     const query = (field === 'redacta' ? this.redactaQuery : this.iniciaQuery).trim().toLowerCase();
 
     return this.profesores
@@ -266,11 +271,11 @@ export class ConvocatoriasComponent implements OnInit {
     this.iniciaOpen = false;
   }
 
-  toggleParticipa(item: OrdenDiaItem): void {
+  toggleParticipa(item: OrdenDiaCoordinadorDto): void {
     item.participaOpen = !item.participaOpen;
   }
 
-  getProfesoresFiltrados(item: OrdenDiaItem): ProfesorOption[] {
+  getProfesoresFiltrados(item: OrdenDiaCoordinadorDto): ProfesorOptionDto[] {
     const query = item.participaQuery.trim().toLowerCase();
 
     return this.profesores
@@ -279,7 +284,7 @@ export class ConvocatoriasComponent implements OnInit {
       .slice(0, 8);
   }
 
-  addProfesor(item: OrdenDiaItem, profesorId: number): void {
+  addProfesor(item: OrdenDiaCoordinadorDto, profesorId: number): void {
     if (!item.participaIds.includes(profesorId)) {
       item.participaIds.push(profesorId);
     }
@@ -288,15 +293,15 @@ export class ConvocatoriasComponent implements OnInit {
     item.participaOpen = true;
   }
 
-  removeProfesor(item: OrdenDiaItem, profesorId: number): void {
-    item.participaIds = item.participaIds.filter((selected) => selected !== profesorId);
+  removeProfesor(item: OrdenDiaCoordinadorDto, profesorId: number): void {
+    item.participaIds = item.participaIds.filter((selected: number) => selected !== profesorId);
   }
 
   guardarConvocatoria(): void {
     this.feedback = '';
     this.feedbackError = false;
 
-    const payload: GuardarConvocatoriaPayload = {
+    const payload: GuardarConvocatoriaPayloadDto = {
       idConvocatoria: this.convocatoria.idConvocatoria || undefined,
       fechaHora: this.convocatoria.fechaHora,
       lugarId: this.convocatoria.lugarId,
@@ -330,6 +335,12 @@ export class ConvocatoriasComponent implements OnInit {
         this.feedbackError = true;
       }
     });
+  }
+
+  esFechaPasada(fechaStr: string): boolean {
+    if (!fechaStr) return false;
+    const fechaConvocatoria = new Date(fechaStr);
+    return fechaConvocatoria.getTime() <= Date.now();
   }
 
   formatFecha(fechaStr: string): string {
@@ -407,7 +418,7 @@ export class ConvocatoriasComponent implements OnInit {
       .filter((nombre) => nombre !== '');
   }
 
-  private createEmptyFila(): OrdenDiaItem {
+  private createEmptyFila(): OrdenDiaCoordinadorDto {
     return {
       minutos: null,
       ordenDia: '',
