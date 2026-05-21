@@ -3,6 +3,10 @@
 /rincon_web/node_modules
 /rincon_web/dist
 /rincon_web/.angular/cache
+/rincon_back/vendor
+/rincon_back/.phpdoc
+/docs/frontend
+/docs/backend
 /rincon_back/storage/*.log
 /backups/
 /SQL.sql
