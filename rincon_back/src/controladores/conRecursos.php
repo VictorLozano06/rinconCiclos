@@ -15,9 +15,9 @@ class ConRecursos extends ControladorBase {
         try {
             $limite = isset($_GET['limite']) ? max(1, min(20, (int)$_GET['limite'])) : 5;
             $datos = $this->modelo->listarRecientesProfesor($limite);
-            $this->enviarRespuesta($datos);
+            $this->enviarMensajes($datos);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar los recursos.');
         }
     }
 
@@ -25,9 +25,9 @@ class ConRecursos extends ControladorBase {
     public function listarTodos() {
         try {
             $datos = $this->modelo->listarTodos();
-            $this->enviarRespuesta($datos);
+            $this->enviarMensajes($datos);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar los recursos.');
         }
     }
 
@@ -35,18 +35,18 @@ class ConRecursos extends ControladorBase {
     public function listarPorCategoria() {
         try {
             if (!isset($_GET['idCategoria'])) {
-                $this->enviarError('Falta el parametro idCategoria.');
+                $this->montarMensajes('Falta el parametro idCategoria.');
             }
 
             $idCategoria = (int)$_GET['idCategoria'];
             if ($idCategoria <= 0) {
-                $this->enviarError('El parametro idCategoria no es valido.');
+                $this->montarMensajes('El parametro idCategoria no es valido.');
             }
 
             $datos = $this->modelo->listarPorCategoria($idCategoria);
-            $this->enviarRespuesta($datos);
+            $this->enviarMensajes($datos);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar los recursos.');
         }
     }
 
@@ -54,24 +54,24 @@ class ConRecursos extends ControladorBase {
     public function detalle() {
         try {
             if (!isset($_GET['idCategoria']) || !isset($_GET['numRecurso'])) {
-                $this->enviarError('Faltan los parametros idCategoria y numRecurso.');
+                $this->montarMensajes('Faltan los parametros idCategoria y numRecurso.');
             }
 
             $idCategoria = (int)$_GET['idCategoria'];
             $numRecurso = (int)$_GET['numRecurso'];
 
             if ($idCategoria <= 0 || $numRecurso <= 0) {
-                $this->enviarError('Los parametros del recurso no son validos.');
+                $this->montarMensajes('Los parametros del recurso no son validos.');
             }
 
             $dato = $this->modelo->obtenerDetalle($idCategoria, $numRecurso);
             if (!$dato) {
-                $this->enviarError('No se ha encontrado el recurso solicitado.', 404);
+                $this->montarMensajes('No se ha encontrado el recurso solicitado.', 404);
             }
 
-            $this->enviarRespuesta($dato);
+            $this->enviarMensajes($dato);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se ha podido cargar el recurso.');
         }
     }
 }

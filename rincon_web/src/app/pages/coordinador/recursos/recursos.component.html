@@ -1,7 +1,7 @@
 <section class="seccion-recursos">
   <div class="cabecera-recursos mb-4">
     <h2 class="titulo-seccion">Recursos</h2>
-    <p class="texto-intro">Vista centralizada de todos los recursos publicados para coordinaci&oacute;n y profesorado.</p>
+    <p class="texto-intro">Vista centralizada de todos los recursos publicados para coordinacion y profesorado.</p>
   </div>
 
   <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
@@ -13,7 +13,7 @@
   <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
     <div class="card-body">
       <h4 class="card-title text-secondary">No se pudieron cargar los recursos</h4>
-      <p class="card-text text-muted mb-0">Revisa la conexion con la API de PHP y vuelve a intentarlo.</p>
+      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>
     </div>
   </div>
 
@@ -68,9 +68,8 @@
     <ng-template #sinResultados>
       <div class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
         <div class="card-body">
-          <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>
           <h4 class="card-title text-secondary">No hay recursos para mostrar</h4>
-          <p class="card-text text-muted mb-0">Prueba con otro filtro o añade recursos en la base de datos.</p>
+          <p class="card-text text-muted mb-0">Prueba con otro filtro.</p>
         </div>
       </div>
     </ng-template>

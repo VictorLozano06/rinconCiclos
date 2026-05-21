@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CategoriaService } from '../../../services/categoria.service';
 import { RecursoService } from '../../../services/recurso.service';
@@ -15,7 +15,7 @@ interface BreadcrumbItem {
 @Component({
   selector: 'app-recurso-detalle-profesor',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './recurso-detalle.component.html',
   styleUrl: './recurso-detalle.component.css'
 })
@@ -25,6 +25,7 @@ export class RecursoDetalleComponent implements OnInit {
   public breadcrumbs: BreadcrumbItem[] = [];
   public cargando = true;
   public errorCarga = false;
+  public mensajeError = '';
   public basePath = '/profesor';
   public homeRoute = '/profesor/inicio';
 
@@ -51,6 +52,7 @@ export class RecursoDetalleComponent implements OnInit {
   cargarDetalle(): void {
     this.cargando = true;
     this.errorCarga = false;
+    this.mensajeError = '';
     this.recurso = null;
     this.breadcrumbs = [];
 
@@ -71,6 +73,7 @@ export class RecursoDetalleComponent implements OnInit {
       },
       error: (err) => {
         this.errorCarga = true;
+        this.mensajeError = err?.error?.message || err?.error?.error || 'No se ha podido cargar el recurso.';
         this.cargando = false;
         console.error('Error al cargar el detalle del recurso:', err);
       }
@@ -102,6 +105,10 @@ export class RecursoDetalleComponent implements OnInit {
     }
 
     return (this.recurso.ciclos || []).map((ciclo) => ciclo.nombre);
+  }
+
+  get breadcrumbTexto(): string {
+    return this.breadcrumbs.map((item) => item.nombre).join(' / ');
   }
 
   // Extrae el nombre legible de un archivo o ruta.

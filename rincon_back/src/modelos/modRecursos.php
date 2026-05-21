@@ -1,5 +1,5 @@
 <?php
-// Modelo para consultar recursos sin capas de abstraccion innecesarias
+// Modelo de recursos.
 class ModRecursos {
     private $db;
 
@@ -9,86 +9,163 @@ class ModRecursos {
 
     // Lista los recursos mas recientes para la portada del profesor.
     public function listarRecientesProfesor($limite = 5) {
-        $sql = $this->sqlBase() . "
-                GROUP BY r.idCategoria, r.numRecurso, r.nombre, r.descripcion, r.fechaPublicacion, r.idCurso, c.nombre, ca.anioInicio, ca.anioFin
-                ORDER BY r.fechaPublicacion DESC, r.idCategoria ASC, r.numRecurso ASC
+        $sql = "SELECT
+                    recurso.*,
+                    categoria.nombre AS categoriaNombre,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoUrl.url SEPARATOR '||')
+                        FROM recursoUrl
+                        WHERE recursoUrl.idCategoria = recurso.idCategoria
+                          AND recursoUrl.numRecurso = recurso.numRecurso
+                    ) AS urls,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoArchivo.archivo SEPARATOR '||')
+                        FROM recursoArchivo
+                        WHERE recursoArchivo.idCategoria = recurso.idCategoria
+                          AND recursoArchivo.numRecurso = recurso.numRecurso
+                    ) AS archivos,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT CONCAT(cicloFormativo.idCiclo, '::', cicloFormativo.nombre) SEPARATOR '||')
+                        FROM cicloRecurso
+                        INNER JOIN cicloFormativo ON cicloFormativo.idCiclo = cicloRecurso.idCiclo
+                        WHERE cicloRecurso.idCategoria = recurso.idCategoria
+                          AND cicloRecurso.numRecurso = recurso.numRecurso
+                    ) AS ciclos
+                FROM recurso
+                INNER JOIN categoria ON categoria.idCategoria = recurso.idCategoria
+                INNER JOIN cursoAcademico ON cursoAcademico.idCurso = recurso.idCurso
+                ORDER BY recurso.fechaPublicacion DESC, recurso.idCategoria ASC, recurso.numRecurso ASC
                 LIMIT " . (int)$limite;
 
-        return $this->mapearRecursos($this->ejecutar($sql));
+        $resultado = $this->db->query($sql);
+        return $this->formatearRecursos($resultado->fetchAll(PDO::FETCH_ASSOC));
     }
 
     // Devuelve todos los recursos para la vista centralizada del coordinador.
     public function listarTodos() {
-        $sql = $this->sqlBase() . "
-                GROUP BY r.idCategoria, r.numRecurso, r.nombre, r.descripcion, r.fechaPublicacion, r.idCurso, c.nombre, ca.anioInicio, ca.anioFin
-                ORDER BY r.fechaPublicacion DESC, r.idCategoria ASC, r.numRecurso ASC";
+        $sql = "SELECT
+                    recurso.*,
+                    categoria.nombre AS categoriaNombre,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoUrl.url SEPARATOR '||')
+                        FROM recursoUrl
+                        WHERE recursoUrl.idCategoria = recurso.idCategoria
+                          AND recursoUrl.numRecurso = recurso.numRecurso
+                    ) AS urls,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoArchivo.archivo SEPARATOR '||')
+                        FROM recursoArchivo
+                        WHERE recursoArchivo.idCategoria = recurso.idCategoria
+                          AND recursoArchivo.numRecurso = recurso.numRecurso
+                    ) AS archivos,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT CONCAT(cicloFormativo.idCiclo, '::', cicloFormativo.nombre) SEPARATOR '||')
+                        FROM cicloRecurso
+                        INNER JOIN cicloFormativo ON cicloFormativo.idCiclo = cicloRecurso.idCiclo
+                        WHERE cicloRecurso.idCategoria = recurso.idCategoria
+                          AND cicloRecurso.numRecurso = recurso.numRecurso
+                    ) AS ciclos
+                FROM recurso
+                INNER JOIN categoria ON categoria.idCategoria = recurso.idCategoria
+                INNER JOIN cursoAcademico ON cursoAcademico.idCurso = recurso.idCurso
+                ORDER BY recurso.fechaPublicacion DESC, recurso.idCategoria ASC, recurso.numRecurso ASC";
 
-        return $this->mapearRecursos($this->ejecutar($sql));
+        $resultado = $this->db->query($sql);
+        return $this->formatearRecursos($resultado->fetchAll(PDO::FETCH_ASSOC));
     }
 
     // Filtra los recursos por categoria concreta.
     public function listarPorCategoria($idCategoria) {
-        $sql = $this->sqlBase() . "
-                WHERE r.idCategoria = :idCategoria
-                GROUP BY r.idCategoria, r.numRecurso, r.nombre, r.descripcion, r.fechaPublicacion, r.idCurso, c.nombre, ca.anioInicio, ca.anioFin
-                ORDER BY r.fechaPublicacion DESC, r.idCategoria ASC, r.numRecurso ASC";
+        $sql = "SELECT
+                    recurso.*,
+                    categoria.nombre AS categoriaNombre,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoUrl.url SEPARATOR '||')
+                        FROM recursoUrl
+                        WHERE recursoUrl.idCategoria = recurso.idCategoria
+                          AND recursoUrl.numRecurso = recurso.numRecurso
+                    ) AS urls,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoArchivo.archivo SEPARATOR '||')
+                        FROM recursoArchivo
+                        WHERE recursoArchivo.idCategoria = recurso.idCategoria
+                          AND recursoArchivo.numRecurso = recurso.numRecurso
+                    ) AS archivos,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT CONCAT(cicloFormativo.idCiclo, '::', cicloFormativo.nombre) SEPARATOR '||')
+                        FROM cicloRecurso
+                        INNER JOIN cicloFormativo ON cicloFormativo.idCiclo = cicloRecurso.idCiclo
+                        WHERE cicloRecurso.idCategoria = recurso.idCategoria
+                          AND cicloRecurso.numRecurso = recurso.numRecurso
+                    ) AS ciclos
+                FROM recurso
+                INNER JOIN categoria ON categoria.idCategoria = recurso.idCategoria
+                INNER JOIN cursoAcademico ON cursoAcademico.idCurso = recurso.idCurso
+                WHERE recurso.idCategoria = :idCategoria
+                ORDER BY recurso.fechaPublicacion DESC, recurso.idCategoria ASC, recurso.numRecurso ASC";
 
-        return $this->mapearRecursos($this->ejecutar($sql, [':idCategoria' => (int)$idCategoria]));
+        return $this->consultarRecurso($sql, [':idCategoria' => (int)$idCategoria]);
     }
 
     // Recupera un unico recurso para su ficha de detalle.
     public function obtenerDetalle($idCategoria, $numRecurso) {
-        $sql = $this->sqlBase() . "
-                WHERE r.idCategoria = :idCategoria AND r.numRecurso = :numRecurso
-                GROUP BY r.idCategoria, r.numRecurso, r.nombre, r.descripcion, r.fechaPublicacion, r.idCurso, c.nombre, ca.anioInicio, ca.anioFin
+        $sql = "SELECT
+                    recurso.*,
+                    categoria.nombre AS categoriaNombre,
+                    cursoAcademico.anioInicio,
+                    cursoAcademico.anioFin,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoUrl.url SEPARATOR '||')
+                        FROM recursoUrl
+                        WHERE recursoUrl.idCategoria = recurso.idCategoria
+                          AND recursoUrl.numRecurso = recurso.numRecurso
+                    ) AS urls,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT recursoArchivo.archivo SEPARATOR '||')
+                        FROM recursoArchivo
+                        WHERE recursoArchivo.idCategoria = recurso.idCategoria
+                          AND recursoArchivo.numRecurso = recurso.numRecurso
+                    ) AS archivos,
+                    (
+                        SELECT GROUP_CONCAT(DISTINCT CONCAT(cicloFormativo.idCiclo, '::', cicloFormativo.nombre) SEPARATOR '||')
+                        FROM cicloRecurso
+                        INNER JOIN cicloFormativo ON cicloFormativo.idCiclo = cicloRecurso.idCiclo
+                        WHERE cicloRecurso.idCategoria = recurso.idCategoria
+                          AND cicloRecurso.numRecurso = recurso.numRecurso
+                    ) AS ciclos
+                FROM recurso
+                INNER JOIN categoria ON categoria.idCategoria = recurso.idCategoria
+                INNER JOIN cursoAcademico ON cursoAcademico.idCurso = recurso.idCurso
+                WHERE recurso.idCategoria = :idCategoria AND recurso.numRecurso = :numRecurso
                 LIMIT 1";
 
-        $recursos = $this->mapearRecursos($this->ejecutar($sql, [
+        $recursos = $this->consultarRecurso($sql, [
             ':idCategoria' => (int)$idCategoria,
             ':numRecurso' => (int)$numRecurso
-        ]));
+        ]);
 
         return !empty($recursos) ? $recursos[0] : null;
     }
 
-    // Consulta base comun: solo cambia el filtro y el limite segun el caso de uso.
-    private function sqlBase() {
-        return "SELECT
-                    r.idCategoria,
-                    r.numRecurso,
-                    r.nombre,
-                    r.descripcion,
-                    r.fechaPublicacion,
-                    r.idCurso,
-                    c.nombre AS categoriaNombre,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    GROUP_CONCAT(DISTINCT ru.url SEPARATOR '||') AS urls,
-                    GROUP_CONCAT(DISTINCT ra.archivo SEPARATOR '||') AS archivos,
-                    GROUP_CONCAT(DISTINCT CONCAT(cf.idCiclo, '::', cf.nombre) SEPARATOR '||') AS ciclos
-                FROM recurso r
-                INNER JOIN categoria c ON c.idCategoria = r.idCategoria
-                INNER JOIN cursoAcademico ca ON ca.idCurso = r.idCurso
-                LEFT JOIN recursoUrl ru ON ru.idCategoria = r.idCategoria AND ru.numRecurso = r.numRecurso
-                LEFT JOIN recursoArchivo ra ON ra.idCategoria = r.idCategoria AND ra.numRecurso = r.numRecurso
-                LEFT JOIN cicloRecurso cr ON cr.idCategoria = r.idCategoria AND cr.numRecurso = r.numRecurso
-                LEFT JOIN cicloFormativo cf ON cf.idCiclo = cr.idCiclo";
-        return $sql;
-    }
-
-    // Ejecuta la consulta y devuelve filas asociativas.
-    private function ejecutar($sql, $parametros = []) {
+    // Ejecuta la consulta de un recurso y devuelve la lista ya preparada.
+    private function consultarRecurso($sql, $parametros = []) {
         $stmt = $this->db->prepare($sql);
         foreach ($parametros as $nombre => $valor) {
             $stmt->bindValue($nombre, $valor, PDO::PARAM_INT);
         }
 
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->formatearRecursos($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    // Convierte las filas SQL a la estructura que consume Angular.
-    private function mapearRecursos($filas) {
+    // Convierte las filas SQL al formato que consume Angular.
+    private function formatearRecursos($filas) {
         $recursos = [];
 
         foreach ($filas as $fila) {
@@ -102,68 +179,65 @@ class ModRecursos {
                 'anioInicio' => (int)$fila['anioInicio'],
                 'anioFin' => (int)$fila['anioFin'],
                 'categoriaNombre' => $fila['categoriaNombre'],
-                'urls' => $this->separarCampo($fila['urls'] ?? ''),
-                'archivos' => $this->separarCampo($fila['archivos'] ?? ''),
+                'urls' => $this->separarLista($fila['urls'] ?? ''),
+                'archivos' => $this->separarLista($fila['archivos'] ?? ''),
                 'ciclos' => $this->separarCiclos($fila['ciclos'] ?? ''),
-                'enlacePrincipal' => $this->obtenerPrincipal($fila)
+                'enlacePrincipal' => $this->obtenerEnlacePrincipal($fila)
             ];
         }
 
         return $recursos;
     }
 
-    // Convierte el campo concatenado por MySQL en un array limpio.
-    private function separarCampo($valor) {
+    // Convierte un texto con separador en un array.
+    private function separarLista($valor) {
         if ($valor === '' || $valor === null) {
             return [];
         }
 
         $resultado = [];
-        foreach (explode('||', $valor) as $elemento) {
-            $elemento = trim($elemento);
-            if ($elemento !== '') {
-                $resultado[] = $elemento;
+        $partes = explode('||', $valor);
+
+        foreach ($partes as $parte) {
+            $parte = trim($parte);
+            if ($parte !== '') {
+                $resultado[] = $parte;
             }
         }
 
         return $resultado;
     }
 
-    // Convierte el campo concatenado de ciclos en pares id/nombre.
+    // Convierte el texto de ciclos en un array con id y nombre.
     private function separarCiclos($valor) {
         if ($valor === '' || $valor === null) {
             return [];
         }
 
         $resultado = [];
-        foreach (explode('||', $valor) as $elemento) {
-            $elemento = trim($elemento);
-            if ($elemento === '') {
-                continue;
-            }
+        $partes = explode('||', $valor);
 
-            $partes = explode('::', $elemento, 2);
-            if (count($partes) !== 2) {
-                continue;
+        foreach ($partes as $parte) {
+            $dato = explode('::', $parte, 2);
+            if (count($dato) === 2) {
+                $resultado[] = [
+                    'idCiclo' => (int)$dato[0],
+                    'nombre' => $dato[1]
+                ];
             }
-
-            $resultado[] = [
-                'idCiclo' => (int)$partes[0],
-                'nombre' => $partes[1]
-            ];
         }
 
         return $resultado;
     }
 
-    // Selecciona un enlace principal para el resumen visual.
-    private function obtenerPrincipal($fila) {
-        $urls = $this->separarCampo($fila['urls'] ?? '');
+    // Elige un enlace o archivo para la vista previa.
+    private function obtenerEnlacePrincipal($fila) {
+        $urls = $this->separarLista($fila['urls'] ?? '');
         if (!empty($urls)) {
             return $urls[0];
         }
 
-        $archivos = $this->separarCampo($fila['archivos'] ?? '');
+        $archivos = $this->separarLista($fila['archivos'] ?? '');
         if (!empty($archivos)) {
             return $archivos[0];
         }
