@@ -14,9 +14,9 @@ class ConCategorias extends ControladorBase {
     public function listar() {
         try {
             $datos = $this->modelo->listar();
-            $this->enviarRespuesta($datos);
+            $this->enviarMensajes($datos);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar las categorias.');
         }
     }
 }
