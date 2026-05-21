@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { CoordinadorLayoutComponent } from './layout/coordinador-layout.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { ConvocatoriasComponent } from './convocatorias/convocatorias.component';
+import { ConvocatoriasCanceladasComponent } from './convocatorias-canceladas/convocatorias-canceladas.component';
 import { RecursosCategoriaComponent } from './recursos-categoria/recursos-categoria.component';
 import { RecursosComponent } from './recursos/recursos.component';
 import { RecursoDetalleComponent } from '../profesor/recurso-detalle/recurso-detalle.component';
@@ -15,9 +16,11 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: '', component: InicioComponent },
       { path: 'inicio', component: InicioComponent },
       { path: 'reuniones-de-equipo/convocatorias', component: ConvocatoriasComponent },
+      { path: 'reuniones-de-equipo/convocatorias/canceladas', component: ConvocatoriasCanceladasComponent },
+      { path: 'reuniones-de-equipo/convocatorias/canceladas/:id', component: ConvocatoriasCanceladasComponent },
       { path: 'reuniones-de-equipo/convocatorias/crear', component: ConvocatoriasComponent },
-      { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id/editar', component: ConvocatoriasComponent },
+      { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
       { path: 'gestion-de-cursos', component: CiclosCursosComponent },
       { path: 'recursos', component: RecursosComponent, data: { basePath: '/coordinador', homeRoute: '/coordinador/recursos' } },

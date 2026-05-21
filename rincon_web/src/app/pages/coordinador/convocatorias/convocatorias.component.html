@@ -6,9 +6,14 @@
       <h1 class="hero-title">Convocatorias</h1>
       <p class="hero-subtitle">Visualiza y edita las convocatorias de reuniones programadas para el ciclo.</p>
     </div>
-    <button type="button" class="primary-button" (click)="crearNueva()">
-      <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
-    </button>
+    <div class="hero-actions">
+      <button type="button" class="secondary-button" (click)="irAConvocatoriasCanceladas()">
+        <i class="bi bi-slash-circle me-2"></i> Convocatorias canceladas
+      </button>
+      <button type="button" class="primary-button" (click)="crearNueva()">
+        <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
+      </button>
+    </div>
   </div>
 
   <div *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</div>
@@ -77,12 +82,9 @@
           type="button"
           class="secondary-button btn-sm px-3"
           (click)="editarConvocatoria(conv.idConvocatoria)"
-          [disabled]="esFechaPasada(conv.fecha)"
-          [title]="esFechaPasada(conv.fecha) ? 'Las convocatorias pasadas no se pueden modificar' : 'Editar convocatoria'">
+          [disabled]="conv.cancelada"
+          [title]="conv.cancelada ? 'Las convocatorias canceladas no se pueden modificar' : 'Editar convocatoria'">
           <i class="bi bi-pencil-square"></i>
-        </button>
-        <button type="button" class="secondary-button btn-sm px-3 text-danger border-danger" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="Eliminar convocatoria">
-          <i class="bi bi-trash3"></i>
         </button>
       </div>
     </div>
@@ -229,7 +231,7 @@
           type="button"
           class="secondary-button"
           (click)="editarConvocatoria(convocatoriaSeleccionada.idConvocatoria)"
-          [disabled]="esFechaPasada(convocatoriaSeleccionada.fecha)">
+          [disabled]="convocatoriaSeleccionada.cancelada">
           <i class="bi bi-pencil-square me-2"></i> Editar convocatoria
         </button>
       </div>

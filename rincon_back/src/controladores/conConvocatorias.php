@@ -9,75 +9,75 @@ class ConConvocatorias extends ControladorBase {
         $this->modelo = new ModConvocatorias($db);
     }
 
-    // Devuelve los datos base que necesitan los formularios de alta y edicion.
     public function formulario() {
-        try {
-            $this->enviarRespuesta($this->modelo->obtenerFormulario());
-        } catch (Exception $e) {
-            $this->enviarError($e);
-        }
+        $this->ejecutar(fn () => $this->modelo->obtenerFormulario());
     }
 
-    // Guarda convocatorias que llegan desde el frontend en JSON.
     public function guardar() {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->enviarRespuesta(['error' => 'Metodo no permitido.'], 405);
-            }
-
-            $payload = json_decode(file_get_contents('php://input'), true);
-            if (!is_array($payload)) {
-                throw new InvalidArgumentException('El cuerpo JSON no es valido.');
-            }
-
-            $this->enviarRespuesta($this->modelo->guardar($payload), 201);
-        } catch (Exception $e) {
-            $this->enviarError($e);
-        }
+        $this->ejecutar(function () {
+            $this->requerirMetodo('POST');
+            return $this->modelo->guardar($this->leerJson());
+        }, 201);
     }
 
-    // Lista las convocatorias para la pantalla principal del coordinador.
     public function listar() {
-        try {
-            $this->enviarRespuesta($this->modelo->listarConvocatorias());
-        } catch (Exception $e) {
-            $this->enviarError($e);
-        }
+        $this->ejecutar(fn () => $this->modelo->listarConvocatorias());
     }
 
-    // Devuelve el detalle completo de una convocatoria.
+    public function listarCanceladas() {
+        $this->ejecutar(fn () => $this->modelo->listarConvocatoriasCanceladas());
+    }
+
     public function detalle() {
-        try {
-            $id = $_GET['id'] ?? null;
-            if (!$id) {
-                throw new InvalidArgumentException('El parametro ID es obligatorio.');
-            }
-            $convocatoria = $this->modelo->obtenerConvocatoria((int)$id);
+        $this->ejecutar(function () {
+            $convocatoria = $this->modelo->obtenerConvocatoria($this->leerId());
+
             if (!$convocatoria) {
                 $this->enviarRespuesta(['error' => 'Convocatoria no encontrada.'], 404);
-            } else {
-                $this->enviarRespuesta($convocatoria);
             }
+
+            return $convocatoria;
+        });
+    }
+
+    public function eliminar() {
+        $this->ejecutar(function () {
+            $this->requerirMetodo('DELETE');
+            return $this->modelo->eliminar($this->leerId());
+        });
+    }
+
+    private function ejecutar(callable $accion, $codigo = 200) {
+        try {
+            $this->enviarRespuesta($accion(), $codigo);
         } catch (Exception $e) {
             $this->enviarError($e);
         }
     }
 
-    // Elimina una convocatoria y su orden del dia.
-    public function eliminar() {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-                $this->enviarRespuesta(['error' => 'Metodo no permitido.'], 405);
-            }
-
-            $id = $_GET['id'] ?? null;
-            if (!$id) {
-                throw new InvalidArgumentException('El parametro ID es obligatorio.');
-            }
-
-            $this->enviarRespuesta($this->modelo->eliminar((int)$id));
-        } catch (Exception $e) {
-            $this->enviarError($e);
+    private function requerirMetodo($metodo) {
+        if ($_SERVER['REQUEST_METHOD'] !== $metodo) {
+            $this->enviarRespuesta(['error' => 'Metodo no permitido.'], 405);
         }
+    }
+
+    private function leerJson() {
+        $payload = json_decode(file_get_contents('php://input'), true);
+
+        if (!is_array($payload)) {
+            throw new InvalidArgumentException('El cuerpo JSON no es valido.');
+        }
+
+        return $payload;
+    }
+
+    private function leerId() {
+        $id = $_GET['id'] ?? null;
+
+        if (!$id) {
+            throw new InvalidArgumentException('El parametro ID es obligatorio.');
+        }
+
+        return (int)$id;
     }
 }
