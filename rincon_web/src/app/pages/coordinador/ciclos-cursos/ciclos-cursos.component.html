@@ -1,6 +1,12 @@
-<div class="header-container mb-4">
-  <h2 class="fw-bold text-dark m-0">Ciclos y Cursos</h2>
-  <p class="text-secondary small">Gestión de ciclos formativos y cursos.</p>
+<div class="header-container d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h2 class="fw-bold text-dark m-0">Ciclos y Cursos</h2>
+    <p class="text-secondary small">Gestión de ciclos formativos y cursos.</p>
+  </div>
+  <button class="btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nuevo-ciclo"
+    (click)="mostrarModalNuevoCiclo = true">
+    + NUEVO CICLO
+  </button>
 </div>
 
 <div class="ciclos-list">
@@ -53,6 +59,38 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nuevo Ciclo -->
+<div *ngIf="mostrarModalNuevoCiclo" class="modal-overlay d-flex align-items-center justify-content-center">
+  <div class="custom-modal rounded-3 shadow-lg p-4">
+    <h5 class="text-white fw-bold mb-4">NUEVO CICLO FORMATIVO</h5>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre del Ciclo</label>
+      <input type="text" class="form-control custom-input py-2" placeholder="ej: DAW" [(ngModel)]="nuevoNombre">
+    </div>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia
+        Profesional</label>
+      <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">
+    </div>
+
+    <p class="text-secondary small mb-5 modal-helper-text">
+      se crearán automáticamente los cursos 1º y 2º al guardar
+    </p>
+
+    <div class="d-flex justify-content-end gap-3">
+      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
+        (click)="mostrarModalNuevoCiclo = false">
+        CANCELAR
+      </button>
+      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarNuevoCiclo()">
+        GUARDAR
+      </button>
     </div>
   </div>
 </div>

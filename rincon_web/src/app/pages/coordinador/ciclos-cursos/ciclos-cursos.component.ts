@@ -10,11 +10,14 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './ciclos-cursos.component.css'
 })
 export class CiclosCursosComponent {
+  public mostrarModalNuevoCiclo = false;
   public mostrarModalEditarCiclo = false;
   public mostrarModalEditarCurso = false;
   public mostrarModalConfirmar = false;
   public confirmarMensaje: string = '';
 
+  public nuevoNombre: string = '';
+  public nuevaFamilia: string = '';
   public cicloSeleccionado: any = null;
   public editarFamilia: string = '';
   public cursoSeleccionado: any = null;
@@ -49,6 +52,22 @@ export class CiclosCursosComponent {
       ]
     }
   ];
+
+  guardarNuevoCiclo(): void {
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
+    this.ciclos.push({
+      siglas: this.nuevoNombre.trim(),
+      familia: this.nuevaFamilia.trim(),
+      abierto: false,
+      cursos: [
+        { nombre: '1' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() },
+        { nombre: '2' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() }
+      ]
+    });
+    this.mostrarModalNuevoCiclo = false;
+    this.nuevoNombre = '';
+    this.nuevaFamilia = '';
+  }
 
   abrirEditarCiclo(ciclo: any): void {
     this.cicloSeleccionado = ciclo;
