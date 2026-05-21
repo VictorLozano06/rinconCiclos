@@ -42,39 +42,32 @@ class ConConvocatorias extends ControladorBase {
         }
     }
 
+    public function listarCanceladas() {
+        try {
+            $this->enviarMensajes($this->modelo->listarConvocatoriasCanceladas());
+        } catch (Exception $e) {
+            $this->montarMensajes('No se han podido cargar las convocatorias canceladas.');
+        }
+    }
+
     public function detalle() {
         try {
             $id = $_GET['id'] ?? null;
             if (!$id) {
                 $this->montarMensajes('El parametro ID es obligatorio.');
             }
+
             $convocatoria = $this->modelo->obtenerConvocatoria((int)$id);
             if (!$convocatoria) {
                 $this->montarMensajes('Convocatoria no encontrada.', 404);
-            } else {
-                $this->enviarMensajes($convocatoria);
             }
 
-            return $convocatoria;
-        });
-    }
-
-    public function eliminar() {
-        $this->ejecutar(function () {
-            $this->requerirMetodo('DELETE');
-            return $this->modelo->eliminar($this->leerId());
-        });
-    }
-
-    private function ejecutar(callable $accion, $codigo = 200) {
-        try {
-            $this->enviarRespuesta($accion(), $codigo);
+            $this->enviarMensajes($convocatoria);
         } catch (Exception $e) {
             $this->montarMensajes('No se han podido cargar los detalles de la convocatoria.');
         }
     }
 
-    // Elimina una convocatoria y su orden del dia.
     public function eliminar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
@@ -90,7 +83,6 @@ class ConConvocatorias extends ControladorBase {
         } catch (Exception $e) {
             $this->montarMensajes('No se ha podido eliminar la convocatoria.');
         }
-
-        return (int)$id;
     }
 }
+?>
