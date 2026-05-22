@@ -1,7 +1,10 @@
-<aside class="barra-lateral">
+<aside class="barra-lateral" [class.barra-lateral-abierta]="mobileOpen">
   <div class="cabecera-sidebar">
     <h1 class="titulo-web">Rincón de Ciclos</h1>
     <p class="subtitulo-web">Portal Docente</p>
+    <button type="button" class="cerrar-sidebar" (click)="cerrarSidebar()" aria-label="Cerrar menu">
+      <i class="bi bi-x-lg"></i>
+    </button>
   </div>
 
   <nav class="navegacion-sidebar">
@@ -33,7 +36,8 @@
               *ngIf="!sub.deshabilitado"
               [routerLink]="sub.ruta"
               routerLinkActive="enlace-activo"
-              class="item-subcategoria">
+              class="item-subcategoria"
+              (click)="cerrarSidebar()">
               {{ sub.nombre }}
             </a>
             <span
@@ -62,7 +66,8 @@
                   *ngIf="!subsub.deshabilitado"
                   [routerLink]="subsub.ruta"
                   routerLinkActive="enlace-activo"
-                  class="item-subcategoria item-anidado">
+                  class="item-subcategoria item-anidado"
+                  (click)="cerrarSidebar()">
                   {{ subsub.nombre }}
                 </a>
                 <span
