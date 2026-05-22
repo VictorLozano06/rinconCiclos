@@ -100,3 +100,45 @@
   color: #2563eb !important;
   font-weight: bold;
 }
+
+/* Sub con hijos: botón de expansión */
+.item-subcategoria-expandible {
+  padding: 4px 0;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.item-subcategoria-expandible:hover {
+  color: #1e293b;
+}
+
+.item-subcategoria-expandible .bi {
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* Tercer nivel: subcategorías anidadas */
+.lista-subcategorias-anidada {
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 3px 0 6px 0;
+  border-left: 2px solid #e2e8f0;
+}
+
+.item-anidado {
+  font-size: 12px !important;
+  padding: 3px 0 3px 8px;
+  color: #94a3b8 !important;
+}
+
+.item-anidado:hover {
+  color: #1e293b !important;
+}
+
+.item-anidado.enlace-activo {
+  color: #2563eb !important;
+}

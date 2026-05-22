@@ -44,7 +44,7 @@ export class SidebarProfesorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const disabledSubs = ['BOCC', 'Calendario de reuniones'];
 
     return cats.map(cat => {
       const nombre = cat.nombre;
@@ -57,6 +57,35 @@ export class SidebarProfesorComponent implements OnInit {
         .replace(/ª/g, "") // los elimina los simbolos ª
         .replace(/\s+/g, '-') // convierte espacios en guiones
         .replace(/[^a-z0-9-]/g, ''); // elimina caracteres no deseados
+
+      // Interceptar 'Actas': expande con Control de Asistencia y Redacción
+      if (nombre === 'Actas') {
+        return {
+          nombre,
+          icono: 'categoria-generica',
+          ruta: null,
+          abierto: true,
+          subcategorias: [
+            {
+              nombre: 'Control de Asistencia',
+              icono: 'categoria-generica',
+              ruta: '/profesor/proceso-de-actas/asistencia',
+              abierto: false,
+              subcategorias: [],
+              deshabilitado: false
+            },
+            {
+              nombre: 'Redacción de Actas',
+              icono: 'categoria-generica',
+              ruta: '/profesor/proceso-de-actas/redaccion',
+              abierto: false,
+              subcategorias: [],
+              deshabilitado: false
+            }
+          ],
+          deshabilitado: false
+        };
+      }
 
       // Construcción de la ruta
       let ruta = '';

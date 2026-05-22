@@ -1,0 +1,212 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+/* Badge de estado general */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.badge-previo {
+  background-color: #f1f3f5;
+  color: #6c757d;
+}
+
+.badge-progreso {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-confirmado {
+  background-color: #d1e7dd;
+  color: #0a3622;
+}
+
+/* Tarjeta de convocatoria */
+.convocatoria-card {
+  border-left: 4px solid #212529 !important;
+  max-width: 75rem;
+}
+
+.icono-convocatoria {
+  width: 46px;
+  height: 46px;
+  background: #212529;
+  flex-shrink: 0;
+}
+
+.orden-del-dia-ol {
+  list-style: decimal;
+  margin: 0;
+}
+
+.orden-del-dia-ol li {
+  padding: 0.15rem 0;
+  color: #495057;
+}
+
+/* Estado previo */
+.estado-previo-icono {
+  width: 72px;
+  height: 72px;
+  background-color: #f1f3f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.btn-iniciar {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+  border-radius: 8px;
+}
+
+/* Contador de presentes */
+.conteo-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: #212529;
+  color: #fff;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+}
+
+/* Lista de participantes */
+.participantes-list {
+  max-width: 75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.participante-row {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid #f1f3f5;
+  background: #fff;
+  transition: background 0.15s ease;
+}
+
+.participante-row:last-child {
+  border-bottom: none;
+}
+
+.participante-row:hover {
+  background-color: #fafafa;
+}
+
+.participante-ausente {
+  opacity: 0.55;
+  background-color: #fff5f5 !important;
+}
+
+.avatar-inicial {
+  width: 38px;
+  height: 38px;
+  background-color: #212529;
+  color: #fff;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.avatar-ausente {
+  background-color: #adb5bd !important;
+}
+
+/* Etiqueta asiste / no asiste */
+.etiqueta-estado {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+}
+
+.etiqueta-asiste {
+  background-color: #d1e7dd;
+  color: #0a3622;
+}
+
+.etiqueta-falta {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* Switch personalizado */
+.custom-switch {
+  width: 2.5rem;
+  height: 1.3rem;
+  cursor: pointer;
+}
+
+.custom-switch:checked {
+  background-color: #212529;
+  border-color: #212529;
+}
+
+/* Botón confirmar */
+.btn-confirmar {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+  border-radius: 8px;
+}
+
+/* Resumen confirmado */
+.resumen-confirmado {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  max-width: 75rem;
+}
+
+.icono-ok {
+  width: 42px;
+  height: 42px;
+  background-color: #198754;
+  flex-shrink: 0;
+}
+
+.resumen-card {
+  min-height: 80px;
+}
+
+.resumen-asisten {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.resumen-faltan {
+  background-color: #fff5f5;
+  border: 1px solid #fecaca;
+}
+
+.avatar-mini {
+  width: 24px;
+  height: 24px;
+  background-color: #212529;
+  color: #fff;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+.btn-ir-redactar {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+  border-radius: 8px;
+}
+
+.x-small {
+  font-size: 0.7rem;
+}
