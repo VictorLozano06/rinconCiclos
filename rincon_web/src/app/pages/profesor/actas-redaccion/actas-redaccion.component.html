@@ -9,7 +9,7 @@
   </span>
 </div>
 
-<!-- Info de la convocatoria — campos reales de BD -->
+<!-- INFO CONVOCATORIA -->
 <div class="card border-0 shadow-sm rounded-3 mb-4 convocatoria-card">
   <div class="card-body p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
     <div class="d-flex align-items-center gap-3">
@@ -17,7 +17,6 @@
         <i class="bi bi-file-earmark-text-fill text-white fs-5"></i>
       </div>
       <div>
-        <!-- Sin campo título en BD: se identifica por idConvocatoria -->
         <h6 class="fw-bold text-dark mb-0">
           Convocatoria #{{ convocatoria.idConvocatoria }}
           <span class="text-secondary fw-normal small ms-1">{{ cursoAcademico }}</span>
@@ -44,10 +43,8 @@
   <p class="x-small text-secondary fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">
     Puntos del acta
   </p>
-  <div *ngFor="let punto of puntosInformacion"
-    class="punto-card card border-0 shadow-sm rounded-3 mb-3"
-    [class.punto-completado]="punto.informacion.trim().length > 0"
-    [class.punto-bloqueado]="estado === 'bloqueada'">
+  <div *ngFor="let punto of puntosInformacion" class="punto-card card border-0 shadow-sm rounded-3 mb-3"
+    [class.punto-completado]="punto.informacion.trim().length > 0" [class.punto-bloqueado]="estado === 'bloqueada'">
 
     <div class="card-body p-3 d-flex align-items-center justify-content-between punto-header"
       (click)="togglePunto(punto)">
@@ -59,9 +56,7 @@
         </div>
         <span class="fw-bold text-dark small">{{ punto.titulo_OrdenDia }}</span>
       </div>
-      <i class="bi text-secondary"
-        [class.bi-chevron-down]="!punto.expandido"
-        [class.bi-chevron-up]="punto.expandido">
+      <i class="bi text-secondary" [class.bi-chevron-down]="!punto.expandido" [class.bi-chevron-up]="punto.expandido">
       </i>
     </div>
 
@@ -72,15 +67,12 @@
           Información / Acuerdos
           <span class="text-muted fw-normal ms-1">(máx. 250 caracteres)</span>
         </label>
-        <textarea
-          class="form-control area-texto"
-          [(ngModel)]="punto.informacion"
-          rows="4"
-          maxlength="250"
+        <textarea class="form-control area-texto" [(ngModel)]="punto.informacion" rows="4" maxlength="250"
           [placeholder]="'Escribe aquí los acuerdos del punto ' + punto.numInformacion + '…'">
         </textarea>
         <div class="d-flex justify-content-end mt-2">
-          <span class="x-small" [class.text-danger]="punto.informacion.length >= 240" [class.text-secondary]="punto.informacion.length < 240">
+          <span class="x-small" [class.text-danger]="punto.informacion.length >= 240"
+            [class.text-secondary]="punto.informacion.length < 240">
             {{ punto.informacion.length }}/250
           </span>
         </div>
@@ -88,7 +80,8 @@
 
       <!-- Modo solo lectura (acta cerrada en BD) -->
       <div *ngIf="estado === 'bloqueada'">
-        <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">Información / Acuerdos</p>
+        <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">Información /
+          Acuerdos</p>
         <div class="contenido-bloqueado rounded-3 p-3">
           <p class="text-dark small mb-0" *ngIf="punto.informacion.trim().length > 0">{{ punto.informacion }}</p>
           <p class="text-secondary small fst-italic mb-0" *ngIf="punto.informacion.trim().length === 0">
@@ -110,7 +103,9 @@
 
     <!-- Lista de ruegos actuales -->
     <div *ngIf="ruegosPreguntas.length > 0" class="mb-3 d-flex flex-column gap-2">
-      <div *ngFor="let ruego of ruegosPreguntas; let i = index" class="ruego-item p-2 rounded-2 d-flex justify-content-between align-items-start" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+      <div *ngFor="let ruego of ruegosPreguntas; let i = index"
+        class="ruego-item p-2 rounded-2 d-flex justify-content-between align-items-start"
+        style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
         <span class="small text-dark">{{ ruego.texto }}</span>
         <button *ngIf="estado === 'redactando'" class="btn btn-link text-danger p-0 ms-2" (click)="eliminarRuego(i)">
           <i class="bi bi-trash"></i>
@@ -121,7 +116,8 @@
     <!-- Formulario para nuevo ruego (solo si está redactando) -->
     <div *ngIf="estado === 'redactando'" class="d-flex gap-2 align-items-start">
       <div class="flex-grow-1">
-        <textarea class="form-control area-texto" [(ngModel)]="nuevoRuego" rows="2" maxlength="250" placeholder="Añadir un nuevo ruego o pregunta (máx 250 car)..."></textarea>
+        <textarea class="form-control area-texto" [(ngModel)]="nuevoRuego" rows="2" maxlength="250"
+          placeholder="Añadir un nuevo ruego o pregunta (máx 250 car)..."></textarea>
       </div>
       <button class="btn btn-outline-dark btn-sm" (click)="agregarRuego()" [disabled]="nuevoRuego.trim().length === 0">
         Añadir
@@ -178,10 +174,8 @@
 
     <div class="puntos-resumen mb-4">
       <div *ngFor="let p of puntosInformacion" class="d-flex align-items-center gap-2 mb-1">
-        <i class="bi x-small"
-          [class.bi-check-circle-fill]="p.informacion.trim().length > 0"
-          [class.bi-circle]="p.informacion.trim().length === 0"
-          [class.text-success]="p.informacion.trim().length > 0"
+        <i class="bi x-small" [class.bi-check-circle-fill]="p.informacion.trim().length > 0"
+          [class.bi-circle]="p.informacion.trim().length === 0" [class.text-success]="p.informacion.trim().length > 0"
           [class.text-secondary]="p.informacion.trim().length === 0">
         </i>
         <span class="text-secondary" style="font-size:0.82rem;">{{ p.titulo_OrdenDia }}</span>
