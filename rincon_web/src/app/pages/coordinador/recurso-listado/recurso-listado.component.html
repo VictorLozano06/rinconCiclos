@@ -1,0 +1,115 @@
+<section class="seccion-recursos">
+  <div class="cabecera-recursos mb-4">
+    <div>
+      <h2 class="titulo-seccion">Mis recursos</h2>
+      <p class="texto-intro">Panel de coordinacion para revisar, crear, editar y eliminar recursos en modo mock.</p>
+    </div>
+  </div>
+
+  <p *ngIf="feedbackMock" class="feedback-mock">{{ feedbackMock }}</p>
+
+  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <p class="text-muted mb-0">Cargando recursos...</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <h4 class="card-title text-secondary">No se pudieron cargar los recursos</h4>
+      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!cargando && !errorCarga">
+    <div class="filtros-recursos">
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Categoria</span>
+        <select class="filtro-select" [value]="filtroActivo" (change)="cambiarFiltro($event)">
+          <option *ngFor="let filtro of filtros" [value]="filtro">{{ filtro }}</option>
+        </select>
+      </label>
+
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Curso</span>
+        <select class="filtro-select" [value]="filtroCurso" (change)="cambiarCurso($event)">
+          <option *ngFor="let curso of cursosFiltro" [value]="curso.idCurso">{{ curso.etiqueta }}</option>
+        </select>
+      </label>
+
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Ciclo</span>
+        <select class="filtro-select" [value]="filtroCiclo" (change)="cambiarCiclo($event)">
+          <option *ngFor="let ciclo of ciclosFiltro" [value]="ciclo.idCiclo">{{ ciclo.nombre }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div *ngIf="gruposFiltrados.length; else sinResultados" class="grupos-recursos">
+      <section *ngFor="let grupo of gruposFiltrados" class="grupo-recursos">
+        <div class="grupo-cabecera">
+          <div>
+            <h3>{{ grupo.categoriaNombre }}</h3>
+            <p>{{ grupo.recursos.length }} recurso{{ grupo.recursos.length === 1 ? '' : 's' }}</p>
+          </div>
+        </div>
+
+        <div class="lista-recursos">
+          <article *ngFor="let recurso of grupo.recursos" class="recurso-coordinador-card">
+            <app-recurso-item
+              [categoria]="recurso.categoriaNombre"
+              [fechaPublicacion]="recurso.fechaPublicacion"
+              [nombre]="recurso.nombre"
+              [descripcion]="recurso.descripcion"
+              [curso]="formatearCurso(recurso)"
+              [ciclos]="formatearCiclos(recurso)"
+              [detalleRuta]="['/coordinador', 'recursos', recurso.idCategoria, recurso.numRecurso]">
+            </app-recurso-item>
+
+            <div class="acciones-recurso">
+              <button type="button" class="boton-accion" (click)="abrirEditarMock(recurso)">
+                <i class="bi bi-pencil-square"></i>
+                Editar
+              </button>
+              <button type="button" class="boton-accion boton-eliminar" (click)="abrirEliminarMock(recurso)">
+                <i class="bi bi-trash3"></i>
+                Eliminar
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <ng-template #sinResultados>
+      <div class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+        <div class="card-body">
+          <h4 class="card-title text-secondary">No hay recursos para mostrar</h4>
+          <p class="card-text text-muted mb-0">Si no has subido ninguno todavia, aparecera aqui cuando lo crees.</p>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+</section>
+
+<div *ngIf="mostrarModalEliminar && recursoSeleccionado" class="modal-overlay">
+  <div class="modal-recurso modal-recurso-eliminar">
+    <div class="modal-cabecera">
+      <div>
+        <p class="modal-kicker">Coordinacion / Mock</p>
+        <h3>Eliminar recurso</h3>
+      </div>
+      <button type="button" class="modal-cerrar" (click)="cerrarModalEliminar()">X</button>
+    </div>
+
+    <p class="modal-texto">
+      Vas a eliminar <strong>{{ recursoSeleccionado.nombre }}</strong> del listado actual.
+      Si cancelas, no se aplicara ningun cambio.
+    </p>
+
+    <div class="modal-acciones">
+      <button type="button" class="boton-secundario" (click)="cerrarModalEliminar()">Cancelar</button>
+      <button type="button" class="boton-peligro" (click)="eliminarMock()">Si, eliminar</button>
+    </div>
+  </div>
+</div>

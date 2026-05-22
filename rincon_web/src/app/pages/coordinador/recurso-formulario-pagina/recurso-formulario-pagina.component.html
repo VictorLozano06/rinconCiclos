@@ -1,0 +1,41 @@
+<section class="seccion-recursos">
+  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <p class="text-muted mb-0">Cargando formulario...</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <h4 class="card-title text-secondary">No se pudo cargar el formulario</h4>
+      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && !errorCarga" class="pagina-formulario-recurso">
+    <app-recurso-formulario-mock
+      [titulo]="tituloFormulario"
+      [textoIntro]="textoIntroFormulario"
+      [textoBotonGuardar]="textoBotonGuardar"
+      [formulario]="formulario"
+      [categoriasFormulario]="categoriasFormulario"
+      [cursosFiltro]="cursosFiltro"
+      [ciclosFormulario]="ciclosFormulario"
+      [erroresFormulario]="erroresFormulario"
+      [nuevoCicloId]="nuevoCicloId"
+      [nuevoEnlace]="nuevoEnlace"
+      [nuevoArchivo]="nuevoArchivo"
+      (nuevoCicloIdChange)="nuevoCicloId = $event"
+      (agregarCiclo)="agregarCicloMock()"
+      (eliminarCiclo)="eliminarCicloMock($event)"
+      (nuevoEnlaceChange)="actualizarNuevoEnlace($event)"
+      (nuevoArchivoChange)="actualizarNuevoArchivo($event)"
+      (agregarEnlace)="agregarEnlaceMock()"
+      (eliminarEnlace)="eliminarEnlaceMock($event)"
+      (agregarArchivo)="agregarArchivoMock()"
+      (eliminarArchivo)="eliminarArchivoMock($event)"
+      (cancelar)="cancelar()"
+      (guardar)="guardarMock()">
+    </app-recurso-formulario-mock>
+  </div>
+</section>

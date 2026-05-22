@@ -2,46 +2,117 @@
   display: flex;
   min-height: 100vh;
   background-color: #f8fafc;
+  position: relative;
 }
 
-/* Sidebar fijo a la izquierda */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.sidebar-overlay-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .barra-lateral {
-  flex: 0 0 280px; /* Ancho fijo de 280px */
+  flex: 0 0 17.5rem;
   background-color: #fff;
-  border-right: 1px solid #e2e8f0;
+  border-right: 0.0625rem solid #e2e8f0;
 }
 
 .contenedor-principal {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Evita que el contenido desborde */
+  min-width: 0;
 }
 
 .barra-superior {
-  height: 90px;
-
+  min-height: 5.625rem;
   display: flex;
   align-items: center;
-  padding: 0 40px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
+  gap: 1rem;
+  padding: 0 2.5rem;
+  background: #fff;
+  border-bottom: 0.0625rem solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
+.boton-sidebar {
+  display: none;
+  width: 2.875rem;
+  height: 2.875rem;
+  border: 0.0625rem solid #d9e2f0;
+  border-radius: 0.875rem;
+  background: #f8fbff;
+  color: #243043;
+  font-size: 1.4rem;
+}
 
 .contenedor-contenido {
-  padding: 40px;
+  padding: 2.5rem;
   flex: 1;
   overflow-y: auto;
 }
 
-/* Limitamos el ancho del contenido para que no se estire infinito */
 .ajuste-ancho {
-  max-width: 1100px;
-  margin: 0; /* Mantenemos alineación a la izquierda como en el buscador */
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 app-buscador {
   width: 100%;
-  max-width: 1100px; /* Misma anchura que el contenido */
+  max-width: none;
+}
+
+@media (max-width: 1024px) {
+  .barra-superior {
+    min-height: auto;
+    padding: 1.125rem 1.25rem;
+  }
+
+  .contenedor-contenido {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .boton-sidebar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .barra-lateral {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.2);
+    z-index: 30;
+  }
+
+  .barra-lateral-abierta {
+    transform: translateX(0);
+  }
+
+  .barra-superior {
+    padding: 0.875rem 1rem;
+  }
+
+  .contenedor-contenido {
+    padding: 1.125rem 0.875rem 1.5rem;
+  }
 }

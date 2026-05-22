@@ -1,40 +1,40 @@
 .recurso-item {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
-  padding: 12px 14px;
-  border: 1px solid #d8d8d8;
-  border-radius: 6px;
-  background: #fff;
-  margin-bottom: 10px;
+  gap: 1rem;
+  padding: 0.75rem 0.875rem;
+  border: 0.0625rem solid #d8d8d8;
+  border-radius: 0.625rem;
+  background: #f7ffcc;
+  margin-bottom: 0.625rem;
 }
 
 .recurso-dato {
-  margin: 0 0 6px;
-  font-size: 12px;
+  margin: 0 0 0.375rem;
+  font-size: 0.75rem;
   color: #666;
 }
 
 .recurso-titulo {
-  margin: 0 0 6px;
-  font-size: 16px;
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
   color: #222;
 }
 
 .recurso-texto {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #555;
 }
 
 .recurso-enlace {
   display: inline-block;
-  padding: 7px 10px;
-  border-radius: 5px;
+  padding: 0.4375rem 0.625rem;
+  border-radius: 0.3125rem;
   background: #ededed;
   color: #222;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .recurso-enlace:hover {
@@ -42,6 +42,6 @@
 }
 
 .recurso-vacio {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: #777;
 }
