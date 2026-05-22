@@ -1,8 +1,19 @@
 <div class="diseno-app">
-  <app-sidebar-profesor />
+  <div
+    class="sidebar-overlay"
+    [class.sidebar-overlay-visible]="sidebarOpen"
+    (click)="closeSidebar()"></div>
+
+  <app-sidebar-profesor
+    [mobileOpen]="sidebarOpen"
+    (requestClose)="closeSidebar()" />
 
   <main class="contenedor-principal">
     <header class="barra-superior">
+      <button type="button" class="boton-sidebar" (click)="openSidebar()" aria-label="Abrir menu lateral">
+        <i class="bi bi-list"></i>
+      </button>
+
       <app-buscador />
     </header>
 

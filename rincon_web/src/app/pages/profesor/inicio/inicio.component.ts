@@ -28,6 +28,7 @@ export class InicioComponent implements OnInit {
     this.cargandoRecursos = true;
     this.errorRecursos = false;
 
+    // subscribe consume la respuesta del Observable que devuelve el servicio HTTP.
     this.recursoService.getRecientesProfesor().subscribe({
       next: (recursos) => {
         this.recursosRecientes = recursos;

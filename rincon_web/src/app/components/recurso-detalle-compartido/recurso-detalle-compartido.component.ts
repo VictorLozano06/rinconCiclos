@@ -2,32 +2,33 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { CategoriaService } from '../../../services/categoria.service';
-import { RecursoService } from '../../../services/recurso.service';
-import { CategoriaDto } from '../../../dto/categoria.dto';
-import { RecursoDto } from '../../../dto/recurso.dto';
+import { CategoriaService } from '../../services/categoria.service';
+import { RecursoService } from '../../services/recurso.service';
+import { CategoriaDto } from '../../dto/categoria.dto';
+import { RecursoDto } from '../../dto/recurso.dto';
 
-interface BreadcrumbItem {
+interface RutaNavegacionItem {
   nombre: string;
   ruta: string | any[] | null;
 }
 
 @Component({
-  selector: 'app-recurso-detalle-profesor',
+  selector: 'app-recurso-detalle-compartido',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './recurso-detalle.component.html',
-  styleUrl: './recurso-detalle.component.css'
+  templateUrl: './recurso-detalle-compartido.component.html',
+  styleUrl: './recurso-detalle-compartido.component.css'
 })
-export class RecursoDetalleComponent implements OnInit {
+export class RecursoDetalleCompartidoComponent implements OnInit {
   // Ficha completa del recurso que se muestra en pantalla.
   public recurso: RecursoDto | null = null;
-  public breadcrumbs: BreadcrumbItem[] = [];
+  // Ruta jerarquica visible arriba del detalle: Inicio / Categoria / Recurso.
+  public rutaNavegacion: RutaNavegacionItem[] = [];
   public cargando = true;
   public errorCarga = false;
   public mensajeError = '';
-  public basePath = '/profesor';
-  public homeRoute = '/profesor/inicio';
+  public rutaBase = '/profesor';
+  public rutaInicio = '/profesor/inicio';
 
   private idCategoria = 0;
   private numRecurso = 0;
@@ -39,11 +40,13 @@ export class RecursoDetalleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // subscribe escucha cambios de la ruta. Si cambia el id del recurso, se recarga el detalle.
     this.route.params.subscribe((params) => {
       this.idCategoria = Number(params['idCategoria'] || 0);
       this.numRecurso = Number(params['numRecurso'] || 0);
-      this.basePath = this.route.snapshot.data['basePath'] || '/profesor';
-      this.homeRoute = this.route.snapshot.data['homeRoute'] || '/profesor/inicio';
+      // snapshot es una foto instantanea del estado actual de la ruta en este momento.
+      this.rutaBase = this.route.snapshot.data['rutaBase'] || '/profesor';
+      this.rutaInicio = this.route.snapshot.data['rutaInicio'] || '/profesor/inicio';
       this.cargarDetalle();
     });
   }
@@ -54,7 +57,7 @@ export class RecursoDetalleComponent implements OnInit {
     this.errorCarga = false;
     this.mensajeError = '';
     this.recurso = null;
-    this.breadcrumbs = [];
+    this.rutaNavegacion = [];
 
     if (!this.idCategoria || !this.numRecurso) {
       this.errorCarga = true;
@@ -62,13 +65,14 @@ export class RecursoDetalleComponent implements OnInit {
       return;
     }
 
+    // forkJoin lanza varias peticiones en paralelo y espera a que todas terminen.
     forkJoin({
       categorias: this.categoriaService.getCategorias(),
       recurso: this.recursoService.getDetalle(this.idCategoria, this.numRecurso)
     }).subscribe({
       next: ({ categorias, recurso }) => {
         this.recurso = recurso;
-        this.breadcrumbs = this.construirBreadcrumbs(categorias, this.idCategoria, recurso.nombre);
+        this.rutaNavegacion = this.construirRutaNavegacion(categorias, this.idCategoria, recurso.nombre);
         this.cargando = false;
       },
       error: (err) => {
@@ -107,8 +111,8 @@ export class RecursoDetalleComponent implements OnInit {
     return (this.recurso.ciclos || []).map((ciclo) => ciclo.nombre);
   }
 
-  get breadcrumbTexto(): string {
-    return this.breadcrumbs.map((item) => item.nombre).join(' / ');
+  get textoRutaNavegacion(): string {
+    return this.rutaNavegacion.map((item) => item.nombre).join(' / ');
   }
 
   // Extrae el nombre legible de un archivo o ruta.
@@ -117,22 +121,22 @@ export class RecursoDetalleComponent implements OnInit {
     return limpio.split('/').pop() || archivo;
   }
 
-  // Construye el breadcrumb a partir de la categoria real del recurso.
-  private construirBreadcrumbs(categorias: CategoriaDto[], idCategoria: number, nombreRecurso: string): BreadcrumbItem[] {
+  // Construye la ruta superior visible a partir de la categoria real del recurso.
+  private construirRutaNavegacion(categorias: CategoriaDto[], idCategoria: number, nombreRecurso: string): RutaNavegacionItem[] {
     const ruta = this.buscarRutaCategoria(categorias, idCategoria);
-    const breadcrumbs: BreadcrumbItem[] = [{ nombre: 'Inicio', ruta: this.homeRoute }];
+    const rutaNavegacion: RutaNavegacionItem[] = [{ nombre: 'Inicio', ruta: this.rutaInicio }];
 
     if (ruta.length > 0) {
       ruta.forEach((nombre, index) => {
-        breadcrumbs.push({
+        rutaNavegacion.push({
           nombre,
-          ruta: index === ruta.length - 1 ? null : this.homeRoute
+          ruta: index === ruta.length - 1 ? null : this.rutaInicio
         });
       });
     }
 
-    breadcrumbs.push({ nombre: nombreRecurso, ruta: '' });
-    return breadcrumbs;
+    rutaNavegacion.push({ nombre: nombreRecurso, ruta: '' });
+    return rutaNavegacion;
   }
 
   // Localiza la ruta jerarquica de una categoria dentro del arbol.

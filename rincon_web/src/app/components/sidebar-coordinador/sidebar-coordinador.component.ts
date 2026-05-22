@@ -38,7 +38,7 @@ export class SidebarCoordinadorComponent implements OnInit {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
         this.errorCarga = false;
-        this.menuItems = this.buildMenu(data);
+        this.menuItems = this.construirMenu(data);
       },
       error: (err) => {
         this.errorCarga = true;
@@ -48,12 +48,12 @@ export class SidebarCoordinadorComponent implements OnInit {
   }
 
   // Monta los grupos del sidebar, incluyendo accesos fijos y categorias dinamicas.
-  private buildMenu(categorias: CategoriaDto[]): SidebarItem[] {
+  private construirMenu(categorias: CategoriaDto[]): SidebarItem[] {
     const catReuniones = categorias.find((cat) => cat.nombre === 'Reuniones de Equipo');
 
     let subCategoriasReuniones: SidebarItem[] = [];
     if (catReuniones && catReuniones.subcategorias) {
-      subCategoriasReuniones = this.mapCategorias(
+      subCategoriasReuniones = this.mapearCategorias(
         catReuniones.subcategorias,
         '/coordinador',
         '/coordinador/reuniones-de-equipo'
@@ -138,15 +138,7 @@ export class SidebarCoordinadorComponent implements OnInit {
             ruta: '/coordinador/recursos/crear',
             abierto: false,
             subcategorias: [],
-            deshabilitado: true
-          },
-          {
-            nombre: 'Editar recurso',
-            icono: 'categoria-generica',
-            ruta: '/coordinador/recursos/editar',
-            abierto: false,
-            subcategorias: [],
-            deshabilitado: true
+            deshabilitado: false
           }
         ],
         deshabilitado: false
@@ -155,8 +147,8 @@ export class SidebarCoordinadorComponent implements OnInit {
   }
 
   // Convierte categorias anidadas en items navegables.
-  private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): SidebarItem[] {
-    const iconMap: { [key: string]: string } = {
+  private mapearCategorias(cats: CategoriaDto[], prefijoRuta: string, rutaPadre: string = ''): SidebarItem[] {
+    const mapaIconos: { [key: string]: string } = {
       'Inicio': 'home',
       'Reuniones de Equipo': 'reuniones',
       'Tutorias': 'tutorias',
@@ -165,7 +157,7 @@ export class SidebarCoordinadorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const subcategoriasDeshabilitadas = ['Actas', 'BOCC', 'Calendario de reuniones'];
 
     return cats.map((cat) => {
       const nombre = cat.nombre;
@@ -180,40 +172,40 @@ export class SidebarCoordinadorComponent implements OnInit {
 
       let ruta = '';
       if (nombre === 'Inicio') {
-        ruta = `${prefix}/inicio`;
-      } else if (parentRuta) {
-        ruta = `${parentRuta}/${slug}`;
+        ruta = `${prefijoRuta}/inicio`;
+      } else if (rutaPadre) {
+        ruta = `${rutaPadre}/${slug}`;
       } else {
-        ruta = `${prefix}/${slug}`;
+        ruta = `${prefijoRuta}/${slug}`;
       }
 
-      const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
+      const subcategorias = cat.subcategorias ? this.mapearCategorias(cat.subcategorias, prefijoRuta, ruta) : [];
 
       return {
         nombre,
-        icono: iconMap[nombre] || 'categoria-generica',
+        icono: mapaIconos[nombre] || 'categoria-generica',
         ruta,
         abierto: false,
         subcategorias,
-        deshabilitado: disabledSubs.includes(nombre)
+        deshabilitado: subcategoriasDeshabilitadas.includes(nombre)
       };
     });
   }
 
   // Abre o cierra el bloque de menu que corresponda.
-  toggleMenu(cat: SidebarItem): void {
+  alternarMenu(cat: SidebarItem): void {
     if (cat.subcategorias.length > 0) {
       cat.abierto = !cat.abierto;
     }
   }
 
   // Indica si un item tiene hijos para decidir si se pinta como boton o enlace.
-  hasChildren(cat: SidebarItem): boolean {
+  tieneHijos(cat: SidebarItem): boolean {
     return cat.subcategorias.length > 0;
   }
 
   // Cierra el sidebar en mobile.
-  closeSidebar(): void {
+  cerrarSidebar(): void {
     this.requestClose.emit();
   }
 }

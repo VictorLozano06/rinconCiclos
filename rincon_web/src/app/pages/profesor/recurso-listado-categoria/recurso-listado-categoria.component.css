@@ -1,7 +1,7 @@
 /* Estilos específicos de la sección de recursos de categoría */
 .cabecera-seccion-categoria {
-  border-bottom: 2px solid var(--color-background-secundario, #e2e8f0);
-  padding-bottom: 12px;
+  border-bottom: 0.125rem solid var(--color-background-secundario, #e2e8f0);
+  padding-bottom: 0.75rem;
 }
 
 .ruta-seccion {
@@ -33,7 +33,7 @@
 
 .filtro-select {
   width: 100%;
-  border: 1px solid #d7def0;
+  border: 0.0625rem solid #d7def0;
   border-radius: 0.9rem;
   padding: 0.8rem 1rem;
   background: #ffffff;
@@ -46,7 +46,7 @@
   box-shadow: 0 0 0 0.2rem rgba(33, 83, 255, 0.12);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48em) {
   .filtros-recursos {
     grid-template-columns: 1fr;
   }

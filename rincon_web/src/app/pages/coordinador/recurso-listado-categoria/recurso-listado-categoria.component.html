@@ -1,8 +1,8 @@
 <section class="seccion-recursos">
   <div class="cabecera-seccion-categoria mb-4">
-    <h2 class="titulo-seccion text-capitalize">{{ categoriaActual || section }}</h2>
-    <p *ngIf="subsection" class="ruta-seccion mt-2">
-      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subsection }}</span>
+    <h2 class="titulo-seccion text-capitalize">{{ categoriaActual || seccion }}</h2>
+    <p *ngIf="subseccion" class="ruta-seccion mt-2">
+      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subseccion }}</span>
     </p>
   </div>
 
@@ -45,7 +45,7 @@
         [descripcion]="recurso.descripcion"
         [curso]="formatearCurso(recurso)"
         [ciclos]="formatearCiclos(recurso)"
-        [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
+        [detalleRuta]="['/coordinador', 'recursos', recurso.idCategoria, recurso.numRecurso]">
       </app-recurso-item>
     </div>
   </ng-container>

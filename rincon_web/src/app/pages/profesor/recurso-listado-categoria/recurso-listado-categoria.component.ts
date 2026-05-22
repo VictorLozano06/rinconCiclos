@@ -18,16 +18,16 @@ interface CicloFiltro {
 }
 
 @Component({
-  selector: 'app-recursos-categoria-profesor',
+  selector: 'app-recurso-listado-categoria-profesor',
   standalone: true,
   imports: [CommonModule, RecursoItemComponent],
-  templateUrl: './recursos-categoria.component.html',
-  styleUrl: './recursos-categoria.component.css'
+  templateUrl: './recurso-listado-categoria.component.html',
+  styleUrl: './recurso-listado-categoria.component.css'
 })
-export class RecursosCategoriaComponent implements OnInit {
+export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   // Ruta actual y subtipo seleccionado dentro del arbol de categorias.
-  public section: string | null = null;
-  public subsection: string | null = null;
+  public seccion: string | null = null;
+  public subseccion: string | null = null;
   public categoriaActual: string | null = null;
   public recursos: RecursoDto[] = [];
   public cursosFiltro: CursoFiltro[] = [];
@@ -45,8 +45,8 @@ export class RecursosCategoriaComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.section = params['section'] || null;
-      this.subsection = params['subsection'] || null;
+      this.seccion = params['section'] || null;
+      this.subseccion = params['subsection'] || null;
       this.cargarRecursos();
     });
   }
@@ -64,7 +64,7 @@ export class RecursosCategoriaComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
-        const categoria = this.buscarCategoriaPorRuta(categorias, [this.section, this.subsection].filter((valor): valor is string => !!valor));
+        const categoria = this.buscarCategoriaPorRuta(categorias, [this.seccion, this.subseccion].filter((valor): valor is string => !!valor));
 
         if (!categoria) {
           this.cargando = false;
