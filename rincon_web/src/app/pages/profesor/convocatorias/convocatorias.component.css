@@ -81,6 +81,119 @@
   padding: 20px 22px;
 }
 
+.presence-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.presence-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.presence-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.presence-header p {
+  margin: 6px 0 0;
+  color: #6f7d93;
+}
+
+.presence-search {
+  min-width: 300px;
+  max-width: 420px;
+  width: 100%;
+}
+
+.presence-search-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #6f7d93;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.presence-input-shell {
+  position: relative;
+}
+
+.presence-input-shell i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6f7d93;
+  pointer-events: none;
+}
+
+.presence-input-shell .form-control {
+  padding-left: 38px;
+  border-radius: 12px;
+  border: 1px solid #dbe4f0;
+  box-shadow: none;
+}
+
+.presence-result {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+}
+
+.presence-result.is-match {
+  background: #eefaf2;
+  border-color: #c7ead5;
+  color: #136b3c;
+}
+
+.presence-result.is-miss {
+  background: #fff6f6;
+  border-color: #f0d2d2;
+  color: #b42318;
+}
+
+.presence-result-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.presence-match-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.presence-match-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.presence-match-list strong {
+  font-size: 0.92rem;
+}
+
+.presence-match-list span {
+  font-size: 0.84rem;
+  opacity: 0.88;
+}
+
 .summary-title {
   max-width: 540px;
   font-size: 1.2rem;
@@ -308,6 +421,11 @@
     flex-direction: column;
   }
 
+  .presence-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .summary-meta,
   .info-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -320,6 +438,11 @@
 
   .hero-badge {
     min-width: 0;
+  }
+
+  .presence-search {
+    min-width: 0;
+    max-width: none;
   }
 
   .agenda-table {

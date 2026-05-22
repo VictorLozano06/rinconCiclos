@@ -1,20 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ConvocatoriaService } from '../../../services/convocatoria.service';
 import { ConvocatoriaDetalleDto } from '../../../dto/convocatoria-detalle.dto';
 import { ConvocatoriaListaItemDto } from '../../../dto/convocatoria-lista-item.dto';
 
+interface CoincidenciaProfesorConvocatoria {
+  nombre: string;
+  contexto: string;
+}
+
 @Component({
   selector: 'app-convocatorias-profesor',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './convocatorias.component.html',
   styleUrl: './convocatorias.component.css'
 })
 export class ProfesorConvocatoriasComponent implements OnInit {
   convocatoras: ConvocatoriaListaItemDto[] = [];
   convocatoriaSeleccionada: ConvocatoriaDetalleDto | null = null;
+  buscadorProfesor = '';
   cargandoListado = true;
   cargandoDetalle = false;
   errorMsg = '';
@@ -95,5 +102,73 @@ export class ProfesorConvocatoriasComponent implements OnInit {
   get minutosTotales(): number {
     if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
     return this.convocatoriaSeleccionada.ordenDia.reduce((total, item) => total + Number(item.minutos || 0), 0);
+  }
+
+  get resultadoBuscadorProfesor(): { encontrado: boolean; coincidencias: CoincidenciaProfesorConvocatoria[] } | null {
+    const convocatoria = this.convocatoriaSeleccionada;
+    const termino = this.normalizarTexto(this.buscadorProfesor);
+
+    if (!convocatoria || !termino) {
+      return null;
+    }
+
+    const coincidencias: CoincidenciaProfesorConvocatoria[] = [];
+
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.redacta, 'Redacta la convocatoria');
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.inicia, 'Inicia la reunión');
+
+    (convocatoria.ordenDia || []).forEach((punto) => {
+      this.agregarCoincidencia(
+        coincidencias,
+        termino,
+        punto.dinamiza,
+        `Punto ${punto.numOrden}: dinamiza`
+      );
+
+      (punto.participantes || []).forEach((participante) => {
+        this.agregarCoincidencia(
+          coincidencias,
+          termino,
+          participante.nombre,
+          `Punto ${punto.numOrden}: participa`
+        );
+      });
+    });
+
+    return {
+      encontrado: coincidencias.length > 0,
+      coincidencias
+    };
+  }
+
+  limpiarBuscadorProfesor(): void {
+    this.buscadorProfesor = '';
+  }
+
+  private agregarCoincidencia(
+    coincidencias: CoincidenciaProfesorConvocatoria[],
+    termino: string,
+    nombre: string | null | undefined,
+    contexto: string
+  ): void {
+    if (!nombre) {
+      return;
+    }
+
+    if (this.normalizarTexto(nombre).includes(termino)) {
+      coincidencias.push({
+        nombre,
+        contexto
+      });
+    }
+  }
+
+  private normalizarTexto(valor: string | null | undefined): string {
+    return (valor || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 }
