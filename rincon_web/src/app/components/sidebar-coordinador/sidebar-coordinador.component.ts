@@ -162,31 +162,14 @@ export class SidebarCoordinadorComponent implements OnInit {
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
 
-      // Interceptar 'Actas': expande con Plantillas e Historial
+      // Interceptar 'Actas': redirige a la página principal de actas
       if (nombre === 'Actas') {
         return {
           nombre,
           icono: 'categoria-generica',
-          ruta: null,
-          abierto: true,
-          subcategorias: [
-            {
-              nombre: 'Plantillas de Acta',
-              icono: 'categoria-generica',
-              ruta: '/coordinador/proceso-de-actas/plantillas',
-              abierto: false,
-              subcategorias: [],
-              deshabilitado: false
-            },
-            {
-              nombre: 'Historial de Actas',
-              icono: 'categoria-generica',
-              ruta: '/coordinador/proceso-de-actas/historial',
-              abierto: false,
-              subcategorias: [],
-              deshabilitado: false
-            }
-          ],
+          ruta: '/coordinador/proceso-de-actas',
+          abierto: false,
+          subcategorias: [],
           deshabilitado: false
         };
       }

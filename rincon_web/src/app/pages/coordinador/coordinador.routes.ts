@@ -10,6 +10,7 @@ import { RecursoDetalleCompartidoComponent } from '../../components/recurso-deta
 import { CiclosCursosComponent } from './ciclos-cursos/ciclos-cursos.component';
 import { ActasPlantillaComponent } from './actas-plantilla/actas-plantilla.component';
 import { ActasHistorialComponent } from './actas-historial/actas-historial.component';
+import { ActasInicioCoordinadorComponent } from './actas-inicio/actas-inicio.component';
 
 export const COORDINADOR_ROUTES: Routes = [
   {
@@ -26,6 +27,7 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
       { path: 'gestion-de-cursos', component: CiclosCursosComponent },
+      { path: 'proceso-de-actas', component: ActasInicioCoordinadorComponent },
       { path: 'proceso-de-actas/plantillas', component: ActasPlantillaComponent },
       { path: 'proceso-de-actas/historial', component: ActasHistorialComponent },
       { path: 'recursos', component: RecursoListadoCoordinadorComponent, data: { rutaBase: '/coordinador', rutaInicio: '/coordinador/recursos' } },

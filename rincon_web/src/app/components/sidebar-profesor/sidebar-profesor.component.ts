@@ -99,31 +99,14 @@ export class SidebarProfesorComponent implements OnInit {
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
 
-      // Interceptar 'Actas': expande con Control de Asistencia y Redacción
+      // Interceptar 'Actas': redirige a la página principal de actas
       if (nombre === 'Actas') {
         return {
           nombre,
           icono: 'categoria-generica',
-          ruta: null,
-          abierto: true,
-          subcategorias: [
-            {
-              nombre: 'Control de Asistencia',
-              icono: 'categoria-generica',
-              ruta: '/profesor/proceso-de-actas/asistencia',
-              abierto: false,
-              subcategorias: [],
-              deshabilitado: false
-            },
-            {
-              nombre: 'Redacción de Actas',
-              icono: 'categoria-generica',
-              ruta: '/profesor/proceso-de-actas/redaccion',
-              abierto: false,
-              subcategorias: [],
-              deshabilitado: false
-            }
-          ],
+          ruta: '/profesor/proceso-de-actas',
+          abierto: false,
+          subcategorias: [],
           deshabilitado: false
         };
       }
