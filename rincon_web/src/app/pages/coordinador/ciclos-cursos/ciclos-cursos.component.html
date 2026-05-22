@@ -1,0 +1,169 @@
+<div class="header-container d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h2 class="fw-bold text-dark m-0">Ciclos y Cursos</h2>
+    <p class="text-secondary small">Gestión de ciclos formativos y cursos.</p>
+  </div>
+  <button class="btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nuevo-ciclo"
+    (click)="mostrarModalNuevoCiclo = true">
+    + NUEVO CICLO
+  </button>
+</div>
+
+<div class="ciclos-list">
+  <div *ngFor="let ciclo of ciclos" class="card border-0 shadow-sm rounded-3 mb-3">
+    <!-- Fila del Ciclo -->
+    <div class="card-body p-3 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-link p-0 text-dark" (click)="toggleCiclo(ciclo)">
+          <i class="bi" [class.bi-chevron-right]="!ciclo.abierto" [class.bi-chevron-down]="ciclo.abierto"></i>
+        </button>
+        <div>
+          <h6 class="m-0 fw-bold text-dark">
+            {{ ciclo.siglas }}
+          </h6>
+          <span class="text-secondary small">{{ ciclo.familia }}</span>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3 action-btn"
+          (click)="abrirEditarCiclo(ciclo)">
+          <i class="bi bi-pencil-fill small"></i>
+          <span class="text-uppercase small fw-bold">editar</span>
+        </button>
+        <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 action-btn delete-btn"
+          (click)="eliminarCiclo(ciclo)">
+          <i class="bi bi-trash-fill small"></i>
+          <span class="text-uppercase small fw-bold">eliminar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cursos del Ciclo (si está abierto) -->
+    <div *ngIf="ciclo.abierto && ciclo.cursos.length > 0" class="card-footer bg-white border-top-0 p-0">
+      <div *ngFor="let curso of ciclo.cursos"
+        class="d-flex align-items-center justify-content-between border-top px-5 py-2">
+        <div class="d-flex align-items-center gap-3 ps-3">
+          <i class="bi bi-book text-secondary fs-5"></i>
+          <span class="fw-bold text-dark small">{{ curso.nombre }}</span>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-light btn-sm text-secondary fw-bold text-uppercase px-3 sub-action-btn"
+            (click)="abrirEditarCurso(ciclo, curso)">
+            EDITAR
+          </button>
+          <button
+            class="btn btn-link btn-sm text-danger text-decoration-none fw-bold text-uppercase px-3 sub-action-btn"
+            (click)="eliminarCurso(curso)">
+            ELIMINAR
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nuevo Ciclo -->
+<div *ngIf="mostrarModalNuevoCiclo" class="modal-overlay d-flex align-items-center justify-content-center">
+  <div class="custom-modal rounded-3 shadow-lg p-4">
+    <h5 class="text-white fw-bold mb-4">NUEVO CICLO FORMATIVO</h5>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre del Ciclo</label>
+      <input type="text" class="form-control custom-input py-2" placeholder="ej: DAW" [(ngModel)]="nuevoNombre">
+    </div>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia
+        Profesional</label>
+      <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">
+    </div>
+
+    <p class="text-secondary small mb-5 modal-helper-text">
+      se crearán automáticamente los cursos 1º y 2º al guardar
+    </p>
+
+    <div class="d-flex justify-content-end gap-3">
+      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
+        (click)="mostrarModalNuevoCiclo = false">
+        CANCELAR
+      </button>
+      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarNuevoCiclo()">
+        GUARDAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Ciclo -->
+<div *ngIf="mostrarModalEditarCiclo" class="modal-overlay d-flex align-items-center justify-content-center">
+  <div class="custom-modal rounded-3 shadow-lg p-4">
+    <h5 class="text-white fw-bold mb-4">EDITAR CICLO FORMATIVO</h5>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia
+        Profesional</label>
+      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarFamilia">
+    </div>
+
+    <div class="d-flex justify-content-end gap-3 mt-5">
+      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
+        (click)="mostrarModalEditarCiclo = false">
+        CANCELAR
+      </button>
+      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarEditarCiclo()">
+        GUARDAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar Curso -->
+<div *ngIf="mostrarModalEditarCurso" class="modal-overlay d-flex align-items-center justify-content-center">
+  <div class="custom-modal rounded-3 shadow-lg p-4">
+    <h5 class="text-white fw-bold mb-1">EDITAR CURSO</h5>
+    <p class="text-secondary x-small text-uppercase fw-bold mb-4" style="letter-spacing: 0.03rem;">
+      Ciclo: {{ cicloSeleccionado?.siglas }}
+    </p>
+
+    <div class="mb-4">
+      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre Curso</label>
+      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso">
+    </div>
+
+    <div class="d-flex justify-content-end gap-3 mt-5">
+      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
+        (click)="mostrarModalEditarCurso = false">
+        CANCELAR
+      </button>
+      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarEditarCurso()">
+        GUARDAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Eliminación -->
+<div *ngIf="mostrarModalConfirmar" class="modal-overlay d-flex align-items-center justify-content-center">
+  <div class="custom-modal rounded-3 shadow-lg p-4" style="max-width: 420px;">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center"
+        style="width:42px;height:42px;background:rgba(220,53,69,0.15);flex-shrink:0;">
+        <i class="bi bi-trash-fill text-danger"></i>
+      </div>
+      <h5 class="text-white fw-bold m-0">Confirmar eliminación</h5>
+    </div>
+
+    <p class="text-secondary mb-5" style="font-size: 0.93rem;">{{ confirmarMensaje }}</p>
+
+    <div class="d-flex justify-content-end gap-3">
+      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
+        (click)="cancelarConfirmacion()">
+        CANCELAR
+      </button>
+      <button class="btn btn-danger fw-bold text-uppercase px-4" (click)="confirmarAccion()">
+        ELIMINAR
+      </button>
+    </div>
+  </div>
+</div>

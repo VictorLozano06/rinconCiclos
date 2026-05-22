@@ -4,6 +4,8 @@ import { InicioComponent } from './inicio/inicio.component';
 import { RecursoListadoCategoriaProfesorComponent } from './recurso-listado-categoria/recurso-listado-categoria.component';
 import { ProfesorConvocatoriasComponent } from './convocatorias/convocatorias.component';
 import { RecursoDetalleCompartidoComponent } from '../../components/recurso-detalle-compartido/recurso-detalle-compartido.component';
+import { ActasAsistenciaComponent } from './actas-asistencia/actas-asistencia.component';
+import { ActasRedaccionComponent } from './actas-redaccion/actas-redaccion.component';
 
 export const PROFESOR_ROUTES: Routes = [
   {
@@ -14,6 +16,8 @@ export const PROFESOR_ROUTES: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'reuniones-de-equipo/convocatorias', component: ProfesorConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ProfesorConvocatoriasComponent },
+      { path: 'proceso-de-actas/asistencia', component: ActasAsistenciaComponent },
+      { path: 'proceso-de-actas/redaccion', component: ActasRedaccionComponent },
       { path: 'recurso/:idCategoria/:numRecurso', component: RecursoDetalleCompartidoComponent, data: { rutaBase: '/profesor', rutaInicio: '/profesor/inicio' } },
       { path: ':section', component: RecursoListadoCategoriaProfesorComponent },
       { path: ':section/:subsection', component: RecursoListadoCategoriaProfesorComponent }

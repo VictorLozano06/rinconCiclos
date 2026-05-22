@@ -1,0 +1,163 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.plantillas-list {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.btn-nueva {
+  font-size: 0.75rem;
+  letter-spacing: 0.05rem;
+}
+
+/* Icono de la plantilla */
+.icono-plantilla {
+  width: 30px;
+  height: 30px;
+  background-color: #212529;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+}
+
+/* Chips de bloques */
+.chip-bloque {
+  display: inline-block;
+  background-color: #f1f3f5;
+  color: #495057;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  border: 1px solid #dee2e6;
+}
+
+/* Botones de acción */
+.action-btn {
+  border-color: #dee2e6;
+  color: #495057;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.72rem;
+}
+
+.action-btn:hover {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.delete-btn {
+  color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #fff5f5;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* ========= MODAL ========= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.custom-modal {
+  background-color: #2d2d2d;
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.label-spacing {
+  letter-spacing: 0.05rem;
+}
+
+.custom-input {
+  background-color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.custom-input::placeholder {
+  color: #adb5bd;
+}
+
+/* Grid de bloques con checkboxes */
+.bloques-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.bloque-item {
+  display: flex;
+}
+
+.bloque-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: #adb5bd;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.bloque-label:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.bloque-activo {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #fff !important;
+}
+
+/* Botones del modal */
+.btn-white {
+  background-color: #fff;
+  color: #2d2d2d;
+  border-radius: 8px;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-white:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save {
+  font-size: 0.78rem;
+  letter-spacing: 0.04rem;
+}
+
+.x-small {
+  font-size: 0.7rem;
+}

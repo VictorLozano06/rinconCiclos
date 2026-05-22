@@ -1,0 +1,196 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+/* Badge de estado */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.badge-redactando {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-bloqueada {
+  background-color: #d1e7dd;
+  color: #0a3622;
+}
+
+/* Convocatoria card */
+.convocatoria-card {
+  border-left: 4px solid #212529 !important;
+  max-width: 75rem;
+}
+
+.icono-conv {
+  width: 46px;
+  height: 46px;
+  background: #212529;
+  flex-shrink: 0;
+}
+
+/* Barra de progreso */
+.progreso-wrapper {
+  min-width: 180px;
+}
+
+.barra-progreso-bg {
+  height: 6px;
+  background-color: #e9ecef;
+  overflow: hidden;
+}
+
+.barra-progreso-fill {
+  height: 100%;
+  background-color: #212529;
+  transition: width 0.4s ease;
+}
+
+/* Lista de puntos */
+.puntos-lista {
+  max-width: 75rem;
+}
+
+.punto-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.punto-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.punto-completado > .card-body {
+  border-left: 3px solid #198754;
+  border-radius: 12px 12px 0 0;
+}
+
+.punto-bloqueado {
+  opacity: 0.92;
+}
+
+.punto-header {
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.15s;
+}
+
+.punto-header:hover {
+  background-color: #fafafa;
+}
+
+/* Número del punto */
+.num-badge {
+  width: 32px;
+  height: 32px;
+  background-color: #f1f3f5;
+  color: #495057;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.num-badge-done {
+  background-color: #198754 !important;
+  color: #fff !important;
+}
+
+/* Área de texto */
+.area-texto {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.area-texto:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 2px rgba(33, 37, 41, 0.1);
+  background-color: #fff;
+}
+
+/* Contenido bloqueado */
+.contenido-bloqueado {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  min-height: 60px;
+}
+
+/* Botones de acción */
+.btn-sm-accion {
+  font-size: 0.78rem;
+  letter-spacing: 0.04rem;
+  border-radius: 8px;
+}
+
+/* Alerta bloqueada */
+.alerta-bloqueada {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  max-width: 75rem;
+}
+
+/* Resumen de puntos en modal */
+.puntos-resumen {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+/* ========== MODAL (idéntico al de ciclos-cursos) ========== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.custom-modal {
+  background-color: #2d2d2d;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #2d2d2d;
+  border-radius: 8px;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+}
+
+.x-small {
+  font-size: 0.7rem;
+}

@@ -78,14 +78,6 @@ export class SidebarCoordinadorComponent implements OnInit {
         deshabilitado: false
       },
       {
-        nombre: 'Gestión de Cursos',
-        icono: 'categoria-generica',
-        ruta: '/coordinador/gestion-de-cursos',
-        abierto: false,
-        subcategorias: [],
-        deshabilitado: false
-      },
-      {
         nombre: 'Categorías',
         icono: 'categorias',
         ruta: null,
@@ -157,7 +149,7 @@ export class SidebarCoordinadorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const subcategoriasDeshabilitadas = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const subcategoriasDeshabilitadas = ['BOCC', 'Calendario de reuniones'];
 
     return cats.map((cat) => {
       const nombre = cat.nombre;
@@ -169,6 +161,35 @@ export class SidebarCoordinadorComponent implements OnInit {
         .replace(/[ºª]/g, '')
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
+
+      // Interceptar 'Actas': expande con Plantillas e Historial
+      if (nombre === 'Actas') {
+        return {
+          nombre,
+          icono: 'categoria-generica',
+          ruta: null,
+          abierto: true,
+          subcategorias: [
+            {
+              nombre: 'Plantillas de Acta',
+              icono: 'categoria-generica',
+              ruta: '/coordinador/proceso-de-actas/plantillas',
+              abierto: false,
+              subcategorias: [],
+              deshabilitado: false
+            },
+            {
+              nombre: 'Historial de Actas',
+              icono: 'categoria-generica',
+              ruta: '/coordinador/proceso-de-actas/historial',
+              abierto: false,
+              subcategorias: [],
+              deshabilitado: false
+            }
+          ],
+          deshabilitado: false
+        };
+      }
 
       let ruta = '';
       if (nombre === 'Inicio') {
