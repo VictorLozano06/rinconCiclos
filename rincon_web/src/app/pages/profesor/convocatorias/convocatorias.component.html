@@ -112,6 +112,48 @@
     </div>
   </div>
 
+  <div class="surface-card section-card presence-card">
+    <div class="presence-header">
+      <div>
+        <p class="summary-label">Chequeo rápido</p>
+        <h3>¿Estoy en esta convocatoria?</h3>
+        <p>Busca tu nombre o apellidos para comprobar si apareces como redacta, inicia, dinamiza o participante.</p>
+      </div>
+
+      <div class="presence-search">
+        <label for="buscador-profesor" class="presence-search-label">Buscar profesor</label>
+        <div class="presence-input-shell">
+          <i class="bi bi-search"></i>
+          <input
+            id="buscador-profesor"
+            type="text"
+            class="form-control"
+            [(ngModel)]="buscadorProfesor"
+            placeholder="Ej. María García"
+          >
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="resultadoBuscadorProfesor as resultado" class="presence-result" [class.is-match]="resultado.encontrado" [class.is-miss]="!resultado.encontrado">
+      <div class="presence-result-head">
+        <strong>{{ resultado.encontrado ? 'Sí, apareces en esta convocatoria' : 'No apareces en esta convocatoria' }}</strong>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarBuscadorProfesor()">Limpiar</button>
+      </div>
+
+      <p class="mb-0">
+        {{ resultado.encontrado ? 'Coincidencias encontradas:' : 'No se han encontrado coincidencias con ese nombre.' }}
+      </p>
+
+      <ul class="presence-match-list" *ngIf="resultado.coincidencias.length > 0">
+        <li *ngFor="let coincidencia of resultado.coincidencias">
+          <strong>{{ coincidencia.nombre }}</strong>
+          <span>{{ coincidencia.contexto }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
   <div class="surface-card section-card">
     <div class="section-header">
       <div>

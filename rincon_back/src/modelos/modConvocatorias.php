@@ -270,6 +270,8 @@ class ModConvocatorias {
     }
 
     private function listarPorEstado($cancelada) {
+        $ordenFecha = $cancelada ? 'DESC' : 'ASC';
+
         $sql = "SELECT
                     c.idConvocatoria,
                     c.fecha,
@@ -285,7 +287,7 @@ class ModConvocatorias {
                 LEFT JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
                 LEFT JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
                 WHERE (c.cancelada + 0) = :cancelada
-                ORDER BY c.fecha DESC";
+                ORDER BY c.fecha {$ordenFecha}";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':cancelada' => (int)$cancelada]);
