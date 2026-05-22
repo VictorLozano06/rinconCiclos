@@ -39,10 +39,10 @@
   </div>
 </div>
 
-<!-- PUNTOS DE INFORMACIÓN (tabla informacion) -->
+<!-- PUNTOS DE INFORMACIÓN -->
 <div class="puntos-lista mb-3">
   <p class="x-small text-secondary fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">
-    Puntos del acta — tabla <code>informacion</code>
+    Puntos del acta
   </p>
   <div *ngFor="let punto of puntosInformacion"
     class="punto-card card border-0 shadow-sm rounded-3 mb-3"
@@ -57,7 +57,6 @@
           <i *ngIf="punto.informacion.trim().length > 0" class="bi bi-check2 fw-bold"></i>
           <span *ngIf="punto.informacion.trim().length === 0">{{ punto.numInformacion }}</span>
         </div>
-        <!-- titulo_OrdenDia: campo real de la tabla informacion -->
         <span class="fw-bold text-dark small">{{ punto.titulo_OrdenDia }}</span>
       </div>
       <i class="bi text-secondary"
@@ -69,7 +68,6 @@
     <div *ngIf="punto.expandido" class="card-footer bg-white border-top p-3">
       <!-- Modo redacción -->
       <div *ngIf="estado === 'redactando'">
-        <!-- informacion: campo real de la tabla informacion (VARCHAR 250) -->
         <label class="x-small text-secondary fw-bold text-uppercase mb-2 d-block" style="letter-spacing: 0.05rem;">
           Información / Acuerdos
           <span class="text-muted fw-normal ms-1">(máx. 250 caracteres)</span>
@@ -102,24 +100,37 @@
   </div>
 </div>
 
-<!-- RUEGOS Y PREGUNTAS (tabla ruegosPreguntasActa separada) -->
+<!-- RUEGOS Y PREGUNTAS -->
 <div class="card border-0 shadow-sm rounded-3 mb-4 ruegos-card">
   <div class="card-body p-3">
-    <div class="d-flex align-items-center gap-2 mb-2">
+    <div class="d-flex align-items-center gap-2 mb-3">
       <i class="bi bi-chat-left-quote text-secondary"></i>
       <span class="fw-bold text-dark small">Ruegos y Preguntas</span>
-      <span class="x-small text-secondary fw-normal">— tabla <code>ruegosPreguntasActa</code></span>
     </div>
-    <textarea *ngIf="estado === 'redactando'"
-      class="form-control area-texto"
-      [(ngModel)]="ruegosPreguntasTexto"
-      rows="3"
-      maxlength="250"
-      placeholder="Escribe los ruegos y preguntas de la sesión…">
-    </textarea>
-    <div *ngIf="estado === 'bloqueada'" class="contenido-bloqueado rounded-3 p-3">
-      <p class="text-dark small mb-0" *ngIf="ruegosPreguntasTexto.trim().length > 0">{{ ruegosPreguntasTexto }}</p>
-      <p class="text-secondary small fst-italic mb-0" *ngIf="ruegosPreguntasTexto.trim().length === 0">Sin ruegos ni preguntas registrados.</p>
+
+    <!-- Lista de ruegos actuales -->
+    <div *ngIf="ruegosPreguntas.length > 0" class="mb-3 d-flex flex-column gap-2">
+      <div *ngFor="let ruego of ruegosPreguntas; let i = index" class="ruego-item p-2 rounded-2 d-flex justify-content-between align-items-start" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+        <span class="small text-dark">{{ ruego.texto }}</span>
+        <button *ngIf="estado === 'redactando'" class="btn btn-link text-danger p-0 ms-2" (click)="eliminarRuego(i)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario para nuevo ruego (solo si está redactando) -->
+    <div *ngIf="estado === 'redactando'" class="d-flex gap-2 align-items-start">
+      <div class="flex-grow-1">
+        <textarea class="form-control area-texto" [(ngModel)]="nuevoRuego" rows="2" maxlength="250" placeholder="Añadir un nuevo ruego o pregunta (máx 250 car)..."></textarea>
+      </div>
+      <button class="btn btn-outline-dark btn-sm" (click)="agregarRuego()" [disabled]="nuevoRuego.trim().length === 0">
+        Añadir
+      </button>
+    </div>
+
+    <!-- Solo lectura vacío -->
+    <div *ngIf="estado === 'bloqueada' && ruegosPreguntas.length === 0" class="contenido-bloqueado rounded-3 p-3">
+      <p class="text-secondary small fst-italic mb-0">Sin ruegos ni preguntas registrados.</p>
     </div>
   </div>
 </div>
@@ -143,7 +154,7 @@
   <div>
     <p class="fw-bold text-dark small mb-0">Acta oficial bloqueada</p>
     <p class="text-secondary x-small mb-0">
-      Registro en tabla <code>acta</code> — idActa: {{ acta.idActa }} — fecha: {{ acta.fecha | date:'dd/MM/yyyy' }}
+      El acta ha sido finalizada y cerrada oficialmente.
     </p>
   </div>
 </div>
@@ -160,9 +171,10 @@
     </div>
 
     <p class="text-secondary mb-3" style="font-size: 0.9rem;">
-      Se creará un registro en la tabla <strong class="text-white">acta</strong> con la fecha de hoy y quedará
+      Se guardará el acta con la fecha de hoy y quedará
       <strong class="text-white">bloqueada permanentemente</strong>. ¿Deseas continuar?
     </p>
+
 
     <div class="puntos-resumen mb-4">
       <div *ngFor="let p of puntosInformacion" class="d-flex align-items-center gap-2 mb-1">

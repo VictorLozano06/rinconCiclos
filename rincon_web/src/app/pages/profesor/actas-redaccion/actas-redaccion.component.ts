@@ -71,9 +71,24 @@ export class ActasRedaccionComponent {
    * - idPreguntaActa: INT AUTO_INCREMENT
    * - idActa: FK
    * - ruegosPregunta: VARCHAR(250)
-   * Es una tabla separada → se gestiona como lista de textos
+   * Es una tabla separada → se gestiona como array de textos (múltiples filas)
    */
-  public ruegosPreguntasTexto: string = '';
+  public ruegosPreguntas: { id: number, texto: string }[] = [];
+  public nuevoRuego: string = '';
+
+  agregarRuego(): void {
+    if (this.nuevoRuego.trim().length > 0) {
+      this.ruegosPreguntas.push({
+        id: this.ruegosPreguntas.length + 1,
+        texto: this.nuevoRuego.trim()
+      });
+      this.nuevoRuego = '';
+    }
+  }
+
+  eliminarRuego(index: number): void {
+    this.ruegosPreguntas.splice(index, 1);
+  }
 
   get cursoAcademico(): string {
     return `${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}`;
