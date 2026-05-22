@@ -11,6 +11,10 @@
 /backups/
 /SQL.sql
 
+# Convocatorias backend deshabilitado en desarrollo
+/rincon_back/src/controladores/conConvocatorias.php
+/rincon_back/src/modelos/modConvocatorias.php
+
 # Secrets
 .env
 .env.*
