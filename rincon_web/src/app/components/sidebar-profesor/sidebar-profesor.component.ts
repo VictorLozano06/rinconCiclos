@@ -20,48 +20,10 @@ export class SidebarProfesorComponent implements OnInit {
   constructor(private categoriaService: CategoriaService) {}
 
   ngOnInit(): void {
-    this.categorias = this.obtenerItemsEstaticos();
     this.obtenerCategorias();
   }
 
-  private obtenerItemsEstaticos(): any[] {
-    return [
-      {
-        nombre: 'Reuniones de Equipo',
-        icono: 'reuniones',
-        ruta: null,
-        abierto: true,
-        subcategorias: [
-          {
-            nombre: 'Actas',
-            icono: 'categoria-generica',
-            ruta: null,
-            abierto: true,
-            subcategorias: [
-              {
-                nombre: 'Control de Asistencia',
-                icono: 'categoria-generica',
-                ruta: '/profesor/proceso-de-actas/asistencia',
-                abierto: false,
-                subcategorias: [],
-                deshabilitado: false
-              },
-              {
-                nombre: 'Redacción de Actas',
-                icono: 'categoria-generica',
-                ruta: '/profesor/proceso-de-actas/redaccion',
-                abierto: false,
-                subcategorias: [],
-                deshabilitado: false
-              }
-            ],
-            deshabilitado: false
-          }
-        ],
-        deshabilitado: false
-      }
-    ];
-  }
+
 
   // Carga categorias y las transforma en enlaces del sidebar.
   obtenerCategorias(): void {
@@ -98,18 +60,6 @@ export class SidebarProfesorComponent implements OnInit {
         .replace(/[ºª]/g, '')
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
-
-      // Interceptar 'Actas': redirige a la página principal de actas
-      if (nombre === 'Actas') {
-        return {
-          nombre,
-          icono: 'categoria-generica',
-          ruta: '/profesor/proceso-de-actas',
-          abierto: false,
-          subcategorias: [],
-          deshabilitado: false
-        };
-      }
 
       // Construye la ruta segun el nivel de la categoria.
       let ruta = '';

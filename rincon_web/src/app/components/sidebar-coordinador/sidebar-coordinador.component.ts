@@ -162,17 +162,7 @@ export class SidebarCoordinadorComponent implements OnInit {
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
 
-      // Interceptar 'Actas': redirige a la página principal de actas
-      if (nombre === 'Actas') {
-        return {
-          nombre,
-          icono: 'categoria-generica',
-          ruta: '/coordinador/proceso-de-actas',
-          abierto: false,
-          subcategorias: [],
-          deshabilitado: false
-        };
-      }
+
 
       let ruta = '';
       if (nombre === 'Inicio') {

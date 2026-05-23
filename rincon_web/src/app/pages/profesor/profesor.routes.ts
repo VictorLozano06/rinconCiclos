@@ -17,9 +17,9 @@ export const PROFESOR_ROUTES: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'reuniones-de-equipo/convocatorias', component: ProfesorConvocatoriasComponent },
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ProfesorConvocatoriasComponent },
-      { path: 'proceso-de-actas', component: ActasInicioProfesorComponent },
-      { path: 'proceso-de-actas/asistencia', component: ActasAsistenciaComponent },
-      { path: 'proceso-de-actas/redaccion', component: ActasRedaccionComponent },
+      { path: 'reuniones-de-equipo/actas', component: ActasInicioProfesorComponent },
+      { path: 'reuniones-de-equipo/actas/asistencia', component: ActasAsistenciaComponent },
+      { path: 'reuniones-de-equipo/actas/redaccion', component: ActasRedaccionComponent },
       { path: 'recurso/:idCategoria/:numRecurso', component: RecursoDetalleCompartidoComponent, data: { rutaBase: '/profesor', rutaInicio: '/profesor/inicio' } },
       { path: ':section', component: RecursoListadoCategoriaProfesorComponent },
       { path: ':section/:subsection', component: RecursoListadoCategoriaProfesorComponent }

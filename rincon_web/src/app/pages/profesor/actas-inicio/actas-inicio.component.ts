@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
       <h2 class="mb-4">Proceso de Actas</h2>
       <div class="row g-4">
         <div class="col-md-6">
-          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" routerLink="/profesor/proceso-de-actas/asistencia">
+          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" routerLink="/profesor/reuniones-de-equipo/actas/asistencia">
             <div class="card-body text-center p-5">
               <i class="bi bi-person-check text-primary mb-3" style="font-size: 3rem;"></i>
               <h4 class="card-title">Control de Asistencia</h4>
@@ -20,7 +20,7 @@ import { RouterModule } from '@angular/router';
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" routerLink="/profesor/proceso-de-actas/redaccion">
+          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" routerLink="/profesor/reuniones-de-equipo/actas/redaccion">
             <div class="card-body text-center p-5">
               <i class="bi bi-pencil-square text-success mb-3" style="font-size: 3rem;"></i>
               <h4 class="card-title">Redacción de Actas</h4>
