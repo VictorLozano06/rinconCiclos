@@ -9,62 +9,31 @@
 
   <nav class="navegacion-sidebar">
     <div *ngFor="let cat of categorias" class="grupo-navegacion">
-
-      <button class="item-menu" (click)="toggleMenu(cat)"
-        [routerLink]="cat.subcategorias.length === 0 ? cat.ruta : null" routerLinkActive="enlace-activo">
-
-        <div class="contenido-item">
-          <span class="icono-item">
-            <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
-          </span>
-          <span class="texto-item">{{ cat.nombre }}</span>
-        </div>
-        <i *ngIf="cat.subcategorias.length > 0" class="bi" [class.bi-chevron-up]="cat.abierto"
-          [class.bi-chevron-down]="!cat.abierto"></i>
+      <button
+        class="item-menu"
+        (click)="activarCategoria(cat)"
+        [routerLink]="cat.subcategorias.length === 0 ? cat.ruta : null"
+        routerLinkActive="enlace-activo">
+        <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
+        <span class="texto-item">{{ cat.nombre }}</span>
       </button>
 
       <div *ngIf="cat.abierto && cat.subcategorias.length > 0" class="lista-subcategorias">
-        <ng-container *ngFor="let sub of cat.subcategorias">
+        <div *ngFor="let sub of cat.subcategorias" class="subcategoria-item">
+          <a
+            *ngIf="!sub.deshabilitado"
+            [routerLink]="sub.ruta"
+            routerLinkActive="enlace-activo"
+            class="item-subcategoria"
+            (click)="cerrarSidebar()">
+            {{ sub.nombre }}
+          </a>
 
-          <!-- Sub sin hijos: enlace directo -->
-          <ng-container *ngIf="sub.subcategorias.length === 0">
-            <a *ngIf="!sub.deshabilitado" [routerLink]="sub.ruta" routerLinkActive="enlace-activo"
-              class="item-subcategoria" (click)="cerrarSidebar()">
-              {{ sub.nombre }}
-            </a>
-            <span *ngIf="sub.deshabilitado" class="item-subcategoria sub-deshabilitada" title="Sección en desarrollo"
-              style="opacity: 0.5; cursor: not-allowed; display: block; padding: 6px 12px 6px 44px; font-size: 0.9rem; color: var(--color-texto-secundario);">
-              {{ sub.nombre }}
-            </span>
-          </ng-container>
-
-          <!-- Sub con hijos: expandible -->
-          <ng-container *ngIf="sub.subcategorias.length > 0">
-            <button
-              class="item-subcategoria item-subcategoria-expandible d-flex align-items-center justify-content-between w-100 text-start border-0 bg-transparent"
-              (click)="toggleMenu(sub)">
-              <span>{{ sub.nombre }}</span>
-              <i class="bi bi-chevron-down ms-auto" style="font-size:0.65rem;" [class.bi-chevron-up]="sub.abierto"
-                [class.bi-chevron-down]="!sub.abierto"></i>
-            </button>
-
-            <div *ngIf="sub.abierto" class="lista-subcategorias-anidada">
-              <ng-container *ngFor="let subsub of sub.subcategorias">
-                <a *ngIf="!subsub.deshabilitado" [routerLink]="subsub.ruta" routerLinkActive="enlace-activo"
-                  class="item-subcategoria item-anidado" (click)="cerrarSidebar()">
-                  {{ subsub.nombre }}
-                </a>
-                <span *ngIf="subsub.deshabilitado" class="item-subcategoria item-anidado sub-deshabilitada"
-                  title="Sección en desarrollo" style="opacity: 0.5; cursor: not-allowed;">
-                  {{ subsub.nombre }}
-                </span>
-              </ng-container>
-            </div>
-          </ng-container>
-
-        </ng-container>
+          <span *ngIf="sub.deshabilitado" class="item-subcategoria sub-deshabilitada">
+            {{ sub.nombre }}
+          </span>
+        </div>
       </div>
-
     </div>
   </nav>
 </aside>

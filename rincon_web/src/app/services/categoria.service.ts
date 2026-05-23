@@ -12,7 +12,7 @@ export class CategoriaService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService
-  ) {}
+  ) { }
 
   // Carga el arbol de categorias que usan los sidebars y rutas dinamicas.
   getCategorias(): Observable<CategoriaDto[]> {
@@ -29,7 +29,7 @@ export class CategoriaService {
               nombre: 'Actas',
               predeterminada: false,
               idCategoriaPadre: reuniones.idCategoria,
-              subcategorias: [] // Sin subcategorías, es una página directa como pidió el equipo
+              subcategorias: [] // Sin subcategorías
             });
           }
         }
