@@ -1,0 +1,185 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 1.25rem;
+  flex-shrink: 0;
+}
+
+.badge-redactando {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-bloqueada {
+  background-color: #d1e7dd;
+  color: #0a3622;
+}
+
+.convocatoria-card {
+  border-left: 0.25rem solid #212529 !important;
+  max-width: 75rem;
+}
+
+.icono-conv {
+  width: 2.875rem;
+  height: 2.875rem;
+  background: #212529;
+  flex-shrink: 0;
+}
+
+.progreso-wrapper {
+  min-width: 11.25rem;
+}
+
+.barra-progreso-bg {
+  height: 0.375rem;
+  background-color: #e9ecef;
+  overflow: hidden;
+}
+
+.barra-progreso-fill {
+  height: 100%;
+  background-color: #212529;
+  transition: width 0.4s ease;
+}
+
+.puntos-lista {
+  max-width: 75rem;
+}
+
+.punto-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.punto-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.punto-completado > .card-body {
+  border-left: 0.1875rem solid #198754;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.punto-bloqueado {
+  opacity: 0.92;
+}
+
+.punto-header {
+  cursor: pointer;
+  border-radius: 0.75rem;
+  transition: background 0.15s;
+}
+
+.punto-header:hover {
+  background-color: #fafafa;
+}
+
+.num-badge {
+  width: 2rem;
+  height: 2rem;
+  background-color: #f1f3f5;
+  color: #495057;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.num-badge-done {
+  background-color: #198754 !important;
+  color: #fff !important;
+}
+
+.area-texto {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.area-texto:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 2px rgba(33, 37, 41, 0.1);
+  background-color: #fff;
+}
+
+.contenido-bloqueado {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  min-height: 3.75rem;
+}
+
+.btn-sm-accion {
+  font-size: 0.78rem;
+  letter-spacing: 0.04rem;
+  border-radius: 0.5rem;
+}
+
+.alerta-bloqueada {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  max-width: 75rem;
+}
+
+.puntos-resumen {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.custom-modal {
+  background-color: #2d2d2d;
+  width: 100%;
+  max-width: 31.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #2d2d2d;
+  border-radius: 0.5rem;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-save {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+}
+
+.x-small {
+  font-size: 0.7rem;
+}

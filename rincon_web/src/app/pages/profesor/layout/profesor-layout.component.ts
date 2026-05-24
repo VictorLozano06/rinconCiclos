@@ -11,4 +11,14 @@ import { SidebarProfesorComponent } from '../../../components/sidebar-profesor/s
   templateUrl: './profesor-layout.component.html',
   styleUrl: './profesor-layout.component.css'
 })
-export class ProfesorLayoutComponent {}
+export class ProfesorLayoutComponent {
+  public sidebarOpen = false;
+
+  openSidebar(): void {
+    this.sidebarOpen = true;
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen = false;
+  }
+}

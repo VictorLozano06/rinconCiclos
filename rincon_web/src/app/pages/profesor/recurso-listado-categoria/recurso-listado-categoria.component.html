@@ -1,0 +1,61 @@
+<section class="seccion-recursos">
+  <div class="cabecera-seccion-categoria mb-4">
+    <h2 class="titulo-seccion text-capitalize">{{ categoriaActual || seccion }}</h2>
+    <p *ngIf="subseccion" class="ruta-seccion mt-2">
+      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subseccion }}</span>
+    </p>
+  </div>
+
+  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <p class="text-muted mb-0">Cargando recursos...</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+    <div class="card-body">
+      <h4 class="card-title text-secondary">No se han podido cargar los recursos</h4>
+      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!cargando && !errorCarga">
+    <div class="filtros-recursos">
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Filtrar por curso</span>
+        <select class="filtro-select" [value]="filtroCurso" (change)="cambiarCurso($event)">
+          <option *ngFor="let curso of cursosFiltro" [value]="curso.idCurso">{{ curso.etiqueta }}</option>
+        </select>
+      </label>
+
+      <label class="filtro-bloque">
+        <span class="filtro-etiqueta">Filtrar por ciclo</span>
+        <select class="filtro-select" [value]="filtroCiclo" (change)="cambiarCiclo($event)">
+          <option *ngFor="let ciclo of ciclosFiltro" [value]="ciclo.idCiclo">{{ ciclo.nombre }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div *ngIf="recursosFiltrados.length; else sinRecursos" class="lista-recursos">
+      <app-recurso-item
+        *ngFor="let recurso of recursosFiltrados"
+        [categoria]="recurso.categoriaNombre"
+        [fechaPublicacion]="recurso.fechaPublicacion"
+        [nombre]="recurso.nombre"
+        [descripcion]="recurso.descripcion"
+        [curso]="formatearCurso(recurso)"
+        [ciclos]="formatearCiclos(recurso)"
+        [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
+      </app-recurso-item>
+    </div>
+  </ng-container>
+
+  <ng-template #sinRecursos>
+    <div *ngIf="!cargando && !errorCarga" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+      <div class="card-body">
+        <h4 class="card-title text-secondary">Aun no hay recursos en esta categoria</h4>
+        <p class="card-text text-muted mb-0">Prueba con otra categoria o revisa mas tarde.</p>
+      </div>
+    </div>
+  </ng-template>
+</section>

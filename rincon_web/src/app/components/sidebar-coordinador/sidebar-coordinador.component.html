@@ -2,7 +2,7 @@
   <div class="cabecera-sidebar">
     <h1 class="titulo-web">Rincon de Ciclos</h1>
     <p class="subtitulo-web">Portal Coordinacion</p>
-    <button type="button" class="cerrar-sidebar" (click)="closeSidebar()" aria-label="Cerrar menu">
+    <button type="button" class="cerrar-sidebar" (click)="cerrarSidebar()" aria-label="Cerrar menu">
       <i class="bi bi-x-lg"></i>
     </button>
   </div>
@@ -14,9 +14,9 @@
 
     <div *ngFor="let item of menuItems" class="grupo-navegacion">
       <a
-        *ngIf="!hasChildren(item)"
+        *ngIf="!tieneHijos(item)"
         [routerLink]="item.ruta"
-        (click)="closeSidebar()"
+        (click)="cerrarSidebar()"
         routerLinkActive="enlace-activo"
         [routerLinkActiveOptions]="{ exact: true }"
         class="item-menu item-menu-enlace">
@@ -29,10 +29,10 @@
       </a>
 
       <button
-        *ngIf="hasChildren(item)"
+        *ngIf="tieneHijos(item)"
         type="button"
         class="item-menu"
-        (click)="toggleMenu(item)">
+        (click)="alternarMenu(item)">
         <div class="contenido-item">
           <span class="icono-item">
             <img [src]="'assets/icons/' + item.icono + '.svg'" [alt]="item.nombre" class="imagen-icono">
@@ -42,14 +42,14 @@
         <i class="bi" [ngClass]="item.abierto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
       </button>
 
-      <div *ngIf="item.abierto && hasChildren(item)" class="lista-subcategorias">
+      <div *ngIf="item.abierto && tieneHijos(item)" class="lista-subcategorias">
         <ng-container *ngFor="let categoria of item.subcategorias">
           <div class="categoria-bloque">
             <div class="categoria-fila">
               <a
                 *ngIf="!categoria.deshabilitado"
                 [routerLink]="categoria.ruta"
-                (click)="closeSidebar()"
+                (click)="cerrarSidebar()"
                 routerLinkActive="enlace-activo"
                 class="item-subcategoria item-subcategoria-principal">
                 {{ categoria.nombre }}
@@ -63,21 +63,21 @@
               </span>
 
               <button
-                *ngIf="hasChildren(categoria)"
+                *ngIf="tieneHijos(categoria)"
                 type="button"
                 class="boton-subcategoria"
-                (click)="toggleMenu(categoria)"
+                (click)="alternarMenu(categoria)"
                 [attr.aria-label]="'Mostrar subcategorias de ' + categoria.nombre">
                 <i class="bi" [ngClass]="categoria.abierto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
               </button>
             </div>
 
-            <div *ngIf="categoria.abierto && hasChildren(categoria)" class="lista-subcategorias lista-subcategorias-anidada">
+            <div *ngIf="categoria.abierto && tieneHijos(categoria)" class="lista-subcategorias lista-subcategorias-anidada">
               <ng-container *ngFor="let sub of categoria.subcategorias">
                 <a
                   *ngIf="!sub.deshabilitado"
                   [routerLink]="sub.ruta"
-                  (click)="closeSidebar()"
+                  (click)="cerrarSidebar()"
                   routerLinkActive="enlace-activo"
                   class="item-subcategoria">
                   {{ sub.nombre }}

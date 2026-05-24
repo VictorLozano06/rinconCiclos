@@ -33,11 +33,12 @@ export class SidebarCoordinadorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+  // Carga categorias para construir el menu lateral de coordinador.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
         this.errorCarga = false;
-        this.menuItems = this.buildMenu(data);
+        this.menuItems = this.construirMenu(data);
       },
       error: (err) => {
         this.errorCarga = true;
@@ -46,12 +47,13 @@ export class SidebarCoordinadorComponent implements OnInit {
     });
   }
 
-  private buildMenu(categorias: CategoriaDto[]): SidebarItem[] {
+  // Monta los grupos del sidebar, incluyendo accesos fijos y categorias dinamicas.
+  private construirMenu(categorias: CategoriaDto[]): SidebarItem[] {
     const catReuniones = categorias.find((cat) => cat.nombre === 'Reuniones de Equipo');
 
     let subCategoriasReuniones: SidebarItem[] = [];
     if (catReuniones && catReuniones.subcategorias) {
-      subCategoriasReuniones = this.mapCategorias(
+      subCategoriasReuniones = this.mapearCategorias(
         catReuniones.subcategorias,
         '/coordinador',
         '/coordinador/reuniones-de-equipo'
@@ -71,14 +73,6 @@ export class SidebarCoordinadorComponent implements OnInit {
         nombre: 'Gestión de Ciclos',
         icono: 'categorias',
         ruta: '/coordinador/gestion-de-ciclos',
-        abierto: false,
-        subcategorias: [],
-        deshabilitado: false
-      },
-      {
-        nombre: 'Gestión de Cursos',
-        icono: 'categoria-generica',
-        ruta: '/coordinador/gestion-de-cursos',
         abierto: false,
         subcategorias: [],
         deshabilitado: false
@@ -123,20 +117,20 @@ export class SidebarCoordinadorComponent implements OnInit {
         abierto: true,
         subcategorias: [
           {
+            nombre: 'Ver todos',
+            icono: 'categoria-generica',
+            ruta: '/coordinador/recursos',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          },
+          {
             nombre: 'Crear recurso',
             icono: 'categoria-generica',
             ruta: '/coordinador/recursos/crear',
             abierto: false,
             subcategorias: [],
-            deshabilitado: true
-          },
-          {
-            nombre: 'Editar recurso',
-            icono: 'categoria-generica',
-            ruta: '/coordinador/recursos/editar',
-            abierto: false,
-            subcategorias: [],
-            deshabilitado: true
+            deshabilitado: false
           }
         ],
         deshabilitado: false
@@ -144,8 +138,9 @@ export class SidebarCoordinadorComponent implements OnInit {
     ];
   }
 
-  private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): SidebarItem[] {
-    const iconMap: { [key: string]: string } = {
+  // Convierte categorias anidadas en items navegables.
+  private mapearCategorias(cats: CategoriaDto[], prefijoRuta: string, rutaPadre: string = ''): SidebarItem[] {
+    const mapaIconos: { [key: string]: string } = {
       'Inicio': 'home',
       'Reuniones de Equipo': 'reuniones',
       'Tutorias': 'tutorias',
@@ -154,10 +149,11 @@ export class SidebarCoordinadorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const subcategoriasDeshabilitadas = ['BOCC', 'Calendario de reuniones'];
 
     return cats.map((cat) => {
       const nombre = cat.nombre;
+
       const slug = nombre
         .toLowerCase()
         .normalize('NFD')
@@ -166,39 +162,44 @@ export class SidebarCoordinadorComponent implements OnInit {
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
 
+
+
       let ruta = '';
       if (nombre === 'Inicio') {
-        ruta = `${prefix}/inicio`;
-      } else if (parentRuta) {
-        ruta = `${parentRuta}/${slug}`;
+        ruta = `${prefijoRuta}/inicio`;
+      } else if (rutaPadre) {
+        ruta = `${rutaPadre}/${slug}`;
       } else {
-        ruta = `${prefix}/${slug}`;
+        ruta = `${prefijoRuta}/${slug}`;
       }
 
-      const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
+      const subcategorias = cat.subcategorias ? this.mapearCategorias(cat.subcategorias, prefijoRuta, ruta) : [];
 
       return {
         nombre,
-        icono: iconMap[nombre] || 'categoria-generica',
+        icono: mapaIconos[nombre] || 'categoria-generica',
         ruta,
         abierto: false,
         subcategorias,
-        deshabilitado: disabledSubs.includes(nombre)
+        deshabilitado: subcategoriasDeshabilitadas.includes(nombre)
       };
     });
   }
 
-  toggleMenu(cat: SidebarItem): void {
+  // Abre o cierra el bloque de menu que corresponda.
+  alternarMenu(cat: SidebarItem): void {
     if (cat.subcategorias.length > 0) {
       cat.abierto = !cat.abierto;
     }
   }
 
-  hasChildren(cat: SidebarItem): boolean {
+  // Indica si un item tiene hijos para decidir si se pinta como boton o enlace.
+  tieneHijos(cat: SidebarItem): boolean {
     return cat.subcategorias.length > 0;
   }
 
-  closeSidebar(): void {
+  // Cierra el sidebar en mobile.
+  cerrarSidebar(): void {
     this.requestClose.emit();
   }
 }

@@ -11,16 +11,16 @@ class ConConvocatorias extends ControladorBase {
 
     public function formulario() {
         try {
-            $this->enviarRespuesta($this->modelo->obtenerFormulario());
+            $this->enviarMensajes($this->modelo->obtenerFormulario());
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar los datos del formulario.');
         }
     }
 
     public function guardar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->enviarRespuesta(['error' => 'Metodo no permitido.'], 405);
+                $this->montarMensajes('Metodo no permitido.', 405);
             }
 
             $payload = json_decode(file_get_contents('php://input'), true);
@@ -28,17 +28,25 @@ class ConConvocatorias extends ControladorBase {
                 throw new InvalidArgumentException('El cuerpo JSON no es valido.');
             }
 
-            $this->enviarRespuesta($this->modelo->guardar($payload), 201);
+            $this->enviarMensajes($this->modelo->guardar($payload), 201);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se ha podido guardar la convocatoria.');
         }
     }
 
     public function listar() {
         try {
-            $this->enviarRespuesta($this->modelo->listarConvocatorias());
+            $this->enviarMensajes($this->modelo->listarConvocatorias());
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar las convocatorias.');
+        }
+    }
+
+    public function listarCanceladas() {
+        try {
+            $this->enviarMensajes($this->modelo->listarConvocatoriasCanceladas());
+        } catch (Exception $e) {
+            $this->montarMensajes('No se han podido cargar las convocatorias canceladas.');
         }
     }
 
@@ -46,16 +54,36 @@ class ConConvocatorias extends ControladorBase {
         try {
             $id = $_GET['id'] ?? null;
             if (!$id) {
-                throw new InvalidArgumentException('El parametro ID es obligatorio.');
+                $this->montarMensajes('El parametro ID es obligatorio.');
             }
+
             $convocatoria = $this->modelo->obtenerConvocatoria((int)$id);
             if (!$convocatoria) {
-                $this->enviarRespuesta(['error' => 'Convocatoria no encontrada.'], 404);
-            } else {
-                $this->enviarRespuesta($convocatoria);
+                $this->montarMensajes('Convocatoria no encontrada.', 404);
             }
+
+            $this->enviarMensajes($convocatoria);
         } catch (Exception $e) {
-            $this->enviarError($e);
+            $this->montarMensajes('No se han podido cargar los detalles de la convocatoria.');
+        }
+    }
+
+    public function eliminar() {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+                $this->montarMensajes('Metodo no permitido.', 405);
+            }
+
+            $id = $_GET['id'] ?? null;
+            if (!$id) {
+                $this->montarMensajes('El parametro ID es obligatorio.');
+            }
+
+            $this->enviarMensajes($this->modelo->eliminar((int)$id));
+        } catch (Exception $e) {
+            $this->montarMensajes('No se ha podido eliminar la convocatoria.');
         }
     }
 }
+
+?>
