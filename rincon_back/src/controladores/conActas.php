@@ -28,5 +28,17 @@ class ConActas extends ControladorBase {
 
         return $this->modelo->listarHistorialPorAnio($anio);
     }
+
+    /**
+     * GET ?c=Actas&m=pendiente
+     */
+    public function pendiente() {
+        $convocatoria = $this->modelo->obtenerConvocatoriaPendiente();
+        if (!$convocatoria) {
+            http_response_code(404);
+            return ["error" => "No hay convocatorias pendientes."];
+        }
+        return $convocatoria;
+    }
 }
 ?>

@@ -83,5 +83,70 @@ class ModActas {
 
         return $actas;
     }
+
+    public function obtenerConvocatoriaPendiente() {
+        $sql = "SELECT 
+                    co.idConvocatoria,
+                    co.fecha as fechaOriginal,
+                    DATE_FORMAT(co.fecha, '%Y-%m-%dT%H:%i:%s') as fecha,
+                    l.nombre as lugar,
+                    c.anioInicio,
+                    c.anioFin,
+                    co.idProfesorRedactaActa,
+                    co.idProfesorIniciaReunion
+                FROM convocatoria co
+                LEFT JOIN acta a ON co.idConvocatoria = a.idConvocatoria
+                JOIN lugar l ON co.idLugar = l.idLugar
+                JOIN cursoAcademico c ON co.idCurso = c.idCurso
+                WHERE a.idActa IS NULL AND co.cancelada = 0
+                ORDER BY co.fecha ASC
+                LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $convocatoria = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$convocatoria) {
+            return null;
+        }
+
+        // Convertir IDs
+        $convocatoria['idConvocatoria'] = (int) $convocatoria['idConvocatoria'];
+        $convocatoria['anioInicio'] = (int) $convocatoria['anioInicio'];
+        $convocatoria['anioFin'] = (int) $convocatoria['anioFin'];
+        $convocatoria['idProfesorRedactaActa'] = (int) $convocatoria['idProfesorRedactaActa'];
+        $convocatoria['idProfesorIniciaReunion'] = (int) $convocatoria['idProfesorIniciaReunion'];
+
+        // Obtener Orden del dia
+        $sqlOrden = "SELECT numOrden, objetivo, descripcion, minutos 
+                     FROM ordenDia 
+                     WHERE idConvocatoria = :idConvocatoria 
+                     ORDER BY numOrden ASC";
+        $stmtOrden = $this->db->prepare($sqlOrden);
+        $stmtOrden->execute([':idConvocatoria' => $convocatoria['idConvocatoria']]);
+        $convocatoria['ordenDia'] = $stmtOrden->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($convocatoria['ordenDia'] as &$od) {
+            $od['numOrden'] = (int) $od['numOrden'];
+            $od['minutos'] = $od['minutos'] !== null ? (int) $od['minutos'] : null;
+        }
+
+        // Obtener participantes (solo profesores)
+        $sqlPart = "SELECT DISTINCT p.idProfesor, part.nombre
+                    FROM participanteParticipa pp
+                    JOIN profesor p ON pp.idParticipanteParticipa = p.idProfesor
+                    JOIN participantes part ON p.idProfesor = part.idParticipante
+                    WHERE pp.idConvocatoria = :idConvocatoria
+                    ORDER BY part.nombre ASC";
+        $stmtPart = $this->db->prepare($sqlPart);
+        $stmtPart->execute([':idConvocatoria' => $convocatoria['idConvocatoria']]);
+        $convocatoria['profesores'] = $stmtPart->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($convocatoria['profesores'] as &$prof) {
+            $prof['idProfesor'] = (int) $prof['idProfesor'];
+            $prof['asiste'] = true;
+        }
+
+        return $convocatoria;
+    }
 }
 ?>
