@@ -201,6 +201,22 @@ export class ConvocatoriaService {
     });
   }
 
+  cancelarConvocatoria(id: number): Observable<{ message: string }> {
+    const convocatoria = this.convocatorias.find((item) => item.idConvocatoria === id);
+
+    if (!convocatoria) {
+      return throwError(() => ({
+        error: { message: 'No se ha encontrado la convocatoria que quieres cancelar.' }
+      }));
+    }
+
+    convocatoria.estado = 'p';
+
+    return of({
+      message: 'La convocatoria ha pasado al histórico.'
+    });
+  }
+
   listarConvocatorias(): Observable<ConvocatoriaListaItemDto[]> {
     return of(this.clone(
       this.ordenarConvocatorias(
