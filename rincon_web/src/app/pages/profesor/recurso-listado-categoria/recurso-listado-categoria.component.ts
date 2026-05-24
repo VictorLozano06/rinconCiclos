@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriaService } from '../../../services/categoria.service';
@@ -17,6 +17,11 @@ interface CicloFiltro {
   nombre: string;
 }
 
+interface CategoriaRuta {
+  categoria: CategoriaDto;
+  ruta: string[];
+}
+
 @Component({
   selector: 'app-recurso-listado-categoria-profesor',
   standalone: true,
@@ -29,6 +34,7 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   public seccion: string | null = null;
   public subseccion: string | null = null;
   public categoriaActual: string | null = null;
+  public rutaCategoria: string[] = [];
   public recursos: RecursoDto[] = [];
   public cursosFiltro: CursoFiltro[] = [];
   public ciclosFiltro: CicloFiltro[] = [];
@@ -57,6 +63,7 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
     this.errorCarga = false;
     this.recursos = [];
     this.categoriaActual = null;
+    this.rutaCategoria = [];
     this.cursosFiltro = [];
     this.ciclosFiltro = [];
     this.filtroCurso = 'Todos';
@@ -64,16 +71,20 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
-        const categoria = this.buscarCategoriaPorRuta(categorias, [this.seccion, this.subseccion].filter((valor): valor is string => !!valor));
+        const encontrada = this.buscarCategoriaPorRuta(
+          categorias,
+          [this.seccion, this.subseccion].filter((valor): valor is string => !!valor)
+        );
 
-        if (!categoria) {
+        if (!encontrada) {
           this.cargando = false;
           return;
         }
 
-        this.categoriaActual = categoria.nombre;
+        this.categoriaActual = encontrada.categoria.nombre;
+        this.rutaCategoria = encontrada.ruta;
 
-        this.recursoService.getPorCategoria(categoria.idCategoria).subscribe({
+        this.recursoService.getPorCategoria(encontrada.categoria.idCategoria).subscribe({
           next: (recursos) => {
             this.recursos = recursos;
             this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -110,7 +121,7 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   }
 
   // Busca la categoria correspondiente recorriendo el arbol de categorias.
-  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaDto | null {
+  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaRuta | null {
     if (segmentos.length === 0) {
       return null;
     }
@@ -121,13 +132,16 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
       }
 
       if (segmentos.length === 1) {
-        return categoria;
+        return { categoria, ruta: [categoria.nombre] };
       }
 
       if (categoria.subcategorias && categoria.subcategorias.length > 0) {
         const encontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentos.slice(1));
         if (encontrada) {
-          return encontrada;
+          return {
+            categoria: encontrada.categoria,
+            ruta: [categoria.nombre, ...encontrada.ruta]
+          };
         }
       }
     }
@@ -180,7 +194,9 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   }
 
   formatearCiclos(recurso: RecursoDto): string {
-    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' · ');
+    return (recurso.ciclos || [])
+      .map((ciclo) => ciclo.nombre.split(' ')[0])
+      .join(' · ');
   }
 
   // Convierte un nombre visible a slug URL.
@@ -193,3 +209,5 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
       .replace(/[^a-z0-9-]/g, '');
   }
 }
+
+

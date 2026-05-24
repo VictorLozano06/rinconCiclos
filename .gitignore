@@ -10,6 +10,7 @@
 /rincon_back/storage/*.log
 /backups/
 /SQL.sql
+/SQL_inserts_test.sql
 
 # Convocatorias backend deshabilitado en desarrollo
 /rincon_back/vic_back

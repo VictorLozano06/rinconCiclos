@@ -149,6 +149,29 @@
   background: #fff;
 }
 
+.adjunto-item-vertical {
+  align-items: flex-start;
+}
+
+.adjunto-contenido {
+  min-width: 0;
+}
+
+.adjunto-nombre {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.adjunto-valor {
+  display: block;
+  margin-top: .2rem;
+  color: #667085;
+  font-size: .9rem;
+  word-break: break-word;
+}
+
 .adjunto-item span {
   overflow-wrap: anywhere;
 }
@@ -182,5 +205,9 @@
   .acciones-formulario {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .linea-adjunto input {
+    width: 100%;
   }
 }

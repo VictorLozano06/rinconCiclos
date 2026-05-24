@@ -126,14 +126,26 @@
   text-decoration: none;
 }
 
+.contenido-recurso-detalle {
+  min-width: 0;
+}
+
 .item-recurso-detalle:hover {
   background: #f4f6f8;
 }
 
-.item-recurso-detalle strong {
+.nombre-recurso-detalle {
   display: block;
   margin-top: 0.15rem;
   color: #101828;
+  word-break: break-word;
+}
+
+.valor-recurso-detalle {
+  display: block;
+  margin-top: 0.2rem;
+  color: #475467;
+  font-size: 0.88rem;
   word-break: break-word;
 }
 

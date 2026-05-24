@@ -17,6 +17,11 @@ interface CicloFiltro {
   nombre: string;
 }
 
+interface CategoriaRuta {
+  categoria: CategoriaDto;
+  ruta: string[];
+}
+
 @Component({
   selector: 'app-recurso-listado-categoria-coordinador',
   standalone: true,
@@ -29,6 +34,7 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
   public seccion: string | null = null;
   public subseccion: string | null = null;
   public categoriaActual: string | null = null;
+  public rutaCategoria: string[] = [];
   public recursos: RecursoDto[] = [];
   public cursosFiltro: CursoFiltro[] = [];
   public ciclosFiltro: CicloFiltro[] = [];
@@ -58,6 +64,7 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
     this.errorCarga = false;
     this.recursos = [];
     this.categoriaActual = null;
+    this.rutaCategoria = [];
     this.cursosFiltro = [];
     this.ciclosFiltro = [];
     this.filtroCurso = 'Todos';
@@ -65,19 +72,20 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
-        const categoria = this.buscarCategoriaPorRuta(
+        const encontrada = this.buscarCategoriaPorRuta(
           categorias,
           [this.seccion, this.subseccion].filter((valor): valor is string => !!valor)
         );
 
-        if (!categoria) {
+        if (!encontrada) {
           this.cargando = false;
           return;
         }
 
-        this.categoriaActual = categoria.nombre;
+        this.categoriaActual = encontrada.categoria.nombre;
+        this.rutaCategoria = encontrada.ruta;
 
-        this.recursoService.getPorCategoria(categoria.idCategoria).subscribe({
+        this.recursoService.getPorCategoria(encontrada.categoria.idCategoria).subscribe({
           next: (recursos) => {
             this.recursos = recursos;
             this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -123,7 +131,7 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
   }
 
   // Busca dentro del arbol de categorias la que coincide con la ruta actual.
-  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaDto | null {
+  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaRuta | null {
     if (segmentos.length === 0) {
       return null;
     }
@@ -134,13 +142,16 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
       }
 
       if (segmentos.length === 1) {
-        return categoria;
+        return { categoria, ruta: [categoria.nombre] };
       }
 
       if (categoria.subcategorias && categoria.subcategorias.length > 0) {
         const encontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentos.slice(1));
         if (encontrada) {
-          return encontrada;
+          return {
+            categoria: encontrada.categoria,
+            ruta: [categoria.nombre, ...encontrada.ruta]
+          };
         }
       }
     }

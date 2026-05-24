@@ -141,7 +141,9 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
   }
 
   formatearCiclos(recurso: RecursoDto): string {
-    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' / ');
+    return (recurso.ciclos || [])
+      .map((ciclo) => ciclo.nombre.split(' ')[0])
+      .join(' / ');
   }
 
   private construirVista(recursos: RecursoDto[], categorias: CategoriaDto[]): void {

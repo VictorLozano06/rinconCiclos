@@ -1,8 +1,8 @@
 <section class="seccion-recursos">
   <div class="cabecera-seccion-categoria mb-4">
-    <h2 class="titulo-seccion text-capitalize">{{ categoriaActual || seccion }}</h2>
-    <p *ngIf="subseccion" class="ruta-seccion mt-2">
-      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ subseccion }}</span>
+    <h2 class="titulo-seccion text-capitalize">{{ rutaCategoria[0] || categoriaActual || seccion }}</h2>
+    <p *ngIf="rutaCategoria[1]" class="ruta-seccion mt-2">
+      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ rutaCategoria[1] }}</span>
     </p>
   </div>
 

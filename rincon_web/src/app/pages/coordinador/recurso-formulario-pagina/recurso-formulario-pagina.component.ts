@@ -16,14 +16,19 @@ interface CursoFiltro {
 type CategoriaFormulario = Pick<CategoriaDto, 'idCategoria' | 'nombre'>;
 type CicloFormulario = CicloRecursoDto;
 
+interface AdjuntoFormulario {
+  nombre: string;
+  valor: string;
+}
+
 interface RecursoFormularioMock {
   idCategoria: number | null;
   nombre: string;
   descripcion: string;
   cursoId: number | null;
   ciclosSeleccionados: number[];
-  enlaces: string[];
-  archivos: string[];
+  enlaces: AdjuntoFormulario[];
+  archivos: AdjuntoFormulario[];
 }
 
 @Component({
@@ -43,7 +48,9 @@ export class RecursoFormularioPaginaComponent implements OnInit {
   public erroresFormulario: string[] = [];
   public formulario: RecursoFormularioMock = this.crearFormularioVacio();
   public nuevoCicloId: number | null = null;
+  public nuevoNombreEnlace = '';
   public nuevoEnlace = '';
+  public nuevoNombreArchivo = '';
   public nuevoArchivo = '';
   private recursoOriginal: RecursoDto | null = null;
 
@@ -88,8 +95,16 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.nuevoEnlace = valor;
   }
 
+  actualizarNuevoNombreEnlace(valor: string): void {
+    this.nuevoNombreEnlace = valor;
+  }
+
   actualizarNuevoArchivo(valor: string): void {
     this.nuevoArchivo = valor;
+  }
+
+  actualizarNuevoNombreArchivo(valor: string): void {
+    this.nuevoNombreArchivo = valor;
   }
 
   agregarCicloMock(): void {
@@ -112,13 +127,15 @@ export class RecursoFormularioPaginaComponent implements OnInit {
   }
 
   agregarEnlaceMock(): void {
+    const nombre = this.nuevoNombreEnlace.trim();
     const enlace = this.nuevoEnlace.trim();
 
-    if (!enlace) {
+    if (!nombre || !enlace) {
       return;
     }
 
-    this.formulario.enlaces = [...this.formulario.enlaces, enlace];
+    this.formulario.enlaces = [...this.formulario.enlaces, { nombre, valor: enlace }];
+    this.nuevoNombreEnlace = '';
     this.nuevoEnlace = '';
   }
 
@@ -127,13 +144,15 @@ export class RecursoFormularioPaginaComponent implements OnInit {
   }
 
   agregarArchivoMock(): void {
+    const nombre = this.nuevoNombreArchivo.trim();
     const archivo = this.nuevoArchivo.trim();
 
-    if (!archivo) {
+    if (!nombre || !archivo) {
       return;
     }
 
-    this.formulario.archivos = [...this.formulario.archivos, archivo];
+    this.formulario.archivos = [...this.formulario.archivos, { nombre, valor: archivo }];
+    this.nuevoNombreArchivo = '';
     this.nuevoArchivo = '';
   }
 
@@ -228,10 +247,12 @@ export class RecursoFormularioPaginaComponent implements OnInit {
       cursoId: recurso.idCurso,
       ciclosSeleccionados: (recurso.ciclos || []).map((ciclo) => ciclo.idCiclo),
       enlaces: this.obtenerEnlacesRecurso(recurso),
-      archivos: [...(recurso.archivos || [])]
+      archivos: this.obtenerArchivosRecurso(recurso)
     };
     this.nuevoArchivo = '';
+    this.nuevoNombreArchivo = '';
     this.nuevoEnlace = '';
+    this.nuevoNombreEnlace = '';
     this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
     this.erroresFormulario = [];
     this.cargando = false;
@@ -245,7 +266,9 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.formulario.idCategoria = this.categoriasFormulario[0]?.idCategoria ?? null;
     this.formulario.cursoId = typeof primerCurso?.idCurso === 'number' ? primerCurso.idCurso : null;
     this.nuevoArchivo = '';
+    this.nuevoNombreArchivo = '';
     this.nuevoEnlace = '';
+    this.nuevoNombreEnlace = '';
     this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
     this.erroresFormulario = [];
   }
@@ -311,14 +334,28 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     return this.categoriasFormulario.find((categoria) => categoria.idCategoria === idCategoria)?.nombre || 'Sin categoria';
   }
 
-  private obtenerEnlacesRecurso(recurso: RecursoDto): string[] {
-    const enlaces = [...(recurso.urls || [])];
-
-    if (recurso.enlacePrincipal && !enlaces.includes(recurso.enlacePrincipal)) {
-      enlaces.unshift(recurso.enlacePrincipal);
+  private obtenerEnlacesRecurso(recurso: RecursoDto): AdjuntoFormulario[] {
+    const enlacesDetalle = recurso.enlacesDetalle || [];
+    if (enlacesDetalle.length > 0) {
+      return enlacesDetalle.map((enlace) => ({ nombre: enlace.nombre, valor: enlace.url }));
     }
 
-    return enlaces;
+    return (recurso.urls || []).map((url, index) => ({
+      nombre: `Acceso ${index + 1}`,
+      valor: url
+    }));
+  }
+
+  private obtenerArchivosRecurso(recurso: RecursoDto): AdjuntoFormulario[] {
+    const archivosDetalle = recurso.archivosDetalle || [];
+    if (archivosDetalle.length > 0) {
+      return archivosDetalle.map((archivo) => ({ nombre: archivo.nombre, valor: archivo.archivo }));
+    }
+
+    return (recurso.archivos || []).map((archivo, index) => ({
+      nombre: `Adjunto ${index + 1}`,
+      valor: archivo
+    }));
   }
 
   private validarFormularioMock(): string[] {
@@ -357,14 +394,22 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     }
 
     for (const archivo of this.formulario.archivos) {
-      if (!this.esArchivoValido(archivo)) {
-        errores.push(`Formato de archivo no permitido: ${archivo}`);
+      if (!archivo.nombre.trim()) {
+        errores.push('Cada archivo necesita un nombre visible.');
+      }
+
+      if (!this.esArchivoValido(archivo.valor)) {
+        errores.push(`Formato de archivo no permitido: ${archivo.valor}`);
       }
     }
 
     for (const enlace of this.formulario.enlaces) {
-      if (!this.esUrlValida(enlace)) {
-        errores.push(`URL no valida: ${enlace}`);
+      if (!enlace.nombre.trim()) {
+        errores.push('Cada enlace necesita un nombre visible.');
+      }
+
+      if (!this.esUrlValida(enlace.valor)) {
+        errores.push(`URL no valida: ${enlace.valor}`);
       }
     }
 
