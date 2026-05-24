@@ -363,15 +363,6 @@
     </div>
 
     <label class="field field-inline">
-      <span>Estado</span>
-      <select [(ngModel)]="convocatoria.estado" [disabled]="cargandoFormulario">
-        <option value="b">Borrador</option>
-        <option value="a">Activa</option>
-        <option value="p">Pasada</option>
-      </select>
-    </label>
-
-    <label class="field field-inline">
       <span>Fecha y hora</span>
       <input type="datetime-local" [(ngModel)]="convocatoria.fechaHora" [disabled]="cargandoFormulario">
     </label>
@@ -491,28 +482,85 @@
               <textarea rows="2" [(ngModel)]="item.objetivo" placeholder="Qué se espera conseguir"></textarea>
             </td>
             <td data-label="Dinamiza">
-              <select [(ngModel)]="item.dinamizaId">
-                <option [ngValue]="null">Selecciona</option>
-                <option *ngFor="let profesor of profesores" [ngValue]="profesor.idProfesor">{{ profesor.nombre }}</option>
-              </select>
+              <div class="single-select single-select-cell">
+                <button
+                  type="button"
+                  class="participa-toggle"
+                  (click)="toggleFilaDropdown(item, 'dinamiza')"
+                  [attr.aria-expanded]="item.dinamizaOpen">
+                  <span class="participa-toggle-text">{{ getDinamizaLabelFila(item) }}</span>
+                  <i class="bi" [ngClass]="item.dinamizaOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="item.dinamizaOpen" class="participa-dropdown">
+                  <input type="text" [(ngModel)]="item.dinamizaQuery" placeholder="Buscar profesor">
+
+                  <div class="search-results row-results">
+                    <button
+                      type="button"
+                      *ngFor="let profesor of getProfesoresFilaFiltrados(item)"
+                      class="search-result"
+                      (click)="selectDinamizaFila(item, profesor.idProfesor)">
+                      <span>{{ profesor.nombre }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </td>
             <td data-label="Lugar">
-              <select [(ngModel)]="item.lugarId">
-                <option [ngValue]="null">Selecciona</option>
-                <option *ngFor="let lugar of lugares" [ngValue]="lugar.idLugar">{{ lugar.nombre }}</option>
-              </select>
+              <div class="single-select single-select-cell">
+                <button
+                  type="button"
+                  class="participa-toggle"
+                  (click)="toggleFilaDropdown(item, 'lugar')"
+                  [attr.aria-expanded]="item.lugarOpen">
+                  <span class="participa-toggle-text">{{ getLugarLabelFila(item) }}</span>
+                  <i class="bi" [ngClass]="item.lugarOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                </button>
+
+                <div *ngIf="item.lugarOpen" class="participa-dropdown">
+                  <input type="text" [(ngModel)]="item.lugarQuery" placeholder="Buscar lugar">
+
+                  <div class="search-results row-results">
+                    <button
+                      type="button"
+                      *ngFor="let lugar of getLugaresFilaFiltrados(item)"
+                      class="search-result"
+                      (click)="selectLugarFila(item, lugar.idLugar)">
+                      <span>{{ lugar.nombre }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </td>
             <td data-label="Participa">
               <div class="participa-cell">
-                <div class="participants-list row-participants" *ngIf="item.participantes.length > 0">
+                <div class="participants-summary" *ngIf="item.participantes.length > 0">
+                  <span class="participants-count">{{ item.participantes.length }} participantes</span>
+                </div>
+
+                <div
+                  class="participants-list row-participants"
+                  [class.participants-list-compact]="!item.participantesExpandido"
+                  *ngIf="item.participantes.length > 0">
                   <article
-                    *ngFor="let participante of getParticipantesSeleccionados(item)"
+                    *ngFor="let participante of getParticipantesPreview(item)"
                     class="participant-chip chip-view">
                     <span class="participant-type" [ngClass]="getParticipanteClase(participante)">
                       {{ getParticipanteEtiqueta(participante) }}
                     </span>
                     <strong>{{ participante.nombre }}</strong>
                   </article>
+
+                  <button
+                    type="button"
+                    *ngIf="getParticipantesRestantes(item) > 0"
+                    class="participant-chip chip-view participant-chip-more"
+                    (click)="toggleParticipantesExpandido(item)">
+                    <strong>
+                      {{ item.participantesExpandido ? 'Ver menos' : '+' + getParticipantesRestantes(item) + ' más' }}
+                    </strong>
+                  </button>
                 </div>
 
                 <p *ngIf="item.participantes.length === 0" class="participants-empty mb-2">Nadie asignado</p>
@@ -548,7 +596,9 @@
       </div>
 
       <div class="footer-actions">
-        <button type="button" (click)="volverAlListado()" class="secondary-button">Cancelar</button>
+        <button type="button" class="secondary-button" (click)="cancelarConvocatoria()">
+          Cancelar convocatoria
+        </button>
         <button type="button" class="secondary-button" (click)="guardarConvocatoria('b')" [disabled]="cargandoFormulario || guardando">
           Guardar borrador
         </button>

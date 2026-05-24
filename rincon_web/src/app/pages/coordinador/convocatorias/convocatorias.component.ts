@@ -244,6 +244,11 @@ export class ConvocatoriasComponent implements OnInit {
               dinamizaId: item.idProfesorDinamiza ? Number(item.idProfesorDinamiza) : null,
               lugarId: item.idLugar ? Number(item.idLugar) : null,
               participantes: (item.participantes || []).map((participante) => ({ ...participante })),
+              dinamizaQuery: '',
+              dinamizaOpen: false,
+              lugarQuery: '',
+              lugarOpen: false,
+              participantesExpandido: false,
               participaQuery: '',
               participaOpen: false
             }))
@@ -286,6 +291,24 @@ export class ConvocatoriasComponent implements OnInit {
     }
   }
 
+  toggleFilaDropdown(item: OrdenDiaCoordinadorDto, field: 'dinamiza' | 'lugar'): void {
+    this.ordenDia.forEach((fila) => {
+      if (fila !== item) {
+        fila.dinamizaOpen = false;
+        fila.lugarOpen = false;
+      }
+    });
+
+    if (field === 'dinamiza') {
+      item.dinamizaOpen = !item.dinamizaOpen;
+      item.lugarOpen = false;
+      return;
+    }
+
+    item.lugarOpen = !item.lugarOpen;
+    item.dinamizaOpen = false;
+  }
+
   toggleProfesorDropdown(field: ProfesorField): void {
     if (field === 'redacta') {
       this.redactaOpen = !this.redactaOpen;
@@ -316,6 +339,34 @@ export class ConvocatoriasComponent implements OnInit {
     this.convocatoria.iniciaId = profesorId;
     this.iniciaQuery = '';
     this.iniciaOpen = false;
+  }
+
+  getProfesoresFilaFiltrados(item: OrdenDiaCoordinadorDto): ProfesorOptionDto[] {
+    const query = this.normalizarTexto(item.dinamizaQuery);
+
+    return this.profesores
+      .filter((profesor) => !query || this.normalizarTexto(profesor.nombre).includes(query))
+      .slice(0, 8);
+  }
+
+  getLugaresFilaFiltrados(item: OrdenDiaCoordinadorDto): LugarOptionDto[] {
+    const query = this.normalizarTexto(item.lugarQuery);
+
+    return this.lugares
+      .filter((lugar) => !query || this.normalizarTexto(lugar.nombre).includes(query))
+      .slice(0, 8);
+  }
+
+  selectDinamizaFila(item: OrdenDiaCoordinadorDto, profesorId: number): void {
+    item.dinamizaId = profesorId;
+    item.dinamizaQuery = '';
+    item.dinamizaOpen = false;
+  }
+
+  selectLugarFila(item: OrdenDiaCoordinadorDto, lugarId: number): void {
+    item.lugarId = lugarId;
+    item.lugarQuery = '';
+    item.lugarOpen = false;
   }
 
   abrirModalParticipantes(item: OrdenDiaCoordinadorDto): void {
@@ -405,6 +456,29 @@ export class ConvocatoriasComponent implements OnInit {
       : 'No se publican cambios.';
     this.feedbackError = false;
     this.guardando = false;
+  }
+
+  cancelarConvocatoria(): void {
+    if (!this.convocatoria.idConvocatoria) {
+      this.feedback = 'La convocatoria se cancelará cuando exista en el listado.';
+      this.feedbackError = false;
+      return;
+    }
+
+    this.convocatoriaService.cancelarConvocatoria(this.convocatoria.idConvocatoria).subscribe({
+      next: (response) => {
+        this.feedback = response.message;
+        this.feedbackError = false;
+        this.router.navigate(
+          ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
+          { queryParams: { tab: 'pasadas' } }
+        );
+      },
+      error: (error) => {
+        this.feedback = error?.error?.message || 'No se pudo cancelar la convocatoria.';
+        this.feedbackError = true;
+      }
+    });
   }
 
   esFechaPasada(fechaStr: string): boolean {
@@ -540,6 +614,26 @@ export class ConvocatoriasComponent implements OnInit {
     return item.participantes;
   }
 
+  getParticipantesPreview(item: OrdenDiaCoordinadorDto, limite = 4): ParticipanteDto[] {
+    return item.participantesExpandido ? item.participantes : item.participantes.slice(0, limite);
+  }
+
+  getParticipantesRestantes(item: OrdenDiaCoordinadorDto, limite = 4): number {
+    return Math.max(item.participantes.length - limite, 0);
+  }
+
+  toggleParticipantesExpandido(item: OrdenDiaCoordinadorDto): void {
+    item.participantesExpandido = !item.participantesExpandido;
+  }
+
+  getDinamizaLabelFila(item: OrdenDiaCoordinadorDto): string {
+    return this.getProfesorNombre(item.dinamizaId) || 'Selecciona';
+  }
+
+  getLugarLabelFila(item: OrdenDiaCoordinadorDto): string {
+    return this.getLugarNombre(item.lugarId) || 'Selecciona';
+  }
+
   getTodasOpcionesParticipantes(): ParticipanteBusqueda[] {
     return this.obtenerParticipantesDisponibles();
   }
@@ -593,6 +687,11 @@ export class ConvocatoriasComponent implements OnInit {
       dinamizaId: null,
       lugarId: null,
       participantes: [],
+      dinamizaQuery: '',
+      dinamizaOpen: false,
+      lugarQuery: '',
+      lugarOpen: false,
+      participantesExpandido: false,
       participaQuery: '',
       participaOpen: false
     };

@@ -7,6 +7,11 @@ export interface OrdenDiaCoordinadorDto {
   dinamizaId: number | null;
   lugarId: number | null;
   participantes: ParticipanteDto[];
+  dinamizaQuery: string;
+  dinamizaOpen: boolean;
+  lugarQuery: string;
+  lugarOpen: boolean;
+  participantesExpandido: boolean;
   participaQuery: string;
   participaOpen: boolean;
 }

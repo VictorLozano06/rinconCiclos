@@ -38,6 +38,38 @@
   font-size: 1.2rem;
 }
 
+.participants-summary {
+  margin-top: 6px;
+}
+
+.participants-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef2fb;
+  color: #4e5d76;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.participants-list-compact {
+  gap: 8px;
+  max-height: 92px;
+  overflow: hidden;
+}
+
+.participant-chip-more {
+  background: #fff;
+  border-style: dashed;
+  color: #526279;
+  cursor: pointer;
+}
+
+.single-select-cell {
+  min-width: 150px;
+}
+
 .participants-modal-header p {
   margin: 0;
   color: #6f7d93;
