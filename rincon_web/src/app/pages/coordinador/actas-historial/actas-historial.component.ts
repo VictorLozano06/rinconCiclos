@@ -1,40 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActasService, ActaHistorial, Informacion } from '../../../services/actas.service';
 
-/**
- * Refleja la tabla `informacion`:
- * - numInformacion: PK parcial
- * - titulo_OrdenDia: VARCHAR(250)
- * - informacion: VARCHAR(250)
- */
-interface Informacion {
-  numInformacion: number;
-  titulo_OrdenDia: string;
-  informacion: string;
-}
 
-/**
- * Refleja la tabla `acta` + joins:
- * - idActa: INT AUTO_INCREMENT
- * - fecha: DATE — fecha de cierre del acta
- * - idConvocatoria: FK → convocatoria (fecha DATETIME, lugar.nombre, cursoAcademico)
- * No hay campo "estado" — si existe fila en acta → está cerrada
- */
-interface ActaHistorial {
-  idActa: number;
-  fecha: string;                  // acta.fecha DATE
-  idConvocatoria: number;
-  fechaConvocatoria: string;      // convocatoria.fecha DATETIME (parte fecha)
-  horaConvocatoria: string;       // convocatoria.fecha DATETIME (parte hora)
-  lugar: string;                  // lugar.nombre
-  anioInicio: number;             // cursoAcademico.anioInicio
-  anioFin: number;                // cursoAcademico.anioFin
-  asistentes: number;             // COUNT de profesor_asiste
-  totalConvocados: number;
-  informacion: Informacion[];     // tabla informacion
-  ruegosPregunta: string[];       // tabla ruegosPreguntasActa
-}
 
 @Component({
   selector: 'app-actas-historial',
@@ -43,105 +12,28 @@ interface ActaHistorial {
   templateUrl: './actas-historial.component.html',
   styleUrl: './actas-historial.component.css'
 })
-export class ActasHistorialComponent {
-  /** cursoAcademico.anioInicio values disponibles en BD */
-  public aniosDisponibles = [2025, 2024, 2023, 2022];
-  public anioSeleccionado = 2025;
+export class ActasHistorialComponent implements OnInit {
+  public aniosDisponibles: number[] = [];
+  public anioSeleccionado: number | null = null;
   public buscando = false;
   public actaVisualizando: ActaHistorial | null = null;
 
-  /** Mock basado en la estructura real de BD */
-  private todasLasActas: ActaHistorial[] = [
-    {
-      idActa: 1,
-      fecha: '23/05/2026',
-      idConvocatoria: 1,
-      fechaConvocatoria: '23/05/2026',
-      horaConvocatoria: '10:00',
-      lugar: 'Sala de Reuniones B-04',
-      anioInicio: 2025,
-      anioFin: 2026,
-      asistentes: 5,
-      totalConvocados: 6,
-      informacion: [
-        { numInformacion: 1, titulo_OrdenDia: 'Lectura y aprobación del acta anterior',       informacion: 'Se aprueba el acta anterior por unanimidad sin observaciones.' },
-        { numInformacion: 2, titulo_OrdenDia: 'Revisión de resultados de evaluación final',    informacion: 'El 82% del alumnado supera la convocatoria ordinaria.' },
-        { numInformacion: 3, titulo_OrdenDia: 'Coordinación de actividades de recuperación',   informacion: 'Se acuerda organizar sesiones de recuperación durante la última semana de junio.' },
-        { numInformacion: 4, titulo_OrdenDia: 'Planificación del próximo curso académico',     informacion: 'Se delega en el coordinador la elaboración del calendario lectivo provisional.' }
-      ],
-      ruegosPregunta: ['Sin ruegos ni preguntas adicionales.']
-    },
-    {
-      idActa: 2,
-      fecha: '15/03/2026',
-      idConvocatoria: 2,
-      fechaConvocatoria: '15/03/2026',
-      horaConvocatoria: '09:00',
-      lugar: 'Aula de Coordinación A-12',
-      anioInicio: 2025,
-      anioFin: 2026,
-      asistentes: 6,
-      totalConvocados: 6,
-      informacion: [
-        { numInformacion: 1, titulo_OrdenDia: 'Revisión de la 2ª evaluación',  informacion: 'Los resultados mejoran un 8% respecto al trimestre anterior.' },
-        { numInformacion: 2, titulo_OrdenDia: 'Acuerdos de mejora',             informacion: 'Se incrementan actividades prácticas en módulos con mayor índice de suspenso.' }
-      ],
-      ruegosPregunta: ['Se solicita actualizar el inventario de equipos del aula de informática.']
-    },
-    {
-      idActa: 3,
-      fecha: '10/12/2025',
-      idConvocatoria: 3,
-      fechaConvocatoria: '10/12/2025',
-      horaConvocatoria: '10:30',
-      lugar: 'Sala de Reuniones B-04',
-      anioInicio: 2025,
-      anioFin: 2026,
-      asistentes: 4,
-      totalConvocados: 6,
-      informacion: [
-        { numInformacion: 1, titulo_OrdenDia: 'Resultados 1ª evaluación', informacion: 'Se revisan resultados por módulos y grupos.' },
-        { numInformacion: 2, titulo_OrdenDia: 'Propuestas de mejora',      informacion: 'Seguimiento semanal para alumnos con más de 2 módulos suspensos.' }
-      ],
-      ruegosPregunta: ['El profesor de SMR solicita recursos adicionales para la sala de redes.']
-    },
-    {
-      idActa: 4,
-      fecha: '18/06/2025',
-      idConvocatoria: 4,
-      fechaConvocatoria: '18/06/2025',
-      horaConvocatoria: '11:00',
-      lugar: 'Sala de Reuniones B-04',
-      anioInicio: 2024,
-      anioFin: 2025,
-      asistentes: 6,
-      totalConvocados: 6,
-      informacion: [
-        { numInformacion: 1, titulo_OrdenDia: 'Balance del curso 2024/2025', informacion: 'Valoración positiva: 79% de tasa de éxito global.' },
-        { numInformacion: 2, titulo_OrdenDia: 'Propuestas para el siguiente curso', informacion: 'Se acuerda revisar la programación didáctica de 3 módulos.' }
-      ],
-      ruegosPregunta: []
-    },
-    {
-      idActa: 5,
-      fecha: '14/03/2025',
-      idConvocatoria: 5,
-      fechaConvocatoria: '14/03/2025',
-      horaConvocatoria: '09:30',
-      lugar: 'Aula de Coordinación A-12',
-      anioInicio: 2024,
-      anioFin: 2025,
-      asistentes: 5,
-      totalConvocados: 6,
-      informacion: [
-        { numInformacion: 1, titulo_OrdenDia: 'Revisión 2ª evaluación', informacion: 'Resultados similares al año anterior.' }
-      ],
-      ruegosPregunta: []
-    }
-  ];
-
   public actasFiltradas: ActaHistorial[] = [];
   public busquedaRealizada = false;
+
+  constructor(private actasService: ActasService) {}
+
+  ngOnInit(): void {
+    this.actasService.getAniosDisponibles().subscribe({
+      next: (anios) => {
+        this.aniosDisponibles = anios;
+        if (anios.length > 0) {
+          this.anioSeleccionado = anios[0];
+        }
+      },
+      error: (err) => console.error('Error cargando años disponibles', err)
+    });
+  }
 
   get cursoSeleccionado(): string {
     const anio = this.aniosDisponibles.find(a => a === this.anioSeleccionado);
@@ -149,12 +41,21 @@ export class ActasHistorialComponent {
   }
 
   buscar(): void {
+    if (!this.anioSeleccionado) return;
     this.buscando = true;
-    setTimeout(() => {
-      this.actasFiltradas = this.todasLasActas.filter(a => a.anioInicio === this.anioSeleccionado);
-      this.buscando = false;
-      this.busquedaRealizada = true;
-    }, 400);
+    this.actasService.getHistorialPorAnio(this.anioSeleccionado).subscribe({
+      next: (actas) => {
+        this.actasFiltradas = actas;
+        this.buscando = false;
+        this.busquedaRealizada = true;
+      },
+      error: (err) => {
+        console.error('Error buscando actas', err);
+        this.buscando = false;
+        this.busquedaRealizada = true;
+        this.actasFiltradas = [];
+      }
+    });
   }
 
   verActa(acta: ActaHistorial): void {

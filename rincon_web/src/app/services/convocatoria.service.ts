@@ -239,6 +239,12 @@ export class ConvocatoriaService {
     });
   }
 
+  cancelarConvocatoria(id: number): Observable<{ message: string }> {
+    return of({
+      message: 'Convocatoria cancelada (modo mock).'
+    });
+  }
+
   private toListaItem(convocatoria: ConvocatoriaMock): ConvocatoriaListaItemDto {
     return {
       idConvocatoria: convocatoria.idConvocatoria,

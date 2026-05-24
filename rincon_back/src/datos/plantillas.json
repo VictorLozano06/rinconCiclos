@@ -1,0 +1,13 @@
+[
+    {
+        "id": 1,
+        "nombre": "Plantilla de prueba",
+        "descripcion": "Esto es la primera prueba de la plantilla",
+        "bloques": [
+            "Apertura y bienvenida",
+            "Lectura del acta anterior",
+            "Acuerdos y compromisos"
+        ],
+        "fechaCreacion": "24\/05\/2026"
+    }
+]
