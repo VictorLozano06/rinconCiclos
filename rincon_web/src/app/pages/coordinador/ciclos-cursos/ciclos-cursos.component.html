@@ -4,7 +4,7 @@
     <p class="text-secondary small">Gestión de ciclos formativos y cursos.</p>
   </div>
   <button class="btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nuevo-ciclo"
-    (click)="mostrarModalNuevoCiclo = true">
+    (click)="abrirModalNuevoCiclo()">
     + NUEVO CICLO
   </button>
 </div>
@@ -79,6 +79,10 @@
       <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">
     </div>
 
+    <div *ngIf="errorNuevoCiclo" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorNuevoCiclo }}
+    </div>
+
     <p class="text-secondary small mb-5 modal-helper-text">
       se crearán automáticamente los cursos 1º y 2º al guardar
     </p>
@@ -129,6 +133,10 @@
     <div class="mb-4">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre Curso</label>
       <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso">
+    </div>
+
+    <div *ngIf="errorEditarCurso" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorEditarCurso }}
     </div>
 
     <div class="d-flex justify-content-end gap-3 mt-5">
