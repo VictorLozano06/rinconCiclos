@@ -19,4 +19,29 @@ export class RecursoItemComponent {
   @Input() ciclos: string = '';
   @Input() detalleRuta: string | (string | number)[] = '';
   @Input() enlace: string = '';
+
+  get metaSuperior(): string {
+    const fecha = this.fechaPublicacion ? this.formatearFecha(this.fechaPublicacion) : '';
+    const categoria = (this.categoria || '').trim();
+    const nombre = (this.nombre || '').trim();
+
+    if (!categoria) {
+      return fecha;
+    }
+
+    if (categoria.toLowerCase() === nombre.toLowerCase()) {
+      return fecha;
+    }
+
+    return fecha ? `${categoria} - ${fecha}` : categoria;
+  }
+
+  private formatearFecha(valor: string): string {
+    const fecha = new Date(valor);
+    if (Number.isNaN(fecha.getTime())) {
+      return valor;
+    }
+
+    return fecha.toLocaleDateString('es-ES');
+  }
 }

@@ -38,12 +38,13 @@
       <a
         *ngFor="let enlace of obtenerEnlaces()"
         class="item-recurso-detalle"
-        [href]="enlace"
+        [href]="enlace.url"
         target="_blank"
         rel="noopener noreferrer">
-        <div>
-          <span class="tipo-recurso">Enlace</span>
-          <strong>{{ enlace }}</strong>
+        <div class="contenido-recurso-detalle">
+          <span class="tipo-recurso">Acceso</span>
+          <strong class="nombre-recurso-detalle">{{ getNombreEnlace(enlace) }}</strong>
+          <span class="valor-recurso-detalle">{{ enlace.url }}</span>
         </div>
         <span class="accion-recurso">Abrir</span>
       </a>
@@ -60,11 +61,12 @@
       <a
         *ngFor="let archivo of obtenerArchivos()"
         class="item-recurso-detalle"
-        [href]="archivo"
+        [href]="archivo.archivo"
         download>
-        <div>
-          <span class="tipo-recurso">Archivo</span>
-          <strong>{{ getNombreArchivo(archivo) }}</strong>
+        <div class="contenido-recurso-detalle">
+          <span class="tipo-recurso">Adjunto</span>
+          <strong class="nombre-recurso-detalle">{{ getNombreArchivoAdjunto(archivo) }}</strong>
+          <span class="valor-recurso-detalle">{{ archivo.archivo }}</span>
         </div>
         <span class="accion-recurso">Descargar</span>
       </a>

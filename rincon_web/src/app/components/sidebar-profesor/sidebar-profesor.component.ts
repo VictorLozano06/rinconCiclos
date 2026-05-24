@@ -29,7 +29,17 @@ export class SidebarProfesorComponent implements OnInit {
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
-        this.categorias = this.mapCategorias(data, '/profesor');
+        this.categorias = [
+          {
+            nombre: 'Inicio',
+            icono: 'home',
+            ruta: '/profesor/inicio',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          },
+          ...this.mapCategorias(data, '/profesor')
+        ];
       },
       error: (err) => {
         console.error('Error de conexion con el servidor backend PHP, usando items estaticos:', err);

@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CategoriaService } from '../../services/categoria.service';
 import { RecursoService } from '../../services/recurso.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
-import { RecursoDto } from '../../dto/recurso.dto';
+import { RecursoArchivoDto, RecursoDto, RecursoEnlaceDto } from '../../dto/recurso.dto';
 
 interface RutaNavegacionItem {
   nombre: string;
@@ -85,21 +85,35 @@ export class RecursoDetalleCompartidoComponent implements OnInit {
   }
 
   // Devuelve los enlaces externos asociados al recurso.
-  obtenerEnlaces(): string[] {
+  obtenerEnlaces(): RecursoEnlaceDto[] {
     if (!this.recurso) {
       return [];
     }
 
-    return this.recurso.urls || [];
+    if (this.recurso.enlacesDetalle && this.recurso.enlacesDetalle.length > 0) {
+      return this.recurso.enlacesDetalle;
+    }
+
+    return (this.recurso.urls || []).map((url, index) => ({
+      nombre: this.obtenerEtiquetaDesdeUrl(url, `Acceso ${index + 1}`),
+      url
+    }));
   }
 
   // Devuelve los archivos adjuntos asociados al recurso.
-  obtenerArchivos(): string[] {
+  obtenerArchivos(): RecursoArchivoDto[] {
     if (!this.recurso) {
       return [];
     }
 
-    return this.recurso.archivos || [];
+    if (this.recurso.archivosDetalle && this.recurso.archivosDetalle.length > 0) {
+      return this.recurso.archivosDetalle;
+    }
+
+    return (this.recurso.archivos || []).map((archivo, index) => ({
+      nombre: `Adjunto ${index + 1}`,
+      archivo
+    }));
   }
 
   // Devuelve los ciclos asociados al recurso en formato visual.
@@ -119,6 +133,36 @@ export class RecursoDetalleCompartidoComponent implements OnInit {
   getNombreArchivo(archivo: string): string {
     const limpio = archivo.replace(/\\/g, '/');
     return limpio.split('/').pop() || archivo;
+  }
+
+  getNombreEnlace(enlace: RecursoEnlaceDto): string {
+    const nombre = (enlace.nombre || '').trim();
+    if (nombre) {
+      return nombre;
+    }
+
+    return this.obtenerEtiquetaDesdeUrl(enlace.url, 'Acceso externo');
+  }
+
+  getNombreArchivoAdjunto(archivo: RecursoArchivoDto): string {
+    const nombre = (archivo.nombre || '').trim();
+    return nombre || this.getNombreArchivo(archivo.archivo);
+  }
+
+  private obtenerEtiquetaDesdeUrl(url: string, fallback: string): string {
+    try {
+      const parsed = new URL(url);
+      const host = parsed.hostname.replace(/^www\./, '');
+      const path = parsed.pathname.replace(/\/+$/, '');
+
+      if (host && path && path !== '/') {
+        return `${host}${path}`.slice(0, 80);
+      }
+
+      return host || fallback;
+    } catch {
+      return fallback;
+    }
   }
 
   // Construye la ruta superior visible a partir de la categoria real del recurso.

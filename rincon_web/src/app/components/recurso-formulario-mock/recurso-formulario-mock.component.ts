@@ -12,14 +12,19 @@ interface CursoFormulario {
 type CategoriaFormulario = Pick<CategoriaDto, 'idCategoria' | 'nombre'>;
 type CicloFormulario = CicloRecursoDto;
 
+interface AdjuntoFormulario {
+  nombre: string;
+  valor: string;
+}
+
 interface RecursoFormularioMock {
   idCategoria: number | null;
   nombre: string;
   descripcion: string;
   cursoId: number | null;
   ciclosSeleccionados: number[];
-  enlaces: string[];
-  archivos: string[];
+  enlaces: AdjuntoFormulario[];
+  archivos: AdjuntoFormulario[];
 }
 
 @Component({
@@ -39,11 +44,15 @@ export class RecursoFormularioMockComponent {
   @Input() ciclosFormulario: CicloFormulario[] = [];
   @Input() erroresFormulario: string[] = [];
   @Input() nuevoCicloId: number | null = null;
+  @Input() nuevoNombreEnlace = '';
   @Input() nuevoEnlace = '';
+  @Input() nuevoNombreArchivo = '';
   @Input() nuevoArchivo = '';
 
   @Output() nuevoCicloIdChange = new EventEmitter<number | null>();
+  @Output() nuevoNombreEnlaceChange = new EventEmitter<string>();
   @Output() nuevoEnlaceChange = new EventEmitter<string>();
+  @Output() nuevoNombreArchivoChange = new EventEmitter<string>();
   @Output() nuevoArchivoChange = new EventEmitter<string>();
   @Output() agregarCiclo = new EventEmitter<void>();
   @Output() eliminarCiclo = new EventEmitter<number>();
@@ -58,8 +67,16 @@ export class RecursoFormularioMockComponent {
     this.nuevoCicloIdChange.emit(valor ? Number(valor) : null);
   }
 
+  actualizarNuevoNombreEnlace(valor: string): void {
+    this.nuevoNombreEnlaceChange.emit(valor);
+  }
+
   actualizarNuevoEnlace(valor: string): void {
     this.nuevoEnlaceChange.emit(valor);
+  }
+
+  actualizarNuevoNombreArchivo(valor: string): void {
+    this.nuevoNombreArchivoChange.emit(valor);
   }
 
   actualizarNuevoArchivo(valor: string): void {
