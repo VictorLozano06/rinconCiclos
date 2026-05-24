@@ -1,6 +1,5 @@
 <?php
-// Modelo encargado de obtener, crear, modificar y eliminar ciclos y cursos.
-// Se utiliza la tabla cicloFormativo para almacenar los cursos y se agrupan virtualmente por su familia.
+// Clase para CRUD de ciclos y cursos
 class ModCiclos {
     private $db;
 
@@ -19,7 +18,7 @@ class ModCiclos {
         foreach ($filas as $fila) {
             $fam = $fila['familia'];
             if (!isset($ciclosAgrupados[$fam])) {
-                // Deducir las siglas o el nombre del ciclo eliminando el '1' o '2' del inicio
+                // Quitamos el '1' o '2' para deducir el nombre padre
                 $nombreCiclo = preg_replace('/^[0-9]+[º°]?\s*/', '', $fila['nombre']);
                 $ciclosAgrupados[$fam] = [
                     'idCiclo' => (int)$fila['idCiclo'],
@@ -73,7 +72,7 @@ class ModCiclos {
      * Modifica la familia de todos los cursos que componen un ciclo (CU 1.3)
      */
     public function editarCiclo($idCicloRepresentativo, $nuevaFamilia) {
-        // Primero, descubrimos cuál era la familia antigua usando el ID recibido
+        // Sacamos la familia antigua por el ID recibido
         $sqlGet = "SELECT familia FROM cicloFormativo WHERE idCiclo = :id";
         $stmtGet = $this->db->prepare($sqlGet);
         $stmtGet->execute([':id' => $idCicloRepresentativo]);

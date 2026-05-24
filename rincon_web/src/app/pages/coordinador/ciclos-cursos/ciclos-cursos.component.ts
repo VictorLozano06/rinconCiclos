@@ -58,7 +58,7 @@ export class CiclosCursosComponent implements OnInit {
     this.errorNuevoCiclo = '';
     if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
 
-    // Validación de duplicado
+    // Validar duplicidad
     const existe = this.ciclos.some(c => c.siglas.toLowerCase() === this.nuevoNombre.trim().toLowerCase());
     if (existe) {
       this.errorNuevoCiclo = 'No se puede introducir el mismo ciclo';
@@ -112,7 +112,7 @@ export class CiclosCursosComponent implements OnInit {
     this.errorEditarCurso = '';
     if (!this.editarNombreCurso.trim()) return;
     
-    // Validación de duplicado dentro del mismo ciclo
+    // Comprobamos que no se repita el curso en la misma familia
     const existe = this.cicloSeleccionado.cursos.some((c: any) => 
       c.nombre.toLowerCase() === this.editarNombreCurso.trim().toLowerCase() && 
       c.idCiclo !== this.cursoSeleccionado.idCiclo
@@ -123,17 +123,13 @@ export class CiclosCursosComponent implements OnInit {
       return;
     }
 
-    // Necesitamos llamar a un nuevo método en el servicio si editamos un curso individual.
-    // Usaremos put directamente o implementaremos editarCurso en el servicio.
-    // Como un workaround rápido, llamamos directo usando fetch para no tener que editar el service.ts
-    // Pero lo correcto es añadir el método en CiclosService.
-    fetch(`http://localhost:8000/index.php?c=Ciclos&m=editarCurso`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idCiclo: this.cursoSeleccionado.idCiclo, nombre: this.editarNombreCurso.trim() })
-    }).then(res => res.json()).then(() => {
-      this.cargarCiclos();
-      this.mostrarModalEditarCurso = false;
+    // OJO: Tirando directo con el servicio para usar el enviroment configurado
+    this.ciclosService.editarCurso(this.cursoSeleccionado.idCiclo, this.editarNombreCurso.trim()).subscribe({
+      next: () => {
+        this.cargarCiclos();
+        this.mostrarModalEditarCurso = false;
+      },
+      error: (err) => console.error(err)
     });
   }
 
@@ -154,11 +150,12 @@ export class CiclosCursosComponent implements OnInit {
         error: (err) => console.error('Error al eliminar ciclo', err)
       });
     } else if (this.accionConfirmar === 'eliminarCurso' && this.itemAEliminar) {
-      fetch(`http://localhost:8000/index.php?c=Ciclos&m=eliminarCurso&id=${this.itemAEliminar.idCiclo}`, {
-        method: 'DELETE'
-      }).then(res => res.json()).then(() => {
-        this.cargarCiclos();
-        this.mostrarModalConfirmar = false;
+      this.ciclosService.eliminarCurso(this.itemAEliminar.idCiclo).subscribe({
+        next: () => {
+          this.cargarCiclos();
+          this.mostrarModalConfirmar = false;
+        },
+        error: (err) => console.error(err)
       });
     }
   }

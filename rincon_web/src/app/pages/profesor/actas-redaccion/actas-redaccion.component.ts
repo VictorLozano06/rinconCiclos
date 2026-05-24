@@ -1,19 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/proceso-actas.service';
 
-/**
- * Refleja la tabla `informacion`:
- * - idActa (FK)
- * - numInformacion (PK parcial)
- * - titulo_OrdenDia VARCHAR(250) — título del punto del OdD
- * - informacion VARCHAR(250) — texto redactado por el profesor
- */
 interface PuntoInformacion {
   numInformacion: number;
-  titulo_OrdenDia: string;   // campo real de BD
-  informacion: string;       // campo real de BD
+  titulo_OrdenDia: string;
+  informacion: string;
   expandido: boolean;
 }
 
@@ -24,57 +18,46 @@ interface PuntoInformacion {
   templateUrl: './actas-redaccion.component.html',
   styleUrl: './actas-redaccion.component.css'
 })
-export class ActasRedaccionComponent {
-  // El acta existe o no existe en BD — no hay campo "estado"
-  // Si hay fila en `acta` para esta convocatoria → está cerrada (bloqueada)
-  public estado: 'redactando' | 'bloqueada' = 'redactando';
+export class ActasRedaccionComponent implements OnInit {
+  public estado: 'redactando' | 'bloqueada' | 'guardando' = 'redactando';
   public mostrarModalFinalizar = false;
-
-  /**
-   * Mock de acta (tabla acta):
-   * - idActa: INT AUTO_INCREMENT
-   * - fecha: DATE (fecha en que se redacta/cierra el acta)
-   * - idConvocatoria: FK
-   * No hay campo título — se identifica por idConvocatoria
-   */
+  
   public acta = {
-    idActa: null as number | null,        // null = aún no guardada en BD
-    fecha: null as Date | null,           // acta.fecha — se asigna al finalizar
-    idConvocatoria: 1
+    idActa: null as number | null,
+    fecha: null as Date | null,
+    idConvocatoria: null as number | null
   };
 
-  /** Datos de la convocatoria asociada (tabla convocatoria + lugar + cursoAcademico) */
-  public convocatoria = {
-    idConvocatoria: 1,
-    fecha: new Date('2026-05-23T10:00:00'),
-    lugar: 'Sala de Reuniones B-04',
-    anioInicio: 2025,
-    anioFin: 2026,
-    asistentes: 5,
-    totalConvocados: 6
-  };
-
-  /**
-   * Mock de informacion (tabla informacion):
-   * Cada fila = un punto del acta con su titulo_OrdenDia e informacion redactada.
-   * Los títulos vienen de ordenDia.objetivo de la convocatoria.
-   */
-  public puntosInformacion: PuntoInformacion[] = [
-    { numInformacion: 1, titulo_OrdenDia: 'Lectura y aprobación del acta anterior',     informacion: '', expandido: true  },
-    { numInformacion: 2, titulo_OrdenDia: 'Revisión de resultados de evaluación final',  informacion: '', expandido: false },
-    { numInformacion: 3, titulo_OrdenDia: 'Coordinación de actividades de recuperación', informacion: '', expandido: false },
-    { numInformacion: 4, titulo_OrdenDia: 'Planificación del próximo curso académico',   informacion: '', expandido: false },
-  ];
-
-  /**
-   * Mock de ruegosPreguntasActa (tabla ruegosPreguntasActa):
-   * - idPreguntaActa: INT AUTO_INCREMENT
-   * - idActa: FK
-   * - ruegosPregunta: VARCHAR(250)
-   * Es una tabla separada → se gestiona como array de textos (múltiples filas)
-   */
+  public convocatoria: ConvocatoriaPendiente | null = null;
+  public puntosInformacion: PuntoInformacion[] = [];
   public ruegosPreguntas: { id: number, texto: string }[] = [];
   public nuevoRuego: string = '';
+
+  constructor(
+    private procesoActasService: ProcesoActasService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    const conv = this.procesoActasService.getConvocatoriaActiva();
+    
+    if (!conv) {
+      // Seguridad: Si recarga F5 se pierde la memoria, lo devolvemos al check de asistencia
+      this.router.navigate(['/profesor/reuniones-de-equipo/actas/asistencia']);
+      return;
+    }
+
+    this.convocatoria = conv;
+    this.acta.idConvocatoria = conv.idConvocatoria;
+
+    // Mapeamos los temas a tratar
+    this.puntosInformacion = conv.ordenDia.map((od, index) => ({
+      numInformacion: od.numOrden,
+      titulo_OrdenDia: od.objetivo,
+      informacion: '',
+      expandido: index === 0
+    }));
+  }
 
   agregarRuego(): void {
     if (this.nuevoRuego.trim().length > 0) {
@@ -91,13 +74,19 @@ export class ActasRedaccionComponent {
   }
 
   get cursoAcademico(): string {
-    return `${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}`;
+    return this.convocatoria ? `${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}` : '';
   }
 
   get fechaFormateada(): string {
-    return this.convocatoria.fecha.toLocaleDateString('es-ES', {
+    if (!this.convocatoria) return '';
+    const date = new Date(this.convocatoria.fecha);
+    return date.toLocaleDateString('es-ES', {
       day: '2-digit', month: 'long', year: 'numeric'
     });
+  }
+
+  get asistentesRegistrados(): number {
+    return this.convocatoria ? this.convocatoria.profesores.filter(p => p.asiste).length : 0;
   }
 
   togglePunto(punto: PuntoInformacion): void {
@@ -110,11 +99,32 @@ export class ActasRedaccionComponent {
   }
 
   finalizarActa(): void {
-    // En BD: INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), ?)
-    this.acta.idActa = 1;
-    this.acta.fecha = new Date();
-    this.estado = 'bloqueada';
-    this.mostrarModalFinalizar = false;
-    this.puntosInformacion.forEach((p, i) => p.expandido = i === 0);
+    this.estado = 'guardando';
+    
+    // Construimos la petición para el controlador
+    const informacionPayload = this.puntosInformacion.map(p => ({
+      numInformacion: p.numInformacion,
+      titulo_OrdenDia: p.titulo_OrdenDia,
+      informacion: p.informacion.trim()
+    }));
+    
+    const ruegosPayload = this.ruegosPreguntas.map(r => r.texto);
+
+    this.procesoActasService.guardarActaDefinitiva(informacionPayload, ruegosPayload)
+      .subscribe({
+        next: (res) => {
+          this.acta.idActa = res.idActa;
+          this.acta.fecha = new Date();
+          this.estado = 'bloqueada';
+          this.mostrarModalFinalizar = false;
+          this.puntosInformacion.forEach((p, i) => p.expandido = i === 0);
+        },
+        error: (err) => {
+          console.error('Error al guardar el acta', err);
+          alert('Hubo un error al guardar el acta. Por favor, inténtelo de nuevo.');
+          this.estado = 'redactando';
+          this.mostrarModalFinalizar = false;
+        }
+      });
   }
 }

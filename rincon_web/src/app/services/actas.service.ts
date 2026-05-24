@@ -22,6 +22,10 @@ export interface ActaHistorial {
   totalConvocados: number;
   informacion: Informacion[];
   ruegosPregunta: string[];
+  listaAsistentes: string[];
+  listaAusentes: string[];
+  nombreRedacta: string;
+  nombreConvoca: string;
 }
 
 @Injectable({

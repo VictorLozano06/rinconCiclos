@@ -25,7 +25,7 @@ class ModActas {
     }
 
     public function listarHistorialPorAnio($anioInicio) {
-        // Obtenemos los datos base de cada acta
+        // Hacemos el join principal para traer lugar y curso
         $sql = "SELECT 
                     a.idActa, 
                     DATE_FORMAT(a.fecha, '%d/%m/%Y') as fecha, 
@@ -35,6 +35,8 @@ class ModActas {
                     l.nombre as lugar, 
                     c.anioInicio, 
                     c.anioFin,
+                    co.idProfesorRedactaActa,
+                    co.idProfesorIniciaReunion,
                     (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes,
                     (SELECT COUNT(DISTINCT pp.idParticipanteParticipa) FROM participanteParticipa pp WHERE pp.idConvocatoria = co.idConvocatoria) as totalConvocados
                 FROM acta a
@@ -48,15 +50,39 @@ class ModActas {
         $stmt->execute([':anioInicio' => $anioInicio]);
         $actas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Para cada acta, obtenemos su informacion y ruegos
+        // Bucle para añadir información anidada a cada acta
         foreach ($actas as &$acta) {
-            // Transformar numéricos
+            // El driver PDO a veces devuelve strings, forzamos enteros
             $acta['idActa'] = (int) $acta['idActa'];
             $acta['idConvocatoria'] = (int) $acta['idConvocatoria'];
             $acta['anioInicio'] = (int) $acta['anioInicio'];
             $acta['anioFin'] = (int) $acta['anioFin'];
             $acta['asistentes'] = (int) $acta['asistentes'];
             $acta['totalConvocados'] = (int) $acta['totalConvocados'];
+
+            // Nombres de Asistentes
+            $sqlAsistentes = "SELECT p.nombre FROM profesor_asiste pa JOIN participantes p ON pa.idProfesor = p.idParticipante WHERE pa.idActa = :idActa";
+            $stmtAsis = $this->db->prepare($sqlAsistentes);
+            $stmtAsis->execute([':idActa' => $acta['idActa']]);
+            $acta['listaAsistentes'] = $stmtAsis->fetchAll(PDO::FETCH_COLUMN);
+
+            // Nombres de Ausentes
+            $sqlAusentes = "SELECT p.nombre FROM participanteParticipa pp JOIN participantes p ON pp.idParticipanteParticipa = p.idParticipante 
+                            WHERE pp.idConvocatoria = :idConvocatoria 
+                            AND pp.idParticipanteParticipa NOT IN (SELECT idProfesor FROM profesor_asiste WHERE idActa = :idActa)";
+            $stmtAus = $this->db->prepare($sqlAusentes);
+            $stmtAus->execute([':idConvocatoria' => $acta['idConvocatoria'], ':idActa' => $acta['idActa']]);
+            $acta['listaAusentes'] = $stmtAus->fetchAll(PDO::FETCH_COLUMN);
+
+            // Nombres de Redacta y Convoca
+            $sqlNombre = "SELECT nombre FROM participantes WHERE idParticipante = :id";
+            $stmtN = $this->db->prepare($sqlNombre);
+            
+            $stmtN->execute([':id' => $acta['idProfesorRedactaActa']]);
+            $acta['nombreRedacta'] = $stmtN->fetchColumn() ?: '';
+
+            $stmtN->execute([':id' => $acta['idProfesorIniciaReunion']]);
+            $acta['nombreConvoca'] = $stmtN->fetchColumn() ?: '';
 
             // Obtener Informacion
             $sqlInfo = "SELECT numInformacion, titulo_OrdenDia, informacion 
@@ -147,6 +173,63 @@ class ModActas {
         }
 
         return $convocatoria;
+    }
+
+    public function guardarActaDefinitiva($datos) {
+        try {
+            $this->db->beginTransaction();
+
+            // Bloqueamos el acta creando su registro
+            $sqlActa = "INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), :idConvocatoria)";
+            $stmtActa = $this->db->prepare($sqlActa);
+            $stmtActa->execute([':idConvocatoria' => $datos['idConvocatoria']]);
+            $idActa = $this->db->lastInsertId();
+
+            // Vinculamos profesores presentes
+            if (isset($datos['asistentes']) && is_array($datos['asistentes'])) {
+                $sqlAsiste = "INSERT INTO profesor_asiste (idActa, idProfesor) VALUES (:idActa, :idProfesor)";
+                $stmtAsiste = $this->db->prepare($sqlAsiste);
+                foreach ($datos['asistentes'] as $idProf) {
+                    $stmtAsiste->execute([
+                        ':idActa' => $idActa,
+                        ':idProfesor' => $idProf
+                    ]);
+                }
+            }
+
+            // Pasamos los puntos tratados
+            if (isset($datos['informacion']) && is_array($datos['informacion'])) {
+                $sqlInfo = "INSERT INTO informacion (idActa, numInformacion, titulo_OrdenDia, informacion) 
+                            VALUES (:idActa, :num, :titulo, :info)";
+                $stmtInfo = $this->db->prepare($sqlInfo);
+                foreach ($datos['informacion'] as $info) {
+                    $stmtInfo->execute([
+                        ':idActa' => $idActa,
+                        ':num' => $info['numInformacion'],
+                        ':titulo' => $info['titulo_OrdenDia'],
+                        ':info' => $info['informacion'] ?? ''
+                    ]);
+                }
+            }
+
+            // Y las preguntas si las hubo
+            if (isset($datos['ruegos']) && is_array($datos['ruegos'])) {
+                $sqlRuego = "INSERT INTO ruegosPreguntasActa (idActa, ruegosPregunta) VALUES (:idActa, :texto)";
+                $stmtRuego = $this->db->prepare($sqlRuego);
+                foreach ($datos['ruegos'] as $ruego) {
+                    $stmtRuego->execute([
+                        ':idActa' => $idActa,
+                        ':texto' => $ruego
+                    ]);
+                }
+            }
+
+            $this->db->commit();
+            return ['exito' => true, 'idActa' => $idActa];
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return ['exito' => false, 'error' => $e->getMessage()];
+        }
     }
 }
 ?>
