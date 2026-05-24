@@ -40,9 +40,9 @@ export class ConvocatoriasComponent implements OnInit {
 
   convocatoria = {
     idConvocatoria: null as number | null,
-    estado: 'b' as EstadoConvocatoriaFormulario,
+    estado: 'a' as EstadoConvocatoriaFormulario,
     titulo: 'Nueva convocatoria',
-    subtitulo: 'Configura una convocatoria. Los cambios no se guardan en backend.',
+    subtitulo: 'Configura y publica una convocatoria activa.',
     fechaHora: '',
     lugarId: null as number | null,
     redactaId: null as number | null,
@@ -190,9 +190,9 @@ export class ConvocatoriasComponent implements OnInit {
   iniciarCreacion(): void {
     this.convocatoria = {
       idConvocatoria: null,
-      estado: 'b',
+      estado: 'a',
       titulo: 'Nueva convocatoria',
-      subtitulo: 'Crea un borrador o una convocatoria activa. Guardar no persiste cambios.',
+      subtitulo: 'Completa los datos y publica una convocatoria activa.',
       fechaHora: '',
       lugarId: this.lugares[0]?.idLugar ?? null,
       redactaId: null,
@@ -224,11 +224,9 @@ export class ConvocatoriasComponent implements OnInit {
 
         this.convocatoria = {
           idConvocatoria: data.idConvocatoria,
-          estado: data.estado ?? 'b',
+          estado: data.estado ?? 'a',
           titulo: 'Editar convocatoria',
-          subtitulo: data.estado === 'b'
-            ? 'Retoma el borrador, pero no se guardan cambios.'
-            : 'Revisa la convocatoria, pero no se guardan cambios.',
+          subtitulo: 'Actualiza la convocatoria activa y vuelve a publicarla.',
           fechaHora: data.fecha ? data.fecha.substring(0, 16) : '',
           lugarId: data.idLugar ? Number(data.idLugar) : null,
           redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
@@ -450,12 +448,48 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   guardarConvocatoria(estadoDestino: 'b' | 'a'): void {
+    if (estadoDestino !== 'a') {
+      this.feedback = 'Los borradores no estan disponibles en esta fase.';
+      this.feedbackError = true;
+      return;
+    }
+
     this.convocatoria.estado = estadoDestino;
-    this.feedback = estadoDestino === 'b'
-      ? 'No se guardan borradores.'
-      : 'No se publican cambios.';
+    this.guardando = true;
+    this.feedback = '';
     this.feedbackError = false;
-    this.guardando = false;
+
+    const payload = {
+      idConvocatoria: this.convocatoria.idConvocatoria ?? undefined,
+      estado: 'a' as const,
+      fechaHora: this.convocatoria.fechaHora,
+      lugarId: this.convocatoria.lugarId,
+      redactaId: this.convocatoria.redactaId,
+      iniciaId: this.convocatoria.iniciaId,
+      cursoId: this.convocatoria.cursoId,
+      ordenDia: this.ordenDia.map((item) => ({
+        minutos: item.minutos,
+        ordenDia: item.ordenDia,
+        objetivo: item.objetivo,
+        dinamizaId: item.dinamizaId,
+        lugarId: item.lugarId,
+        participantes: item.participantes.map((participante) => ({ ...participante }))
+      }))
+    };
+
+    this.convocatoriaService.guardar(payload).subscribe({
+      next: (response) => {
+        this.guardando = false;
+        this.feedback = response.message;
+        this.feedbackError = false;
+        this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', response.idConvocatoria]);
+      },
+      error: (error) => {
+        this.guardando = false;
+        this.feedback = error?.error?.message || 'No se pudo guardar la convocatoria.';
+        this.feedbackError = true;
+      }
+    });
   }
 
   cancelarConvocatoria(): void {
@@ -666,7 +700,7 @@ export class ConvocatoriasComponent implements OnInit {
         return prioridadDiff;
       }
 
-      return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+      return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
     });
   }
 
