@@ -14,7 +14,7 @@ export class ConvocatoriaService {
   constructor(
     private http: HttpClient,
     private apiService: ApiService
-  ) {}
+  ) { }
 
   getFormulario(): Observable<ConvocatoriaFormularioResponseDto> {
     return this.http.get<ConvocatoriaFormularioResponseDto>(

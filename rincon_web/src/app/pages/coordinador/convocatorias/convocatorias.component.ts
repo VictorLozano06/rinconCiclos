@@ -83,7 +83,7 @@ export class ConvocatoriasComponent implements OnInit {
     private convocatoriaService: ConvocatoriaService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarFormulario();
@@ -226,20 +226,20 @@ export class ConvocatoriasComponent implements OnInit {
 
         this.ordenDia = (data.ordenDia || []).length > 0
           ? data.ordenDia.map((item) => ({
-              minutos: item.minutos ? Number(item.minutos) : null,
-              ordenDia: item.descripcion || '',
-              objetivo: item.objetivo || '',
-              dinamizaId: item.idProfesorDinamiza ? Number(item.idProfesorDinamiza) : null,
-              lugarId: item.idLugar ? Number(item.idLugar) : null,
-              participantes: (item.participantes || []).map((participante) => ({ ...participante })),
-              dinamizaQuery: '',
-              dinamizaOpen: false,
-              lugarQuery: '',
-              lugarOpen: false,
-              participantesExpandido: false,
-              participaQuery: '',
-              participaOpen: false
-            }))
+            minutos: item.minutos ? Number(item.minutos) : null,
+            ordenDia: item.descripcion || '',
+            objetivo: item.objetivo || '',
+            dinamizaId: item.idProfesorDinamiza ? Number(item.idProfesorDinamiza) : null,
+            lugarId: item.idLugar ? Number(item.idLugar) : null,
+            participantes: (item.participantes || []).map((participante) => ({ ...participante })),
+            dinamizaQuery: '',
+            dinamizaOpen: false,
+            lugarQuery: '',
+            lugarOpen: false,
+            participantesExpandido: false,
+            participaQuery: '',
+            participaOpen: false
+          }))
           : [this.createEmptyFila()];
 
         this.cargandoFormulario = false;

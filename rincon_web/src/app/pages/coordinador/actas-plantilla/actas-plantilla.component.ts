@@ -1,19 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PlantillasService, Plantilla } from '../../../services/plantillas.service';
 
 interface BloquePlantilla {
   id: string;
   etiqueta: string;
   seleccionado: boolean;
-}
-
-interface Plantilla {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  bloques: string[];
-  fechaCreacion: string;
 }
 
 @Component({
@@ -23,7 +16,7 @@ interface Plantilla {
   templateUrl: './actas-plantilla.component.html',
   styleUrl: './actas-plantilla.component.css'
 })
-export class ActasPlantillaComponent {
+export class ActasPlantillaComponent implements OnInit {
   public mostrarModalNueva = false;
   public mostrarModalEditar = false;
   public mostrarModalConfirmar = false;
@@ -44,24 +37,21 @@ export class ActasPlantillaComponent {
     { id: 'cierre', etiqueta: 'Cierre de sesión', seleccionado: false }
   ];
 
-  public plantillas: Plantilla[] = [
-    {
-      id: 1,
-      nombre: 'Plantilla Reunión de Equipo',
-      descripcion: 'Estructura estándar para reuniones de coordinación de equipo docente.',
-      bloques: ['Control de asistencia', 'Lectura del acta anterior', 'Puntos del orden del día', 'Acuerdos y compromisos', 'Ruegos y preguntas'],
-      fechaCreacion: '10/01/2026'
-    },
-    {
-      id: 2,
-      nombre: 'Plantilla Evaluaciones',
-      descripcion: 'Formato específico para las sesiones de evaluación trimestral.',
-      bloques: ['Control de asistencia', 'Puntos del orden del día', 'Acuerdos y compromisos', 'Cierre de sesión'],
-      fechaCreacion: '15/03/2026'
-    }
-  ];
+  public plantillas: Plantilla[] = [];
+  public errorMensaje: string = '';
 
-  private nextId = 3;
+  constructor(private plantillasService: PlantillasService) {}
+
+  ngOnInit(): void {
+    this.cargarPlantillas();
+  }
+
+  cargarPlantillas(): void {
+    this.plantillasService.getPlantillas().subscribe({
+      next: (data) => this.plantillas = data,
+      error: (err) => console.error('Error cargando plantillas', err)
+    });
+  }
 
   get bloquesSeleccionados(): string[] {
     return this.bloquesDisponibles.filter(b => b.seleccionado).map(b => b.etiqueta);
@@ -70,26 +60,36 @@ export class ActasPlantillaComponent {
   abrirModalNueva(): void {
     this.nombreNueva = '';
     this.descripcionNueva = '';
+    this.errorMensaje = '';
     this.bloquesDisponibles.forEach(b => b.seleccionado = false);
     this.mostrarModalNueva = true;
   }
 
   guardarNueva(): void {
-    if (!this.nombreNueva.trim() || this.bloquesSeleccionados.length === 0) return;
-    this.plantillas.push({
-      id: this.nextId++,
-      nombre: this.nombreNueva.trim(),
-      descripcion: this.descripcionNueva.trim(),
-      bloques: [...this.bloquesSeleccionados],
-      fechaCreacion: new Date().toLocaleDateString('es-ES')
-    });
-    this.mostrarModalNueva = false;
+    this.errorMensaje = '';
+    
+    if (!this.nombreNueva.trim() || this.bloquesSeleccionados.length === 0) {
+      this.errorMensaje = 'Error: Debe asignar un nombre y seleccionar al menos un bloque para la plantilla';
+      return;
+    }
+
+    this.plantillasService.crearPlantilla(this.nombreNueva.trim(), this.descripcionNueva.trim(), this.bloquesSeleccionados)
+      .subscribe({
+        next: (data) => {
+          this.plantillas.push(data);
+          this.mostrarModalNueva = false;
+        },
+        error: (err) => {
+          this.errorMensaje = err?.error?.error || 'Error al guardar la plantilla.';
+        }
+      });
   }
 
   abrirEditar(plantilla: Plantilla): void {
     this.plantillaEditando = plantilla;
     this.nombreNueva = plantilla.nombre;
     this.descripcionNueva = plantilla.descripcion;
+    this.errorMensaje = '';
     this.bloquesDisponibles.forEach(b => {
       b.seleccionado = plantilla.bloques.includes(b.etiqueta);
     });
@@ -97,12 +97,24 @@ export class ActasPlantillaComponent {
   }
 
   guardarEdicion(): void {
-    if (!this.plantillaEditando || !this.nombreNueva.trim()) return;
-    this.plantillaEditando.nombre = this.nombreNueva.trim();
-    this.plantillaEditando.descripcion = this.descripcionNueva.trim();
-    this.plantillaEditando.bloques = [...this.bloquesSeleccionados];
-    this.mostrarModalEditar = false;
-    this.plantillaEditando = null;
+    this.errorMensaje = '';
+
+    if (!this.plantillaEditando || !this.nombreNueva.trim() || this.bloquesSeleccionados.length === 0) {
+      this.errorMensaje = 'Error: Debe asignar un nombre y seleccionar al menos un bloque para la plantilla';
+      return;
+    }
+    
+    this.plantillasService.editarPlantilla(this.plantillaEditando.id, this.nombreNueva.trim(), this.descripcionNueva.trim(), this.bloquesSeleccionados)
+      .subscribe({
+        next: () => {
+          this.cargarPlantillas();
+          this.mostrarModalEditar = false;
+          this.plantillaEditando = null;
+        },
+        error: (err) => {
+          this.errorMensaje = err?.error?.error || 'Error al editar la plantilla.';
+        }
+      });
   }
 
   confirmarEliminar(plantilla: Plantilla): void {
@@ -113,10 +125,15 @@ export class ActasPlantillaComponent {
 
   confirmarAccion(): void {
     if (this.plantillaAEliminar) {
-      this.plantillas = this.plantillas.filter(p => p.id !== this.plantillaAEliminar!.id);
-      this.plantillaAEliminar = null;
+      this.plantillasService.eliminarPlantilla(this.plantillaAEliminar.id).subscribe({
+        next: () => {
+          this.plantillas = this.plantillas.filter(p => p.id !== this.plantillaAEliminar!.id);
+          this.plantillaAEliminar = null;
+          this.mostrarModalConfirmar = false;
+        },
+        error: (err) => console.error('Error al eliminar', err)
+      });
     }
-    this.mostrarModalConfirmar = false;
   }
 
   cancelarConfirmacion(): void {

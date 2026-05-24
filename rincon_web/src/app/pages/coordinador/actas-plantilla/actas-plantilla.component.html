@@ -52,10 +52,7 @@
   <div *ngIf="plantillas.length === 0" class="card border-0 shadow-sm rounded-3 p-5 text-center">
     <i class="bi bi-file-earmark-ruled text-muted fs-1 mb-3"></i>
     <h5 class="text-secondary">No hay plantillas creadas</h5>
-    <p class="text-muted small">Crea una plantilla para automatizar el formato de las actas.</p>
-    <button class="btn btn-dark fw-bold text-uppercase px-4 mx-auto" (click)="abrirModalNueva()">
-      + Nueva Plantilla
-    </button>
+    <p class="text-muted small mb-0">Crea una plantilla para automatizar el formato de las actas.</p>
   </div>
 </div>
 
@@ -74,6 +71,10 @@
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Descripción (opcional)</label>
       <input type="text" class="form-control custom-input py-2"
         placeholder="Breve descripción del uso de esta plantilla" [(ngModel)]="descripcionNueva">
+    </div>
+
+    <div *ngIf="errorMensaje" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMensaje }}
     </div>
 
     <div class="mb-4">
@@ -95,8 +96,7 @@
       <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
         (click)="mostrarModalNueva = false">CANCELAR</button>
       <button class="btn btn-white fw-bold text-uppercase px-4 btn-save"
-        (click)="guardarNueva()"
-        [disabled]="!nombreNueva.trim() || bloquesSeleccionados.length === 0">
+        (click)="guardarNueva()">
         GUARDAR
       </button>
     </div>
@@ -116,6 +116,10 @@
     <div class="mb-4">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Descripción (opcional)</label>
       <input type="text" class="form-control custom-input py-2" [(ngModel)]="descripcionNueva">
+    </div>
+
+    <div *ngIf="errorMensaje" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMensaje }}
     </div>
 
     <div class="mb-4">
