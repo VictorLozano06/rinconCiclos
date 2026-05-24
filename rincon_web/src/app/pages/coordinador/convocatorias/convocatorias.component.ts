@@ -466,7 +466,7 @@ export class ConvocatoriasComponent implements OnInit {
     }
 
     this.convocatoriaService.cancelarConvocatoria(this.convocatoria.idConvocatoria).subscribe({
-      next: (response) => {
+      next: (response: { message: string }) => {
         this.feedback = response.message;
         this.feedbackError = false;
         this.router.navigate(
@@ -474,7 +474,7 @@ export class ConvocatoriasComponent implements OnInit {
           { queryParams: { tab: 'pasadas' } }
         );
       },
-      error: (error) => {
+      error: (error: { error?: { message?: string } }) => {
         this.feedback = error?.error?.message || 'No se pudo cancelar la convocatoria.';
         this.feedbackError = true;
       }

@@ -239,6 +239,10 @@ export class ConvocatoriaService {
     });
   }
 
+  cancelarConvocatoria(id: number): Observable<{ message: string }> {
+    return this.eliminar(id);
+  }
+
   private toListaItem(convocatoria: ConvocatoriaMock): ConvocatoriaListaItemDto {
     return {
       idConvocatoria: convocatoria.idConvocatoria,
