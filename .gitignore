@@ -11,6 +11,9 @@
 /backups/
 /SQL.sql
 
+# Convocatorias backend deshabilitado en desarrollo
+/rincon_back/vic_back
+
 # Secrets
 .env
 .env.*

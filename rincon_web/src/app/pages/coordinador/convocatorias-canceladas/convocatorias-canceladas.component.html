@@ -1,9 +1,9 @@
-<section class="canceladas-page" *ngIf="vista === 'listado'">
+﻿<section class="canceladas-page" *ngIf="vista === 'listado'">
   <div class="hero hero-canceladas">
     <div>
       <p class="hero-kicker">Reuniones de equipo</p>
-      <h1 class="hero-title">Convocatorias canceladas</h1>
-      <p class="hero-subtitle">Consulta las reuniones canceladas y borra definitivamente las que ya no necesites.</p>
+      <h1 class="hero-title">Borradores e histórico</h1>
+      <p class="hero-subtitle">Consulta las convocatorias pasadas y los borradores que puedes retomar.</p>
     </div>
 
     <div class="hero-actions">
@@ -18,76 +18,171 @@
 
   <div *ngIf="cargandoListado" class="loading-state text-center py-5">
     <div class="spinner-border text-danger" role="status">
-      <span class="visually-hidden">Cargando convocatorias canceladas...</span>
+      <span class="visually-hidden">Cargando histórico de convocatorias...</span>
     </div>
   </div>
 
   <div *ngIf="!cargandoListado && convocatorias.length === 0" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
     <div class="card-body">
       <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>
-      <h4 class="card-title text-secondary">No hay convocatorias canceladas</h4>
-      <p class="card-text text-muted">Cuando se cancelen convocatorias apareceran aqui para su gestion o borrado.</p>
+      <h4 class="card-title text-secondary">No hay borradores ni convocatorias pasadas</h4>
+      <p class="card-text text-muted">Cuando existan aparecerán aquí para su consulta o para retomar un borrador.</p>
     </div>
   </div>
 
-  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="convocatorias-grid">
-    <div *ngFor="let conv of convocatorias" class="surface-card convocatoria-card convocatoria-card-cancelada">
-      <div class="card-header-main">
-        <div class="fecha-badge">
-          <i class="bi bi-x-circle-fill"></i>
-          <span>{{ formatFecha(conv.fecha) }}</span>
-        </div>
-        <span class="status-badge">Cancelada</span>
-      </div>
-
-      <div class="card-details mt-3">
-        <div class="detail-item">
-          <i class="bi bi-geo-alt-fill"></i>
-          <div>
-            <strong>Lugar</strong>
-            <span>{{ conv.lugar || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-person-fill"></i>
-          <div>
-            <strong>Inicia</strong>
-            <span>{{ conv.inicia || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-pencil-square"></i>
-          <div>
-            <strong>Redacta acta</strong>
-            <span>{{ conv.redacta || 'Sin asignar' }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-actions mt-4 d-flex gap-2">
-        <button type="button" class="primary-button btn-sm flex-grow-1" (click)="seleccionarConvocatoria(conv.idConvocatoria)">
-          Ver detalle
-        </button>
-        <button type="button" class="delete-button btn-sm" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="Borrar definitivamente">
-          <i class="bi bi-trash3"></i>
-        </button>
-      </div>
+  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="history-sections">
+    <div class="history-tabs">
+      <button
+        type="button"
+        class="history-tab"
+        [class.history-tab-active]="tabActiva === 'borradores'"
+        (click)="cambiarTab('borradores')">
+        <i class="bi bi-pencil-square me-2"></i> Borradores
+      </button>
+      <button
+        type="button"
+        class="history-tab"
+        [class.history-tab-active]="tabActiva === 'pasadas'"
+        (click)="cambiarTab('pasadas')">
+        <i class="bi bi-clock-history me-2"></i> Histórico
+      </button>
     </div>
+
+    <section class="history-section" *ngIf="tabActiva === 'borradores'">
+      <div class="section-header">
+        <div>
+          <h3>Borradores</h3>
+          <p>Convocatorias a medio preparar que todavia puedes retomar.</p>
+        </div>
+      </div>
+
+      <div *ngIf="borradores.length === 0" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+        <p class="mb-0 text-muted">No hay borradores.</p>
+      </div>
+
+      <div *ngIf="borradores.length > 0" class="convocatorias-grid">
+        <div *ngFor="let conv of borradores" class="surface-card convocatoria-card">
+          <div class="card-header-main">
+            <div class="fecha-badge">
+              <i class="bi bi-pencil-square"></i>
+              <span>{{ formatFecha(conv.fecha) }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">{{ getEstadoLabel(conv.estado) }}</span>
+          </div>
+
+          <div class="card-details mt-3">
+            <div class="detail-item">
+              <i class="bi bi-geo-alt-fill"></i>
+              <div>
+                <strong>Lugar</strong>
+                <span>{{ conv.lugar || 'Sin asignar' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item mt-2">
+              <i class="bi bi-person-fill"></i>
+              <div>
+                <strong>Inicia</strong>
+                <span>{{ conv.inicia || 'Sin asignar' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item mt-2">
+              <i class="bi bi-pencil-square"></i>
+              <div>
+                <strong>Redacta acta</strong>
+                <span>{{ conv.redacta || 'Sin asignar' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions mt-4 d-flex gap-2">
+            <button type="button" class="primary-button btn-sm flex-grow-1" (click)="seleccionarConvocatoria(conv.idConvocatoria)">
+              Ver detalle
+            </button>
+            <button type="button" class="secondary-button btn-sm" (click)="retomarConvocatoria(conv.idConvocatoria)" title="Retomar borrador">
+              Retomar
+            </button>
+            <button type="button" class="delete-button btn-sm" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="No borra nada">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="history-section" *ngIf="tabActiva === 'pasadas'">
+      <div class="section-header">
+        <div>
+          <h3>Convocatorias pasadas</h3>
+          <p>Reuniones ya celebradas o que ya forman parte del histórico.</p>
+        </div>
+      </div>
+
+      <div *ngIf="pasadas.length === 0" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+        <p class="mb-0 text-muted">No hay convocatorias pasadas.</p>
+      </div>
+
+      <div *ngIf="pasadas.length > 0" class="convocatorias-grid">
+        <div *ngFor="let conv of pasadas" class="surface-card convocatoria-card convocatoria-card-historica">
+          <div class="card-header-main">
+            <div class="fecha-badge">
+              <i class="bi bi-clock-history"></i>
+              <span>{{ formatFecha(conv.fecha) }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">{{ getEstadoLabel(conv.estado) }}</span>
+          </div>
+
+          <div class="card-details mt-3">
+            <div class="detail-item">
+              <i class="bi bi-geo-alt-fill"></i>
+              <div>
+                <strong>Lugar</strong>
+                <span>{{ conv.lugar || 'Sin asignar' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item mt-2">
+              <i class="bi bi-person-fill"></i>
+              <div>
+                <strong>Inicia</strong>
+                <span>{{ conv.inicia || 'Sin asignar' }}</span>
+              </div>
+            </div>
+
+            <div class="detail-item mt-2">
+              <i class="bi bi-pencil-square"></i>
+              <div>
+                <strong>Redacta acta</strong>
+                <span>{{ conv.redacta || 'Sin asignar' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions mt-4 d-flex gap-2">
+            <button type="button" class="primary-button btn-sm flex-grow-1" (click)="seleccionarConvocatoria(conv.idConvocatoria)">
+              Ver detalle
+            </button>
+            <button type="button" class="delete-button btn-sm" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="No borra nada">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </section>
 
 <section class="canceladas-page" *ngIf="vista === 'detalle' && convocatoriaSeleccionada">
   <header class="hero hero-canceladas">
-    <div>
+      <div>
       <p class="hero-kicker">Reuniones de equipo</p>
-      <h1 class="hero-title">Detalle convocatoria cancelada</h1>
-      <p class="hero-subtitle">Consulta la informacion completa antes de borrarla definitivamente.</p>
+      <h1 class="hero-title">Detalle convocatoria</h1>
+      <p class="hero-subtitle">Consulta la información completa del histórico o retoma un borrador.</p>
     </div>
 
     <div class="hero-actions">
-      <span class="status-badge status-badge-detail">Cancelada</span>
+      <span class="status-badge" [ngClass]="getEstadoClase(convocatoriaSeleccionada.estado)">{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}</span>
     </div>
   </header>
 
@@ -103,7 +198,7 @@
   <div *ngIf="!cargandoDetalle" class="surface-card group-summary">
     <div>
       <p class="summary-label">Convocatoria</p>
-      <h2 class="summary-title">Datos base y orden del dia</h2>
+      <h2 class="summary-title">Datos base y orden del día</h2>
     </div>
 
     <div class="summary-meta">
@@ -117,7 +212,7 @@
       </div>
       <div>
         <span>Estado</span>
-        <strong>Cancelada</strong>
+        <strong>{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}</strong>
       </div>
     </div>
   </div>
@@ -125,14 +220,14 @@
   <div *ngIf="!cargandoDetalle" class="surface-card section-card">
     <div class="section-header">
       <div>
-        <h3>Informacion general</h3>
-        <p>Detalle completo de la convocatoria cancelada.</p>
+        <h3>Información general</h3>
+        <p>Detalle completo de la convocatoria seleccionada.</p>
       </div>
     </div>
 
     <div class="info-grid">
       <div class="info-item">
-        <strong>Curso academico</strong>
+        <strong>Curso académico</strong>
         <p>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>
       </div>
 
@@ -147,7 +242,7 @@
       </div>
 
       <div class="info-item">
-        <strong>Inicia la reunion</strong>
+        <strong>Inicia la reunión</strong>
         <p>{{ convocatoriaSeleccionada.inicia || 'Sin asignar' }}</p>
       </div>
 
@@ -161,8 +256,8 @@
   <div *ngIf="!cargandoDetalle" class="surface-card section-card">
     <div class="section-header">
       <div>
-        <h3>Orden del dia</h3>
-        <p>Estructura temporal y organizativa de la reunion.</p>
+        <h3>Orden del día</h3>
+        <p>Estructura temporal y organizativa de la reunión.</p>
       </div>
     </div>
 
@@ -171,7 +266,7 @@
         <thead>
           <tr>
             <th>Min.</th>
-            <th>Punto / Descripcion</th>
+            <th>Punto / Descripción</th>
             <th>Objetivo</th>
             <th>Dinamiza</th>
             <th>Lugar</th>
@@ -184,8 +279,8 @@
             <td class="minutos-cell" data-label="Min.">
               <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || '0' }} min</span>
             </td>
-            <td data-label="Punto / Descripcion">
-              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || 'Sin descripcion' }}</p>
+            <td data-label="Punto / Descripción">
+              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || 'Sin descripción' }}</p>
             </td>
             <td data-label="Objetivo">
               <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || 'Sin objetivo' }}</p>
@@ -199,8 +294,11 @@
             <td data-label="Participa">
               <div class="participants-list row-participants">
                 <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
-                <article *ngFor="let prof of item.participantes" class="participant-chip chip-view">
-                  <strong>{{ prof.nombre }}</strong>
+                <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">
+                  <span class="participant-type" [ngClass]="participante.tipo === 'grupo' ? 'chip-tipo-grupo' : 'chip-tipo-profesor'">
+                    {{ participante.tipo === 'grupo' ? 'Grupo' : 'Profesor' }}
+                  </span>
+                  <strong>{{ participante.nombre }}</strong>
                 </article>
               </div>
             </td>
@@ -219,6 +317,9 @@
         <button type="button" class="secondary-button" (click)="volverAlListado()">
           <i class="bi bi-arrow-left me-2"></i> Volver al listado
         </button>
+        <button *ngIf="puedeRetomar(convocatoriaSeleccionada.estado)" type="button" class="primary-button" (click)="retomarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">
+          <i class="bi bi-pencil-square me-2"></i> Retomar borrador
+        </button>
         <button type="button" class="delete-button delete-button-wide" (click)="eliminarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">
           <i class="bi bi-trash3 me-2"></i> Borrar definitivamente
         </button>
@@ -226,3 +327,4 @@
     </footer>
   </div>
 </section>
+
