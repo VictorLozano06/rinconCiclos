@@ -21,6 +21,8 @@
       [fechaPublicacion]="recurso.fechaPublicacion"
       [nombre]="recurso.nombre"
       [descripcion]="recurso.descripcion"
+      [curso]="formatearCurso(recurso)"
+      [ciclos]="formatearCiclos(recurso)"
       [detalleRuta]="['/profesor', 'recurso', recurso.idCategoria, recurso.numRecurso]">
     </app-recurso-item>
   </div>

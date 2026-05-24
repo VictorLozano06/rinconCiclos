@@ -41,4 +41,12 @@ export class InicioComponent implements OnInit {
       }
     });
   }
+
+  formatearCurso(recurso: RecursoDto): string {
+    return `${recurso.anioInicio}/${recurso.anioFin}`;
+  }
+
+  formatearCiclos(recurso: RecursoDto): string {
+    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' / ');
+  }
 }

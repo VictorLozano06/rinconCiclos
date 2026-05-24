@@ -36,6 +36,10 @@ export class RecursoItemComponent {
     return fecha ? `${categoria} - ${fecha}` : categoria;
   }
 
+  get ciclosMostrados(): string {
+    return this.normalizarCiclos(this.ciclos);
+  }
+
   private formatearFecha(valor: string): string {
     const fecha = new Date(valor);
     if (Number.isNaN(fecha.getTime())) {
@@ -43,5 +47,28 @@ export class RecursoItemComponent {
     }
 
     return fecha.toLocaleDateString('es-ES');
+  }
+
+  private normalizarCiclos(valor: string): string {
+    if (!valor.trim()) {
+      return '';
+    }
+
+    return valor
+      .split(/[\/·•]+/)
+      .map((segmento) => this.extraerCodigoCiclo(segmento))
+      .filter(Boolean)
+      .join(' / ');
+  }
+
+  private extraerCodigoCiclo(segmento: string): string {
+    const limpio = segmento.trim();
+
+    if (!limpio) {
+      return '';
+    }
+
+    const primerToken = limpio.split(/\s+/)[0] || '';
+    return primerToken.trim();
   }
 }
