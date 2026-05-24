@@ -14,6 +14,7 @@ import { ConvocatoriaService } from '../../../services/convocatoria.service';
 })
 export class ConvocatoriasCanceladasComponent implements OnInit {
   vista: 'listado' | 'detalle' = 'listado';
+  tabActiva: 'borradores' | 'pasadas' = 'borradores';
   convocatorias: ConvocatoriaListaItemDto[] = [];
   convocatoriaSeleccionada: ConvocatoriaDetalleDto | null = null;
   cargandoListado = true;
@@ -29,6 +30,11 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe((queryParams) => {
+      const tab = queryParams.get('tab');
+      this.tabActiva = tab === 'pasadas' ? 'pasadas' : 'borradores';
+    });
+
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('id');
       if (idParam) {
@@ -44,14 +50,14 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
   cargarConvocatorias(): void {
     this.cargandoListado = true;
     this.errorMsg = '';
-    this.convocatoriaService.listarConvocatoriasCanceladas().subscribe({
+    this.convocatoriaService.listarConvocatoriasHistoricas().subscribe({
       next: (data) => {
         this.convocatorias = data;
         this.cargandoListado = false;
       },
       error: (error) => {
         this.cargandoListado = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar las convocatorias canceladas.';
+        this.errorMsg = error?.error?.message || 'Error al cargar el histórico de convocatorias.';
       }
     });
   }
@@ -60,12 +66,27 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias']);
   }
 
+  cambiarTab(tab: 'borradores' | 'pasadas'): void {
+    this.tabActiva = tab;
+    this.router.navigate(
+      ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
+      { queryParams: { tab } }
+    );
+  }
+
   seleccionarConvocatoria(id: number): void {
-    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/canceladas', id]);
+    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/historico', id]);
+  }
+
+  retomarConvocatoria(id: number): void {
+    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', id, 'editar']);
   }
 
   volverAlListado(): void {
-    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/canceladas']);
+    this.router.navigate(
+      ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
+      { queryParams: { tab: this.tabActiva } }
+    );
   }
 
   iniciarDetalle(id: number): void {
@@ -76,8 +97,8 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
-        if (!data.cancelada) {
-          this.errorMsg = 'La convocatoria seleccionada no esta cancelada.';
+        if (data.estado === 'a') {
+          this.errorMsg = 'La convocatoria seleccionada es activa y no pertenece al histórico.';
           this.cargandoDetalle = false;
           return;
         }
@@ -87,7 +108,7 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
       },
       error: (error) => {
         this.cargandoDetalle = false;
-        this.errorMsg = error?.error?.message || 'Error al cargar los detalles de la convocatoria cancelada.';
+        this.errorMsg = error?.error?.message || 'Error al cargar los detalles de la convocatoria.';
       }
     });
   }
@@ -99,23 +120,47 @@ export class ConvocatoriasCanceladasComponent implements OnInit {
       return;
     }
 
-    this.convocatoriaService.eliminar(id).subscribe({
-      next: (response) => {
-        this.feedback = response.message;
-        this.feedbackError = false;
-        if (this.vista === 'detalle') {
-          this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/canceladas']);
-        } else {
-          this.cargarConvocatorias();
-        }
-        setTimeout(() => (this.feedback = ''), 3000);
-      },
-      error: (error) => {
-        this.feedback = error?.error?.message || 'No se pudo borrar la convocatoria.';
-        this.feedbackError = true;
-        setTimeout(() => (this.feedback = ''), 3000);
-      }
-    });
+    this.feedback = 'No se borran convocatorias.';
+    this.feedbackError = false;
+    setTimeout(() => (this.feedback = ''), 3000);
+  }
+
+  getEstadoLabel(estado?: string | null): string {
+    switch (estado) {
+      case 'b':
+        return 'Borrador';
+      case 'p':
+        return 'Pasada';
+      case 'a':
+        return 'Activa';
+      default:
+        return 'Sin estado';
+    }
+  }
+
+  getEstadoClase(estado?: string | null): string {
+    switch (estado) {
+      case 'b':
+        return 'status-badge-borrador';
+      case 'p':
+        return 'status-badge-historica';
+      case 'a':
+        return 'status-badge-activa';
+      default:
+        return 'status-badge-historica';
+    }
+  }
+
+  puedeRetomar(estado?: string | null): boolean {
+    return estado === 'b';
+  }
+
+  get borradores(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'b');
+  }
+
+  get pasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'p');
   }
 
   formatFecha(fechaStr: string): string {

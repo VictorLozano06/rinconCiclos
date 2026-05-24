@@ -1,7 +1,7 @@
 export interface ConvocatoriaListaItemDto {
   idConvocatoria: number;
   fecha: string;
-  cancelada: number;
+  estado?: 'a' | 'p' | 'b';
   lugar: string;
   anioInicio: string;
   anioFin: string;

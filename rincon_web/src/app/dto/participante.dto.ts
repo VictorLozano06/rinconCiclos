@@ -1,4 +1,5 @@
 export interface ParticipanteDto {
-  idProfesor: number;
+  idParticipante: number;
+  tipo: 'profesor' | 'grupo';
   nombre: string;
 }
