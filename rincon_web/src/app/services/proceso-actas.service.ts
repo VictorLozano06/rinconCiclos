@@ -38,9 +38,7 @@ export class ProcesoActasService {
   
   constructor(private http: HttpClient, private apiService: ApiService) {}
 
-  /**
-   * Obtiene la convocatoria desde el backend y la guarda en memoria.
-   */
+  // Recuperamos los datos del servidor para pintar la pantalla
   getConvocatoriaPendiente(): Observable<ConvocatoriaPendiente> {
     return this.http.get<ConvocatoriaPendiente>(`${this.apiService.baseUrl}?c=Actas&m=pendiente`)
       .pipe(
@@ -48,16 +46,12 @@ export class ProcesoActasService {
       );
   }
 
-  /**
-   * Recupera la convocatoria que está guardada en memoria.
-   */
+  // Permite acceder a los datos que el usuario ya habia cargado
   getConvocatoriaActiva(): ConvocatoriaPendiente | null {
     return this.convocatoriaActiva;
   }
 
-  /**
-   * Actualiza el estado de la asistencia en memoria.
-   */
+  // Guardamos la lista de checks para la siguiente pantalla
   guardarAsistencia(profesores: ProfesorAsistente[]): void {
     if (this.convocatoriaActiva) {
       this.convocatoriaActiva.profesores = profesores;
@@ -66,5 +60,28 @@ export class ProcesoActasService {
 
   limpiarEstado(): void {
     this.convocatoriaActiva = null;
+  }
+
+  // Llama al controlador para registrar definitivamente los acuerdos
+  guardarActaDefinitiva(informacion: any[], ruegos: string[]): Observable<any> {
+    if (!this.convocatoriaActiva) {
+      throw new Error('No hay convocatoria activa en memoria');
+    }
+
+    const asistentes = this.convocatoriaActiva.profesores
+      .filter(p => p.asiste)
+      .map(p => p.idProfesor);
+
+    const payload = {
+      idConvocatoria: this.convocatoriaActiva.idConvocatoria,
+      asistentes: asistentes,
+      informacion: informacion,
+      ruegos: ruegos
+    };
+
+    return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=guardar`, payload)
+      .pipe(
+        tap(() => this.limpiarEstado())
+      );
   }
 }

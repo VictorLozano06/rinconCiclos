@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActasService, ActaHistorial, Informacion } from '../../../services/actas.service';
-
+import { PdfService } from '../../../services/pdf.service';
 
 
 @Component({
@@ -21,7 +21,10 @@ export class ActasHistorialComponent implements OnInit {
   public actasFiltradas: ActaHistorial[] = [];
   public busquedaRealizada = false;
 
-  constructor(private actasService: ActasService) {}
+  constructor(
+    private actasService: ActasService,
+    private pdfService: PdfService
+  ) {}
 
   ngOnInit(): void {
     this.actasService.getAniosDisponibles().subscribe({
@@ -67,7 +70,7 @@ export class ActasHistorialComponent implements OnInit {
   }
 
   descargarActa(acta: ActaHistorial): void {
-    console.log('Descargar acta idActa:', acta.idActa);
-    alert(`Descargando Acta #${acta.idActa} — Convocatoria #${acta.idConvocatoria}`);
+    this.pdfService.generarPdfActa(acta);
   }
 }
+

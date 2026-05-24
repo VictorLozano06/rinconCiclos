@@ -12,8 +12,8 @@ import { ProcesoActasService, ConvocatoriaPendiente, PuntoOrdenDia, ProfesorAsis
   styleUrl: './actas-asistencia.component.css'
 })
 export class ActasAsistenciaComponent implements OnInit {
-  // Estados: 'cargando' | 'error' | 'previo' | 'en-progreso' | 'confirmado'
-  public estado: 'cargando' | 'error' | 'previo' | 'en-progreso' | 'confirmado' = 'cargando';
+  // Flags de UI para manejar el loader y alertas
+  estado: 'cargando' | 'error' | 'previo' | 'en-progreso' | 'confirmado' = 'cargando';
   public mensajeError = '';
 
   public convocatoria: ConvocatoriaPendiente | null = null;
@@ -22,10 +22,10 @@ export class ActasAsistenciaComponent implements OnInit {
   constructor(private procesoActasService: ProcesoActasService) {}
 
   ngOnInit(): void {
-    // Si ya hay una en memoria, la usamos, si no la pedimos.
-    const memoria = this.procesoActasService.getConvocatoriaActiva();
-    if (memoria) {
-      this.asignarConvocatoria(memoria);
+    // Rescatamos datos del servicio temporal por si el profe le ha dado atrás
+    const convMemoria = this.procesoActasService.getConvocatoriaActiva();
+    if (convMemoria) {
+      this.asignarConvocatoria(convMemoria);
     } else {
       this.procesoActasService.getConvocatoriaPendiente().subscribe({
         next: (conv) => {
@@ -42,7 +42,7 @@ export class ActasAsistenciaComponent implements OnInit {
 
   private asignarConvocatoria(conv: ConvocatoriaPendiente): void {
     this.convocatoria = conv;
-    // Convierte la fecha ISO a objeto Date local (solo para mostrar)
+    // Evitar problemas de zona horaria al printarlo
     this.fechaObj = new Date(conv.fechaOriginal.replace(' ', 'T'));
     this.estado = 'previo';
   }
@@ -77,7 +77,7 @@ export class ActasAsistenciaComponent implements OnInit {
 
   confirmarAsistencia(): void {
     if (this.convocatoria) {
-      // Guardar el estado actual en el servicio
+      // Almacenamos para la pantalla 2 (Redacción)
       this.procesoActasService.guardarAsistencia(this.convocatoria.profesores);
       this.estado = 'confirmado';
     }

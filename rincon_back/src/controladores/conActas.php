@@ -40,5 +40,32 @@ class ConActas extends ControladorBase {
         }
         return $convocatoria;
     }
+
+    /**
+     * POST ?c=Actas&m=guardar
+     */
+    public function guardar() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            return ["error" => "Método no permitido. Use POST."];
+        }
+
+        $json = file_get_contents('php://input');
+        $datos = json_decode($json, true);
+
+        if (!$datos || !isset($datos['idConvocatoria'])) {
+            http_response_code(400);
+            return ["error" => "Datos inválidos o falta idConvocatoria."];
+        }
+
+        $resultado = $this->modelo->guardarActaDefinitiva($datos);
+
+        if (!$resultado['exito']) {
+            http_response_code(500);
+            return ["error" => "Error al guardar el acta: " . $resultado['error']];
+        }
+
+        return ["mensaje" => "Acta guardada correctamente", "idActa" => $resultado['idActa']];
+    }
 }
 ?>
