@@ -9,6 +9,7 @@ import { ConvocatoriaListaItemDto } from '../../../dto/convocatoria-lista-item.d
 interface CoincidenciaProfesorConvocatoria {
   nombre: string;
   contexto: string;
+  tipo: 'Profesor' | 'Grupo';
 }
 
 @Component({
@@ -114,15 +115,16 @@ export class ProfesorConvocatoriasComponent implements OnInit {
 
     const coincidencias: CoincidenciaProfesorConvocatoria[] = [];
 
-    this.agregarCoincidencia(coincidencias, termino, convocatoria.redacta, 'Redacta la convocatoria');
-    this.agregarCoincidencia(coincidencias, termino, convocatoria.inicia, 'Inicia la reunión');
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.redacta, 'Redacta la convocatoria', 'Profesor');
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.inicia, 'Inicia la reunión', 'Profesor');
 
     (convocatoria.ordenDia || []).forEach((punto) => {
       this.agregarCoincidencia(
         coincidencias,
         termino,
         punto.dinamiza,
-        `Punto ${punto.numOrden}: dinamiza`
+        `Punto ${punto.numOrden}: dinamiza`,
+        'Profesor'
       );
 
       (punto.participantes || []).forEach((participante) => {
@@ -130,7 +132,8 @@ export class ProfesorConvocatoriasComponent implements OnInit {
           coincidencias,
           termino,
           participante.nombre,
-          `Punto ${punto.numOrden}: participa`
+          `Punto ${punto.numOrden}: participa`,
+          participante.tipo === 'grupo' ? 'Grupo' : 'Profesor'
         );
       });
     });
@@ -149,7 +152,8 @@ export class ProfesorConvocatoriasComponent implements OnInit {
     coincidencias: CoincidenciaProfesorConvocatoria[],
     termino: string,
     nombre: string | null | undefined,
-    contexto: string
+    contexto: string,
+    tipo: 'Profesor' | 'Grupo'
   ): void {
     if (!nombre) {
       return;
@@ -158,7 +162,8 @@ export class ProfesorConvocatoriasComponent implements OnInit {
     if (this.normalizarTexto(nombre).includes(termino)) {
       coincidencias.push({
         nombre,
-        contexto
+        contexto,
+        tipo
       });
     }
   }

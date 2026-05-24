@@ -17,6 +17,8 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: '', component: InicioComponent },
       { path: 'inicio', component: InicioComponent },
       { path: 'reuniones-de-equipo/convocatorias', component: ConvocatoriasComponent },
+      { path: 'reuniones-de-equipo/convocatorias/historico', component: ConvocatoriasCanceladasComponent },
+      { path: 'reuniones-de-equipo/convocatorias/historico/:id', component: ConvocatoriasCanceladasComponent },
       { path: 'reuniones-de-equipo/convocatorias/canceladas', component: ConvocatoriasCanceladasComponent },
       { path: 'reuniones-de-equipo/convocatorias/canceladas/:id', component: ConvocatoriasCanceladasComponent },
       { path: 'reuniones-de-equipo/convocatorias/crear', component: ConvocatoriasComponent },
