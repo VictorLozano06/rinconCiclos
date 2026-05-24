@@ -23,6 +23,8 @@ export class SidebarProfesorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+
+
   // Carga categorias y las transforma en enlaces del sidebar.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
@@ -30,7 +32,7 @@ export class SidebarProfesorComponent implements OnInit {
         this.categorias = this.mapCategorias(data, '/profesor');
       },
       error: (err) => {
-        console.error('Error de conexion con el servidor backend PHP:', err);
+        console.error('Error de conexion con el servidor backend PHP, usando items estaticos:', err);
       }
     });
   }
@@ -46,7 +48,7 @@ export class SidebarProfesorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const disabledSubs = ['BOCC', 'Calendario de reuniones'];
 
     return cats.map((cat) => {
       const nombre = cat.nombre;

@@ -1,0 +1,163 @@
+<div class="header-container d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h2 class="fw-bold text-dark m-0">Control de Asistencia</h2>
+    <p class="text-secondary small">Registra la asistencia antes de iniciar la reunión.</p>
+  </div>
+  <span class="badge-estado" [ngClass]="{
+    'badge-previo': estado === 'previo',
+    'badge-progreso': estado === 'en-progreso',
+    'badge-confirmado': estado === 'confirmado'
+  }">
+    <i class="bi" [ngClass]="{
+      'bi-clock': estado === 'previo',
+      'bi-pencil-square': estado === 'en-progreso',
+      'bi-check-circle-fill': estado === 'confirmado'
+    }"></i>
+    {{ estado === 'previo' ? 'Pendiente' : estado === 'en-progreso' ? 'En progreso' : 'Confirmado' }}
+  </span>
+</div>
+
+<!-- Tarjeta de convocatoria — campos reales de BD -->
+<div class="card border-0 shadow-sm rounded-3 mb-4 convocatoria-card">
+  <div class="card-body p-4">
+    <div class="d-flex align-items-start gap-3">
+      <div class="icono-convocatoria d-flex align-items-center justify-content-center rounded-3">
+        <i class="bi bi-calendar-event-fill text-white fs-5"></i>
+      </div>
+      <div class="flex-grow-1">
+        <!-- Sin título en BD: se muestra fecha + lugar como identificador -->
+        <h5 class="fw-bold text-dark mb-1">Convocatoria #{{ convocatoria.idConvocatoria }}</h5>
+        <div class="d-flex flex-wrap gap-3 text-secondary small mb-3">
+          <span><i class="bi bi-calendar3 me-1"></i>{{ fechaFormateada }}</span>
+          <span><i class="bi bi-clock me-1"></i>{{ horaFormateada }}</span>
+          <span><i class="bi bi-geo-alt me-1"></i>{{ convocatoria.lugar }}</span>
+          <span><i class="bi bi-mortarboard me-1"></i>{{ cursoAcademico }}</span>
+        </div>
+
+        <!-- ordenDia: objetivo (NOT NULL) + descripcion (NULL) + minutos -->
+        <div class="orden-dia-lista">
+          <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">Orden del Día</p>
+          <ol class="orden-del-dia-ol ps-3 mb-0">
+            <li *ngFor="let punto of ordenDelDia" class="text-dark small mb-1">
+              <span class="fw-semibold">{{ punto.objetivo }}</span>
+              <span *ngIf="punto.descripcion" class="text-secondary"> — {{ punto.descripcion }}</span>
+              <span *ngIf="punto.minutos" class="text-secondary x-small ms-1">({{ punto.minutos }} min)</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ESTADO: PREVIO ===== -->
+<div *ngIf="estado === 'previo'" class="text-center py-4">
+  <div class="estado-previo-icono mx-auto mb-3">
+    <i class="bi bi-people-fill"></i>
+  </div>
+  <h5 class="fw-bold text-dark mb-2">¿Listo para registrar la asistencia?</h5>
+  <p class="text-secondary small mb-4">Comprueba que todos los convocados estén presentes y pulsa el botón para comenzar.</p>
+  <button class="btn btn-dark fw-bold text-uppercase px-5 py-2 btn-iniciar" (click)="iniciarControlAsistencia()">
+    <i class="bi bi-person-check-fill me-2"></i>Iniciar Control de Asistencia
+  </button>
+</div>
+
+<!-- ===== ESTADO: EN PROGRESO ===== -->
+<div *ngIf="estado === 'en-progreso'">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h6 class="fw-bold text-dark m-0">Participantes convocados</h6>
+      <p class="text-secondary x-small mb-0">Desmarca a los participantes que no están presentes.</p>
+    </div>
+    <span class="conteo-badge">
+      {{ asistentes.length }} / {{ participantes.length }} presentes
+    </span>
+  </div>
+
+  <div class="participantes-list mb-4">
+    <div *ngFor="let p of participantes"
+      class="participante-row d-flex align-items-center justify-content-between"
+      [class.participante-ausente]="!p.asiste">
+      <div class="d-flex align-items-center gap-3">
+        <div class="avatar-inicial d-flex align-items-center justify-content-center rounded-circle fw-bold"
+          [class.avatar-ausente]="!p.asiste">
+          {{ p.nombre.charAt(0) }}
+        </div>
+        <div>
+          <span class="fw-bold text-dark small d-block">{{ p.nombre }}</span>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="etiqueta-estado" [class.etiqueta-asiste]="p.asiste" [class.etiqueta-falta]="!p.asiste">
+          {{ p.asiste ? 'Asiste' : 'No asiste' }}
+        </span>
+        <div class="form-check form-switch m-0">
+          <input class="form-check-input custom-switch" type="checkbox" [(ngModel)]="p.asiste"
+            [id]="'check-' + p.nombre">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-3">
+    <button class="btn btn-outline-secondary btn-sm fw-bold text-uppercase px-4" (click)="reiniciar()">
+      CANCELAR
+    </button>
+    <button class="btn btn-dark fw-bold text-uppercase px-5 btn-confirmar" (click)="confirmarAsistencia()">
+      <i class="bi bi-check2-circle me-2"></i>Confirmar Asistencia
+    </button>
+  </div>
+</div>
+
+<!-- ===== ESTADO: CONFIRMADO ===== -->
+<div *ngIf="estado === 'confirmado'">
+  <div class="resumen-confirmado rounded-3 p-4 mb-4">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <div class="icono-ok d-flex align-items-center justify-content-center rounded-circle">
+        <i class="bi bi-check-lg text-white fw-bold fs-5"></i>
+      </div>
+      <div>
+        <h6 class="fw-bold text-dark m-0">Asistencia confirmada</h6>
+        <p class="text-secondary x-small mb-0">El registro está guardado y bloqueado.</p>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-6">
+        <div class="resumen-card resumen-asisten rounded-3 p-3">
+          <p class="text-secondary x-small fw-bold text-uppercase mb-2">Asisten ({{ asistentes.length }})</p>
+          <div *ngFor="let p of asistentes" class="d-flex align-items-center gap-2 mb-1">
+            <div class="avatar-mini rounded-circle d-flex align-items-center justify-content-center fw-bold">
+              {{ p.nombre.charAt(0) }}
+            </div>
+            <span class="small text-dark">{{ p.nombre }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="resumen-card resumen-faltan rounded-3 p-3">
+          <p class="text-secondary x-small fw-bold text-uppercase mb-2">No asisten ({{ ausentes.length }})</p>
+          <div *ngFor="let p of ausentes" class="d-flex align-items-center gap-2 mb-1">
+            <div class="avatar-mini avatar-ausente rounded-circle d-flex align-items-center justify-content-center fw-bold">
+              {{ p.nombre.charAt(0) }}
+            </div>
+            <span class="small text-dark">{{ p.nombre }}</span>
+          </div>
+          <p *ngIf="ausentes.length === 0" class="text-secondary x-small mb-0 fst-italic">
+            Todos los convocados asisten.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end gap-3">
+    <button class="btn btn-outline-secondary btn-sm fw-bold text-uppercase px-4" (click)="reiniciar()">
+      <i class="bi bi-arrow-counterclockwise me-1"></i> REINICIAR
+    </button>
+    <a routerLink="/profesor/proceso-de-actas/redaccion"
+      class="btn btn-dark fw-bold text-uppercase px-5 btn-ir-redactar">
+      <i class="bi bi-pencil-fill me-2"></i>Ir a Redactar Acta
+    </a>
+  </div>
+</div>

@@ -78,14 +78,6 @@ export class SidebarCoordinadorComponent implements OnInit {
         deshabilitado: false
       },
       {
-        nombre: 'Gestión de Cursos',
-        icono: 'categoria-generica',
-        ruta: '/coordinador/gestion-de-cursos',
-        abierto: false,
-        subcategorias: [],
-        deshabilitado: false
-      },
-      {
         nombre: 'Categorías',
         icono: 'categorias',
         ruta: null,
@@ -157,7 +149,7 @@ export class SidebarCoordinadorComponent implements OnInit {
       'Otros': 'otros'
     };
 
-    const subcategoriasDeshabilitadas = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const subcategoriasDeshabilitadas = ['BOCC', 'Calendario de reuniones'];
 
     return cats.map((cat) => {
       const nombre = cat.nombre;
@@ -169,6 +161,8 @@ export class SidebarCoordinadorComponent implements OnInit {
         .replace(/[ºª]/g, '')
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
+
+
 
       let ruta = '';
       if (nombre === 'Inicio') {
