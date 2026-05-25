@@ -12,10 +12,10 @@ import { SidebarProfesorComponent } from '../../../components/sidebar-profesor/s
   styleUrl: './profesor-layout.component.css'
 })
 export class ProfesorLayoutComponent {
-  public sidebarOpen = false;
+  public sidebarOpen = typeof window !== 'undefined' ? window.innerWidth > 768 : true;
 
-  openSidebar(): void {
-    this.sidebarOpen = true;
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   closeSidebar(): void {
