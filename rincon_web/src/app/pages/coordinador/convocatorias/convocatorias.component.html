@@ -4,15 +4,9 @@
     <div>
       <p class="hero-kicker">Reuniones de equipo</p>
       <h1 class="hero-title">Convocatorias</h1>
-      <p class="hero-subtitle">Solo se muestran las convocatorias activas. Los borradores y el histórico quedan aparte.</p>
+      <p class="hero-subtitle">Todas las convocatorias se muestran juntas y ordenadas por fecha.</p>
     </div>
     <div class="hero-actions">
-      <button type="button" class="secondary-button" (click)="irABorradores()">
-        <i class="bi bi-pencil-square me-2"></i> Borradores
-      </button>
-      <button type="button" class="secondary-button" (click)="irAPasadas()">
-        <i class="bi bi-clock-history me-2"></i> Histórico
-      </button>
       <button type="button" class="primary-button" (click)="crearNueva()">
         <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
       </button>
@@ -36,70 +30,111 @@
     </div>
   </div>
 
-  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="convocatorias-grid">
-    <div
-      *ngFor="let conv of convocatorias"
-      class="surface-card convocatoria-card"
-      [class.convocatoria-card-activa]="conv.estado === 'a'"
-      [class.convocatoria-card-historica]="conv.estado !== 'a'">
-      <div class="card-header-main">
-        <div class="fecha-badge">
-          <i class="bi bi-calendar3"></i>
-          <span>{{ formatFecha(conv.fecha) }}</span>
-        </div>
+  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="convocatorias-accordion">
+    <details class="estado-panel" open>
+      <summary class="estado-summary">
+        <span class="estado-summary-title">Activas</span>
+      </summary>
 
-        <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">
-          {{ getEstadoLabel(conv.estado) }}
-        </span>
-      </div>
-
-      <div class="card-details mt-3">
-        <div class="detail-item">
-          <i class="bi bi-geo-alt-fill"></i>
-          <div>
-            <strong>Lugar</strong>
-            <span>{{ conv.lugar || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-person-fill"></i>
-          <div>
-            <strong>Inicia</strong>
-            <span>{{ conv.inicia || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-pencil-square"></i>
-          <div>
-            <strong>Redacta acta</strong>
-            <span>{{ conv.redacta || 'Sin asignar' }}</span>
-          </div>
+      <div class="estado-panel-body">
+        <p *ngIf="convocatoriasActivas.length === 0" class="estado-empty">No hay convocatorias activas.</p>
+        <div *ngIf="convocatoriasActivas.length > 0" class="convocatorias-grid">
+          <ng-container *ngTemplateOutlet="convocatoriaCards; context: { $implicit: convocatoriasActivas }"></ng-container>
         </div>
       </div>
+    </details>
 
-      <div class="card-actions mt-4 d-flex gap-2">
-        <button
-          type="button"
-          [class.primary-button]="conv.estado === 'a'"
-          [class.secondary-button]="conv.estado !== 'a'"
-          class="btn-sm flex-grow-1"
-          (click)="verConvocatoria(conv.idConvocatoria)">
-          Ver detalle
-        </button>
-        <button
-          type="button"
-          class="secondary-button btn-sm px-3"
-          (click)="editarConvocatoria(conv.idConvocatoria)"
-          [disabled]="!puedeEditar(conv.estado)"
-          [title]="puedeEditar(conv.estado) ? 'Editar convocatoria' : 'Las convocatorias pasadas no se pueden modificar'">
-          <i class="bi bi-pencil-square"></i>
-        </button>
+    <details class="estado-panel">
+      <summary class="estado-summary">
+        <span class="estado-summary-title">Pasadas</span>
+      </summary>
+
+      <div class="estado-panel-body">
+        <p *ngIf="convocatoriasPasadas.length === 0" class="estado-empty">No hay convocatorias pasadas.</p>
+        <div *ngIf="convocatoriasPasadas.length > 0" class="convocatorias-grid">
+          <ng-container *ngTemplateOutlet="convocatoriaCards; context: { $implicit: convocatoriasPasadas }"></ng-container>
+        </div>
       </div>
-    </div>
+    </details>
+
+    <details class="estado-panel">
+      <summary class="estado-summary">
+        <span class="estado-summary-title">Borradores</span>
+      </summary>
+
+      <div class="estado-panel-body">
+        <p *ngIf="convocatoriasBorradores.length === 0" class="estado-empty">No hay borradores.</p>
+        <div *ngIf="convocatoriasBorradores.length > 0" class="convocatorias-grid">
+          <ng-container *ngTemplateOutlet="convocatoriaCards; context: { $implicit: convocatoriasBorradores }"></ng-container>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
+
+<ng-template #convocatoriaCards let-items>
+  <div
+    *ngFor="let conv of items"
+    class="surface-card convocatoria-card"
+    [class.convocatoria-card-activa]="conv.estado === 'a'"
+    [class.convocatoria-card-historica]="conv.estado !== 'a'">
+    <div class="card-header-main">
+      <div class="fecha-badge">
+        <i class="bi bi-calendar3"></i>
+        <span>{{ formatFecha(conv.fecha) }}</span>
+      </div>
+
+      <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">
+        {{ getEstadoLabel(conv.estado) }}
+      </span>
+    </div>
+
+    <div class="card-details mt-3">
+      <div class="detail-item">
+        <i class="bi bi-geo-alt-fill"></i>
+        <div>
+          <strong>Lugar</strong>
+          <span>{{ conv.lugar || 'Sin asignar' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item mt-2">
+        <i class="bi bi-person-fill"></i>
+        <div>
+          <strong>Inicia</strong>
+          <span>{{ conv.inicia || 'Sin asignar' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item mt-2">
+        <i class="bi bi-pencil-square"></i>
+        <div>
+          <strong>Redacta acta</strong>
+          <span>{{ conv.redacta || 'Sin asignar' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-actions mt-4 d-flex gap-2">
+      <button
+        type="button"
+        [class.primary-button]="conv.estado === 'a'"
+        [class.secondary-button]="conv.estado !== 'a'"
+        class="btn-sm flex-grow-1"
+        (click)="verConvocatoria(conv.idConvocatoria)">
+        Ver detalle
+      </button>
+      <button
+        type="button"
+        class="secondary-button btn-sm px-3"
+        (click)="editarConvocatoria(conv.idConvocatoria)"
+        [disabled]="!puedeEditar(conv.estado)"
+        [title]="puedeEditar(conv.estado) ? 'Editar convocatoria' : 'Las convocatorias pasadas no se pueden modificar'">
+        <i class="bi bi-pencil-square"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
 
 <!-- DETAIL VIEW -->
 <section class="convocatoria-page" *ngIf="vista === 'detalle' && convocatoriaSeleccionada">
@@ -692,6 +727,95 @@
         <button type="button" class="secondary-button" (click)="cerrarModalParticipantes()">Cancelar</button>
         <button type="button" class="primary-button" (click)="aplicarModalParticipantes()">Aceptar</button>
       </footer>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="vista === 'formulario' && modalPublicacionAbierto"
+  class="participants-modal-backdrop"
+  (click)="!modalPublicacionProcesando && !modalPublicacionCargando && cerrarModalPublicacion()">
+  <div
+    class="participants-modal publication-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="publicacion-modal-title"
+    (click)="$event.stopPropagation()">
+    <div class="participants-modal-body">
+      <header class="participants-modal-header">
+        <div>
+          <p class="summary-label">Publicar convocatoria</p>
+          <h3 id="publicacion-modal-title">Tienes convocatorias activas</h3>
+          <p>Antes de publicar esta convocatoria, puedes marcar como pasadas las que sigan activas.</p>
+        </div>
+
+        <button
+          type="button"
+          class="chip-remove modal-close"
+          (click)="cerrarModalPublicacion()"
+          [disabled]="modalPublicacionProcesando || modalPublicacionCargando"
+          aria-label="Cerrar modal">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </header>
+
+      <div *ngIf="modalPublicacionCargando" class="loading-state text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Comprobando convocatorias activas...</span>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!modalPublicacionCargando">
+        <div class="publication-modal-toolbar">
+          <strong>Convocatorias activas actuales</strong>
+          <button
+            type="button"
+            class="secondary-button btn-sm"
+            (click)="marcarTodasActivasComoPasadas()"
+            [disabled]="modalPublicacionProcesando || convocatoriasActivasPendientes.length === 0">
+            Poner todas como pasadas
+          </button>
+        </div>
+
+        <div class="publication-modal-list">
+          <article *ngFor="let conv of convocatoriasActivasPendientes" class="publication-modal-item">
+            <div class="publication-modal-item-main">
+              <strong>{{ formatFecha(conv.fecha) }}</strong>
+              <span>{{ conv.lugar || 'Sin lugar asignado' }}</span>
+              <small>Inicia: {{ conv.inicia || 'Sin asignar' }} · Redacta: {{ conv.redacta || 'Sin asignar' }}</small>
+            </div>
+
+            <button
+              type="button"
+              class="secondary-button btn-sm"
+              (click)="marcarConvocatoriaActivaComoPasada(conv.idConvocatoria)"
+              [disabled]="modalPublicacionProcesando">
+              Poner como pasada
+            </button>
+          </article>
+
+          <p *ngIf="convocatoriasActivasPendientes.length === 0" class="participants-empty text-center mb-0">
+            No quedan convocatorias activas pendientes. Puedes publicar la nueva.
+          </p>
+        </div>
+
+        <footer class="participants-modal-footer">
+          <button
+            type="button"
+            class="secondary-button"
+            (click)="cerrarModalPublicacion()"
+            [disabled]="modalPublicacionProcesando">
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="primary-button"
+            (click)="continuarPublicacionNueva()"
+            [disabled]="modalPublicacionProcesando">
+            Publicar convocatoria
+          </button>
+        </footer>
+      </ng-container>
     </div>
   </div>
 </div>

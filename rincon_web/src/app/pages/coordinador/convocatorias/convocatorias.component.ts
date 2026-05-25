@@ -40,9 +40,9 @@ export class ConvocatoriasComponent implements OnInit {
 
   convocatoria = {
     idConvocatoria: null as number | null,
-    estado: 'b' as EstadoConvocatoriaFormulario,
+    estado: 'a' as EstadoConvocatoriaFormulario,
     titulo: 'Nueva convocatoria',
-    subtitulo: 'Configura una convocatoria. Los cambios no se guardan en backend.',
+    subtitulo: 'Configura y publica una convocatoria activa.',
     fechaHora: '',
     lugarId: null as number | null,
     redactaId: null as number | null,
@@ -72,6 +72,10 @@ export class ConvocatoriasComponent implements OnInit {
   modalParticipantesQuery = '';
   modalParticipantesFiltro: FiltroParticipantesModal = 'todos';
   modalParticipantesSeleccionados: ParticipanteDto[] = [];
+  modalPublicacionAbierto = false;
+  modalPublicacionCargando = false;
+  modalPublicacionProcesando = false;
+  convocatoriasActivasPendientes: ConvocatoriaListaItemDto[] = [];
 
   ordenDia: OrdenDiaCoordinadorDto[] = [this.createEmptyFila()];
 
@@ -138,7 +142,7 @@ export class ConvocatoriasComponent implements OnInit {
 
   cargarConvocatorias(): void {
     this.cargandoListado = true;
-    this.convocatoriaService.listarConvocatorias().subscribe({
+    this.convocatoriaService.listarConvocatoriasCoordinador().subscribe({
       next: (data) => {
         this.convocatorias = this.ordenarListado(data);
         this.cargandoListado = false;
@@ -152,20 +156,6 @@ export class ConvocatoriasComponent implements OnInit {
 
   crearNueva(): void {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/crear']);
-  }
-
-  irABorradores(): void {
-    this.router.navigate(
-      ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
-      { queryParams: { tab: 'borradores' } }
-    );
-  }
-
-  irAPasadas(): void {
-    this.router.navigate(
-      ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
-      { queryParams: { tab: 'pasadas' } }
-    );
   }
 
   editarConvocatoria(id: number): void {
@@ -190,9 +180,9 @@ export class ConvocatoriasComponent implements OnInit {
   iniciarCreacion(): void {
     this.convocatoria = {
       idConvocatoria: null,
-      estado: 'b',
+      estado: 'a',
       titulo: 'Nueva convocatoria',
-      subtitulo: 'Crea un borrador o una convocatoria activa. Guardar no persiste cambios.',
+      subtitulo: 'Completa los datos y publica una convocatoria activa.',
       fechaHora: '',
       lugarId: this.lugares[0]?.idLugar ?? null,
       redactaId: null,
@@ -224,11 +214,9 @@ export class ConvocatoriasComponent implements OnInit {
 
         this.convocatoria = {
           idConvocatoria: data.idConvocatoria,
-          estado: data.estado ?? 'b',
+          estado: data.estado ?? 'a',
           titulo: 'Editar convocatoria',
-          subtitulo: data.estado === 'b'
-            ? 'Retoma el borrador, pero no se guardan cambios.'
-            : 'Revisa la convocatoria, pero no se guardan cambios.',
+          subtitulo: 'Actualiza la convocatoria activa y vuelve a publicarla.',
           fechaHora: data.fecha ? data.fecha.substring(0, 16) : '',
           lugarId: data.idLugar ? Number(data.idLugar) : null,
           redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
@@ -451,11 +439,155 @@ export class ConvocatoriasComponent implements OnInit {
 
   guardarConvocatoria(estadoDestino: 'b' | 'a'): void {
     this.convocatoria.estado = estadoDestino;
-    this.feedback = estadoDestino === 'b'
-      ? 'No se guardan borradores.'
-      : 'No se publican cambios.';
+    this.feedback = '';
     this.feedbackError = false;
-    this.guardando = false;
+
+    if (this.esFechaPasada(this.convocatoria.fechaHora)) {
+      this.feedback = estadoDestino === 'b'
+        ? 'No se puede guardar un borrador con una fecha pasada.'
+        : 'No se puede crear o publicar una convocatoria con una fecha pasada.';
+      this.feedbackError = true;
+      return;
+    }
+
+    if (estadoDestino === 'b') {
+      this.ejecutarGuardado(estadoDestino);
+      return;
+    }
+
+    if (this.convocatoria.idConvocatoria === null) {
+      this.prepararPublicacionNueva();
+      return;
+    }
+
+    this.ejecutarGuardado(estadoDestino);
+  }
+
+  cerrarModalPublicacion(): void {
+    this.modalPublicacionAbierto = false;
+    this.modalPublicacionCargando = false;
+    this.modalPublicacionProcesando = false;
+    this.convocatoriasActivasPendientes = [];
+  }
+
+  marcarConvocatoriaActivaComoPasada(idConvocatoria: number): void {
+    if (this.modalPublicacionProcesando) {
+      return;
+    }
+
+    this.modalPublicacionProcesando = true;
+
+    this.convocatoriaService.marcarComoPasada(idConvocatoria).subscribe({
+      next: () => {
+        this.convocatoriasActivasPendientes = this.convocatoriasActivasPendientes.filter(
+          (convocatoria) => convocatoria.idConvocatoria !== idConvocatoria
+        );
+        this.modalPublicacionProcesando = false;
+      },
+      error: (error) => {
+        this.modalPublicacionProcesando = false;
+        this.feedback = error?.error?.message || 'No se pudo marcar la convocatoria como pasada.';
+        this.feedbackError = true;
+      }
+    });
+  }
+
+  marcarTodasActivasComoPasadas(): void {
+    if (this.modalPublicacionProcesando || this.convocatoriasActivasPendientes.length === 0) {
+      return;
+    }
+
+    this.modalPublicacionProcesando = true;
+
+    this.convocatoriaService.marcarTodasComoPasadas().subscribe({
+      next: () => {
+        this.convocatoriasActivasPendientes = [];
+        this.modalPublicacionProcesando = false;
+      },
+      error: (error) => {
+        this.modalPublicacionProcesando = false;
+        this.feedback = error?.error?.message || 'No se pudieron marcar las convocatorias como pasadas.';
+        this.feedbackError = true;
+      }
+    });
+  }
+
+  continuarPublicacionNueva(): void {
+    this.cerrarModalPublicacion();
+    this.ejecutarGuardado('a');
+  }
+
+  private prepararPublicacionNueva(): void {
+    this.guardando = true;
+    this.modalPublicacionCargando = true;
+    this.modalPublicacionAbierto = true;
+    this.convocatoriasActivasPendientes = [];
+
+    this.convocatoriaService.listarConvocatorias().subscribe({
+      next: (data) => {
+        const activas = this.ordenarListado(data).filter(
+          (convocatoria) => convocatoria.idConvocatoria !== this.convocatoria.idConvocatoria
+        );
+
+        this.modalPublicacionCargando = false;
+        this.guardando = false;
+
+        if (activas.length === 0) {
+          this.cerrarModalPublicacion();
+          this.ejecutarGuardado('a');
+          return;
+        }
+
+        this.convocatoriasActivasPendientes = activas;
+      },
+      error: (error) => {
+        this.modalPublicacionCargando = false;
+        this.modalPublicacionAbierto = false;
+        this.guardando = false;
+        this.feedback = error?.error?.message || 'No se pudieron comprobar las convocatorias activas.';
+        this.feedbackError = true;
+      }
+    });
+  }
+
+  private ejecutarGuardado(estadoDestino: 'a' | 'b'): void {
+    this.guardando = true;
+
+    const payload = this.construirPayload(estadoDestino);
+
+    this.convocatoriaService.guardar(payload).subscribe({
+      next: (response) => {
+        this.guardando = false;
+        this.feedback = response.message;
+        this.feedbackError = false;
+        this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', response.idConvocatoria]);
+      },
+      error: (error) => {
+        this.guardando = false;
+        this.feedback = error?.error?.message || 'No se pudo guardar la convocatoria.';
+        this.feedbackError = true;
+      }
+    });
+  }
+
+  private construirPayload(estadoDestino: 'a' | 'b') {
+    return {
+      idConvocatoria: this.convocatoria.idConvocatoria ?? undefined,
+      estado: estadoDestino,
+      fechaHora: this.convocatoria.fechaHora,
+      lugarId: this.convocatoria.lugarId,
+      redactaId: this.convocatoria.redactaId,
+      iniciaId: this.convocatoria.iniciaId,
+      cursoId: this.convocatoria.cursoId,
+      ordenDia: this.ordenDia.map((item) => ({
+        minutos: item.minutos,
+        ordenDia: item.ordenDia,
+        objetivo: item.objetivo,
+        dinamizaId: item.dinamizaId,
+        lugarId: item.lugarId,
+        participantes: item.participantes.map((participante) => ({ ...participante }))
+      }))
+    };
   }
 
   cancelarConvocatoria(): void {
@@ -602,6 +734,18 @@ export class ConvocatoriasComponent implements OnInit {
     return estado !== 'p';
   }
 
+  get convocatoriasActivas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'a');
+  }
+
+  get convocatoriasPasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'p');
+  }
+
+  get convocatoriasBorradores(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'b');
+  }
+
   getParticipantesResumen(item: OrdenDiaCoordinadorDto): string {
     if (item.participantes.length === 0) {
       return 'Seleccionar participantes';
@@ -654,19 +798,8 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   private ordenarListado(convocatorias: ConvocatoriaListaItemDto[]): ConvocatoriaListaItemDto[] {
-    const prioridad: Record<NonNullable<ConvocatoriaListaItemDto['estado']>, number> = {
-      a: 0,
-      b: 1,
-      p: 2
-    };
-
     return [...convocatorias].sort((a, b) => {
-      const prioridadDiff = prioridad[a.estado || 'p'] - prioridad[b.estado || 'p'];
-      if (prioridadDiff !== 0) {
-        return prioridadDiff;
-      }
-
-      return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+      return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
     });
   }
 

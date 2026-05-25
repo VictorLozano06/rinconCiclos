@@ -1,3 +1,59 @@
+.convocatorias-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.estado-panel {
+  border: 1px solid #dbe4f0;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.estado-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 800;
+  color: #243043;
+}
+
+.estado-summary::-webkit-details-marker {
+  display: none;
+}
+
+.estado-summary::after {
+  content: '\F282';
+  font-family: bootstrap-icons;
+  font-size: 1rem;
+  color: #516178;
+  transition: transform 0.2s ease;
+}
+
+.estado-panel[open] .estado-summary::after {
+  transform: rotate(180deg);
+}
+
+.estado-summary-title {
+  font-size: 1.2rem;
+}
+
+.estado-panel-body {
+  padding: 0 22px 22px;
+}
+
+.estado-empty {
+  margin: 0;
+  color: #6f7d93;
+  font-size: 0.95rem;
+}
+
 .participants-modal {
   width: min(920px, calc(100vw - 32px));
   max-height: min(88vh, 900px);
@@ -116,6 +172,55 @@
   color: #264a91;
   font-size: 0.8rem;
   font-weight: 800;
+}
+
+.publication-modal {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.publication-modal-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.publication-modal-toolbar strong {
+  color: #243043;
+}
+
+.publication-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.publication-modal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fbff;
+}
+
+.publication-modal-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.publication-modal-item-main strong {
+  color: #243043;
+}
+
+.publication-modal-item-main span,
+.publication-modal-item-main small {
+  color: #6f7d93;
 }
 
 .participants-modal-filters {
@@ -256,4 +361,18 @@
   color: #17603a;
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .estado-summary {
+    padding: 16px 18px;
+  }
+
+  .estado-panel-body {
+    padding: 0 18px 18px;
+  }
+
+  .estado-summary-title {
+    font-size: 1.05rem;
+  }
 }
