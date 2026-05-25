@@ -363,6 +363,58 @@
   font-weight: 700;
 }
 
+.agenda-table {
+  table-layout: fixed;
+}
+
+.agenda-table th:nth-child(1),
+.agenda-table td.minutos-cell {
+  width: 66px;
+}
+
+.agenda-table th:nth-child(2),
+.agenda-table td[data-label="Orden del día"] {
+  width: 22%;
+}
+
+.agenda-table th:nth-child(3),
+.agenda-table td[data-label="Objetivo"] {
+  width: 22%;
+}
+
+.agenda-table th:nth-child(4),
+.agenda-table td[data-label="Dinamiza"] {
+  width: 11%;
+}
+
+.agenda-table th:nth-child(5),
+.agenda-table td[data-label="Lugar"] {
+  width: 11%;
+}
+
+.agenda-table th:nth-child(6),
+.agenda-table td[data-label="Participa"] {
+  width: 28%;
+}
+
+.agenda-table td[data-label="Orden del día"] textarea,
+.agenda-table td[data-label="Objetivo"] textarea {
+  min-height: 72px;
+  padding: 14px 16px;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.agenda-table td[data-label="Participa"] {
+  padding-left: 6px;
+  padding-right: 0;
+}
+
+.participa-cell {
+  min-width: 180px;
+}
+
 @media (max-width: 768px) {
   .estado-summary {
     padding: 16px 18px;
