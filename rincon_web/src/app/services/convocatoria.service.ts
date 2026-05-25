@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { ConvocatoriaDetalleDto } from '../dto/convocatoria-detalle.dto';
 import { ConvocatoriaFormularioResponseDto } from '../dto/convocatoria-formulario-response.dto';
@@ -35,12 +35,36 @@ export class ConvocatoriaService {
     );
   }
 
+  listarConvocatoriasCoordinador(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.http.get<ConvocatoriaListaItemDto[]>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=listarTodas`
+    );
+  }
+
+  marcarComoPasada(idConvocatoria: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=marcarComoPasada`,
+      { idConvocatoria }
+    );
+  }
+
+  marcarTodasComoPasadas(): Observable<{ message: string; actualizadas: number }> {
+    return this.http.post<{ message: string; actualizadas: number }>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=marcarTodasComoPasadas`,
+      {}
+    );
+  }
+
   listarConvocatoriasHistoricas(): Observable<ConvocatoriaListaItemDto[]> {
-    return of([]);
+    return this.http.get<ConvocatoriaListaItemDto[]>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=listarHistoricas`
+    );
   }
 
   listarConvocatoriasCanceladas(): Observable<ConvocatoriaListaItemDto[]> {
-    return of([]);
+    return this.http.get<ConvocatoriaListaItemDto[]>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=listarPasadas`
+    );
   }
 
   getConvocatoria(id: number): Observable<ConvocatoriaDetalleDto> {
@@ -55,9 +79,10 @@ export class ConvocatoriaService {
     }));
   }
 
-  cancelarConvocatoria(_id: number): Observable<{ message: string }> {
-    return throwError(() => ({
-      error: { message: 'La cancelacion de convocatorias no esta disponible en esta fase.' }
-    }));
+  cancelarConvocatoria(id: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=cancelar`,
+      { idConvocatoria: id }
+    );
   }
 }
