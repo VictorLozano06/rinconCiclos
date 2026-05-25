@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BuscadorComponent } from '../../../components/buscador/buscador.component';
 import { SidebarCoordinadorComponent } from '../../../components/sidebar-coordinador/sidebar-coordinador.component';
@@ -11,8 +11,12 @@ import { SidebarCoordinadorComponent } from '../../../components/sidebar-coordin
   templateUrl: './coordinador-layout.component.html',
   styleUrl: './coordinador-layout.component.css'
 })
-export class CoordinadorLayoutComponent {
+export class CoordinadorLayoutComponent implements OnInit {
   sidebarOpen = typeof window !== 'undefined' ? window.innerWidth > 768 : true;
+
+  ngOnInit(): void {
+    this.syncSidebarMode();
+  }
 
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
@@ -20,5 +24,20 @@ export class CoordinadorLayoutComponent {
 
   closeSidebar(): void {
     this.sidebarOpen = false;
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.syncSidebarMode();
+  }
+
+  private syncSidebarMode(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (window.innerWidth <= 768) {
+      this.sidebarOpen = false;
+    }
   }
 }
