@@ -12,10 +12,10 @@ import { SidebarCoordinadorComponent } from '../../../components/sidebar-coordin
   styleUrl: './coordinador-layout.component.css'
 })
 export class CoordinadorLayoutComponent {
-  sidebarOpen = false;
+  sidebarOpen = typeof window !== 'undefined' ? window.innerWidth > 768 : true;
 
-  openSidebar(): void {
-    this.sidebarOpen = true;
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   closeSidebar(): void {

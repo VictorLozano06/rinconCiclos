@@ -4,13 +4,19 @@
     [class.sidebar-overlay-visible]="sidebarOpen"
     (click)="closeSidebar()"></div>
 
-  <app-sidebar-coordinador
-    [mobileOpen]="sidebarOpen"
-    (requestClose)="closeSidebar()" />
+  <div class="sidebar-shell" [class.sidebar-shell-open]="sidebarOpen">
+    <app-sidebar-coordinador
+      [mobileOpen]="sidebarOpen"
+      (requestClose)="closeSidebar()" />
+  </div>
 
   <main class="contenedor-principal">
     <header class="barra-superior">
-      <button type="button" class="boton-sidebar" (click)="openSidebar()" aria-label="Abrir menu lateral">
+      <button
+        type="button"
+        class="boton-sidebar"
+        (click)="toggleSidebar()"
+        [attr.aria-label]="sidebarOpen ? 'Cerrar menu lateral' : 'Abrir menu lateral'">
         <i class="bi bi-list"></i>
       </button>
 

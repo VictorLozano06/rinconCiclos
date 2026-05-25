@@ -6,13 +6,24 @@
 }
 
 .sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 20;
+  display: none;
+}
+
+.sidebar-shell {
+  width: 0;
+  flex: 0 0 0;
+  overflow: hidden;
+  transition: width 0.22s ease, flex-basis 0.22s ease;
+}
+
+.sidebar-shell-open {
+  width: 260px;
+  flex-basis: 260px;
+}
+
+.sidebar-shell app-sidebar-coordinador {
+  display: block;
+  width: 260px;
 }
 
 .sidebar-overlay-visible {
@@ -41,7 +52,9 @@
 }
 
 .boton-sidebar {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 2.875rem;
   height: 2.875rem;
   border: 0.0625rem solid #d9e2f0;
@@ -81,11 +94,22 @@ app-buscador {
 }
 
 @media (max-width: 768px) {
-  .boton-sidebar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    display: block;
+    background: rgba(15, 23, 42, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 20;
+  }
+
+  .sidebar-shell,
+  .sidebar-shell-open {
+    width: 0;
+    flex-basis: 0;
+    overflow: visible;
   }
 
   .barra-superior {
