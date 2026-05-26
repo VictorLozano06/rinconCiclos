@@ -6,7 +6,7 @@
  * cabecera y el orden del día, reconstruir los DTO de salida y aplicar los
  * cambios de estado de las convocatorias.
  */
-class ModConvocatorias {
+class ModConvocatorias extends ConexionBD {
     /**
      * Conexión PDO utilizada por todas las consultas y transacciones del modelo.
      *
@@ -42,8 +42,9 @@ class ModConvocatorias {
      *
      * @param PDO $db Conexión a base de datos.
      */
-    public function __construct($db) {
-        $this->db = $db;
+    public function __construct($db = null) {
+        parent::__construct();
+        $this->db = $db ?: $this->obtenerConexion();
     }
 
     /**
