@@ -1,0 +1,560 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  Informacion</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Fichero</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/pages/coordinador/actas-historial/actas-historial.component.ts</code>
+        </p>
+
+
+            <p class="comment">
+                <h3>Descripción</h3>
+            </p>
+            <p class="comment">
+                <p>Refleja la tabla <code>informacion</code>:</p>
+<ul>
+<li>numInformacion: PK parcial</li>
+<li>titulo_OrdenDia: VARCHAR(250)</li>
+<li>informacion: VARCHAR(250)</li>
+</ul>
+
+            </p>
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Índice</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Propiedades</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#informacion" 
+>
+                                            informacion
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#numInformacion" 
+>
+                                            numInformacion
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#titulo_OrdenDia" 
+>
+                                            titulo_OrdenDia
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Propiedades</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="informacion"></a>
+                                        <span class="name "><b>informacion</b>
+                                            <a href="#informacion">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>informacion:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="numInformacion"></a>
+                                        <span class="name "><b>numInformacion</b>
+                                            <a href="#numInformacion">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>numInformacion:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="titulo_OrdenDia"></a>
+                                        <span class="name "><b>titulo_OrdenDia</b>
+                                            <a href="#titulo_OrdenDia">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>titulo_OrdenDia:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+
+/**
+ * Refleja la tabla &#x60;informacion&#x60;:
+ * - numInformacion: PK parcial
+ * - titulo_OrdenDia: VARCHAR(250)
+ * - informacion: VARCHAR(250)
+ */
+interface Informacion {
+  numInformacion: number;
+  titulo_OrdenDia: string;
+  informacion: string;
+}
+
+/**
+ * Refleja la tabla &#x60;acta&#x60; + joins:
+ * - idActa: INT AUTO_INCREMENT
+ * - fecha: DATE — fecha de cierre del acta
+ * - idConvocatoria: FK → convocatoria (fecha DATETIME, lugar.nombre, cursoAcademico)
+ * No hay campo &quot;estado&quot; — si existe fila en acta → está cerrada
+ */
+interface ActaHistorial {
+  idActa: number;
+  fecha: string;                  // acta.fecha DATE
+  idConvocatoria: number;
+  fechaConvocatoria: string;      // convocatoria.fecha DATETIME (parte fecha)
+  horaConvocatoria: string;       // convocatoria.fecha DATETIME (parte hora)
+  lugar: string;                  // lugar.nombre
+  anioInicio: number;             // cursoAcademico.anioInicio
+  anioFin: number;                // cursoAcademico.anioFin
+  asistentes: number;             // COUNT de profesor_asiste
+  totalConvocados: number;
+  informacion: Informacion[];     // tabla informacion
+  ruegosPregunta: string[];       // tabla ruegosPreguntasActa
+}
+
+@Component({
+  selector: &#x27;app-actas-historial&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: &#x27;./actas-historial.component.html&#x27;,
+  styleUrl: &#x27;./actas-historial.component.css&#x27;
+})
+export class ActasHistorialComponent {
+  /** cursoAcademico.anioInicio values disponibles en BD */
+  public aniosDisponibles &#x3D; [2025, 2024, 2023, 2022];
+  public anioSeleccionado &#x3D; 2025;
+  public buscando &#x3D; false;
+  public actaVisualizando: ActaHistorial | null &#x3D; null;
+
+  /** Mock basado en la estructura real de BD */
+  private todasLasActas: ActaHistorial[] &#x3D; [
+    {
+      idActa: 1,
+      fecha: &#x27;23/05/2026&#x27;,
+      idConvocatoria: 1,
+      fechaConvocatoria: &#x27;23/05/2026&#x27;,
+      horaConvocatoria: &#x27;10:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Lectura y aprobación del acta anterior&#x27;,       informacion: &#x27;Se aprueba el acta anterior por unanimidad sin observaciones.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Revisión de resultados de evaluación final&#x27;,    informacion: &#x27;El 82% del alumnado supera la convocatoria ordinaria.&#x27; },
+        { numInformacion: 3, titulo_OrdenDia: &#x27;Coordinación de actividades de recuperación&#x27;,   informacion: &#x27;Se acuerda organizar sesiones de recuperación durante la última semana de junio.&#x27; },
+        { numInformacion: 4, titulo_OrdenDia: &#x27;Planificación del próximo curso académico&#x27;,     informacion: &#x27;Se delega en el coordinador la elaboración del calendario lectivo provisional.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Sin ruegos ni preguntas adicionales.&#x27;]
+    },
+    {
+      idActa: 2,
+      fecha: &#x27;15/03/2026&#x27;,
+      idConvocatoria: 2,
+      fechaConvocatoria: &#x27;15/03/2026&#x27;,
+      horaConvocatoria: &#x27;09:00&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión de la 2ª evaluación&#x27;,  informacion: &#x27;Los resultados mejoran un 8% respecto al trimestre anterior.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Acuerdos de mejora&#x27;,             informacion: &#x27;Se incrementan actividades prácticas en módulos con mayor índice de suspenso.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Se solicita actualizar el inventario de equipos del aula de informática.&#x27;]
+    },
+    {
+      idActa: 3,
+      fecha: &#x27;10/12/2025&#x27;,
+      idConvocatoria: 3,
+      fechaConvocatoria: &#x27;10/12/2025&#x27;,
+      horaConvocatoria: &#x27;10:30&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 4,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Resultados 1ª evaluación&#x27;, informacion: &#x27;Se revisan resultados por módulos y grupos.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas de mejora&#x27;,      informacion: &#x27;Seguimiento semanal para alumnos con más de 2 módulos suspensos.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;El profesor de SMR solicita recursos adicionales para la sala de redes.&#x27;]
+    },
+    {
+      idActa: 4,
+      fecha: &#x27;18/06/2025&#x27;,
+      idConvocatoria: 4,
+      fechaConvocatoria: &#x27;18/06/2025&#x27;,
+      horaConvocatoria: &#x27;11:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Balance del curso 2024/2025&#x27;, informacion: &#x27;Valoración positiva: 79% de tasa de éxito global.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas para el siguiente curso&#x27;, informacion: &#x27;Se acuerda revisar la programación didáctica de 3 módulos.&#x27; }
+      ],
+      ruegosPregunta: []
+    },
+    {
+      idActa: 5,
+      fecha: &#x27;14/03/2025&#x27;,
+      idConvocatoria: 5,
+      fechaConvocatoria: &#x27;14/03/2025&#x27;,
+      horaConvocatoria: &#x27;09:30&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión 2ª evaluación&#x27;, informacion: &#x27;Resultados similares al año anterior.&#x27; }
+      ],
+      ruegosPregunta: []
+    }
+  ];
+
+  public actasFiltradas: ActaHistorial[] &#x3D; [];
+  public busquedaRealizada &#x3D; false;
+
+  get cursoSeleccionado(): string {
+    const anio &#x3D; this.aniosDisponibles.find(a &#x3D;&gt; a &#x3D;&#x3D;&#x3D; this.anioSeleccionado);
+    return anio ? &#x60;${anio}/${anio + 1}&#x60; : &#x27;&#x27;;
+  }
+
+  buscar(): void {
+    this.buscando &#x3D; true;
+    setTimeout(() &#x3D;&gt; {
+      this.actasFiltradas &#x3D; this.todasLasActas.filter(a &#x3D;&gt; a.anioInicio &#x3D;&#x3D;&#x3D; this.anioSeleccionado);
+      this.buscando &#x3D; false;
+      this.busquedaRealizada &#x3D; true;
+    }, 400);
+  }
+
+  verActa(acta: ActaHistorial): void {
+    this.actaVisualizando &#x3D; acta;
+  }
+
+  cerrarModal(): void {
+    this.actaVisualizando &#x3D; null;
+  }
+
+  descargarActa(acta: ActaHistorial): void {
+    console.log(&#x27;Descargar acta idActa:&#x27;, acta.idActa);
+    alert(&#x60;Descargando Acta #${acta.idActa} — Convocatoria #${acta.idConvocatoria}&#x60;);
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'Informacion.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
