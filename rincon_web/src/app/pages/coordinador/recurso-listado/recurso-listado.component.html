@@ -2,11 +2,11 @@
   <div class="cabecera-recursos mb-4">
     <div>
       <h2 class="titulo-seccion">Mis recursos</h2>
-      <p class="texto-intro">Panel de coordinacion para revisar, crear, editar y eliminar recursos en modo mock.</p>
+      <p class="texto-intro">Panel de coordinacion para revisar, crear, editar y eliminar recursos.</p>
     </div>
   </div>
 
-  <p *ngIf="feedbackMock" class="feedback-mock">{{ feedbackMock }}</p>
+  <p *ngIf="feedbackAccion" class="feedback-accion">{{ feedbackAccion }}</p>
 
   <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
     <div class="card-body">
@@ -67,11 +67,11 @@
             </app-recurso-item>
 
             <div class="acciones-recurso">
-              <button type="button" class="boton-accion" (click)="abrirEditarMock(recurso)">
+              <button type="button" class="boton-accion" (click)="abrirEditarRecurso(recurso)">
                 <i class="bi bi-pencil-square"></i>
                 Editar
               </button>
-              <button type="button" class="boton-accion boton-eliminar" (click)="abrirEliminarMock(recurso)">
+              <button type="button" class="boton-accion boton-eliminar" (click)="confirmarEliminarRecurso(recurso)">
                 <i class="bi bi-trash3"></i>
                 Eliminar
               </button>
@@ -91,25 +91,3 @@
     </ng-template>
   </ng-container>
 </section>
-
-<div *ngIf="mostrarModalEliminar && recursoSeleccionado" class="modal-overlay">
-  <div class="modal-recurso modal-recurso-eliminar">
-    <div class="modal-cabecera">
-      <div>
-        <p class="modal-kicker">Coordinacion / Mock</p>
-        <h3>Eliminar recurso</h3>
-      </div>
-      <button type="button" class="modal-cerrar" (click)="cerrarModalEliminar()">X</button>
-    </div>
-
-    <p class="modal-texto">
-      Vas a eliminar <strong>{{ recursoSeleccionado.nombre }}</strong> del listado actual.
-      Si cancelas, no se aplicara ningun cambio.
-    </p>
-
-    <div class="modal-acciones">
-      <button type="button" class="boton-secundario" (click)="cerrarModalEliminar()">Cancelar</button>
-      <button type="button" class="boton-peligro" (click)="eliminarMock()">Si, eliminar</button>
-    </div>
-  </div>
-</div>

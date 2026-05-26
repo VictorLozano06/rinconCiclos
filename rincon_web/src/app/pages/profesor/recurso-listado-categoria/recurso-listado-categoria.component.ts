@@ -1,11 +1,11 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriaService } from '../../../services/categoria.service';
 import { RecursoService } from '../../../services/recurso.service';
 import { CategoriaDto } from '../../../dto/categoria.dto';
 import { RecursoDto } from '../../../dto/recurso.dto';
-import { RecursoItemComponent } from '../../../components/recurso-item/recurso-item.component';
+import { RecursoListadoCategoriaCompartidoComponent } from '../../../components/recurso-listado-categoria-compartido/recurso-listado-categoria-compartido.component';
 
 interface CursoFiltro {
   idCurso: number | 'Todos';
@@ -25,12 +25,11 @@ interface CategoriaRuta {
 @Component({
   selector: 'app-recurso-listado-categoria-profesor',
   standalone: true,
-  imports: [CommonModule, RecursoItemComponent],
+  imports: [CommonModule, RecursoListadoCategoriaCompartidoComponent],
   templateUrl: './recurso-listado-categoria.component.html',
   styleUrl: './recurso-listado-categoria.component.css'
 })
 export class RecursoListadoCategoriaProfesorComponent implements OnInit {
-  // Ruta actual y subtipo seleccionado dentro del arbol de categorias.
   public seccion: string | null = null;
   public subseccion: string | null = null;
   public categoriaActual: string | null = null;
@@ -57,7 +56,6 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
     });
   }
 
-  // Resuelve la categoria real desde la ruta y pide sus recursos.
   cargarRecursos(): void {
     this.cargando = true;
     this.errorCarga = false;
@@ -71,20 +69,20 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
-        const encontrada = this.buscarCategoriaPorRuta(
+        const categoriaEncontrada = this.buscarCategoriaPorRuta(
           categorias,
           [this.seccion, this.subseccion].filter((valor): valor is string => !!valor)
         );
 
-        if (!encontrada) {
+        if (!categoriaEncontrada) {
           this.cargando = false;
           return;
         }
 
-        this.categoriaActual = encontrada.categoria.nombre;
-        this.rutaCategoria = encontrada.ruta;
+        this.categoriaActual = categoriaEncontrada.categoria.nombre;
+        this.rutaCategoria = categoriaEncontrada.ruta;
 
-        this.recursoService.getPorCategoria(encontrada.categoria.idCategoria).subscribe({
+        this.recursoService.getPorCategoria(categoriaEncontrada.categoria.idCategoria).subscribe({
           next: (recursos) => {
             this.recursos = recursos;
             this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -106,41 +104,45 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
     });
   }
 
+  // Aplica todos los filtros visibles sobre la lista actual antes de pintarla.
   get recursosFiltrados(): RecursoDto[] {
-    return this.recursos.filter((recurso) => this.coincideCurso(recurso) && this.coincideCiclo(recurso));
+    return this.recursos.filter((recurso) =>
+      this.coincideCurso(recurso) &&
+      this.coincideCiclo(recurso)
+    );
   }
 
   cambiarCurso(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCurso = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCurso = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
   cambiarCiclo(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCiclo = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCiclo = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
-  // Busca la categoria correspondiente recorriendo el arbol de categorias.
-  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaRuta | null {
-    if (segmentos.length === 0) {
+  // Recorre el arbol de categorias y resuelve la ruta real de la URL actual.
+  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentosRuta: string[]): CategoriaRuta | null {
+    if (segmentosRuta.length === 0) {
       return null;
     }
 
     for (const categoria of categorias) {
-      if (this.slug(categoria.nombre) !== segmentos[0]) {
+      if (this.crearSlug(categoria.nombre) !== segmentosRuta[0]) {
         continue;
       }
 
-      if (segmentos.length === 1) {
+      if (segmentosRuta.length === 1) {
         return { categoria, ruta: [categoria.nombre] };
       }
 
       if (categoria.subcategorias && categoria.subcategorias.length > 0) {
-        const encontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentos.slice(1));
-        if (encontrada) {
+        const categoriaEncontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentosRuta.slice(1));
+        if (categoriaEncontrada) {
           return {
-            categoria: encontrada.categoria,
-            ruta: [categoria.nombre, ...encontrada.ruta]
+            categoria: categoriaEncontrada.categoria,
+            ruta: [categoria.nombre, ...categoriaEncontrada.ruta]
           };
         }
       }
@@ -150,30 +152,30 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   }
 
   private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
-    const cursos = new Map<number, string>();
+    const cursosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
-      cursos.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
+      cursosPorId.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
     }
 
     return [
       { idCurso: 'Todos', etiqueta: 'Todos' },
-      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
+      ...Array.from(cursosPorId.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
     ];
   }
 
   private construirCiclosFiltro(recursos: RecursoDto[]): CicloFiltro[] {
-    const ciclos = new Map<number, string>();
+    const ciclosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
       for (const ciclo of recurso.ciclos || []) {
-        ciclos.set(ciclo.idCiclo, ciclo.nombre);
+        ciclosPorId.set(ciclo.idCiclo, ciclo.nombre);
       }
     }
 
     return [
       { idCiclo: 'Todos', nombre: 'Todos' },
-      ...Array.from(ciclos.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
+      ...Array.from(ciclosPorId.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
     ];
   }
 
@@ -196,11 +198,10 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
   formatearCiclos(recurso: RecursoDto): string {
     return (recurso.ciclos || [])
       .map((ciclo) => ciclo.nombre.split(' ')[0])
-      .join(' · ');
+      .join(' / ');
   }
 
-  // Convierte un nombre visible a slug URL.
-  private slug(valor: string): string {
+  private crearSlug(valor: string): string {
     return valor
       .toLowerCase()
       .normalize('NFD')
@@ -208,6 +209,5 @@ export class RecursoListadoCategoriaProfesorComponent implements OnInit {
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '');
   }
+
 }
-
-

@@ -5,7 +5,7 @@ import { ConvocatoriasComponent } from './convocatorias/convocatorias.component'
 import { ConvocatoriasCanceladasComponent } from './convocatorias-canceladas/convocatorias-canceladas.component';
 import { RecursoListadoCategoriaCoordinadorComponent } from './recurso-listado-categoria/recurso-listado-categoria.component';
 import { RecursoListadoCoordinadorComponent } from './recurso-listado/recurso-listado.component';
-import { RecursoFormularioPaginaComponent } from './recurso-formulario-pagina/recurso-formulario-pagina.component';
+import { RecursoFormularioPageComponent } from './recurso-formulario/recurso-formulario.component';
 import { RecursoDetalleCompartidoComponent } from '../../components/recurso-detalle-compartido/recurso-detalle-compartido.component';
 import { CiclosCursosComponent } from './ciclos-cursos/ciclos-cursos.component';
 import { ActasPlantillaComponent } from './actas-plantilla/actas-plantilla.component';
@@ -33,8 +33,8 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/actas/plantillas', component: ActasPlantillaComponent },
       { path: 'reuniones-de-equipo/actas/historial', component: ActasHistorialComponent },
       { path: 'recursos', component: RecursoListadoCoordinadorComponent, data: { rutaBase: '/coordinador', rutaInicio: '/coordinador/recursos' } },
-      { path: 'recursos/crear', component: RecursoFormularioPaginaComponent, data: { modoFormulario: 'crear' } },
-      { path: 'recursos/:idCategoria/:numRecurso/editar', component: RecursoFormularioPaginaComponent, data: { modoFormulario: 'editar' } },
+      { path: 'recursos/crear', component: RecursoFormularioPageComponent, data: { modoFormulario: 'crear' } },
+      { path: 'recursos/:idCategoria/:numRecurso/editar', component: RecursoFormularioPageComponent, data: { modoFormulario: 'editar' } },
       { path: 'recursos/:idCategoria/:numRecurso', component: RecursoDetalleCompartidoComponent, data: { rutaBase: '/coordinador', rutaInicio: '/coordinador/recursos' } },
       { path: ':section', component: RecursoListadoCategoriaCoordinadorComponent },
       { path: ':section/:subsection', component: RecursoListadoCategoriaCoordinadorComponent }

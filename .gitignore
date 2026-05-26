@@ -4,6 +4,7 @@
 /rincon_web/dist
 /rincon_web/.angular/cache
 /rincon_back/vendor
+/rincon_back/uploads
 /rincon_back/.phpdoc
 /docs/frontend
 /docs/backend

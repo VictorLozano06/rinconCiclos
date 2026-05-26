@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RecursoItemComponent } from '../../../components/recurso-item/recurso-item.component';
-import { RecursoService } from '../../../services/recurso.service';
 import { RecursoDto } from '../../../dto/recurso.dto';
+import { RecursoService } from '../../../services/recurso.service';
 
 @Component({
   selector: 'app-inicio-profesor',
@@ -12,7 +12,6 @@ import { RecursoDto } from '../../../dto/recurso.dto';
   styleUrl: './inicio.component.css'
 })
 export class InicioComponent implements OnInit {
-  // Recursos que aparecen en la portada del profesor.
   public recursosRecientes: RecursoDto[] = [];
   public cargandoRecursos = true;
   public errorRecursos = false;
@@ -28,7 +27,6 @@ export class InicioComponent implements OnInit {
     this.cargandoRecursos = true;
     this.errorRecursos = false;
 
-    // subscribe consume la respuesta del Observable que devuelve el servicio HTTP.
     this.recursoService.getRecientesProfesor().subscribe({
       next: (recursos) => {
         this.recursosRecientes = recursos;

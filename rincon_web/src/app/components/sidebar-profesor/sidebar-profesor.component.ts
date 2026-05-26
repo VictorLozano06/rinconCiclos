@@ -4,6 +4,14 @@ import { RouterModule } from '@angular/router';
 import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
 
+interface CategoriaSidebar extends CategoriaDto {
+  icono: string;
+  ruta: string;
+  abierto: boolean;
+  subcategorias: CategoriaSidebar[];
+  deshabilitado: boolean;
+}
+
 @Component({
   selector: 'app-sidebar-profesor',
   standalone: true,
@@ -15,7 +23,7 @@ export class SidebarProfesorComponent implements OnInit {
   @Input() mobileOpen = false;
   @Output() requestClose = new EventEmitter<void>();
 
-  public categorias: any[] = [];
+  public categorias: CategoriaSidebar[] = [];
 
   constructor(private categoriaService: CategoriaService) {}
 
@@ -23,80 +31,62 @@ export class SidebarProfesorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
-
-
-  // Carga categorias y las transforma en enlaces del sidebar.
+  // Carga las categorias reales de la BD y solo les añade lo visual del sidebar.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
-      next: (data: CategoriaDto[]) => {
+      next: (datos: CategoriaDto[]) => {
         this.categorias = [
           {
+            idCategoria: 0,
             nombre: 'Inicio',
+            predeterminada: true,
+            idCategoriaPadre: 0,
             icono: 'home',
             ruta: '/profesor/inicio',
             abierto: false,
             subcategorias: [],
             deshabilitado: false
           },
-          ...this.mapCategorias(data, '/profesor')
+          ...this.mapCategorias(datos, '/profesor')
         ];
       },
       error: (err) => {
-        console.error('Error de conexion con el servidor backend PHP, usando items estaticos:', err);
+        console.error('Error al cargar las categorias del sidebar:', err);
       }
     });
   }
 
   // Convierte el arbol de categorias en items navegables.
-  private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): any[] {
-    const iconMap: { [key: string]: string } = {
-      'Inicio': 'home',
+  private mapCategorias(categorias: CategoriaDto[], prefijo: string, rutaPadre = ''): CategoriaSidebar[] {
+    const iconosPorNombre: Record<string, string> = {
       'Reuniones de Equipo': 'reuniones',
       'Tutorias': 'tutorias',
-      'Tutorías': 'tutorias',
       'Evaluaciones': 'evaluaciones',
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['BOCC', 'Calendario de reuniones'];
+    const deshabilitadas = ['BOCC', 'Calendario de reuniones'];
 
-    return cats.map((cat) => {
-      const nombre = cat.nombre;
-
-      // Slug simple para construir rutas limpias.
-      const slug = nombre.toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[ºª]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '');
-
-      // Construye la ruta segun el nivel de la categoria.
-      let ruta = '';
-      if (nombre === 'Inicio') {
-        ruta = `${prefix}/inicio`;
-      } else if (parentRuta) {
-        ruta = `${parentRuta}/${slug}`;
-      } else {
-        ruta = `${prefix}/${slug}`;
-      }
-
-      const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
+    return categorias.map((categoria) => {
+      const nombreNormalizado = this.normalizarTexto(categoria.nombre);
+      const slug = this.crearSlug(categoria.nombre);
+      const ruta = rutaPadre ? `${rutaPadre}/${slug}` : `${prefijo}/${slug}`;
+      const subcategorias = categoria.subcategorias ? this.mapCategorias(categoria.subcategorias, prefijo, ruta) : [];
 
       return {
-        nombre,
-        icono: iconMap[nombre] || 'categoria-generica',
+        ...categoria,
+        icono: categoria.predeterminada ? (iconosPorNombre[nombreNormalizado] || 'categoria-generica') : 'categoria-generica',
         ruta,
         abierto: subcategorias.length > 0,
         subcategorias,
-        deshabilitado: disabledSubs.includes(nombre)
+        deshabilitado: deshabilitadas.includes(categoria.nombre)
       };
     });
   }
 
-  toggleMenu(cat: any): void {
-    if (cat.subcategorias.length > 0) {
-      cat.abierto = !cat.abierto;
+  toggleMenu(categoria: CategoriaSidebar): void {
+    if (categoria.subcategorias.length > 0) {
+      categoria.abierto = !categoria.abierto;
     }
   }
 
@@ -104,11 +94,27 @@ export class SidebarProfesorComponent implements OnInit {
     this.requestClose.emit();
   }
 
-  activarCategoria(cat: any): void {
-    this.toggleMenu(cat);
+  activarCategoria(categoria: CategoriaSidebar): void {
+    this.toggleMenu(categoria);
 
-    if (cat.subcategorias.length === 0) {
+    if (categoria.subcategorias.length === 0) {
       this.cerrarSidebar();
     }
+  }
+
+  // Sirve para comparar nombres aunque vengan con o sin tilde.
+  private normalizarTexto(valor: string): string {
+    return valor
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // Convierte el nombre visible en una ruta tipo /tutorias/pat.
+  private crearSlug(valor: string): string {
+    return this.normalizarTexto(valor)
+      .toLowerCase()
+      .replace(/[ºª]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
   }
 }

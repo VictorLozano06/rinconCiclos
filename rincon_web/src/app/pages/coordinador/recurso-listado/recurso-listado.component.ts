@@ -32,8 +32,6 @@ interface CicloFiltro {
 })
 export class RecursoListadoCoordinadorComponent implements OnInit {
   public grupos: RecursoGrupo[] = [];
-  public recursosBase: RecursoDto[] = [];
-  public categoriasBase: CategoriaDto[] = [];
   public filtros: string[] = [];
   public filtroActivo = 'Todos';
   public cursosFiltro: CursoFiltro[] = [];
@@ -42,9 +40,8 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
   public filtroCiclo: number | 'Todos' = 'Todos';
   public cargando = true;
   public errorCarga = false;
-  public feedbackMock = '';
-  public mostrarModalEliminar = false;
-  public recursoSeleccionado: RecursoDto | null = null;
+  public eliminando = false;
+  public feedbackAccion = '';
 
   constructor(
     private router: Router,
@@ -64,10 +61,8 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
       next: (recursos) => {
         this.categoriaService.getCategorias().subscribe({
           next: (categorias) => {
-            this.categoriasBase = categorias;
-            this.recursosBase = recursos;
-            this.construirVista(this.recursosBase, this.categoriasBase);
-            this.feedbackMock = history.state?.feedbackMock || '';
+            this.construirVista(recursos, categorias);
+            this.feedbackAccion = history.state?.feedbackAccion || '';
             this.cargando = false;
           },
           error: (err) => {
@@ -86,53 +81,61 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
   }
 
   cambiarFiltro(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroActivo = select?.value || 'Todos';
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroActivo = selector?.value || 'Todos';
   }
 
   cambiarCurso(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCurso = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCurso = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
   cambiarCiclo(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCiclo = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCiclo = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
+  // Aplica todos los filtros visibles sobre cada grupo antes de pintarlo.
   get gruposFiltrados(): RecursoGrupo[] {
     return this.grupos
       .filter((grupo) => this.filtroActivo === 'Todos' || grupo.categoriaNombre === this.filtroActivo)
       .map((grupo) => ({
         ...grupo,
-        recursos: grupo.recursos.filter((recurso) => this.coincideCurso(recurso) && this.coincideCiclo(recurso))
+        recursos: grupo.recursos.filter((recurso) =>
+          this.coincideCurso(recurso) &&
+          this.coincideCiclo(recurso)
+        )
       }))
       .filter((grupo) => grupo.recursos.length > 0);
   }
 
-  abrirEditarMock(recurso: RecursoDto): void {
+  abrirEditarRecurso(recurso: RecursoDto): void {
     this.router.navigate(['/coordinador/recursos', recurso.idCategoria, recurso.numRecurso, 'editar']);
   }
 
-  abrirEliminarMock(recurso: RecursoDto): void {
-    this.recursoSeleccionado = recurso;
-    this.mostrarModalEliminar = true;
-  }
-
-  cerrarModalEliminar(): void {
-    this.mostrarModalEliminar = false;
-    this.recursoSeleccionado = null;
-  }
-
-  eliminarMock(): void {
-    if (!this.recursoSeleccionado) {
+  confirmarEliminarRecurso(recurso: RecursoDto): void {
+    if (this.eliminando) {
       return;
     }
 
-    const nombreRecurso = this.recursoSeleccionado.nombre;
-    this.cerrarModalEliminar();
-    this.router.navigate(['/coordinador/recursos'], {
-      state: { feedbackMock: `Mock de eliminacion lanzado para "${nombreRecurso}". No se ha borrado nada.` }
+    const confirmar = window.confirm(`Vas a eliminar "${recurso.nombre}". Esta accion no se puede deshacer.`);
+    if (!confirmar) {
+      return;
+    }
+
+    this.eliminando = true;
+
+    this.recursoService.eliminar(recurso.idCategoria, recurso.numRecurso).subscribe({
+      next: () => {
+        this.eliminando = false;
+        this.feedbackAccion = `Recurso "${recurso.nombre}" eliminado correctamente.`;
+        this.quitarRecursoDeLaVista(recurso.idCategoria, recurso.numRecurso);
+      },
+      error: (err) => {
+        this.eliminando = false;
+        console.error('Error al eliminar el recurso:', err);
+        this.feedbackAccion = err?.error?.message || 'No se pudo eliminar el recurso.';
+      }
     });
   }
 
@@ -147,35 +150,35 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
   }
 
   private construirVista(recursos: RecursoDto[], categorias: CategoriaDto[]): void {
-    const categoriasMapa = new Map<number, string>();
-    this.recorrerCategorias(categorias, categoriasMapa);
+    const nombresPorCategoria = new Map<number, string>();
+    this.recorrerCategorias(categorias, nombresPorCategoria);
 
-    const ordenados = [...recursos].sort((a, b) => {
-      const fechaA = new Date(a.fechaPublicacion).getTime();
-      const fechaB = new Date(b.fechaPublicacion).getTime();
-      return fechaB - fechaA || a.categoriaNombre.localeCompare(b.categoriaNombre) || a.nombre.localeCompare(b.nombre);
+    const recursosOrdenados = [...recursos].sort((primero, segundo) => {
+      const fechaPrimero = new Date(primero.fechaPublicacion).getTime();
+      const fechaSegundo = new Date(segundo.fechaPublicacion).getTime();
+      return fechaSegundo - fechaPrimero || primero.categoriaNombre.localeCompare(segundo.categoriaNombre) || primero.nombre.localeCompare(segundo.nombre);
     });
 
-    const grupos = new Map<number, RecursoGrupo>();
+    const gruposPorCategoria = new Map<number, RecursoGrupo>();
 
-    for (const recurso of ordenados) {
-      const nombreCategoria = categoriasMapa.get(recurso.idCategoria) || recurso.categoriaNombre;
+    for (const recurso of recursosOrdenados) {
+      const nombreCategoria = nombresPorCategoria.get(recurso.idCategoria) || recurso.categoriaNombre;
 
-      if (!grupos.has(recurso.idCategoria)) {
-        grupos.set(recurso.idCategoria, {
+      if (!gruposPorCategoria.has(recurso.idCategoria)) {
+        gruposPorCategoria.set(recurso.idCategoria, {
           categoriaNombre: nombreCategoria,
           idCategoria: recurso.idCategoria,
           recursos: []
         });
       }
 
-      grupos.get(recurso.idCategoria)!.recursos.push({
+      gruposPorCategoria.get(recurso.idCategoria)!.recursos.push({
         ...recurso,
         categoriaNombre: nombreCategoria
       });
     }
 
-    this.grupos = Array.from(grupos.values());
+    this.grupos = Array.from(gruposPorCategoria.values());
     this.filtros = ['Todos', ...this.grupos.map((grupo) => grupo.categoriaNombre)];
     this.filtroActivo = 'Todos';
     this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -184,41 +187,42 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
     this.filtroCiclo = 'Todos';
   }
 
-  private recorrerCategorias(categorias: CategoriaDto[], mapa: Map<number, string>): void {
+  // Recorre el arbol de categorias para tener un mapa rapido id -> nombre.
+  private recorrerCategorias(categorias: CategoriaDto[], nombresPorCategoria: Map<number, string>): void {
     for (const categoria of categorias) {
-      mapa.set(categoria.idCategoria, categoria.nombre);
+      nombresPorCategoria.set(categoria.idCategoria, categoria.nombre);
 
       if (categoria.subcategorias && categoria.subcategorias.length > 0) {
-        this.recorrerCategorias(categoria.subcategorias, mapa);
+        this.recorrerCategorias(categoria.subcategorias, nombresPorCategoria);
       }
     }
   }
 
   private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
-    const cursos = new Map<number, string>();
+    const cursosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
-      cursos.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
+      cursosPorId.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
     }
 
     return [
       { idCurso: 'Todos', etiqueta: 'Todos' },
-      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
+      ...Array.from(cursosPorId.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
     ];
   }
 
   private construirCiclosFiltro(recursos: RecursoDto[]): CicloFiltro[] {
-    const ciclos = new Map<number, string>();
+    const ciclosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
       for (const ciclo of recurso.ciclos || []) {
-        ciclos.set(ciclo.idCiclo, ciclo.nombre);
+        ciclosPorId.set(ciclo.idCiclo, ciclo.nombre);
       }
     }
 
     return [
       { idCiclo: 'Todos', nombre: 'Todos' },
-      ...Array.from(ciclos.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
+      ...Array.from(ciclosPorId.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
     ];
   }
 
@@ -232,5 +236,33 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
     }
 
     return (recurso.ciclos || []).some((ciclo) => ciclo.idCiclo === this.filtroCiclo);
+  }
+
+  private quitarRecursoDeLaVista(idCategoria: number, numRecurso: number): void {
+    this.grupos = this.grupos
+      .map((grupo) => ({
+        ...grupo,
+        recursos: grupo.recursos.filter(
+          (recurso) => !(recurso.idCategoria === idCategoria && recurso.numRecurso === numRecurso)
+        )
+      }))
+      .filter((grupo) => grupo.recursos.length > 0);
+
+    const recursosRestantes = this.grupos.flatMap((grupo) => grupo.recursos);
+    this.filtros = ['Todos', ...this.grupos.map((grupo) => grupo.categoriaNombre)];
+    this.cursosFiltro = this.construirCursosFiltro(recursosRestantes);
+    this.ciclosFiltro = this.construirCiclosFiltro(recursosRestantes);
+
+    if (this.filtroActivo !== 'Todos' && !this.filtros.includes(this.filtroActivo)) {
+      this.filtroActivo = 'Todos';
+    }
+
+    if (this.filtroCurso !== 'Todos' && !this.cursosFiltro.some((curso) => curso.idCurso === this.filtroCurso)) {
+      this.filtroCurso = 'Todos';
+    }
+
+    if (this.filtroCiclo !== 'Todos' && !this.ciclosFiltro.some((ciclo) => ciclo.idCiclo === this.filtroCiclo)) {
+      this.filtroCiclo = 'Todos';
+    }
   }
 }

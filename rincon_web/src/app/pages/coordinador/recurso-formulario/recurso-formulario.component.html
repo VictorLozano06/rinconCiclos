@@ -13,7 +13,7 @@
   </div>
 
   <div *ngIf="!cargando && !errorCarga" class="pagina-formulario-recurso">
-    <app-recurso-formulario-mock
+    <app-recurso-formulario
       [titulo]="tituloFormulario"
       [textoIntro]="textoIntroFormulario"
       [textoBotonGuardar]="textoBotonGuardar"
@@ -23,19 +23,19 @@
       [ciclosFormulario]="ciclosFormulario"
       [erroresFormulario]="erroresFormulario"
       [nuevoCicloId]="nuevoCicloId"
+      [nuevoNombreEnlace]="nuevoNombreEnlace"
       [nuevoEnlace]="nuevoEnlace"
-      [nuevoArchivo]="nuevoArchivo"
       (nuevoCicloIdChange)="nuevoCicloId = $event"
-      (agregarCiclo)="agregarCicloMock()"
-      (eliminarCiclo)="eliminarCicloMock($event)"
+      (agregarCiclo)="agregarCiclo()"
+      (eliminarCiclo)="eliminarCiclo($event)"
+      (nuevoNombreEnlaceChange)="actualizarNuevoNombreEnlace($event)"
       (nuevoEnlaceChange)="actualizarNuevoEnlace($event)"
-      (nuevoArchivoChange)="actualizarNuevoArchivo($event)"
-      (agregarEnlace)="agregarEnlaceMock()"
-      (eliminarEnlace)="eliminarEnlaceMock($event)"
-      (agregarArchivo)="agregarArchivoMock()"
-      (eliminarArchivo)="eliminarArchivoMock($event)"
+      (agregarEnlace)="agregarEnlace()"
+      (eliminarEnlace)="eliminarEnlace($event)"
+      (agregarArchivoSubido)="agregarArchivoSubido($event)"
+      (eliminarArchivo)="eliminarArchivo($event)"
       (cancelar)="cancelar()"
-      (guardar)="guardarMock()">
-    </app-recurso-formulario-mock>
+      (guardar)="guardarFormulario()">
+    </app-recurso-formulario>
   </div>
 </section>

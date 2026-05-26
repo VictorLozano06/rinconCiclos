@@ -1,4 +1,4 @@
-<section class="formulario-mock-recurso">
+<section class="formulario-recurso">
   <div class="cabecera-formulario">
     <h2 class="titulo-seccion">{{ titulo }}</h2>
     <p class="texto-intro">{{ textoIntro }}</p>
@@ -34,7 +34,7 @@
       <span>Curso</span>
       <select [(ngModel)]="formulario.cursoId">
         <option [ngValue]="null">Selecciona un curso</option>
-        <option *ngFor="let curso of cursosFiltro" [ngValue]="curso.idCurso" [disabled]="curso.idCurso === 'Todos'">
+        <option *ngFor="let curso of cursosFiltro" [ngValue]="curso.idCurso">
           {{ curso.etiqueta }}
         </option>
       </select>
@@ -70,7 +70,7 @@
       <div *ngIf="formulario.enlaces.length" class="lista-adjuntos">
         <div *ngFor="let enlace of formulario.enlaces; let i = index" class="adjunto-item adjunto-item-vertical">
           <div class="adjunto-contenido">
-            <span class="adjunto-nombre">{{ enlace.nombre }}</span>
+            <input class="entrada-adjunto" [(ngModel)]="enlace.nombre" type="text" placeholder="Nombre visible del enlace">
             <span class="adjunto-valor">{{ enlace.valor }}</span>
           </div>
           <button type="button" class="adjunto-borrar" (click)="eliminarEnlace.emit(i)">Quitar</button>
@@ -81,28 +81,26 @@
     <div class="campo-formulario campo-completo">
       <span>Archivos</span>
 
-      <div class="filepond-mock">
-        <div class="filepond-mock-icono">
-          <i class="bi bi-cloud-arrow-up"></i>
-        </div>
-        <p class="filepond-mock-texto">Arrastra archivos aqui o pulsa para simular la subida</p>
-        <p class="filepond-mock-ayuda">
-          Mock FilePond. Maximo 10 archivos, 10 MB por archivo, 25 MB en total.
+      <div class="filepond-bloque">
+        <div class="filepond-bloque-icono"><i class="bi bi-cloud-arrow-up"></i></div>
+        <p class="filepond-bloque-texto">Arrastra archivos aqui o pulsa para subirlos al servidor</p>
+        <p class="filepond-bloque-ayuda">
+          Maximo 10 archivos, 10 MB por archivo y 25 MB en total por recurso.
         </p>
-
-        <div class="linea-adjunto">
-          <input [ngModel]="nuevoNombreArchivo" (ngModelChange)="actualizarNuevoNombreArchivo($event)" type="text" placeholder="Nombre visible">
-          <input [ngModel]="nuevoArchivo" (ngModelChange)="actualizarNuevoArchivo($event)" type="text" placeholder="documento.pdf o acta.docx">
-          <button type="button" class="boton-secundario" (click)="agregarArchivo.emit()">Anadir</button>
-        </div>
+        <file-pond
+          [options]="opcionesFilePond"
+          [files]="archivosFilePond"
+          (onprocessfile)="registrarArchivoSubidoTemporalmente($event)"
+          (onprocessfiles)="limpiarArchivosTemporalesDeFilePond()">
+        </file-pond>
       </div>
 
-      <p class="ayuda-adjunto">Formatos permitidos en mock: pdf, doc, docx, xls, xlsx, ppt, pptx.</p>
+      <p class="ayuda-adjunto">Formatos permitidos: pdf, doc, docx, xls, xlsx, ppt, pptx.</p>
 
       <div *ngIf="formulario.archivos.length" class="lista-adjuntos">
         <div *ngFor="let archivo of formulario.archivos; let i = index" class="adjunto-item adjunto-item-vertical">
           <div class="adjunto-contenido">
-            <span class="adjunto-nombre">{{ archivo.nombre }}</span>
+            <input class="entrada-adjunto" [(ngModel)]="archivo.nombre" type="text" placeholder="Nombre visible del archivo">
             <span class="adjunto-valor">{{ archivo.valor }}</span>
           </div>
           <button type="button" class="adjunto-borrar" (click)="eliminarArchivo.emit(i)">Quitar</button>

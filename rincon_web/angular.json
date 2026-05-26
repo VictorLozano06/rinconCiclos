@@ -29,6 +29,7 @@
             "styles": [
               "bootstrap/dist/css/bootstrap.min.css",
               "bootstrap-icons/font/bootstrap-icons.css",
+              "filepond/dist/filepond.min.css",
               "src/styles.css"
             ],
             "scripts": [

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriaDto } from '../../../dto/categoria.dto';
 import { RecursoDto } from '../../../dto/recurso.dto';
-import { RecursoItemComponent } from '../../../components/recurso-item/recurso-item.component';
+import { RecursoListadoCategoriaCompartidoComponent } from '../../../components/recurso-listado-categoria-compartido/recurso-listado-categoria-compartido.component';
 import { CategoriaService } from '../../../services/categoria.service';
 import { RecursoService } from '../../../services/recurso.service';
 
@@ -25,12 +25,11 @@ interface CategoriaRuta {
 @Component({
   selector: 'app-recurso-listado-categoria-coordinador',
   standalone: true,
-  imports: [CommonModule, RecursoItemComponent],
+  imports: [CommonModule, RecursoListadoCategoriaCompartidoComponent],
   templateUrl: './recurso-listado-categoria.component.html',
   styleUrl: './recurso-listado-categoria.component.css'
 })
 export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
-  // Segmentos de la URL actual usados para resolver la categoria real.
   public seccion: string | null = null;
   public subseccion: string | null = null;
   public categoriaActual: string | null = null;
@@ -50,7 +49,6 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // subscribe no es un foreach: se ejecuta cada vez que cambian los params de la ruta.
     this.route.params.subscribe((params) => {
       this.seccion = params['section'] || null;
       this.subseccion = params['subsection'] || null;
@@ -58,7 +56,6 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
     });
   }
 
-  // Carga categorias, resuelve la categoria actual desde la URL y luego pide sus recursos.
   cargarRecursos(): void {
     this.cargando = true;
     this.errorCarga = false;
@@ -72,20 +69,20 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
 
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
-        const encontrada = this.buscarCategoriaPorRuta(
+        const categoriaEncontrada = this.buscarCategoriaPorRuta(
           categorias,
           [this.seccion, this.subseccion].filter((valor): valor is string => !!valor)
         );
 
-        if (!encontrada) {
+        if (!categoriaEncontrada) {
           this.cargando = false;
           return;
         }
 
-        this.categoriaActual = encontrada.categoria.nombre;
-        this.rutaCategoria = encontrada.ruta;
+        this.categoriaActual = categoriaEncontrada.categoria.nombre;
+        this.rutaCategoria = categoriaEncontrada.ruta;
 
-        this.recursoService.getPorCategoria(encontrada.categoria.idCategoria).subscribe({
+        this.recursoService.getPorCategoria(categoriaEncontrada.categoria.idCategoria).subscribe({
           next: (recursos) => {
             this.recursos = recursos;
             this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -107,19 +104,22 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
     });
   }
 
-  // Getter calculado: devuelve solo los recursos que pasan los filtros actuales.
+  // Aplica todos los filtros visibles sobre la lista actual antes de pintarla.
   get recursosFiltrados(): RecursoDto[] {
-    return this.recursos.filter((recurso) => this.coincideCurso(recurso) && this.coincideCiclo(recurso));
+    return this.recursos.filter((recurso) =>
+      this.coincideCurso(recurso) &&
+      this.coincideCiclo(recurso)
+    );
   }
 
   cambiarCurso(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCurso = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCurso = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
   cambiarCiclo(evento: Event): void {
-    const select = evento.target as HTMLSelectElement | null;
-    this.filtroCiclo = select?.value === 'Todos' ? 'Todos' : Number(select?.value || 0);
+    const selector = evento.target as HTMLSelectElement | null;
+    this.filtroCiclo = selector?.value === 'Todos' ? 'Todos' : Number(selector?.value || 0);
   }
 
   formatearCurso(recurso: RecursoDto): string {
@@ -127,30 +127,32 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
   }
 
   formatearCiclos(recurso: RecursoDto): string {
-    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' / ');
+    return (recurso.ciclos || [])
+      .map((ciclo) => ciclo.nombre.split(' ')[0])
+      .join(' / ');
   }
 
-  // Busca dentro del arbol de categorias la que coincide con la ruta actual.
-  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaRuta | null {
-    if (segmentos.length === 0) {
+  // Recorre el arbol de categorias y resuelve la ruta real de la URL actual.
+  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentosRuta: string[]): CategoriaRuta | null {
+    if (segmentosRuta.length === 0) {
       return null;
     }
 
     for (const categoria of categorias) {
-      if (this.crearSlugCategoria(categoria.nombre) !== segmentos[0]) {
+      if (this.crearSlugCategoria(categoria.nombre) !== segmentosRuta[0]) {
         continue;
       }
 
-      if (segmentos.length === 1) {
+      if (segmentosRuta.length === 1) {
         return { categoria, ruta: [categoria.nombre] };
       }
 
       if (categoria.subcategorias && categoria.subcategorias.length > 0) {
-        const encontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentos.slice(1));
-        if (encontrada) {
+        const categoriaEncontrada = this.buscarCategoriaPorRuta(categoria.subcategorias, segmentosRuta.slice(1));
+        if (categoriaEncontrada) {
           return {
-            categoria: encontrada.categoria,
-            ruta: [categoria.nombre, ...encontrada.ruta]
+            categoria: categoriaEncontrada.categoria,
+            ruta: [categoria.nombre, ...categoriaEncontrada.ruta]
           };
         }
       }
@@ -159,34 +161,31 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
     return null;
   }
 
-  // Recorre todos los recursos y construye el combo de cursos sin duplicados.
   private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
-    const cursos = new Map<number, string>();
+    const cursosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
-      cursos.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
+      cursosPorId.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
     }
 
     return [
       { idCurso: 'Todos', etiqueta: 'Todos' },
-      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
+      ...Array.from(cursosPorId.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
     ];
   }
 
-  // Esto tampoco es un foreach. Es un bucle for...of anidado:
-  // recorre cada recurso y dentro recorre sus ciclos para montar un listado unico.
   private construirCiclosFiltro(recursos: RecursoDto[]): CicloFiltro[] {
-    const ciclos = new Map<number, string>();
+    const ciclosPorId = new Map<number, string>();
 
     for (const recurso of recursos) {
       for (const ciclo of recurso.ciclos || []) {
-        ciclos.set(ciclo.idCiclo, ciclo.nombre);
+        ciclosPorId.set(ciclo.idCiclo, ciclo.nombre);
       }
     }
 
     return [
       { idCiclo: 'Todos', nombre: 'Todos' },
-      ...Array.from(ciclos.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
+      ...Array.from(ciclosPorId.entries()).map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
     ];
   }
 
@@ -202,7 +201,6 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
     return (recurso.ciclos || []).some((ciclo) => ciclo.idCiclo === this.filtroCiclo);
   }
 
-  // Convierte el nombre visible de la categoria en el slug usado en la URL.
   private crearSlugCategoria(valor: string): string {
     return valor
       .toLowerCase()
@@ -211,4 +209,5 @@ export class RecursoListadoCategoriaCoordinadorComponent implements OnInit {
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '');
   }
+
 }
