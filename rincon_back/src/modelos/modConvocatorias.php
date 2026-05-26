@@ -2,6 +2,20 @@
 // Modelo de convocatorias.
 class ModConvocatorias {
     private $db;
+    private const SQL_LISTADO_BASE = "SELECT
+                    c.idConvocatoria,
+                    c.fecha,
+                    c.cancelada AS estado,
+                    l.nombre AS lugar,
+                    ca.anioInicio,
+                    ca.anioFin,
+                    pr.nombre AS redacta,
+                    pi.nombre AS inicia
+                FROM convocatoria c
+                INNER JOIN lugar l ON l.idLugar = c.idLugar
+                INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
+                INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
+                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion";
 
     public function __construct($db) {
         $this->db = $db;
@@ -51,93 +65,22 @@ class ModConvocatorias {
 
     // Lista las convocatorias activas segun su estado persistido.
     public function listarActivas() {
-        $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    c.cancelada AS estado,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                INNER JOIN lugar l ON l.idLugar = c.idLugar
-                INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                WHERE c.cancelada = 'a'
-                ORDER BY c.fecha ASC, c.idConvocatoria ASC";
-
-        $stmt = $this->db->query($sql);
-        return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $this->listarPorEstados(['a']);
     }
 
     // Lista todas las convocatorias para coordinacion en una sola pantalla.
     public function listarTodas() {
-        $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    c.cancelada AS estado,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                INNER JOIN lugar l ON l.idLugar = c.idLugar
-                INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                ORDER BY c.fecha ASC, c.idConvocatoria ASC";
-
-        $stmt = $this->db->query($sql);
-        return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $this->listarPorEstados();
     }
 
     // Lista solo borradores y pasadas para la pantalla de historico.
     public function listarHistoricas() {
-        $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    c.cancelada AS estado,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                INNER JOIN lugar l ON l.idLugar = c.idLugar
-                INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                WHERE c.cancelada IN ('b', 'p')
-                ORDER BY c.fecha DESC, c.idConvocatoria DESC";
-
-        $stmt = $this->db->query($sql);
-        return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $this->listarPorEstados(['b', 'p'], true);
     }
 
     // Lista solo las convocatorias pasadas.
     public function listarPasadas() {
-        $sql = "SELECT
-                    c.idConvocatoria,
-                    c.fecha,
-                    c.cancelada AS estado,
-                    l.nombre AS lugar,
-                    ca.anioInicio,
-                    ca.anioFin,
-                    pr.nombre AS redacta,
-                    pi.nombre AS inicia
-                FROM convocatoria c
-                INNER JOIN lugar l ON l.idLugar = c.idLugar
-                INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
-                INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
-                WHERE c.cancelada = 'p'
-                ORDER BY c.fecha DESC, c.idConvocatoria DESC";
-
-        $stmt = $this->db->query($sql);
-        return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $this->listarPorEstados(['p'], true);
     }
 
     // Carga la convocatoria completa con su orden del dia.
@@ -191,20 +134,13 @@ class ModConvocatorias {
 
     // Marca una convocatoria activa concreta como pasada.
     public function marcarComoPasada($idConvocatoria) {
-        $sql = "UPDATE convocatoria
-                SET cancelada = 'p'
-                WHERE idConvocatoria = :idConvocatoria
-                  AND cancelada = 'a'";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':idConvocatoria', (int)$idConvocatoria, PDO::PARAM_INT);
-        $stmt->execute();
-
-        if ($stmt->rowCount() === 0) {
-            throw new RuntimeException('La convocatoria indicada no esta activa o no existe.');
-        }
-
-        return ['message' => 'Convocatoria marcada como pasada correctamente.'];
+        return $this->actualizarEstadoConvocatoria(
+            $idConvocatoria,
+            ['a'],
+            'p',
+            'La convocatoria indicada no esta activa o no existe.',
+            'Convocatoria marcada como pasada correctamente.'
+        );
     }
 
     // Marca todas las convocatorias activas como pasadas.
@@ -224,20 +160,13 @@ class ModConvocatorias {
 
     // Cancela una convocatoria activa o un borrador moviendola a pasada.
     public function cancelarConvocatoria($idConvocatoria) {
-        $sql = "UPDATE convocatoria
-                SET cancelada = 'p'
-                WHERE idConvocatoria = :idConvocatoria
-                  AND cancelada IN ('a', 'b')";
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':idConvocatoria', (int)$idConvocatoria, PDO::PARAM_INT);
-        $stmt->execute();
-
-        if ($stmt->rowCount() === 0) {
-            throw new RuntimeException('La convocatoria indicada no se puede cancelar o no existe.');
-        }
-
-        return ['message' => 'Convocatoria marcada como pasada correctamente.'];
+        return $this->actualizarEstadoConvocatoria(
+            $idConvocatoria,
+            ['a', 'b'],
+            'p',
+            'La convocatoria indicada no se puede cancelar o no existe.',
+            'Convocatoria marcada como pasada correctamente.'
+        );
     }
 
     // Extrae y valida la cabecera principal.
@@ -593,6 +522,34 @@ class ModConvocatorias {
         return $resultado;
     }
 
+    // Ejecuta un listado reutilizando la misma consulta base y el mismo DTO.
+    private function listarPorEstados($estados = null, $ordenDescendente = false) {
+        $sql = self::SQL_LISTADO_BASE;
+        $parametros = [];
+
+        if (is_array($estados) && !empty($estados)) {
+            $marcadores = [];
+            foreach (array_values($estados) as $indice => $estado) {
+                $marcador = ':estado' . $indice;
+                $marcadores[] = $marcador;
+                $parametros[$marcador] = $estado;
+            }
+
+            $sql .= " WHERE c.cancelada IN (" . implode(', ', $marcadores) . ")";
+        }
+
+        $direccion = $ordenDescendente ? 'DESC' : 'ASC';
+        $sql .= " ORDER BY c.fecha {$direccion}, c.idConvocatoria {$direccion}";
+
+        $stmt = $this->db->prepare($sql);
+        foreach ($parametros as $marcador => $valor) {
+            $stmt->bindValue($marcador, $valor, PDO::PARAM_STR);
+        }
+
+        $stmt->execute();
+        return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
+
     // Devuelve los cursos para el selector principal.
     private function obtenerCursos() {
         $sql = "SELECT idCurso, anioInicio, anioFin FROM cursoAcademico ORDER BY anioInicio DESC, anioFin DESC";
@@ -720,6 +677,42 @@ class ModConvocatorias {
         $stmt->execute();
 
         return (bool)$stmt->fetchColumn();
+    }
+
+    // Actualiza el estado solo si la convocatoria sigue en uno de los estados permitidos.
+    private function actualizarEstadoConvocatoria($idConvocatoria, $estadosPermitidos, $nuevoEstado, $mensajeError, $mensajeExito) {
+        $marcadores = [];
+        $parametros = [
+            ':idConvocatoria' => (int)$idConvocatoria,
+            ':nuevoEstado' => $nuevoEstado
+        ];
+
+        foreach (array_values($estadosPermitidos) as $indice => $estado) {
+            $marcador = ':estado' . $indice;
+            $marcadores[] = $marcador;
+            $parametros[$marcador] = $estado;
+        }
+
+        $sql = "UPDATE convocatoria
+                SET cancelada = :nuevoEstado
+                WHERE idConvocatoria = :idConvocatoria
+                  AND cancelada IN (" . implode(', ', $marcadores) . ")";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':idConvocatoria', $parametros[':idConvocatoria'], PDO::PARAM_INT);
+        $stmt->bindValue(':nuevoEstado', $parametros[':nuevoEstado'], PDO::PARAM_STR);
+
+        foreach ($marcadores as $marcador) {
+            $stmt->bindValue($marcador, $parametros[$marcador], PDO::PARAM_STR);
+        }
+
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 0) {
+            throw new RuntimeException($mensajeError);
+        }
+
+        return ['message' => $mensajeExito];
     }
 
     // Verifica que la convocatoria sigue activa y editable.
