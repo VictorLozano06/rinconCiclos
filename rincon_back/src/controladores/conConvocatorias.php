@@ -14,9 +14,9 @@ class ConConvocatorias extends ControladorBase {
     public function formulario() {
         try {
             $datos = $this->modelo->obtenerFormulario();
-            $this->enviarMensajes($datos);
+            $this->responderJson($datos);
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido cargar los datos del formulario.');
+            $this->responderError('No se han podido cargar los datos del formulario.');
         }
     }
 
@@ -24,23 +24,23 @@ class ConConvocatorias extends ControladorBase {
     public function guardar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->montarMensajes('Metodo no permitido.', 405);
+                $this->responderError('Metodo no permitido.', 405);
             }
 
             $payload = json_decode(file_get_contents('php://input'), true);
             if (!is_array($payload)) {
-                $this->montarMensajes('El cuerpo JSON no es valido.');
+                $this->responderError('El cuerpo JSON no es valido.');
             }
 
             $respuesta = $this->modelo->guardar($payload);
             $codigo = !empty($payload['idConvocatoria']) ? 200 : 201;
-            $this->enviarMensajes($respuesta, $codigo);
+            $this->responderJson($respuesta, $codigo);
         } catch (InvalidArgumentException $e) {
-            $this->montarMensajes($e->getMessage());
+            $this->responderError($e->getMessage());
         } catch (RuntimeException $e) {
-            $this->montarMensajes($e->getMessage(), 404);
+            $this->responderError($e->getMessage(), 404);
         } catch (Exception $e) {
-            $this->montarMensajes('No se ha podido guardar la convocatoria.');
+            $this->responderError('No se ha podido guardar la convocatoria.');
         }
     }
 
@@ -48,9 +48,9 @@ class ConConvocatorias extends ControladorBase {
     public function listarActivas() {
         try {
             $datos = $this->modelo->listarActivas();
-            $this->enviarMensajes($datos);
+            $this->responderJson($datos);
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido cargar las convocatorias.');
+            $this->responderError('No se han podido cargar las convocatorias.');
         }
     }
 
@@ -58,9 +58,9 @@ class ConConvocatorias extends ControladorBase {
     public function listarTodas() {
         try {
             $datos = $this->modelo->listarTodas();
-            $this->enviarMensajes($datos);
+            $this->responderJson($datos);
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido cargar las convocatorias.');
+            $this->responderError('No se han podido cargar las convocatorias.');
         }
     }
 
@@ -68,9 +68,9 @@ class ConConvocatorias extends ControladorBase {
     public function listarHistoricas() {
         try {
             $datos = $this->modelo->listarHistoricas();
-            $this->enviarMensajes($datos);
+            $this->responderJson($datos);
         } catch (Exception $e) {
-            $this->montarMensajes('No se ha podido cargar el historico de convocatorias.');
+            $this->responderError('No se ha podido cargar el historico de convocatorias.');
         }
     }
 
@@ -78,9 +78,9 @@ class ConConvocatorias extends ControladorBase {
     public function listarPasadas() {
         try {
             $datos = $this->modelo->listarPasadas();
-            $this->enviarMensajes($datos);
+            $this->responderJson($datos);
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido cargar las convocatorias pasadas.');
+            $this->responderError('No se han podido cargar las convocatorias pasadas.');
         }
     }
 
@@ -88,22 +88,22 @@ class ConConvocatorias extends ControladorBase {
     public function detalle() {
         try {
             if (!isset($_GET['id'])) {
-                $this->montarMensajes('Falta el parametro id.');
+                $this->responderError('Falta el parametro id.');
             }
 
             $idConvocatoria = (int)$_GET['id'];
             if ($idConvocatoria <= 0) {
-                $this->montarMensajes('El parametro id no es valido.');
+                $this->responderError('El parametro id no es valido.');
             }
 
             $dato = $this->modelo->obtenerDetalle($idConvocatoria);
             if (!$dato) {
-                $this->montarMensajes('No se ha encontrado la convocatoria solicitada.', 404);
+                $this->responderError('No se ha encontrado la convocatoria solicitada.', 404);
             }
 
-            $this->enviarMensajes($dato);
+            $this->responderJson($dato);
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido cargar los detalles de la convocatoria.');
+            $this->responderError('No se han podido cargar los detalles de la convocatoria.');
         }
     }
 
@@ -111,21 +111,21 @@ class ConConvocatorias extends ControladorBase {
     public function marcarComoPasada() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->montarMensajes('Metodo no permitido.', 405);
+                $this->responderError('Metodo no permitido.', 405);
             }
 
             $payload = json_decode(file_get_contents('php://input'), true);
             $idConvocatoria = (int)($payload['idConvocatoria'] ?? 0);
 
             if ($idConvocatoria <= 0) {
-                $this->montarMensajes('El id de la convocatoria no es valido.');
+                $this->responderError('El id de la convocatoria no es valido.');
             }
 
-            $this->enviarMensajes($this->modelo->marcarComoPasada($idConvocatoria));
+            $this->responderJson($this->modelo->marcarComoPasada($idConvocatoria));
         } catch (RuntimeException $e) {
-            $this->montarMensajes($e->getMessage(), 404);
+            $this->responderError($e->getMessage(), 404);
         } catch (Exception $e) {
-            $this->montarMensajes('No se ha podido marcar la convocatoria como pasada.');
+            $this->responderError('No se ha podido marcar la convocatoria como pasada.');
         }
     }
 
@@ -133,12 +133,12 @@ class ConConvocatorias extends ControladorBase {
     public function marcarTodasComoPasadas() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->montarMensajes('Metodo no permitido.', 405);
+                $this->responderError('Metodo no permitido.', 405);
             }
 
-            $this->enviarMensajes($this->modelo->marcarTodasComoPasadas());
+            $this->responderJson($this->modelo->marcarTodasComoPasadas());
         } catch (Exception $e) {
-            $this->montarMensajes('No se han podido marcar las convocatorias como pasadas.');
+            $this->responderError('No se han podido marcar las convocatorias como pasadas.');
         }
     }
 
@@ -146,21 +146,21 @@ class ConConvocatorias extends ControladorBase {
     public function cancelar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $this->montarMensajes('Metodo no permitido.', 405);
+                $this->responderError('Metodo no permitido.', 405);
             }
 
             $payload = json_decode(file_get_contents('php://input'), true);
             $idConvocatoria = (int)($payload['idConvocatoria'] ?? 0);
 
             if ($idConvocatoria <= 0) {
-                $this->montarMensajes('El id de la convocatoria no es valido.');
+                $this->responderError('El id de la convocatoria no es valido.');
             }
 
-            $this->enviarMensajes($this->modelo->cancelarConvocatoria($idConvocatoria));
+            $this->responderJson($this->modelo->cancelarConvocatoria($idConvocatoria));
         } catch (RuntimeException $e) {
-            $this->montarMensajes($e->getMessage(), 404);
+            $this->responderError($e->getMessage(), 404);
         } catch (Exception $e) {
-            $this->montarMensajes('No se ha podido cancelar la convocatoria.');
+            $this->responderError('No se ha podido cancelar la convocatoria.');
         }
     }
 }

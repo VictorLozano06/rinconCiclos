@@ -1,5 +1,6 @@
 <?php
-// Clase base para devolver mensajes JSON simples desde los controladores.
+// Clase base comun para todos los controladores JSON.
+// Solo centraliza la salida correcta de datos y errores.
 class ControladorBase {
     protected $db;
     protected $usuario;
@@ -9,8 +10,8 @@ class ControladorBase {
         $this->usuario = $usuario;
     }
 
-    // Devuelve cualquier respuesta en JSON.
-    protected function enviarMensajes($datos, $codigo = 200) {
+    // Devuelve datos en JSON y corta la ejecucion del controlador.
+    protected function responderJson($datos, $codigo = 200) {
         if (!headers_sent()) {
             http_response_code($codigo);
         }
@@ -20,9 +21,9 @@ class ControladorBase {
         exit;
     }
 
-    // Devuelve un mensaje de error en JSON.
-    protected function montarMensajes($mensaje, $codigo = 400) {
-        $this->enviarMensajes([
+    // Devuelve un error en JSON con el codigo HTTP que toque.
+    protected function responderError($mensaje, $codigo = 400) {
+        $this->responderJson([
             'error' => $mensaje,
             'message' => $mensaje
         ], $codigo);

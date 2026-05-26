@@ -30,7 +30,7 @@ export class InicioComponent implements OnInit {
     this.recursoService.getTodos().subscribe({
       next: (recursos) => {
         this.recursosRecientes = [...recursos]
-          .sort((a, b) => new Date(b.fechaPublicacion).getTime() - new Date(a.fechaPublicacion).getTime())
+          .sort((primero, segundo) => new Date(segundo.fechaPublicacion).getTime() - new Date(primero.fechaPublicacion).getTime())
           .slice(0, 5);
         this.cargandoRecursos = false;
       },
@@ -47,6 +47,6 @@ export class InicioComponent implements OnInit {
   }
 
   formatearCiclos(recurso: RecursoDto): string {
-    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' · ');
+    return (recurso.ciclos || []).map((ciclo) => ciclo.nombre).join(' / ');
   }
 }

@@ -1,27 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecursoFormularioMockComponent } from '../../../components/recurso-formulario-mock/recurso-formulario-mock.component';
+import { RecursoFormularioComponent, AdjuntoFormulario } from '../../../components/recurso-formulario/recurso-formulario.component';
 import { CategoriaDto } from '../../../dto/categoria.dto';
 import { CicloRecursoDto } from '../../../dto/ciclo-recurso.dto';
 import { RecursoDto } from '../../../dto/recurso.dto';
 import { CategoriaService } from '../../../services/categoria.service';
-import { RecursoService } from '../../../services/recurso.service';
+import { RecursoService, RecursoFormularioResponse } from '../../../services/recurso.service';
 
 interface CursoFiltro {
-  idCurso: number | 'Todos';
+  idCurso: number;
   etiqueta: string;
 }
 
 type CategoriaFormulario = Pick<CategoriaDto, 'idCategoria' | 'nombre'>;
 type CicloFormulario = CicloRecursoDto;
 
-interface AdjuntoFormulario {
-  nombre: string;
-  valor: string;
-}
-
-interface RecursoFormularioMock {
+interface RecursoFormulario {
   idCategoria: number | null;
   nombre: string;
   descripcion: string;
@@ -32,26 +27,25 @@ interface RecursoFormularioMock {
 }
 
 @Component({
-  selector: 'app-recurso-formulario-pagina',
+  selector: 'app-recurso-formulario-page',
   standalone: true,
-  imports: [CommonModule, RecursoFormularioMockComponent],
-  templateUrl: './recurso-formulario-pagina.component.html',
-  styleUrl: './recurso-formulario-pagina.component.css'
+  imports: [CommonModule, RecursoFormularioComponent],
+  templateUrl: './recurso-formulario.component.html',
+  styleUrl: './recurso-formulario.component.css'
 })
-export class RecursoFormularioPaginaComponent implements OnInit {
+export class RecursoFormularioPageComponent implements OnInit {
   public modoFormulario: 'crear' | 'editar' = 'crear';
   public categoriasBase: CategoriaDto[] = [];
   public cursosFiltro: CursoFiltro[] = [];
   public ciclosFormulario: CicloFormulario[] = [];
   public cargando = true;
+  public guardando = false;
   public errorCarga = false;
   public erroresFormulario: string[] = [];
-  public formulario: RecursoFormularioMock = this.crearFormularioVacio();
+  public formulario: RecursoFormulario = this.crearFormularioVacio();
   public nuevoCicloId: number | null = null;
   public nuevoNombreEnlace = '';
   public nuevoEnlace = '';
-  public nuevoNombreArchivo = '';
-  public nuevoArchivo = '';
   private recursoOriginal: RecursoDto | null = null;
 
   constructor(
@@ -69,11 +63,11 @@ export class RecursoFormularioPaginaComponent implements OnInit {
   }
 
   get categoriasFormulario(): CategoriaFormulario[] {
-    const mapa = new Map<number, string>();
-    this.recorrerCategorias(this.categoriasBase, mapa);
-
-    return Array.from(mapa.entries())
-      .map(([idCategoria, nombre]) => ({ idCategoria, nombre }))
+    return this.obtenerCategoriasRecurso(this.categoriasBase)
+      .map((categoria) => ({
+        idCategoria: categoria.idCategoria,
+        nombre: categoria.nombre
+      }))
       .sort((a, b) => a.nombre.localeCompare(b.nombre));
   }
 
@@ -83,12 +77,14 @@ export class RecursoFormularioPaginaComponent implements OnInit {
 
   get textoIntroFormulario(): string {
     return this.modoFormulario === 'crear'
-      ? 'Formulario mock de alta para coordinacion. No guarda nada en backend.'
-      : 'Formulario mock de edicion para coordinacion. Carga el recurso real, pero no guarda cambios.';
+      ? 'Formulario de coordinacion con FilePond para subir archivos temporales al servidor.'
+      : 'Formulario de edicion con FilePond para subir archivos nuevos al servidor antes de actualizar.';
   }
 
   get textoBotonGuardar(): string {
-    return this.modoFormulario === 'crear' ? 'Guardar' : 'Actualizar';
+    return this.guardando
+      ? (this.modoFormulario === 'crear' ? 'Guardando...' : 'Actualizando...')
+      : (this.modoFormulario === 'crear' ? 'Guardar' : 'Actualizar');
   }
 
   actualizarNuevoEnlace(valor: string): void {
@@ -99,15 +95,7 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.nuevoNombreEnlace = valor;
   }
 
-  actualizarNuevoArchivo(valor: string): void {
-    this.nuevoArchivo = valor;
-  }
-
-  actualizarNuevoNombreArchivo(valor: string): void {
-    this.nuevoNombreArchivo = valor;
-  }
-
-  agregarCicloMock(): void {
+  agregarCiclo(): void {
     if (this.nuevoCicloId === null) {
       return;
     }
@@ -119,14 +107,14 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
   }
 
-  eliminarCicloMock(idCiclo: number): void {
+  eliminarCiclo(idCiclo: number): void {
     this.formulario.ciclosSeleccionados = this.formulario.ciclosSeleccionados.filter((ciclo) => ciclo !== idCiclo);
     if (this.nuevoCicloId === idCiclo) {
       this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
     }
   }
 
-  agregarEnlaceMock(): void {
+  agregarEnlace(): void {
     const nombre = this.nuevoNombreEnlace.trim();
     const enlace = this.nuevoEnlace.trim();
 
@@ -139,51 +127,79 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.nuevoEnlace = '';
   }
 
-  eliminarEnlaceMock(index: number): void {
+  eliminarEnlace(index: number): void {
     this.formulario.enlaces = this.formulario.enlaces.filter((_, i) => i !== index);
   }
 
-  agregarArchivoMock(): void {
-    const nombre = this.nuevoNombreArchivo.trim();
-    const archivo = this.nuevoArchivo.trim();
+  // Añade al formulario el archivo ya subido temporalmente por FilePond.
+  // Añade al array del formulario un archivo que ya existe en la carpeta temporal.
+  // Aqui todavia no se ha guardado el recurso: solo tenemos el archivo provisional.
+  agregarArchivoSubido(adjunto: AdjuntoFormulario): void {
+    const yaExiste = this.formulario.archivos.some(
+      (archivo) => archivo.identificadorTemporal && archivo.identificadorTemporal === adjunto.identificadorTemporal
+    );
 
-    if (!nombre || !archivo) {
+    if (yaExiste) {
       return;
     }
 
-    this.formulario.archivos = [...this.formulario.archivos, { nombre, valor: archivo }];
-    this.nuevoNombreArchivo = '';
-    this.nuevoArchivo = '';
+    this.formulario.archivos = [...this.formulario.archivos, adjunto];
   }
 
-  eliminarArchivoMock(index: number): void {
-    this.formulario.archivos = this.formulario.archivos.filter((_, i) => i !== index);
+  eliminarArchivo(index: number): void {
+    const archivo = this.formulario.archivos[index];
+    if (!archivo) {
+      return;
+    }
+
+    if (!archivo.identificadorTemporal) {
+      this.formulario.archivos = this.formulario.archivos.filter((_, i) => i !== index);
+      return;
+    }
+
+    this.recursoService.eliminarArchivoTemporalSubido(archivo.identificadorTemporal).subscribe({
+      next: () => {
+        this.formulario.archivos = this.formulario.archivos.filter((_, i) => i !== index);
+      },
+      error: (err) => {
+        console.error('Error al borrar el archivo temporal:', err);
+        this.erroresFormulario = ['No se pudo eliminar el archivo temporal. Intentalo de nuevo.'];
+      }
+    });
   }
 
   cancelar(): void {
     this.router.navigate(['/coordinador/recursos']);
   }
 
-  guardarMock(): void {
-    this.erroresFormulario = this.validarFormularioMock();
+  guardarFormulario(): void {
+    this.erroresFormulario = this.validarFormulario();
 
     if (this.erroresFormulario.length > 0) {
       return;
     }
 
-    if (this.modoFormulario === 'crear') {
-      this.router.navigate(['/coordinador/recursos'], {
-        state: { feedbackMock: 'Mock de creacion completado. No se ha creado ningun recurso real.' }
-      });
+    if (this.modoFormulario === 'editar' && !this.recursoOriginal) {
       return;
     }
 
-    if (!this.recursoOriginal) {
-      return;
-    }
+    this.guardando = true;
 
-    this.router.navigate(['/coordinador/recursos'], {
-      state: { feedbackMock: `Mock de edicion completado para "${this.recursoOriginal.nombre}". No se ha guardado nada.` }
+    this.recursoService.guardar(this.construirPayloadGuardado()).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.router.navigate(['/coordinador/recursos'], {
+          state: {
+            feedbackAccion: this.modoFormulario === 'crear'
+              ? 'Recurso guardado correctamente.'
+              : 'Recurso actualizado correctamente.'
+          }
+        });
+      },
+      error: (err) => {
+        this.guardando = false;
+        this.erroresFormulario = [err?.error?.message || 'No se pudo guardar el recurso.'];
+      }
     });
   }
 
@@ -194,7 +210,7 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
         this.categoriasBase = categorias;
-        this.cargarRecursosBase();
+        this.cargarDatosFormulario();
       },
       error: (err) => {
         this.errorCarga = true;
@@ -204,76 +220,78 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     });
   }
 
-  private cargarRecursosBase(): void {
-    this.recursoService.getTodos().subscribe({
-      next: (recursos) => {
-        this.prepararFormularioDesdeRecursos(recursos);
+  private cargarDatosFormulario(): void {
+    this.recursoService.getFormulario().subscribe({
+      next: (datosFormulario) => {
+        this.prepararFormularioBase(datosFormulario);
+        this.cargarRecursoEdicionSiHaceFalta();
       },
       error: (err) => {
         this.errorCarga = true;
         this.cargando = false;
-        console.error('Error al cargar recursos para el formulario de coordinador:', err);
+        console.error('Error al cargar cursos y ciclos para el formulario de coordinador:', err);
       }
     });
   }
 
-  private prepararFormularioDesdeRecursos(recursos: RecursoDto[]): void {
-    this.cursosFiltro = this.construirCursosFiltro(recursos);
-    this.ciclosFormulario = this.construirCiclosFormulario(recursos);
+  private prepararFormularioBase(datosFormulario: RecursoFormularioResponse): void {
+    this.cursosFiltro = this.construirCursosFiltro(datosFormulario);
+    this.ciclosFormulario = this.construirCiclosFormulario(datosFormulario);
 
     if (this.modoFormulario === 'crear') {
-      this.prepararFormularioCreacion();
+      this.prepararFormularioCreacion(datosFormulario.cursoActualId);
       this.cargando = false;
+    }
+  }
+
+  private cargarRecursoEdicionSiHaceFalta(): void {
+    if (this.modoFormulario !== 'editar') {
       return;
     }
 
     const idCategoria = Number(this.route.snapshot.paramMap.get('idCategoria'));
     const numRecurso = Number(this.route.snapshot.paramMap.get('numRecurso'));
-    const recurso = recursos.find(
-      (item) => item.idCategoria === idCategoria && item.numRecurso === numRecurso
-    ) || null;
 
-    if (!recurso) {
-      this.errorCarga = true;
-      this.cargando = false;
-      return;
-    }
-
-    this.recursoOriginal = recurso;
-    this.formulario = {
-      idCategoria: recurso.idCategoria,
-      nombre: recurso.nombre,
-      descripcion: recurso.descripcion,
-      cursoId: recurso.idCurso,
-      ciclosSeleccionados: (recurso.ciclos || []).map((ciclo) => ciclo.idCiclo),
-      enlaces: this.obtenerEnlacesRecurso(recurso),
-      archivos: this.obtenerArchivosRecurso(recurso)
-    };
-    this.nuevoArchivo = '';
-    this.nuevoNombreArchivo = '';
-    this.nuevoEnlace = '';
-    this.nuevoNombreEnlace = '';
-    this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
-    this.erroresFormulario = [];
-    this.cargando = false;
+    this.recursoService.getDetalle(idCategoria, numRecurso).subscribe({
+      next: (recurso) => {
+        this.recursoOriginal = recurso;
+        this.formulario = {
+          idCategoria: recurso.idCategoria,
+          nombre: recurso.nombre,
+          descripcion: recurso.descripcion,
+          cursoId: recurso.idCurso,
+          ciclosSeleccionados: (recurso.ciclos || []).map((ciclo) => ciclo.idCiclo),
+          enlaces: this.obtenerEnlacesRecurso(recurso),
+          archivos: this.obtenerArchivosRecurso(recurso)
+        };
+        this.nuevoEnlace = '';
+        this.nuevoNombreEnlace = '';
+        this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
+        this.erroresFormulario = [];
+        this.cargando = false;
+      },
+      error: (err) => {
+        this.errorCarga = true;
+        this.cargando = false;
+        console.error('Error al cargar el recurso que se va a editar:', err);
+      }
+    });
   }
 
-  private prepararFormularioCreacion(): void {
-    const primerCurso = this.cursosFiltro.find((curso) => curso.idCurso !== 'Todos');
+  private prepararFormularioCreacion(cursoActualId: number | null): void {
+    const primerCurso = this.cursosFiltro[0];
 
     this.recursoOriginal = null;
     this.formulario = this.crearFormularioVacio();
     this.formulario.idCategoria = this.categoriasFormulario[0]?.idCategoria ?? null;
-    this.formulario.cursoId = typeof primerCurso?.idCurso === 'number' ? primerCurso.idCurso : null;
-    this.nuevoArchivo = '';
-    this.nuevoNombreArchivo = '';
+    this.formulario.cursoId = cursoActualId || primerCurso?.idCurso || null;
     this.nuevoEnlace = '';
     this.nuevoNombreEnlace = '';
     this.nuevoCicloId = this.obtenerSiguienteCicloDisponible();
     this.erroresFormulario = [];
   }
 
-  private crearFormularioVacio(): RecursoFormularioMock {
+  private crearFormularioVacio(): RecursoFormulario {
     return {
       idCategoria: null,
       nombre: '',
@@ -285,40 +303,64 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     };
   }
 
-  private recorrerCategorias(categorias: CategoriaDto[], mapa: Map<number, string>): void {
+  // Solo deja categorias finales de recursos.
+  // No se admiten padres ni la rama de Reuniones de Equipo.
+  private obtenerCategoriasRecurso(categorias: CategoriaDto[]): CategoriaDto[] {
+    const resultado: CategoriaDto[] = [];
+
     for (const categoria of categorias) {
-      mapa.set(categoria.idCategoria, categoria.nombre);
+      const tieneHijos = !!(categoria.subcategorias && categoria.subcategorias.length > 0);
 
-      if (categoria.subcategorias && categoria.subcategorias.length > 0) {
-        this.recorrerCategorias(categoria.subcategorias, mapa);
+      if (categoria.nombre === 'Reuniones de Equipo') {
+        continue;
       }
+
+      if (tieneHijos) {
+        resultado.push(...this.obtenerCategoriasRecurso(categoria.subcategorias || []));
+        continue;
+      }
+
+      resultado.push(categoria);
     }
+
+    return resultado;
   }
 
-  private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
-    const cursos = new Map<number, string>();
-
-    for (const recurso of recursos) {
-      cursos.set(recurso.idCurso, `${recurso.anioInicio}/${recurso.anioFin}`);
-    }
-
-    return [
-      { idCurso: 'Todos', etiqueta: 'Todos' },
-      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) => ({ idCurso, etiqueta }))
-    ];
+  private construirCursosFiltro(datosFormulario: RecursoFormularioResponse): CursoFiltro[] {
+    return datosFormulario.cursos
+      .map((curso) => ({
+        idCurso: curso.idCurso,
+        etiqueta: `${curso.anioInicio}/${curso.anioFin}`
+      }))
+      .sort((a, b) => a.etiqueta.localeCompare(b.etiqueta));
   }
 
-  private construirCiclosFormulario(recursos: RecursoDto[]): CicloFormulario[] {
-    const ciclos = new Map<number, string>();
+  private construirPayloadGuardado(): object {
+    return {
+      idCategoria: this.formulario.idCategoria,
+      numRecurso: this.modoFormulario === 'editar' ? (this.recursoOriginal?.numRecurso || 0) : 0,
+      nombre: this.formulario.nombre.trim(),
+      descripcion: this.formulario.descripcion.trim(),
+      idCurso: this.formulario.cursoId,
+      ciclosSeleccionados: this.formulario.ciclosSeleccionados,
+      enlaces: this.formulario.enlaces.map((enlace) => ({
+        nombre: enlace.nombre.trim(),
+        valor: enlace.valor.trim()
+      })),
+      archivos: this.formulario.archivos.map((archivo) => ({
+        nombre: archivo.nombre.trim(),
+        valor: archivo.valor.trim(),
+        identificadorTemporal: archivo.identificadorTemporal || null
+      }))
+    };
+  }
 
-    for (const recurso of recursos) {
-      for (const ciclo of recurso.ciclos || []) {
-        ciclos.set(ciclo.idCiclo, ciclo.nombre);
-      }
-    }
-
-    return Array.from(ciclos.entries())
-      .map(([idCiclo, nombre]) => ({ idCiclo, nombre }))
+  private construirCiclosFormulario(datosFormulario: RecursoFormularioResponse): CicloFormulario[] {
+    return datosFormulario.ciclos
+      .map((ciclo) => ({
+        idCiclo: ciclo.idCiclo,
+        nombre: ciclo.nombre
+      }))
       .sort((a, b) => a.nombre.localeCompare(b.nombre));
   }
 
@@ -328,10 +370,6 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     );
 
     return cicloLibre?.idCiclo ?? null;
-  }
-
-  private obtenerNombreCategoria(idCategoria: number): string {
-    return this.categoriasFormulario.find((categoria) => categoria.idCategoria === idCategoria)?.nombre || 'Sin categoria';
   }
 
   private obtenerEnlacesRecurso(recurso: RecursoDto): AdjuntoFormulario[] {
@@ -358,7 +396,7 @@ export class RecursoFormularioPaginaComponent implements OnInit {
     }));
   }
 
-  private validarFormularioMock(): string[] {
+  private validarFormulario(): string[] {
     const errores: string[] = [];
     const nombre = this.formulario.nombre.trim();
     const descripcion = this.formulario.descripcion.trim();
@@ -391,6 +429,11 @@ export class RecursoFormularioPaginaComponent implements OnInit {
 
     if (this.formulario.enlaces.length > 10) {
       errores.push('No puedes anadir mas de 10 enlaces.');
+    }
+
+    const tamanoTotalArchivos = this.formulario.archivos.reduce((total, archivo) => total + (archivo.tamanoBytes || 0), 0);
+    if (tamanoTotalArchivos > 25 * 1024 * 1024) {
+      errores.push('El tamano total de archivos no puede superar los 25 MB.');
     }
 
     for (const archivo of this.formulario.archivos) {
