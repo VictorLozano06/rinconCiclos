@@ -16,5 +16,10 @@
   },
   "devDependencies": {
     "typedoc": "^0.28.19"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "performance-now": "^2.1.0",
+    "svg-pathdata": "^8.0.0"
   }
 }
