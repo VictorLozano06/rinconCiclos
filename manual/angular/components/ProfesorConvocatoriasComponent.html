@@ -1,0 +1,1745 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ProfesorConvocatoriasComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/profesor/convocatorias/convocatorias.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-convocatorias-profesor</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/router/RouterModule" target="_blank" >RouterModule</a></code>
+                                <code><a href="https://angular.io/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./convocatorias.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./convocatorias.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#buscadorProfesor" >buscadorProfesor</a>
+                            </li>
+                            <li>
+                                <a href="#cargandoDetalle" >cargandoDetalle</a>
+                            </li>
+                            <li>
+                                <a href="#cargandoListado" >cargandoListado</a>
+                            </li>
+                            <li>
+                                <a href="#convocatoras" >convocatoras</a>
+                            </li>
+                            <li>
+                                <a href="#convocatoriaSeleccionada" >convocatoriaSeleccionada</a>
+                            </li>
+                            <li>
+                                <a href="#errorMsg" >errorMsg</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#agregarCoincidencia" >agregarCoincidencia</a>
+                            </li>
+                            <li>
+                                <a href="#cargarConvocatorias" >cargarConvocatorias</a>
+                            </li>
+                            <li>
+                                <a href="#formatFecha" >formatFecha</a>
+                            </li>
+                            <li>
+                                <a href="#iniciarDetalle" >iniciarDetalle</a>
+                            </li>
+                            <li>
+                                <a href="#limpiarBuscadorProfesor" >limpiarBuscadorProfesor</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#normalizarTexto" >normalizarTexto</a>
+                            </li>
+                            <li>
+                                <a href="#seleccionarConvocatoria" >seleccionarConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#volverAlListado" >volverAlListado</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#minutosTotales" >minutosTotales</a>
+                                </li>
+                                <li>
+                                    <a href="#resultadoBuscadorProfesor" >resultadoBuscadorProfesor</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(convocatoriaService: <a href="../injectables/ConvocatoriaService.html" target="_self">ConvocatoriaService</a>, route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="28" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:28</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>convocatoriaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ConvocatoriaService.html" target="_self" >ConvocatoriaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="agregarCoincidencia"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>agregarCoincidencia</b></span>
+                        <a href="#agregarCoincidencia"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>agregarCoincidencia(coincidencias: CoincidenciaProfesorConvocatoria[], termino: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, nombre: string | null | undefined, contexto: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, tipo: <a href="../interfaces/Profesor.html" target="_self">&quot;Profesor&quot; | &quot;Grupo&quot;</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="151"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:151</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>coincidencias</td>
+                                            <td>
+                                                        <code>CoincidenciaProfesorConvocatoria[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>termino</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>nombre</td>
+                                            <td>
+                                                        <code>string | null | undefined</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>contexto</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>tipo</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Profesor.html" target="_self" >&quot;Profesor&quot; | &quot;Grupo&quot;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarConvocatorias"></a>
+                    <span class="name">
+                        <span ><b>cargarConvocatorias</b></span>
+                        <a href="#cargarConvocatorias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cargarConvocatorias()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="48"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatFecha"></a>
+                    <span class="name">
+                        <span ><b>formatFecha</b></span>
+                        <a href="#formatFecha"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>formatFecha(fechaStr: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="90"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fechaStr</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="iniciarDetalle"></a>
+                    <span class="name">
+                        <span ><b>iniciarDetalle</b></span>
+                        <a href="#iniciarDetalle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>iniciarDetalle(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="73"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:73</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="limpiarBuscadorProfesor"></a>
+                    <span class="name">
+                        <span ><b>limpiarBuscadorProfesor</b></span>
+                        <a href="#limpiarBuscadorProfesor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>limpiarBuscadorProfesor()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="147"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:147</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="36"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="normalizarTexto"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>normalizarTexto</b></span>
+                        <a href="#normalizarTexto"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>normalizarTexto(valor: string | null | undefined)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="171"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:171</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                        <code>string | null | undefined</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seleccionarConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>seleccionarConvocatoria</b></span>
+                        <a href="#seleccionarConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>seleccionarConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="64"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="volverAlListado"></a>
+                    <span class="name">
+                        <span ><b>volverAlListado</b></span>
+                        <a href="#volverAlListado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>volverAlListado()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="68"
+                                    class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buscadorProfesor"></a>
+                    <span class="name">
+                        <span ><b>buscadorProfesor</b></span>
+                        <a href="#buscadorProfesor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="25" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargandoDetalle"></a>
+                    <span class="name">
+                        <span ><b>cargandoDetalle</b></span>
+                        <a href="#cargandoDetalle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="27" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargandoListado"></a>
+                    <span class="name">
+                        <span ><b>cargandoListado</b></span>
+                        <a href="#cargandoListado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="26" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convocatoras"></a>
+                    <span class="name">
+                        <span ><b>convocatoras</b></span>
+                        <a href="#convocatoras"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >ConvocatoriaListaItemDto[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="23" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convocatoriaSeleccionada"></a>
+                    <span class="name">
+                        <span ><b>convocatoriaSeleccionada</b></span>
+                        <a href="#convocatoriaSeleccionada"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ConvocatoriaDetalleDto.html" target="_self" >ConvocatoriaDetalleDto | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMsg"></a>
+                    <span class="name">
+                        <span ><b>errorMsg</b></span>
+                        <a href="#errorMsg"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="28" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="minutosTotales"></a>
+                        <span class="name"><b>minutosTotales</b><a href="#minutosTotales"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>minutosTotales()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="103" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:103</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="resultadoBuscadorProfesor"></a>
+                        <span class="name"><b>resultadoBuscadorProfesor</b><a href="#resultadoBuscadorProfesor"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>resultadoBuscadorProfesor()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="108" class="link-to-prism">src/app/pages/profesor/convocatorias/convocatorias.component.ts:108</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { RouterModule, ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { ConvocatoriaService } from &#x27;../../../services/convocatoria.service&#x27;;
+import { ConvocatoriaDetalleDto } from &#x27;../../../dto/convocatoria-detalle.dto&#x27;;
+import { ConvocatoriaListaItemDto } from &#x27;../../../dto/convocatoria-lista-item.dto&#x27;;
+
+interface CoincidenciaProfesorConvocatoria {
+  nombre: string;
+  contexto: string;
+  tipo: &#x27;Profesor&#x27; | &#x27;Grupo&#x27;;
+}
+
+@Component({
+  selector: &#x27;app-convocatorias-profesor&#x27;,
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: &#x27;./convocatorias.component.html&#x27;,
+  styleUrl: &#x27;./convocatorias.component.css&#x27;
+})
+export class ProfesorConvocatoriasComponent implements OnInit {
+  convocatoras: ConvocatoriaListaItemDto[] &#x3D; [];
+  convocatoriaSeleccionada: ConvocatoriaDetalleDto | null &#x3D; null;
+  buscadorProfesor &#x3D; &#x27;&#x27;;
+  cargandoListado &#x3D; true;
+  cargandoDetalle &#x3D; false;
+  errorMsg &#x3D; &#x27;&#x27;;
+
+  constructor(
+    private convocatoriaService: ConvocatoriaService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params &#x3D;&gt; {
+      const idParam &#x3D; params.get(&#x27;id&#x27;);
+      if (idParam) {
+        this.iniciarDetalle(Number(idParam));
+      } else {
+        this.convocatoriaSeleccionada &#x3D; null;
+        this.cargarConvocatorias();
+      }
+    });
+  }
+
+  cargarConvocatorias(): void {
+    this.cargandoListado &#x3D; true;
+    this.errorMsg &#x3D; &#x27;&#x27;;
+    this.convocatoriaService.listarConvocatorias().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.convocatoras &#x3D; data;
+        this.cargandoListado &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoListado &#x3D; false;
+        this.errorMsg &#x3D; error?.error?.message || &#x27;Error al cargar el listado de convocatorias.&#x27;;
+      }
+    });
+  }
+
+  // Navigation triggered from UI
+  seleccionarConvocatoria(id: number): void {
+    this.router.navigate([&#x27;/profesor/reuniones-de-equipo/convocatorias&#x27;, id]);
+  }
+
+  volverAlListado(): void {
+    this.router.navigate([&#x27;/profesor/reuniones-de-equipo/convocatorias&#x27;]);
+  }
+
+  // Route initializer
+  iniciarDetalle(id: number): void {
+    this.cargandoDetalle &#x3D; true;
+    this.errorMsg &#x3D; &#x27;&#x27;;
+    this.convocatoriaSeleccionada &#x3D; null;
+
+    this.convocatoriaService.getConvocatoria(id).subscribe({
+      next: (data) &#x3D;&gt; {
+        this.convocatoriaSeleccionada &#x3D; data;
+        this.cargandoDetalle &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoDetalle &#x3D; false;
+        this.errorMsg &#x3D; error?.error?.message || &#x27;Error al cargar los detalles de la convocatoria.&#x27;;
+      }
+    });
+  }
+
+  formatFecha(fechaStr: string): string {
+    if (!fechaStr) return &#x27;&#x27;;
+    const fecha &#x3D; new Date(fechaStr);
+    if (isNaN(fecha.getTime())) return fechaStr;
+    return fecha.toLocaleString(&#x27;es-ES&#x27;, {
+      day: &#x27;2-digit&#x27;,
+      month: &#x27;2-digit&#x27;,
+      year: &#x27;numeric&#x27;,
+      hour: &#x27;2-digit&#x27;,
+      minute: &#x27;2-digit&#x27;
+    });
+  }
+
+  get minutosTotales(): number {
+    if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
+    return this.convocatoriaSeleccionada.ordenDia.reduce((total, item) &#x3D;&gt; total + Number(item.minutos || 0), 0);
+  }
+
+  get resultadoBuscadorProfesor(): { encontrado: boolean; coincidencias: CoincidenciaProfesorConvocatoria[] } | null {
+    const convocatoria &#x3D; this.convocatoriaSeleccionada;
+    const termino &#x3D; this.normalizarTexto(this.buscadorProfesor);
+
+    if (!convocatoria || !termino) {
+      return null;
+    }
+
+    const coincidencias: CoincidenciaProfesorConvocatoria[] &#x3D; [];
+
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.redacta, &#x27;Redacta la convocatoria&#x27;, &#x27;Profesor&#x27;);
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.inicia, &#x27;Inicia la reunión&#x27;, &#x27;Profesor&#x27;);
+
+    (convocatoria.ordenDia || []).forEach((punto) &#x3D;&gt; {
+      this.agregarCoincidencia(
+        coincidencias,
+        termino,
+        punto.dinamiza,
+        &#x60;Punto ${punto.numOrden}: dinamiza&#x60;,
+        &#x27;Profesor&#x27;
+      );
+
+      (punto.participantes || []).forEach((participante) &#x3D;&gt; {
+        this.agregarCoincidencia(
+          coincidencias,
+          termino,
+          participante.nombre,
+          &#x60;Punto ${punto.numOrden}: participa&#x60;,
+          participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;Grupo&#x27; : &#x27;Profesor&#x27;
+        );
+      });
+    });
+
+    return {
+      encontrado: coincidencias.length &gt; 0,
+      coincidencias
+    };
+  }
+
+  limpiarBuscadorProfesor(): void {
+    this.buscadorProfesor &#x3D; &#x27;&#x27;;
+  }
+
+  private agregarCoincidencia(
+    coincidencias: CoincidenciaProfesorConvocatoria[],
+    termino: string,
+    nombre: string | null | undefined,
+    contexto: string,
+    tipo: &#x27;Profesor&#x27; | &#x27;Grupo&#x27;
+  ): void {
+    if (!nombre) {
+      return;
+    }
+
+    if (this.normalizarTexto(nombre).includes(termino)) {
+      coincidencias.push({
+        nombre,
+        contexto,
+        tipo
+      });
+    }
+  }
+
+  private normalizarTexto(valor: string | null | undefined): string {
+    return (valor || &#x27;&#x27;)
+      .toLowerCase()
+      .normalize(&#x27;NFD&#x27;)
+      .replace(/[\u0300-\u036f]/g, &#x27;&#x27;)
+      .replace(/\s+/g, &#x27; &#x27;)
+      .trim();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;section class&#x3D;&quot;convocatoria-page&quot; *ngIf&#x3D;&quot;!convocatoriaSeleccionada&quot;&gt;
+  &lt;div class&#x3D;&quot;header-container hero&quot;&gt;
+    &lt;div&gt;
+      &lt;p class&#x3D;&quot;hero-kicker&quot;&gt;Reuniones de equipo&lt;/p&gt;
+      &lt;h1 class&#x3D;&quot;hero-title&quot;&gt;Convocatorias&lt;/h1&gt;
+      &lt;p class&#x3D;&quot;hero-subtitle&quot;&gt;Visualiza las convocatorias de reuniones programadas para el ciclo.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorMsg&quot; class&#x3D;&quot;feedback feedback-error&quot;&gt;{{ errorMsg }}&lt;/div&gt;
+
+  &lt;!-- Loading State --&gt;
+  &lt;div *ngIf&#x3D;&quot;cargandoListado&quot; class&#x3D;&quot;loading-state text-center py-5&quot;&gt;
+    &lt;div class&#x3D;&quot;spinner-border text-primary&quot; role&#x3D;&quot;status&quot;&gt;
+      &lt;span class&#x3D;&quot;visually-hidden&quot;&gt;Cargando convocatorias...&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Empty state --&gt;
+  &lt;div *ngIf&#x3D;&quot;!cargandoListado &amp;&amp; convocatoras.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card shadow-sm border-0 p-5 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;i class&#x3D;&quot;bi bi-calendar-x text-muted fs-1 mb-3&quot;&gt;&lt;/i&gt;
+      &lt;h4 class&#x3D;&quot;card-title text-secondary&quot;&gt;No hay convocatorias&lt;/h4&gt;
+      &lt;p class&#x3D;&quot;card-text text-muted&quot;&gt;Aún no se han registrado convocatorias de reuniones.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- List Grid --&gt;
+  &lt;div *ngIf&#x3D;&quot;!cargandoListado &amp;&amp; convocatoras.length &gt; 0&quot; class&#x3D;&quot;convocatorias-grid&quot;&gt;
+    &lt;div *ngFor&#x3D;&quot;let conv of convocatoras&quot; class&#x3D;&quot;surface-card convocatoria-card&quot; [class.convocatoria-card-activa]&#x3D;&quot;conv.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27;&quot;&gt;
+      &lt;div class&#x3D;&quot;card-header-main&quot;&gt;
+        &lt;div class&#x3D;&quot;fecha-badge&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-calendar3&quot;&gt;&lt;/i&gt;
+          &lt;span&gt;{{ formatFecha(conv.fecha) }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;status-badge&quot; [class.status-badge-activa]&#x3D;&quot;conv.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27;&quot; [class.status-badge-historica]&#x3D;&quot;conv.estado !&#x3D;&#x3D; &#x27;a&#x27;&quot;&gt;
+          {{ conv.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27; ? &#x27;Actual&#x27; : (conv.estado &#x3D;&#x3D;&#x3D; &#x27;b&#x27; ? &#x27;Borrador&#x27; : &#x27;Pasada&#x27;) }}
+        &lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;card-details mt-3&quot;&gt;
+        &lt;div class&#x3D;&quot;detail-item&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-geo-alt-fill&quot;&gt;&lt;/i&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Lugar&lt;/strong&gt;
+            &lt;span&gt;{{ conv.lugar || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-person-fill&quot;&gt;&lt;/i&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Inicia&lt;/strong&gt;
+            &lt;span&gt;{{ conv.inicia || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-pencil-square&quot;&gt;&lt;/i&gt;
+          &lt;div&gt;
+            &lt;strong&gt;Redacta acta&lt;/strong&gt;
+            &lt;span&gt;{{ conv.redacta || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;card-actions mt-4&quot;&gt;
+        &lt;button
+          type&#x3D;&quot;button&quot;
+          class&#x3D;&quot;btn-sm w-100&quot;
+          [class.primary-button]&#x3D;&quot;conv.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27;&quot;
+          [class.secondary-button]&#x3D;&quot;conv.estado !&#x3D;&#x3D; &#x27;a&#x27;&quot;
+          (click)&#x3D;&quot;seleccionarConvocatoria(conv.idConvocatoria)&quot;&gt;
+          Ver convocatoria &lt;i class&#x3D;&quot;bi bi-arrow-right ms-2&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;!-- Detail View --&gt;
+&lt;section class&#x3D;&quot;convocatoria-page&quot; *ngIf&#x3D;&quot;convocatoriaSeleccionada&quot;&gt;
+  &lt;header class&#x3D;&quot;hero&quot;&gt;
+    &lt;div&gt;
+      &lt;p class&#x3D;&quot;hero-kicker&quot;&gt;Reuniones de equipo&lt;/p&gt;
+      &lt;h1 class&#x3D;&quot;hero-title&quot;&gt;Detalle Convocatoria&lt;/h1&gt;
+      &lt;p class&#x3D;&quot;hero-subtitle&quot;&gt;Visualiza la información general y el orden del día establecido.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;hero-badge&quot;&gt;
+      &lt;span class&#x3D;&quot;badge-label&quot;&gt;Curso&lt;/span&gt;
+      &lt;strong&gt;{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}&lt;/strong&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorMsg&quot; class&#x3D;&quot;feedback feedback-error&quot;&gt;{{ errorMsg }}&lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;surface-card group-summary&quot;&gt;
+    &lt;div&gt;
+      &lt;p class&#x3D;&quot;summary-label&quot;&gt;Convocatoria&lt;/p&gt;
+      &lt;h2 class&#x3D;&quot;summary-title&quot;&gt;Datos base de la reunión y su orden del día&lt;/h2&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;summary-meta&quot;&gt;
+      &lt;div&gt;
+        &lt;span&gt;Fecha y hora&lt;/span&gt;
+        &lt;strong&gt;{{ formatFecha(convocatoriaSeleccionada.fecha) }}&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;span&gt;Lugar&lt;/span&gt;
+        &lt;strong&gt;{{ convocatoriaSeleccionada.lugar || &#x27;Sin asignar&#x27; }}&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;span&gt;Curso&lt;/span&gt;
+        &lt;strong&gt;{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}&lt;/strong&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;surface-card section-card presence-card&quot;&gt;
+    &lt;div class&#x3D;&quot;presence-header&quot;&gt;
+      &lt;div&gt;
+        &lt;p class&#x3D;&quot;summary-label&quot;&gt;Chequeo rápido&lt;/p&gt;
+        &lt;h3&gt;¿Estoy en esta convocatoria?&lt;/h3&gt;
+        &lt;p&gt;Busca tu nombre, apellidos o el nombre de tu grupo para comprobar si apareces como redacta, inicia, dinamiza o participante.&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;presence-search&quot;&gt;
+        &lt;label for&#x3D;&quot;buscador-profesor&quot; class&#x3D;&quot;presence-search-label&quot;&gt;Buscar profesor&lt;/label&gt;
+        &lt;div class&#x3D;&quot;presence-input-shell&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-search&quot;&gt;&lt;/i&gt;
+          &lt;input
+            id&#x3D;&quot;buscador-profesor&quot;
+            type&#x3D;&quot;text&quot;
+            class&#x3D;&quot;form-control&quot;
+            [(ngModel)]&#x3D;&quot;buscadorProfesor&quot;
+            placeholder&#x3D;&quot;Ej. María García o 1DAW&quot;
+          &gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div *ngIf&#x3D;&quot;resultadoBuscadorProfesor as resultado&quot; class&#x3D;&quot;presence-result&quot; [class.is-match]&#x3D;&quot;resultado.encontrado&quot; [class.is-miss]&#x3D;&quot;!resultado.encontrado&quot;&gt;
+      &lt;div class&#x3D;&quot;presence-result-head&quot;&gt;
+        &lt;strong&gt;{{ resultado.encontrado ? &#x27;Sí, apareces en esta convocatoria&#x27; : &#x27;No apareces en esta convocatoria&#x27; }}&lt;/strong&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-sm btn-outline-secondary&quot; (click)&#x3D;&quot;limpiarBuscadorProfesor()&quot;&gt;Limpiar&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;p class&#x3D;&quot;mb-0&quot;&gt;
+        {{ resultado.encontrado ? &#x27;Coincidencias encontradas:&#x27; : &#x27;No se han encontrado coincidencias con ese nombre.&#x27; }}
+      &lt;/p&gt;
+
+      &lt;ul class&#x3D;&quot;presence-match-list&quot; *ngIf&#x3D;&quot;resultado.coincidencias.length &gt; 0&quot;&gt;
+        &lt;li *ngFor&#x3D;&quot;let coincidencia of resultado.coincidencias&quot;&gt;
+          &lt;strong&gt;{{ coincidencia.nombre }}&lt;/strong&gt;
+          &lt;span class&#x3D;&quot;presence-match-type&quot;&gt;{{ coincidencia.tipo }}&lt;/span&gt;
+          &lt;span&gt;{{ coincidencia.contexto }}&lt;/span&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;surface-card section-card&quot;&gt;
+    &lt;div class&#x3D;&quot;section-header&quot;&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Información general&lt;/h3&gt;
+        &lt;p&gt;Campos base de la convocatoria y responsables de la sesión.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;info-grid&quot;&gt;
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Curso académico&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Fecha y hora&lt;/strong&gt;
+        &lt;p&gt;{{ formatFecha(convocatoriaSeleccionada.fecha) }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Redacta la convocatoria&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.redacta || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Inicia la reunión&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.inicia || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Lugar&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.lugar || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;surface-card section-card&quot;&gt;
+    &lt;div class&#x3D;&quot;section-header&quot;&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Orden del día&lt;/h3&gt;
+        &lt;p&gt;Estructura temporal y organizativa de la sesión.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;table-shell&quot;&gt;
+      &lt;table class&#x3D;&quot;agenda-table&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Min.&lt;/th&gt;
+            &lt;th&gt;Punto / Descripción&lt;/th&gt;
+            &lt;th&gt;Objetivo&lt;/th&gt;
+            &lt;th&gt;Dinamiza&lt;/th&gt;
+            &lt;th&gt;Lugar&lt;/th&gt;
+            &lt;th&gt;Participa&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+          &lt;tr *ngFor&#x3D;&quot;let item of convocatoriaSeleccionada.ordenDia&quot;&gt;
+            &lt;td class&#x3D;&quot;minutos-cell&quot; data-label&#x3D;&quot;Min.&quot;&gt;
+              &lt;span class&#x3D;&quot;badge bg-secondary px-2 py-1 fs-6&quot;&gt;{{ item.minutos || &#x27;0&#x27; }} min&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Punto / Descripción&quot;&gt;
+              &lt;p class&#x3D;&quot;mb-0 fs-6 text-wrap&quot;&gt;{{ item.descripcion || &#x27;Sin descripción&#x27; }}&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Objetivo&quot;&gt;
+              &lt;p class&#x3D;&quot;mb-0 fs-6 text-wrap text-muted&quot;&gt;{{ item.objetivo || &#x27;Sin objetivo&#x27; }}&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Dinamiza&quot;&gt;
+              &lt;span class&#x3D;&quot;text-secondary font-weight-bold&quot;&gt;{{ item.dinamiza || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Lugar&quot;&gt;
+              &lt;span&gt;{{ item.lugar || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Participa&quot;&gt;
+              &lt;div class&#x3D;&quot;participants-list row-participants&quot;&gt;
+                &lt;span *ngIf&#x3D;&quot;item.participantes.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;text-muted fs-6&quot;&gt;Nadie asignado&lt;/span&gt;
+                &lt;article *ngFor&#x3D;&quot;let participante of item.participantes&quot; class&#x3D;&quot;participant-chip chip-view&quot;&gt;
+                  &lt;span class&#x3D;&quot;participant-type&quot; [ngClass]&#x3D;&quot;participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;chip-tipo-grupo&#x27; : &#x27;chip-tipo-profesor&#x27;&quot;&gt;
+                    {{ participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;Grupo&#x27; : &#x27;Profesor&#x27; }}
+                  &lt;/span&gt;
+                  &lt;strong&gt;{{ participante.nombre }}&lt;/strong&gt;
+                &lt;/article&gt;
+              &lt;/div&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;footer class&#x3D;&quot;agenda-footer&quot;&gt;
+      &lt;div class&#x3D;&quot;total-badge&quot;&gt;
+        &lt;span&gt;Total previsto&lt;/span&gt;
+        &lt;strong&gt;{{ minutosTotales }} minutos&lt;/strong&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;footer-actions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;primary-button&quot; (click)&#x3D;&quot;volverAlListado()&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-arrow-left me-2&quot;&gt;&lt;/i&gt; Volver al listado
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><section class="convocatoria-page" *ngIf="!convocatoriaSeleccionada">  <div class="header-container hero">    <div>      <p class="hero-kicker">Reuniones de equipo</p>      <h1 class="hero-title">Convocatorias</h1>      <p class="hero-subtitle">Visualiza las convocatorias de reuniones programadas para el ciclo.</p>    </div>  </div>  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>  <!-- Loading State -->  <div *ngIf="cargandoListado" class="loading-state text-center py-5">    <div class="spinner-border text-primary" role="status">      <span class="visually-hidden">Cargando convocatorias...</span>    </div>  </div>  <!-- Empty state -->  <div *ngIf="!cargandoListado && convocatoras.length === 0" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">    <div class="card-body">      <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>      <h4 class="card-title text-secondary">No hay convocatorias</h4>      <p class="card-text text-muted">Aún no se han registrado convocatorias de reuniones.</p>    </div>  </div>  <!-- List Grid -->  <div *ngIf="!cargandoListado && convocatoras.length > 0" class="convocatorias-grid">    <div *ngFor="let conv of convocatoras" class="surface-card convocatoria-card" [class.convocatoria-card-activa]="conv.estado === \'a\'">      <div class="card-header-main">        <div class="fecha-badge">          <i class="bi bi-calendar3"></i>          <span>{{ formatFecha(conv.fecha) }}</span>        </div>        <span class="status-badge" [class.status-badge-activa]="conv.estado === \'a\'" [class.status-badge-historica]="conv.estado !== \'a\'">          {{ conv.estado === \'a\' ? \'Actual\' : (conv.estado === \'b\' ? \'Borrador\' : \'Pasada\') }}        </span>      </div>      <div class="card-details mt-3">        <div class="detail-item">          <i class="bi bi-geo-alt-fill"></i>          <div>            <strong>Lugar</strong>            <span>{{ conv.lugar || \'Sin asignar\' }}</span>          </div>        </div>        <div class="detail-item mt-2">          <i class="bi bi-person-fill"></i>          <div>            <strong>Inicia</strong>            <span>{{ conv.inicia || \'Sin asignar\' }}</span>          </div>        </div>        <div class="detail-item mt-2">          <i class="bi bi-pencil-square"></i>          <div>            <strong>Redacta acta</strong>            <span>{{ conv.redacta || \'Sin asignar\' }}</span>          </div>        </div>      </div>      <div class="card-actions mt-4">        <button          type="button"          class="btn-sm w-100"          [class.primary-button]="conv.estado === \'a\'"          [class.secondary-button]="conv.estado !== \'a\'"          (click)="seleccionarConvocatoria(conv.idConvocatoria)">          Ver convocatoria <i class="bi bi-arrow-right ms-2"></i>        </button>      </div>    </div>  </div></section><!-- Detail View --><section class="convocatoria-page" *ngIf="convocatoriaSeleccionada">  <header class="hero">    <div>      <p class="hero-kicker">Reuniones de equipo</p>      <h1 class="hero-title">Detalle Convocatoria</h1>      <p class="hero-subtitle">Visualiza la información general y el orden del día establecido.</p>    </div>    <div class="hero-badge">      <span class="badge-label">Curso</span>      <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>    </div>  </header>  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>  <div class="surface-card group-summary">    <div>      <p class="summary-label">Convocatoria</p>      <h2 class="summary-title">Datos base de la reunión y su orden del día</h2>    </div>    <div class="summary-meta">      <div>        <span>Fecha y hora</span>        <strong>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</strong>      </div>      <div>        <span>Lugar</span>        <strong>{{ convocatoriaSeleccionada.lugar || \'Sin asignar\' }}</strong>      </div>      <div>        <span>Curso</span>        <strong>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</strong>      </div>    </div>  </div>  <div class="surface-card section-card presence-card">    <div class="presence-header">      <div>        <p class="summary-label">Chequeo rápido</p>        <h3>¿Estoy en esta convocatoria?</h3>        <p>Busca tu nombre, apellidos o el nombre de tu grupo para comprobar si apareces como redacta, inicia, dinamiza o participante.</p>      </div>      <div class="presence-search">        <label for="buscador-profesor" class="presence-search-label">Buscar profesor</label>        <div class="presence-input-shell">          <i class="bi bi-search"></i>          <input            id="buscador-profesor"            type="text"            class="form-control"            [(ngModel)]="buscadorProfesor"            placeholder="Ej. María García o 1DAW"          >        </div>      </div>    </div>    <div *ngIf="resultadoBuscadorProfesor as resultado" class="presence-result" [class.is-match]="resultado.encontrado" [class.is-miss]="!resultado.encontrado">      <div class="presence-result-head">        <strong>{{ resultado.encontrado ? \'Sí, apareces en esta convocatoria\' : \'No apareces en esta convocatoria\' }}</strong>        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="limpiarBuscadorProfesor()">Limpiar</button>      </div>      <p class="mb-0">        {{ resultado.encontrado ? \'Coincidencias encontradas:\' : \'No se han encontrado coincidencias con ese nombre.\' }}      </p>      <ul class="presence-match-list" *ngIf="resultado.coincidencias.length > 0">        <li *ngFor="let coincidencia of resultado.coincidencias">          <strong>{{ coincidencia.nombre }}</strong>          <span class="presence-match-type">{{ coincidencia.tipo }}</span>          <span>{{ coincidencia.contexto }}</span>        </li>      </ul>    </div>  </div>  <div class="surface-card section-card">    <div class="section-header">      <div>        <h3>Información general</h3>        <p>Campos base de la convocatoria y responsables de la sesión.</p>      </div>    </div>    <div class="info-grid">      <div class="info-item">        <strong>Curso académico</strong>        <p>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>      </div>      <div class="info-item">        <strong>Fecha y hora</strong>        <p>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</p>      </div>      <div class="info-item">        <strong>Redacta la convocatoria</strong>        <p>{{ convocatoriaSeleccionada.redacta || \'Sin asignar\' }}</p>      </div>      <div class="info-item">        <strong>Inicia la reunión</strong>        <p>{{ convocatoriaSeleccionada.inicia || \'Sin asignar\' }}</p>      </div>      <div class="info-item">        <strong>Lugar</strong>        <p>{{ convocatoriaSeleccionada.lugar || \'Sin asignar\' }}</p>      </div>    </div>  </div>  <div class="surface-card section-card">    <div class="section-header">      <div>        <h3>Orden del día</h3>        <p>Estructura temporal y organizativa de la sesión.</p>      </div>    </div>    <div class="table-shell">      <table class="agenda-table">        <thead>          <tr>            <th>Min.</th>            <th>Punto / Descripción</th>            <th>Objetivo</th>            <th>Dinamiza</th>            <th>Lugar</th>            <th>Participa</th>          </tr>        </thead>        <tbody>          <tr *ngFor="let item of convocatoriaSeleccionada.ordenDia">            <td class="minutos-cell" data-label="Min.">              <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || \'0\' }} min</span>            </td>            <td data-label="Punto / Descripción">              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || \'Sin descripción\' }}</p>            </td>            <td data-label="Objetivo">              <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || \'Sin objetivo\' }}</p>            </td>            <td data-label="Dinamiza">              <span class="text-secondary font-weight-bold">{{ item.dinamiza || \'Sin asignar\' }}</span>            </td>            <td data-label="Lugar">              <span>{{ item.lugar || \'Sin asignar\' }}</span>            </td>            <td data-label="Participa">              <div class="participants-list row-participants">                <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>                <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">                  <span class="participant-type" [ngClass]="participante.tipo === \'grupo\' ? \'chip-tipo-grupo\' : \'chip-tipo-profesor\'">                    {{ participante.tipo === \'grupo\' ? \'Grupo\' : \'Profesor\' }}                  </span>                  <strong>{{ participante.nombre }}</strong>                </article>              </div>            </td>          </tr>        </tbody>      </table>    </div>    <footer class="agenda-footer">      <div class="total-badge">        <span>Total previsto</span>        <strong>{{ minutosTotales }} minutos</strong>      </div>      <div class="footer-actions">        <button type="button" class="primary-button" (click)="volverAlListado()">          <i class="bi bi-arrow-left me-2"></i> Volver al listado        </button>      </div>    </footer>  </div></section></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ProfesorConvocatoriasComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ProfesorConvocatoriasComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

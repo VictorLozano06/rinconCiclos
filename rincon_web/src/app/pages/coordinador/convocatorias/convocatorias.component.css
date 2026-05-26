@@ -369,7 +369,15 @@
 
 .agenda-table th:nth-child(1),
 .agenda-table td.minutos-cell {
-  width: 66px;
+  width: 88px;
+}
+
+.agenda-table td.minutos-cell input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px 28px 10px 12px;
+  text-align: center;
 }
 
 .agenda-table th:nth-child(2),

@@ -1,0 +1,1792 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  RecursoDetalleCompartidoComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-recurso-detalle-compartido</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./recurso-detalle-compartido.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./recurso-detalle-compartido.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorCarga" >errorCarga</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#idCategoria" >idCategoria</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mensajeError" >mensajeError</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#numRecurso" >numRecurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#recurso" >recurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#rutaBase" >rutaBase</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#rutaInicio" >rutaInicio</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#rutaNavegacion" >rutaNavegacion</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buscarRutaCategoria" >buscarRutaCategoria</a>
+                            </li>
+                            <li>
+                                <a href="#cargarDetalle" >cargarDetalle</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#construirRutaNavegacion" >construirRutaNavegacion</a>
+                            </li>
+                            <li>
+                                <a href="#getNombreArchivo" >getNombreArchivo</a>
+                            </li>
+                            <li>
+                                <a href="#getNombreArchivoAdjunto" >getNombreArchivoAdjunto</a>
+                            </li>
+                            <li>
+                                <a href="#getNombreEnlace" >getNombreEnlace</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#obtenerArchivos" >obtenerArchivos</a>
+                            </li>
+                            <li>
+                                <a href="#obtenerCiclos" >obtenerCiclos</a>
+                            </li>
+                            <li>
+                                <a href="#obtenerEnlaces" >obtenerEnlaces</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#obtenerEtiquetaDesdeUrl" >obtenerEtiquetaDesdeUrl</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#textoRutaNavegacion" >textoRutaNavegacion</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, categoriaService: <a href="../injectables/CategoriaService.html" target="_self">CategoriaService</a>, recursoService: <a href="../injectables/RecursoService.html" target="_self">RecursoService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="34" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:34</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>categoriaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CategoriaService.html" target="_self" >CategoriaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>recursoService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/RecursoService.html" target="_self" >RecursoService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buscarRutaCategoria"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>buscarRutaCategoria</b></span>
+                        <a href="#buscarRutaCategoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buscarRutaCategoria(categorias: <a href="../interfaces/CategoriaDto.html" target="_self">CategoriaDto[]</a>, idCategoria: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="187"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:187</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>categorias</td>
+                                            <td>
+                                                            <code><a href="../interfaces/CategoriaDto.html" target="_self" >CategoriaDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>idCategoria</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>string[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarDetalle"></a>
+                    <span class="name">
+                        <span ><b>cargarDetalle</b></span>
+                        <a href="#cargarDetalle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cargarDetalle()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="55"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:55</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="construirRutaNavegacion"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>construirRutaNavegacion</b></span>
+                        <a href="#construirRutaNavegacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>construirRutaNavegacion(categorias: <a href="../interfaces/CategoriaDto.html" target="_self">CategoriaDto[]</a>, idCategoria: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, nombreRecurso: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="169"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:169</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>categorias</td>
+                                            <td>
+                                                            <code><a href="../interfaces/CategoriaDto.html" target="_self" >CategoriaDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>idCategoria</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>nombreRecurso</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/RutaNavegacionItem.html" target="_self" >RutaNavegacionItem[]</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNombreArchivo"></a>
+                    <span class="name">
+                        <span ><b>getNombreArchivo</b></span>
+                        <a href="#getNombreArchivo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNombreArchivo(archivo: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="133"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:133</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>archivo</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNombreArchivoAdjunto"></a>
+                    <span class="name">
+                        <span ><b>getNombreArchivoAdjunto</b></span>
+                        <a href="#getNombreArchivoAdjunto"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNombreArchivoAdjunto(archivo: <a href="../interfaces/RecursoArchivoDto.html" target="_self">RecursoArchivoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="147"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:147</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>archivo</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoArchivoDto.html" target="_self" >RecursoArchivoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getNombreEnlace"></a>
+                    <span class="name">
+                        <span ><b>getNombreEnlace</b></span>
+                        <a href="#getNombreEnlace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getNombreEnlace(enlace: <a href="../interfaces/RecursoEnlaceDto.html" target="_self">RecursoEnlaceDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="138"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:138</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>enlace</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoEnlaceDto.html" target="_self" >RecursoEnlaceDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="42"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerArchivos"></a>
+                    <span class="name">
+                        <span ><b>obtenerArchivos</b></span>
+                        <a href="#obtenerArchivos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>obtenerArchivos()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="104"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:104</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/RecursoArchivoDto.html" target="_self" >RecursoArchivoDto[]</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerCiclos"></a>
+                    <span class="name">
+                        <span ><b>obtenerCiclos</b></span>
+                        <a href="#obtenerCiclos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>obtenerCiclos()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="120"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:120</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>string[]</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerEnlaces"></a>
+                    <span class="name">
+                        <span ><b>obtenerEnlaces</b></span>
+                        <a href="#obtenerEnlaces"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>obtenerEnlaces()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="88"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:88</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/RecursoEnlaceDto.html" target="_self" >RecursoEnlaceDto[]</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerEtiquetaDesdeUrl"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>obtenerEtiquetaDesdeUrl</b></span>
+                        <a href="#obtenerEtiquetaDesdeUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>obtenerEtiquetaDesdeUrl(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, fallback: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="152"
+                                    class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:152</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>url</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>fallback</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="27" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorCarga"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>errorCarga</b></span>
+                        <a href="#errorCarga"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="28" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="idCategoria"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>idCategoria</b></span>
+                        <a href="#idCategoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="33" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mensajeError"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mensajeError</b></span>
+                        <a href="#mensajeError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="29" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="numRecurso"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>numRecurso</b></span>
+                        <a href="#numRecurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="34" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recurso"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>recurso</b></span>
+                        <a href="#recurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rutaBase"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>rutaBase</b></span>
+                        <a href="#rutaBase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;/profesor&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="30" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rutaInicio"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>rutaInicio</b></span>
+                        <a href="#rutaInicio"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;/profesor/inicio&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="31" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rutaNavegacion"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>rutaNavegacion</b></span>
+                        <a href="#rutaNavegacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/RutaNavegacionItem.html" target="_self" >RutaNavegacionItem[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="26" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="textoRutaNavegacion"></a>
+                        <span class="name"><b>textoRutaNavegacion</b><a href="#textoRutaNavegacion"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>textoRutaNavegacion()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="128" class="link-to-prism">src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts:128</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { forkJoin } from &#x27;rxjs&#x27;;
+import { CategoriaService } from &#x27;../../services/categoria.service&#x27;;
+import { RecursoService } from &#x27;../../services/recurso.service&#x27;;
+import { CategoriaDto } from &#x27;../../dto/categoria.dto&#x27;;
+import { RecursoArchivoDto, RecursoDto, RecursoEnlaceDto } from &#x27;../../dto/recurso.dto&#x27;;
+
+interface RutaNavegacionItem {
+  nombre: string;
+  ruta: string | any[] | null;
+}
+
+@Component({
+  selector: &#x27;app-recurso-detalle-compartido&#x27;,
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: &#x27;./recurso-detalle-compartido.component.html&#x27;,
+  styleUrl: &#x27;./recurso-detalle-compartido.component.css&#x27;
+})
+export class RecursoDetalleCompartidoComponent implements OnInit {
+  // Ficha completa del recurso que se muestra en pantalla.
+  public recurso: RecursoDto | null &#x3D; null;
+  // Ruta jerarquica visible arriba del detalle: Inicio / Categoria / Recurso.
+  public rutaNavegacion: RutaNavegacionItem[] &#x3D; [];
+  public cargando &#x3D; true;
+  public errorCarga &#x3D; false;
+  public mensajeError &#x3D; &#x27;&#x27;;
+  public rutaBase &#x3D; &#x27;/profesor&#x27;;
+  public rutaInicio &#x3D; &#x27;/profesor/inicio&#x27;;
+
+  private idCategoria &#x3D; 0;
+  private numRecurso &#x3D; 0;
+
+  constructor(
+    private route: ActivatedRoute,
+    private categoriaService: CategoriaService,
+    private recursoService: RecursoService
+  ) {}
+
+  ngOnInit(): void {
+    // subscribe escucha cambios de la ruta. Si cambia el id del recurso, se recarga el detalle.
+    this.route.params.subscribe((params) &#x3D;&gt; {
+      this.idCategoria &#x3D; Number(params[&#x27;idCategoria&#x27;] || 0);
+      this.numRecurso &#x3D; Number(params[&#x27;numRecurso&#x27;] || 0);
+      // snapshot es una foto instantanea del estado actual de la ruta en este momento.
+      this.rutaBase &#x3D; this.route.snapshot.data[&#x27;rutaBase&#x27;] || &#x27;/profesor&#x27;;
+      this.rutaInicio &#x3D; this.route.snapshot.data[&#x27;rutaInicio&#x27;] || &#x27;/profesor/inicio&#x27;;
+      this.cargarDetalle();
+    });
+  }
+
+  // Trae categorias y detalle del recurso para construir la vista final.
+  cargarDetalle(): void {
+    this.cargando &#x3D; true;
+    this.errorCarga &#x3D; false;
+    this.mensajeError &#x3D; &#x27;&#x27;;
+    this.recurso &#x3D; null;
+    this.rutaNavegacion &#x3D; [];
+
+    if (!this.idCategoria || !this.numRecurso) {
+      this.errorCarga &#x3D; true;
+      this.cargando &#x3D; false;
+      return;
+    }
+
+    // forkJoin lanza varias peticiones en paralelo y espera a que todas terminen.
+    forkJoin({
+      categorias: this.categoriaService.getCategorias(),
+      recurso: this.recursoService.getDetalle(this.idCategoria, this.numRecurso)
+    }).subscribe({
+      next: ({ categorias, recurso }) &#x3D;&gt; {
+        this.recurso &#x3D; recurso;
+        this.rutaNavegacion &#x3D; this.construirRutaNavegacion(categorias, this.idCategoria, recurso.nombre);
+        this.cargando &#x3D; false;
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        this.mensajeError &#x3D; err?.error?.message || err?.error?.error || &#x27;No se ha podido cargar el recurso.&#x27;;
+        this.cargando &#x3D; false;
+        console.error(&#x27;Error al cargar el detalle del recurso:&#x27;, err);
+      }
+    });
+  }
+
+  // Devuelve los enlaces externos asociados al recurso.
+  obtenerEnlaces(): RecursoEnlaceDto[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    if (this.recurso.enlacesDetalle &amp;&amp; this.recurso.enlacesDetalle.length &gt; 0) {
+      return this.recurso.enlacesDetalle;
+    }
+
+    return (this.recurso.urls || []).map((url, index) &#x3D;&gt; ({
+      nombre: this.obtenerEtiquetaDesdeUrl(url, &#x60;Acceso ${index + 1}&#x60;),
+      url
+    }));
+  }
+
+  // Devuelve los archivos adjuntos asociados al recurso.
+  obtenerArchivos(): RecursoArchivoDto[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    if (this.recurso.archivosDetalle &amp;&amp; this.recurso.archivosDetalle.length &gt; 0) {
+      return this.recurso.archivosDetalle;
+    }
+
+    return (this.recurso.archivos || []).map((archivo, index) &#x3D;&gt; ({
+      nombre: &#x60;Adjunto ${index + 1}&#x60;,
+      archivo
+    }));
+  }
+
+  // Devuelve los ciclos asociados al recurso en formato visual.
+  obtenerCiclos(): string[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    return (this.recurso.ciclos || []).map((ciclo) &#x3D;&gt; ciclo.nombre);
+  }
+
+  get textoRutaNavegacion(): string {
+    return this.rutaNavegacion.map((item) &#x3D;&gt; item.nombre).join(&#x27; / &#x27;);
+  }
+
+  // Extrae el nombre legible de un archivo o ruta.
+  getNombreArchivo(archivo: string): string {
+    const limpio &#x3D; archivo.replace(/\\/g, &#x27;/&#x27;);
+    return limpio.split(&#x27;/&#x27;).pop() || archivo;
+  }
+
+  getNombreEnlace(enlace: RecursoEnlaceDto): string {
+    const nombre &#x3D; (enlace.nombre || &#x27;&#x27;).trim();
+    if (nombre) {
+      return nombre;
+    }
+
+    return this.obtenerEtiquetaDesdeUrl(enlace.url, &#x27;Acceso externo&#x27;);
+  }
+
+  getNombreArchivoAdjunto(archivo: RecursoArchivoDto): string {
+    const nombre &#x3D; (archivo.nombre || &#x27;&#x27;).trim();
+    return nombre || this.getNombreArchivo(archivo.archivo);
+  }
+
+  private obtenerEtiquetaDesdeUrl(url: string, fallback: string): string {
+    try {
+      const parsed &#x3D; new URL(url);
+      const host &#x3D; parsed.hostname.replace(/^www\./, &#x27;&#x27;);
+      const path &#x3D; parsed.pathname.replace(/\/+$/, &#x27;&#x27;);
+
+      if (host &amp;&amp; path &amp;&amp; path !&#x3D;&#x3D; &#x27;/&#x27;) {
+        return &#x60;${host}${path}&#x60;.slice(0, 80);
+      }
+
+      return host || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  // Construye la ruta superior visible a partir de la categoria real del recurso.
+  private construirRutaNavegacion(categorias: CategoriaDto[], idCategoria: number, nombreRecurso: string): RutaNavegacionItem[] {
+    const ruta &#x3D; this.buscarRutaCategoria(categorias, idCategoria);
+    const rutaNavegacion: RutaNavegacionItem[] &#x3D; [{ nombre: &#x27;Inicio&#x27;, ruta: this.rutaInicio }];
+
+    if (ruta.length &gt; 0) {
+      ruta.forEach((nombre, index) &#x3D;&gt; {
+        rutaNavegacion.push({
+          nombre,
+          ruta: index &#x3D;&#x3D;&#x3D; ruta.length - 1 ? null : this.rutaInicio
+        });
+      });
+    }
+
+    rutaNavegacion.push({ nombre: nombreRecurso, ruta: &#x27;&#x27; });
+    return rutaNavegacion;
+  }
+
+  // Localiza la ruta jerarquica de una categoria dentro del arbol.
+  private buscarRutaCategoria(categorias: CategoriaDto[], idCategoria: number): string[] {
+    for (const categoria of categorias) {
+      if (categoria.idCategoria &#x3D;&#x3D;&#x3D; idCategoria) {
+        return [categoria.nombre];
+      }
+
+      if (categoria.subcategorias &amp;&amp; categoria.subcategorias.length &gt; 0) {
+        const encontrada &#x3D; this.buscarRutaCategoria(categoria.subcategorias, idCategoria);
+        if (encontrada.length &gt; 0) {
+          return [categoria.nombre, ...encontrada];
+        }
+      }
+    }
+
+    return [];
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;section class&#x3D;&quot;recurso-detalle&quot; *ngIf&#x3D;&quot;!cargando &amp;&amp; recurso&quot;&gt;
+  &lt;p class&#x3D;&quot;ruta-detalle&quot; *ngIf&#x3D;&quot;textoRutaNavegacion&quot;&gt;{{ textoRutaNavegacion }}&lt;/p&gt;
+
+  &lt;header class&#x3D;&quot;hero-detalle&quot;&gt;
+    &lt;div class&#x3D;&quot;hero-contenido&quot;&gt;
+      &lt;p class&#x3D;&quot;categoria-detalle&quot;&gt;{{ recurso.categoriaNombre }}&lt;/p&gt;
+      &lt;h1 class&#x3D;&quot;titulo-detalle&quot;&gt;{{ recurso.nombre }}&lt;/h1&gt;
+      &lt;p class&#x3D;&quot;descripcion-detalle&quot;&gt;{{ recurso.descripcion }}&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;aside class&#x3D;&quot;hero-resumen&quot;&gt;
+      &lt;div class&#x3D;&quot;dato-resumen&quot;&gt;
+        &lt;span class&#x3D;&quot;etiqueta-resumen&quot;&gt;Publicado&lt;/span&gt;
+        &lt;strong&gt;{{ recurso.fechaPublicacion | date:&#x27;dd/MM/yyyy&#x27; }}&lt;/strong&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;dato-resumen&quot;&gt;
+        &lt;span class&#x3D;&quot;etiqueta-resumen&quot;&gt;Curso&lt;/span&gt;
+        &lt;strong&gt;{{ recurso.anioInicio }}/{{ recurso.anioFin }}&lt;/strong&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;dato-resumen&quot; *ngIf&#x3D;&quot;obtenerCiclos().length &gt; 0&quot;&gt;
+        &lt;span class&#x3D;&quot;etiqueta-resumen&quot;&gt;Ciclos&lt;/span&gt;
+        &lt;div class&#x3D;&quot;lista-etiquetas&quot;&gt;
+          &lt;span *ngFor&#x3D;&quot;let ciclo of obtenerCiclos()&quot; class&#x3D;&quot;etiqueta-ciclo&quot;&gt;{{ ciclo }}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/aside&gt;
+  &lt;/header&gt;
+
+  &lt;section class&#x3D;&quot;bloque-detalle bloque-recursos&quot; *ngIf&#x3D;&quot;obtenerEnlaces().length &gt; 0&quot;&gt;
+    &lt;div class&#x3D;&quot;cabecera-bloque&quot;&gt;
+      &lt;h2&gt;Enlaces&lt;/h2&gt;
+      &lt;p&gt;Accesos externos asociados a este recurso.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;lista-recursos-detalle&quot;&gt;
+      &lt;a
+        *ngFor&#x3D;&quot;let enlace of obtenerEnlaces()&quot;
+        class&#x3D;&quot;item-recurso-detalle&quot;
+        [href]&#x3D;&quot;enlace.url&quot;
+        target&#x3D;&quot;_blank&quot;
+        rel&#x3D;&quot;noopener noreferrer&quot;&gt;
+        &lt;div class&#x3D;&quot;contenido-recurso-detalle&quot;&gt;
+          &lt;span class&#x3D;&quot;tipo-recurso&quot;&gt;Acceso&lt;/span&gt;
+          &lt;strong class&#x3D;&quot;nombre-recurso-detalle&quot;&gt;{{ getNombreEnlace(enlace) }}&lt;/strong&gt;
+          &lt;span class&#x3D;&quot;valor-recurso-detalle&quot;&gt;{{ enlace.url }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;accion-recurso&quot;&gt;Abrir&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section class&#x3D;&quot;bloque-detalle bloque-recursos&quot; *ngIf&#x3D;&quot;obtenerArchivos().length &gt; 0&quot;&gt;
+    &lt;div class&#x3D;&quot;cabecera-bloque&quot;&gt;
+      &lt;h2&gt;Archivos&lt;/h2&gt;
+      &lt;p&gt;Descargas disponibles dentro del recurso.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;lista-recursos-detalle&quot;&gt;
+      &lt;a
+        *ngFor&#x3D;&quot;let archivo of obtenerArchivos()&quot;
+        class&#x3D;&quot;item-recurso-detalle&quot;
+        [href]&#x3D;&quot;archivo.archivo&quot;
+        download&gt;
+        &lt;div class&#x3D;&quot;contenido-recurso-detalle&quot;&gt;
+          &lt;span class&#x3D;&quot;tipo-recurso&quot;&gt;Adjunto&lt;/span&gt;
+          &lt;strong class&#x3D;&quot;nombre-recurso-detalle&quot;&gt;{{ getNombreArchivoAdjunto(archivo) }}&lt;/strong&gt;
+          &lt;span class&#x3D;&quot;valor-recurso-detalle&quot;&gt;{{ archivo.archivo }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;accion-recurso&quot;&gt;Descargar&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/section&gt;
+
+&lt;section class&#x3D;&quot;recurso-detalle&quot; *ngIf&#x3D;&quot;cargando&quot;&gt;
+  &lt;div class&#x3D;&quot;mensaje-estado&quot;&gt;Cargando detalle del recurso...&lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class&#x3D;&quot;recurso-detalle&quot; *ngIf&#x3D;&quot;errorCarga&quot;&gt;
+  &lt;div class&#x3D;&quot;mensaje-estado&quot;&gt;{{ mensajeError }}&lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><section class="recurso-detalle" *ngIf="!cargando && recurso">  <p class="ruta-detalle" *ngIf="textoRutaNavegacion">{{ textoRutaNavegacion }}</p>  <header class="hero-detalle">    <div class="hero-contenido">      <p class="categoria-detalle">{{ recurso.categoriaNombre }}</p>      <h1 class="titulo-detalle">{{ recurso.nombre }}</h1>      <p class="descripcion-detalle">{{ recurso.descripcion }}</p>    </div>    <aside class="hero-resumen">      <div class="dato-resumen">        <span class="etiqueta-resumen">Publicado</span>        <strong>{{ recurso.fechaPublicacion | date:\'dd/MM/yyyy\' }}</strong>      </div>      <div class="dato-resumen">        <span class="etiqueta-resumen">Curso</span>        <strong>{{ recurso.anioInicio }}/{{ recurso.anioFin }}</strong>      </div>      <div class="dato-resumen" *ngIf="obtenerCiclos().length > 0">        <span class="etiqueta-resumen">Ciclos</span>        <div class="lista-etiquetas">          <span *ngFor="let ciclo of obtenerCiclos()" class="etiqueta-ciclo">{{ ciclo }}</span>        </div>      </div>    </aside>  </header>  <section class="bloque-detalle bloque-recursos" *ngIf="obtenerEnlaces().length > 0">    <div class="cabecera-bloque">      <h2>Enlaces</h2>      <p>Accesos externos asociados a este recurso.</p>    </div>    <div class="lista-recursos-detalle">      <a        *ngFor="let enlace of obtenerEnlaces()"        class="item-recurso-detalle"        [href]="enlace.url"        target="_blank"        rel="noopener noreferrer">        <div class="contenido-recurso-detalle">          <span class="tipo-recurso">Acceso</span>          <strong class="nombre-recurso-detalle">{{ getNombreEnlace(enlace) }}</strong>          <span class="valor-recurso-detalle">{{ enlace.url }}</span>        </div>        <span class="accion-recurso">Abrir</span>      </a>    </div>  </section>  <section class="bloque-detalle bloque-recursos" *ngIf="obtenerArchivos().length > 0">    <div class="cabecera-bloque">      <h2>Archivos</h2>      <p>Descargas disponibles dentro del recurso.</p>    </div>    <div class="lista-recursos-detalle">      <a        *ngFor="let archivo of obtenerArchivos()"        class="item-recurso-detalle"        [href]="archivo.archivo"        download>        <div class="contenido-recurso-detalle">          <span class="tipo-recurso">Adjunto</span>          <strong class="nombre-recurso-detalle">{{ getNombreArchivoAdjunto(archivo) }}</strong>          <span class="valor-recurso-detalle">{{ archivo.archivo }}</span>        </div>        <span class="accion-recurso">Descargar</span>      </a>    </div>  </section></section><section class="recurso-detalle" *ngIf="cargando">  <div class="mensaje-estado">Cargando detalle del recurso...</div></section><section class="recurso-detalle" *ngIf="errorCarga">  <div class="mensaje-estado">{{ mensajeError }}</div></section></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'RecursoDetalleCompartidoComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'RecursoDetalleCompartidoComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
