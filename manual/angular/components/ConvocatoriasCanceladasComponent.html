@@ -1,0 +1,2177 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ConvocatoriasCanceladasComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-convocatorias-canceladas</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/router/RouterModule" target="_blank" >RouterModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./convocatorias-canceladas.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./convocatorias-canceladas.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cargandoDetalle" >cargandoDetalle</a>
+                            </li>
+                            <li>
+                                <a href="#cargandoListado" >cargandoListado</a>
+                            </li>
+                            <li>
+                                <a href="#convocatorias" >convocatorias</a>
+                            </li>
+                            <li>
+                                <a href="#convocatoriaSeleccionada" >convocatoriaSeleccionada</a>
+                            </li>
+                            <li>
+                                <a href="#errorMsg" >errorMsg</a>
+                            </li>
+                            <li>
+                                <a href="#feedback" >feedback</a>
+                            </li>
+                            <li>
+                                <a href="#feedbackError" >feedbackError</a>
+                            </li>
+                            <li>
+                                <a href="#tabActiva" >tabActiva</a>
+                            </li>
+                            <li>
+                                <a href="#vista" >vista</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cambiarTab" >cambiarTab</a>
+                            </li>
+                            <li>
+                                <a href="#cargarConvocatorias" >cargarConvocatorias</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarConvocatoria" >eliminarConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#formatFecha" >formatFecha</a>
+                            </li>
+                            <li>
+                                <a href="#getEstadoClase" >getEstadoClase</a>
+                            </li>
+                            <li>
+                                <a href="#getEstadoLabel" >getEstadoLabel</a>
+                            </li>
+                            <li>
+                                <a href="#iniciarDetalle" >iniciarDetalle</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#puedeRetomar" >puedeRetomar</a>
+                            </li>
+                            <li>
+                                <a href="#retomarConvocatoria" >retomarConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#seleccionarConvocatoria" >seleccionarConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#volverAActivas" >volverAActivas</a>
+                            </li>
+                            <li>
+                                <a href="#volverAlListado" >volverAlListado</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#borradores" >borradores</a>
+                                </li>
+                                <li>
+                                    <a href="#pasadas" >pasadas</a>
+                                </li>
+                                <li>
+                                    <a href="#minutosTotales" >minutosTotales</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(convocatoriaService: <a href="../injectables/ConvocatoriaService.html" target="_self">ConvocatoriaService</a>, route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:24</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>convocatoriaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ConvocatoriaService.html" target="_self" >ConvocatoriaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cambiarTab"></a>
+                    <span class="name">
+                        <span ><b>cambiarTab</b></span>
+                        <a href="#cambiarTab"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cambiarTab(tab: "borradores" | "pasadas")</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="69"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>tab</td>
+                                            <td>
+                                                        <code>&quot;borradores&quot; | &quot;pasadas&quot;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarConvocatorias"></a>
+                    <span class="name">
+                        <span ><b>cargarConvocatorias</b></span>
+                        <a href="#cargarConvocatorias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cargarConvocatorias()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="50"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>eliminarConvocatoria</b></span>
+                        <a href="#eliminarConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, event?: <a href="https://angular.io/api/router/Event" target="_blank">Event</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="116"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>event</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/router/Event" target="_blank" >Event</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatFecha"></a>
+                    <span class="name">
+                        <span ><b>formatFecha</b></span>
+                        <a href="#formatFecha"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>formatFecha(fechaStr: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="166"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:166</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>fechaStr</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getEstadoClase"></a>
+                    <span class="name">
+                        <span ><b>getEstadoClase</b></span>
+                        <a href="#getEstadoClase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getEstadoClase(estado?: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="141"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:141</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>estado</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getEstadoLabel"></a>
+                    <span class="name">
+                        <span ><b>getEstadoLabel</b></span>
+                        <a href="#getEstadoLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getEstadoLabel(estado?: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="128"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:128</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>estado</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="iniciarDetalle"></a>
+                    <span class="name">
+                        <span ><b>iniciarDetalle</b></span>
+                        <a href="#iniciarDetalle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>iniciarDetalle(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="92"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="32"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="puedeRetomar"></a>
+                    <span class="name">
+                        <span ><b>puedeRetomar</b></span>
+                        <a href="#puedeRetomar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>puedeRetomar(estado?: string | null)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="154"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:154</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>estado</td>
+                                            <td>
+                                                        <code>string | null</code>
+                                            </td>
+
+                                            <td>
+                                                    Si
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="retomarConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>retomarConvocatoria</b></span>
+                        <a href="#retomarConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>retomarConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="81"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:81</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seleccionarConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>seleccionarConvocatoria</b></span>
+                        <a href="#seleccionarConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>seleccionarConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="77"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="volverAActivas"></a>
+                    <span class="name">
+                        <span ><b>volverAActivas</b></span>
+                        <a href="#volverAActivas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>volverAActivas()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="65"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:65</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="volverAlListado"></a>
+                    <span class="name">
+                        <span ><b>volverAlListado</b></span>
+                        <a href="#volverAlListado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>volverAlListado()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="85"
+                                    class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargandoDetalle"></a>
+                    <span class="name">
+                        <span ><b>cargandoDetalle</b></span>
+                        <a href="#cargandoDetalle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="21" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargandoListado"></a>
+                    <span class="name">
+                        <span ><b>cargandoListado</b></span>
+                        <a href="#cargandoListado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="20" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convocatorias"></a>
+                    <span class="name">
+                        <span ><b>convocatorias</b></span>
+                        <a href="#convocatorias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >ConvocatoriaListaItemDto[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="18" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convocatoriaSeleccionada"></a>
+                    <span class="name">
+                        <span ><b>convocatoriaSeleccionada</b></span>
+                        <a href="#convocatoriaSeleccionada"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ConvocatoriaDetalleDto.html" target="_self" >ConvocatoriaDetalleDto | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="19" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMsg"></a>
+                    <span class="name">
+                        <span ><b>errorMsg</b></span>
+                        <a href="#errorMsg"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="22" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="feedback"></a>
+                    <span class="name">
+                        <span ><b>feedback</b></span>
+                        <a href="#feedback"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="23" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="feedbackError"></a>
+                    <span class="name">
+                        <span ><b>feedbackError</b></span>
+                        <a href="#feedbackError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="tabActiva"></a>
+                    <span class="name">
+                        <span ><b>tabActiva</b></span>
+                        <a href="#tabActiva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;borradores&quot; | &quot;pasadas&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;borradores&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="17" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="vista"></a>
+                    <span class="name">
+                        <span ><b>vista</b></span>
+                        <a href="#vista"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;listado&quot; | &quot;detalle&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;listado&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="16" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="borradores"></a>
+                        <span class="name"><b>borradores</b><a href="#borradores"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>borradores()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="158" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:158</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pasadas"></a>
+                        <span class="name"><b>pasadas</b><a href="#pasadas"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>pasadas()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="162" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:162</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="minutosTotales"></a>
+                        <span class="name"><b>minutosTotales</b><a href="#minutosTotales"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>minutosTotales()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="179" class="link-to-prism">src/app/pages/coordinador/convocatorias-canceladas/convocatorias-canceladas.component.ts:179</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute, Router, RouterModule } from &#x27;@angular/router&#x27;;
+import { ConvocatoriaDetalleDto } from &#x27;../../../dto/convocatoria-detalle.dto&#x27;;
+import { ConvocatoriaListaItemDto } from &#x27;../../../dto/convocatoria-lista-item.dto&#x27;;
+import { ConvocatoriaService } from &#x27;../../../services/convocatoria.service&#x27;;
+
+@Component({
+  selector: &#x27;app-convocatorias-canceladas&#x27;,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: &#x27;./convocatorias-canceladas.component.html&#x27;,
+  styleUrl: &#x27;./convocatorias-canceladas.component.css&#x27;
+})
+export class ConvocatoriasCanceladasComponent implements OnInit {
+  vista: &#x27;listado&#x27; | &#x27;detalle&#x27; &#x3D; &#x27;listado&#x27;;
+  tabActiva: &#x27;borradores&#x27; | &#x27;pasadas&#x27; &#x3D; &#x27;borradores&#x27;;
+  convocatorias: ConvocatoriaListaItemDto[] &#x3D; [];
+  convocatoriaSeleccionada: ConvocatoriaDetalleDto | null &#x3D; null;
+  cargandoListado &#x3D; true;
+  cargandoDetalle &#x3D; false;
+  errorMsg &#x3D; &#x27;&#x27;;
+  feedback &#x3D; &#x27;&#x27;;
+  feedbackError &#x3D; false;
+
+  constructor(
+    private convocatoriaService: ConvocatoriaService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((queryParams) &#x3D;&gt; {
+      const tab &#x3D; queryParams.get(&#x27;tab&#x27;);
+      this.tabActiva &#x3D; tab &#x3D;&#x3D;&#x3D; &#x27;pasadas&#x27; ? &#x27;pasadas&#x27; : &#x27;borradores&#x27;;
+    });
+
+    this.route.paramMap.subscribe(params &#x3D;&gt; {
+      const idParam &#x3D; params.get(&#x27;id&#x27;);
+      if (idParam) {
+        this.iniciarDetalle(Number(idParam));
+      } else {
+        this.convocatoriaSeleccionada &#x3D; null;
+        this.vista &#x3D; &#x27;listado&#x27;;
+        this.cargarConvocatorias();
+      }
+    });
+  }
+
+  cargarConvocatorias(): void {
+    this.cargandoListado &#x3D; true;
+    this.errorMsg &#x3D; &#x27;&#x27;;
+    this.convocatoriaService.listarConvocatoriasHistoricas().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.convocatorias &#x3D; data;
+        this.cargandoListado &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoListado &#x3D; false;
+        this.errorMsg &#x3D; error?.error?.message || &#x27;Error al cargar el histórico de convocatorias.&#x27;;
+      }
+    });
+  }
+
+  volverAActivas(): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;]);
+  }
+
+  cambiarTab(tab: &#x27;borradores&#x27; | &#x27;pasadas&#x27;): void {
+    this.tabActiva &#x3D; tab;
+    this.router.navigate(
+      [&#x27;/coordinador/reuniones-de-equipo/convocatorias/historico&#x27;],
+      { queryParams: { tab } }
+    );
+  }
+
+  seleccionarConvocatoria(id: number): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias/historico&#x27;, id]);
+  }
+
+  retomarConvocatoria(id: number): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;, id, &#x27;editar&#x27;]);
+  }
+
+  volverAlListado(): void {
+    this.router.navigate(
+      [&#x27;/coordinador/reuniones-de-equipo/convocatorias/historico&#x27;],
+      { queryParams: { tab: this.tabActiva } }
+    );
+  }
+
+  iniciarDetalle(id: number): void {
+    this.cargandoDetalle &#x3D; true;
+    this.errorMsg &#x3D; &#x27;&#x27;;
+    this.convocatoriaSeleccionada &#x3D; null;
+    this.vista &#x3D; &#x27;detalle&#x27;;
+
+    this.convocatoriaService.getConvocatoria(id).subscribe({
+      next: (data) &#x3D;&gt; {
+        if (data.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27;) {
+          this.errorMsg &#x3D; &#x27;La convocatoria seleccionada es activa y no pertenece al histórico.&#x27;;
+          this.cargandoDetalle &#x3D; false;
+          return;
+        }
+
+        this.convocatoriaSeleccionada &#x3D; data;
+        this.cargandoDetalle &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoDetalle &#x3D; false;
+        this.errorMsg &#x3D; error?.error?.message || &#x27;Error al cargar los detalles de la convocatoria.&#x27;;
+      }
+    });
+  }
+
+  eliminarConvocatoria(id: number, event?: Event): void {
+    event?.stopPropagation();
+
+    if (!confirm(&#x27;Estas seguro de que deseas borrar definitivamente esta convocatoria?&#x27;)) {
+      return;
+    }
+
+    this.feedback &#x3D; &#x27;No se borran convocatorias.&#x27;;
+    this.feedbackError &#x3D; false;
+    setTimeout(() &#x3D;&gt; (this.feedback &#x3D; &#x27;&#x27;), 3000);
+  }
+
+  getEstadoLabel(estado?: string | null): string {
+    switch (estado) {
+      case &#x27;b&#x27;:
+        return &#x27;Borrador&#x27;;
+      case &#x27;p&#x27;:
+        return &#x27;Pasada&#x27;;
+      case &#x27;a&#x27;:
+        return &#x27;Activa&#x27;;
+      default:
+        return &#x27;Sin estado&#x27;;
+    }
+  }
+
+  getEstadoClase(estado?: string | null): string {
+    switch (estado) {
+      case &#x27;b&#x27;:
+        return &#x27;status-badge-borrador&#x27;;
+      case &#x27;p&#x27;:
+        return &#x27;status-badge-historica&#x27;;
+      case &#x27;a&#x27;:
+        return &#x27;status-badge-activa&#x27;;
+      default:
+        return &#x27;status-badge-historica&#x27;;
+    }
+  }
+
+  puedeRetomar(estado?: string | null): boolean {
+    return estado &#x3D;&#x3D;&#x3D; &#x27;b&#x27;;
+  }
+
+  get borradores(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) &#x3D;&gt; convocatoria.estado &#x3D;&#x3D;&#x3D; &#x27;b&#x27;);
+  }
+
+  get pasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) &#x3D;&gt; convocatoria.estado &#x3D;&#x3D;&#x3D; &#x27;p&#x27;);
+  }
+
+  formatFecha(fechaStr: string): string {
+    if (!fechaStr) return &#x27;&#x27;;
+    const fecha &#x3D; new Date(fechaStr);
+    if (isNaN(fecha.getTime())) return fechaStr;
+    return fecha.toLocaleString(&#x27;es-ES&#x27;, {
+      day: &#x27;2-digit&#x27;,
+      month: &#x27;2-digit&#x27;,
+      year: &#x27;numeric&#x27;,
+      hour: &#x27;2-digit&#x27;,
+      minute: &#x27;2-digit&#x27;
+    });
+  }
+
+  get minutosTotales(): number {
+    if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
+    return this.convocatoriaSeleccionada.ordenDia.reduce((total, item) &#x3D;&gt; total + Number(item.minutos || 0), 0);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">﻿&lt;section class&#x3D;&quot;canceladas-page&quot; *ngIf&#x3D;&quot;vista &#x3D;&#x3D;&#x3D; &#x27;listado&#x27;&quot;&gt;
+  &lt;div class&#x3D;&quot;hero hero-canceladas&quot;&gt;
+    &lt;div&gt;
+      &lt;p class&#x3D;&quot;hero-kicker&quot;&gt;Reuniones de equipo&lt;/p&gt;
+      &lt;h1 class&#x3D;&quot;hero-title&quot;&gt;Borradores e histórico&lt;/h1&gt;
+      &lt;p class&#x3D;&quot;hero-subtitle&quot;&gt;Consulta las convocatorias pasadas y los borradores que puedes retomar.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;hero-actions&quot;&gt;
+      &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;secondary-button&quot; (click)&#x3D;&quot;volverAActivas()&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-arrow-left me-2&quot;&gt;&lt;/i&gt; Volver a activas
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorMsg&quot; class&#x3D;&quot;feedback feedback-error&quot;&gt;{{ errorMsg }}&lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;feedback&quot; class&#x3D;&quot;feedback&quot; [class.feedback-error]&#x3D;&quot;feedbackError&quot;&gt;{{ feedback }}&lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;cargandoListado&quot; class&#x3D;&quot;loading-state text-center py-5&quot;&gt;
+    &lt;div class&#x3D;&quot;spinner-border text-danger&quot; role&#x3D;&quot;status&quot;&gt;
+      &lt;span class&#x3D;&quot;visually-hidden&quot;&gt;Cargando histórico de convocatorias...&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargandoListado &amp;&amp; convocatorias.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card shadow-sm border-0 p-5 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;i class&#x3D;&quot;bi bi-calendar-x text-muted fs-1 mb-3&quot;&gt;&lt;/i&gt;
+      &lt;h4 class&#x3D;&quot;card-title text-secondary&quot;&gt;No hay borradores ni convocatorias pasadas&lt;/h4&gt;
+      &lt;p class&#x3D;&quot;card-text text-muted&quot;&gt;Cuando existan aparecerán aquí para su consulta o para retomar un borrador.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargandoListado &amp;&amp; convocatorias.length &gt; 0&quot; class&#x3D;&quot;history-sections&quot;&gt;
+    &lt;div class&#x3D;&quot;history-tabs&quot;&gt;
+      &lt;button
+        type&#x3D;&quot;button&quot;
+        class&#x3D;&quot;history-tab&quot;
+        [class.history-tab-active]&#x3D;&quot;tabActiva &#x3D;&#x3D;&#x3D; &#x27;borradores&#x27;&quot;
+        (click)&#x3D;&quot;cambiarTab(&#x27;borradores&#x27;)&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-pencil-square me-2&quot;&gt;&lt;/i&gt; Borradores
+      &lt;/button&gt;
+      &lt;button
+        type&#x3D;&quot;button&quot;
+        class&#x3D;&quot;history-tab&quot;
+        [class.history-tab-active]&#x3D;&quot;tabActiva &#x3D;&#x3D;&#x3D; &#x27;pasadas&#x27;&quot;
+        (click)&#x3D;&quot;cambiarTab(&#x27;pasadas&#x27;)&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-clock-history me-2&quot;&gt;&lt;/i&gt; Histórico
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;section class&#x3D;&quot;history-section&quot; *ngIf&#x3D;&quot;tabActiva &#x3D;&#x3D;&#x3D; &#x27;borradores&#x27;&quot;&gt;
+      &lt;div class&#x3D;&quot;section-header&quot;&gt;
+        &lt;div&gt;
+          &lt;h3&gt;Borradores&lt;/h3&gt;
+          &lt;p&gt;Convocatorias a medio preparar que todavia puedes retomar.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div *ngIf&#x3D;&quot;borradores.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+        &lt;p class&#x3D;&quot;mb-0 text-muted&quot;&gt;No hay borradores.&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div *ngIf&#x3D;&quot;borradores.length &gt; 0&quot; class&#x3D;&quot;convocatorias-grid&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let conv of borradores&quot; class&#x3D;&quot;surface-card convocatoria-card&quot;&gt;
+          &lt;div class&#x3D;&quot;card-header-main&quot;&gt;
+            &lt;div class&#x3D;&quot;fecha-badge&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-pencil-square&quot;&gt;&lt;/i&gt;
+              &lt;span&gt;{{ formatFecha(conv.fecha) }}&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;span class&#x3D;&quot;status-badge&quot; [ngClass]&#x3D;&quot;getEstadoClase(conv.estado)&quot;&gt;{{ getEstadoLabel(conv.estado) }}&lt;/span&gt;
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;card-details mt-3&quot;&gt;
+            &lt;div class&#x3D;&quot;detail-item&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-geo-alt-fill&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Lugar&lt;/strong&gt;
+                &lt;span&gt;{{ conv.lugar || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-person-fill&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Inicia&lt;/strong&gt;
+                &lt;span&gt;{{ conv.inicia || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-pencil-square&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Redacta acta&lt;/strong&gt;
+                &lt;span&gt;{{ conv.redacta || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;card-actions mt-4 d-flex gap-2&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;primary-button btn-sm flex-grow-1&quot; (click)&#x3D;&quot;seleccionarConvocatoria(conv.idConvocatoria)&quot;&gt;
+              Ver detalle
+            &lt;/button&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;secondary-button btn-sm&quot; (click)&#x3D;&quot;retomarConvocatoria(conv.idConvocatoria)&quot; title&#x3D;&quot;Retomar borrador&quot;&gt;
+              Retomar
+            &lt;/button&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;delete-button btn-sm&quot; (click)&#x3D;&quot;eliminarConvocatoria(conv.idConvocatoria, $event)&quot; title&#x3D;&quot;No borra nada&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-trash3&quot;&gt;&lt;/i&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class&#x3D;&quot;history-section&quot; *ngIf&#x3D;&quot;tabActiva &#x3D;&#x3D;&#x3D; &#x27;pasadas&#x27;&quot;&gt;
+      &lt;div class&#x3D;&quot;section-header&quot;&gt;
+        &lt;div&gt;
+          &lt;h3&gt;Convocatorias pasadas&lt;/h3&gt;
+          &lt;p&gt;Reuniones ya celebradas o que ya forman parte del histórico.&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div *ngIf&#x3D;&quot;pasadas.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+        &lt;p class&#x3D;&quot;mb-0 text-muted&quot;&gt;No hay convocatorias pasadas.&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div *ngIf&#x3D;&quot;pasadas.length &gt; 0&quot; class&#x3D;&quot;convocatorias-grid&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let conv of pasadas&quot; class&#x3D;&quot;surface-card convocatoria-card convocatoria-card-historica&quot;&gt;
+          &lt;div class&#x3D;&quot;card-header-main&quot;&gt;
+            &lt;div class&#x3D;&quot;fecha-badge&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-clock-history&quot;&gt;&lt;/i&gt;
+              &lt;span&gt;{{ formatFecha(conv.fecha) }}&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;span class&#x3D;&quot;status-badge&quot; [ngClass]&#x3D;&quot;getEstadoClase(conv.estado)&quot;&gt;{{ getEstadoLabel(conv.estado) }}&lt;/span&gt;
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;card-details mt-3&quot;&gt;
+            &lt;div class&#x3D;&quot;detail-item&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-geo-alt-fill&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Lugar&lt;/strong&gt;
+                &lt;span&gt;{{ conv.lugar || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-person-fill&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Inicia&lt;/strong&gt;
+                &lt;span&gt;{{ conv.inicia || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;detail-item mt-2&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-pencil-square&quot;&gt;&lt;/i&gt;
+              &lt;div&gt;
+                &lt;strong&gt;Redacta acta&lt;/strong&gt;
+                &lt;span&gt;{{ conv.redacta || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;card-actions mt-4 d-flex gap-2&quot;&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;primary-button btn-sm flex-grow-1&quot; (click)&#x3D;&quot;seleccionarConvocatoria(conv.idConvocatoria)&quot;&gt;
+              Ver detalle
+            &lt;/button&gt;
+            &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;delete-button btn-sm&quot; (click)&#x3D;&quot;eliminarConvocatoria(conv.idConvocatoria, $event)&quot; title&#x3D;&quot;No borra nada&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-trash3&quot;&gt;&lt;/i&gt;
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;section class&#x3D;&quot;canceladas-page&quot; *ngIf&#x3D;&quot;vista &#x3D;&#x3D;&#x3D; &#x27;detalle&#x27; &amp;&amp; convocatoriaSeleccionada&quot;&gt;
+  &lt;header class&#x3D;&quot;hero hero-canceladas&quot;&gt;
+      &lt;div&gt;
+      &lt;p class&#x3D;&quot;hero-kicker&quot;&gt;Reuniones de equipo&lt;/p&gt;
+      &lt;h1 class&#x3D;&quot;hero-title&quot;&gt;Detalle convocatoria&lt;/h1&gt;
+      &lt;p class&#x3D;&quot;hero-subtitle&quot;&gt;Consulta la información completa del histórico o retoma un borrador.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;hero-actions&quot;&gt;
+      &lt;span class&#x3D;&quot;status-badge&quot; [ngClass]&#x3D;&quot;getEstadoClase(convocatoriaSeleccionada.estado)&quot;&gt;{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorMsg&quot; class&#x3D;&quot;feedback feedback-error&quot;&gt;{{ errorMsg }}&lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;feedback&quot; class&#x3D;&quot;feedback&quot; [class.feedback-error]&#x3D;&quot;feedbackError&quot;&gt;{{ feedback }}&lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;cargandoDetalle&quot; class&#x3D;&quot;loading-state text-center py-5&quot;&gt;
+    &lt;div class&#x3D;&quot;spinner-border text-danger&quot; role&#x3D;&quot;status&quot;&gt;
+      &lt;span class&#x3D;&quot;visually-hidden&quot;&gt;Cargando detalles...&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargandoDetalle&quot; class&#x3D;&quot;surface-card group-summary&quot;&gt;
+    &lt;div&gt;
+      &lt;p class&#x3D;&quot;summary-label&quot;&gt;Convocatoria&lt;/p&gt;
+      &lt;h2 class&#x3D;&quot;summary-title&quot;&gt;Datos base y orden del día&lt;/h2&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;summary-meta&quot;&gt;
+      &lt;div&gt;
+        &lt;span&gt;Fecha y hora&lt;/span&gt;
+        &lt;strong&gt;{{ formatFecha(convocatoriaSeleccionada.fecha) }}&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;span&gt;Lugar&lt;/span&gt;
+        &lt;strong&gt;{{ convocatoriaSeleccionada.lugar || &#x27;Sin asignar&#x27; }}&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;span&gt;Estado&lt;/span&gt;
+        &lt;strong&gt;{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}&lt;/strong&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargandoDetalle&quot; class&#x3D;&quot;surface-card section-card&quot;&gt;
+    &lt;div class&#x3D;&quot;section-header&quot;&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Información general&lt;/h3&gt;
+        &lt;p&gt;Detalle completo de la convocatoria seleccionada.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;info-grid&quot;&gt;
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Curso académico&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Fecha y hora&lt;/strong&gt;
+        &lt;p&gt;{{ formatFecha(convocatoriaSeleccionada.fecha) }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Redacta la convocatoria&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.redacta || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Inicia la reunión&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.inicia || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;info-item&quot;&gt;
+        &lt;strong&gt;Lugar&lt;/strong&gt;
+        &lt;p&gt;{{ convocatoriaSeleccionada.lugar || &#x27;Sin asignar&#x27; }}&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargandoDetalle&quot; class&#x3D;&quot;surface-card section-card&quot;&gt;
+    &lt;div class&#x3D;&quot;section-header&quot;&gt;
+      &lt;div&gt;
+        &lt;h3&gt;Orden del día&lt;/h3&gt;
+        &lt;p&gt;Estructura temporal y organizativa de la reunión.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;table-shell&quot;&gt;
+      &lt;table class&#x3D;&quot;agenda-table&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th&gt;Min.&lt;/th&gt;
+            &lt;th&gt;Punto / Descripción&lt;/th&gt;
+            &lt;th&gt;Objetivo&lt;/th&gt;
+            &lt;th&gt;Dinamiza&lt;/th&gt;
+            &lt;th&gt;Lugar&lt;/th&gt;
+            &lt;th&gt;Participa&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+          &lt;tr *ngFor&#x3D;&quot;let item of convocatoriaSeleccionada.ordenDia&quot;&gt;
+            &lt;td class&#x3D;&quot;minutos-cell&quot; data-label&#x3D;&quot;Min.&quot;&gt;
+              &lt;span class&#x3D;&quot;badge bg-secondary px-2 py-1 fs-6&quot;&gt;{{ item.minutos || &#x27;0&#x27; }} min&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Punto / Descripción&quot;&gt;
+              &lt;p class&#x3D;&quot;mb-0 fs-6 text-wrap&quot;&gt;{{ item.descripcion || &#x27;Sin descripción&#x27; }}&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Objetivo&quot;&gt;
+              &lt;p class&#x3D;&quot;mb-0 fs-6 text-wrap text-muted&quot;&gt;{{ item.objetivo || &#x27;Sin objetivo&#x27; }}&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Dinamiza&quot;&gt;
+              &lt;span class&#x3D;&quot;text-secondary font-weight-bold&quot;&gt;{{ item.dinamiza || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Lugar&quot;&gt;
+              &lt;span&gt;{{ item.lugar || &#x27;Sin asignar&#x27; }}&lt;/span&gt;
+            &lt;/td&gt;
+            &lt;td data-label&#x3D;&quot;Participa&quot;&gt;
+              &lt;div class&#x3D;&quot;participants-list row-participants&quot;&gt;
+                &lt;span *ngIf&#x3D;&quot;item.participantes.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;text-muted fs-6&quot;&gt;Nadie asignado&lt;/span&gt;
+                &lt;article *ngFor&#x3D;&quot;let participante of item.participantes&quot; class&#x3D;&quot;participant-chip chip-view&quot;&gt;
+                  &lt;span class&#x3D;&quot;participant-type&quot; [ngClass]&#x3D;&quot;participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;chip-tipo-grupo&#x27; : &#x27;chip-tipo-profesor&#x27;&quot;&gt;
+                    {{ participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;Grupo&#x27; : &#x27;Profesor&#x27; }}
+                  &lt;/span&gt;
+                  &lt;strong&gt;{{ participante.nombre }}&lt;/strong&gt;
+                &lt;/article&gt;
+              &lt;/div&gt;
+            &lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;footer class&#x3D;&quot;agenda-footer&quot;&gt;
+      &lt;div class&#x3D;&quot;total-badge total-badge-danger&quot;&gt;
+        &lt;span&gt;Total previsto&lt;/span&gt;
+        &lt;strong&gt;{{ minutosTotales }} minutos&lt;/strong&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;footer-actions&quot;&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;secondary-button&quot; (click)&#x3D;&quot;volverAlListado()&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-arrow-left me-2&quot;&gt;&lt;/i&gt; Volver al listado
+        &lt;/button&gt;
+        &lt;button *ngIf&#x3D;&quot;puedeRetomar(convocatoriaSeleccionada.estado)&quot; type&#x3D;&quot;button&quot; class&#x3D;&quot;primary-button&quot; (click)&#x3D;&quot;retomarConvocatoria(convocatoriaSeleccionada.idConvocatoria)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-pencil-square me-2&quot;&gt;&lt;/i&gt; Retomar borrador
+        &lt;/button&gt;
+        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;delete-button delete-button-wide&quot; (click)&#x3D;&quot;eliminarConvocatoria(convocatoriaSeleccionada.idConvocatoria)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-trash3 me-2&quot;&gt;&lt;/i&gt; Borrar definitivamente
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div>﻿<section class="canceladas-page" *ngIf="vista === \'listado\'">  <div class="hero hero-canceladas">    <div>      <p class="hero-kicker">Reuniones de equipo</p>      <h1 class="hero-title">Borradores e histórico</h1>      <p class="hero-subtitle">Consulta las convocatorias pasadas y los borradores que puedes retomar.</p>    </div>    <div class="hero-actions">      <button type="button" class="secondary-button" (click)="volverAActivas()">        <i class="bi bi-arrow-left me-2"></i> Volver a activas      </button>    </div>  </div>  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>  <div *ngIf="feedback" class="feedback" [class.feedback-error]="feedbackError">{{ feedback }}</div>  <div *ngIf="cargandoListado" class="loading-state text-center py-5">    <div class="spinner-border text-danger" role="status">      <span class="visually-hidden">Cargando histórico de convocatorias...</span>    </div>  </div>  <div *ngIf="!cargandoListado && convocatorias.length === 0" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">    <div class="card-body">      <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>      <h4 class="card-title text-secondary">No hay borradores ni convocatorias pasadas</h4>      <p class="card-text text-muted">Cuando existan aparecerán aquí para su consulta o para retomar un borrador.</p>    </div>  </div>  <div *ngIf="!cargandoListado && convocatorias.length > 0" class="history-sections">    <div class="history-tabs">      <button        type="button"        class="history-tab"        [class.history-tab-active]="tabActiva === \'borradores\'"        (click)="cambiarTab(\'borradores\')">        <i class="bi bi-pencil-square me-2"></i> Borradores      </button>      <button        type="button"        class="history-tab"        [class.history-tab-active]="tabActiva === \'pasadas\'"        (click)="cambiarTab(\'pasadas\')">        <i class="bi bi-clock-history me-2"></i> Histórico      </button>    </div>    <section class="history-section" *ngIf="tabActiva === \'borradores\'">      <div class="section-header">        <div>          <h3>Borradores</h3>          <p>Convocatorias a medio preparar que todavia puedes retomar.</p>        </div>      </div>      <div *ngIf="borradores.length === 0" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">        <p class="mb-0 text-muted">No hay borradores.</p>      </div>      <div *ngIf="borradores.length > 0" class="convocatorias-grid">        <div *ngFor="let conv of borradores" class="surface-card convocatoria-card">          <div class="card-header-main">            <div class="fecha-badge">              <i class="bi bi-pencil-square"></i>              <span>{{ formatFecha(conv.fecha) }}</span>            </div>            <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">{{ getEstadoLabel(conv.estado) }}</span>          </div>          <div class="card-details mt-3">            <div class="detail-item">              <i class="bi bi-geo-alt-fill"></i>              <div>                <strong>Lugar</strong>                <span>{{ conv.lugar || \'Sin asignar\' }}</span>              </div>            </div>            <div class="detail-item mt-2">              <i class="bi bi-person-fill"></i>              <div>                <strong>Inicia</strong>                <span>{{ conv.inicia || \'Sin asignar\' }}</span>              </div>            </div>            <div class="detail-item mt-2">              <i class="bi bi-pencil-square"></i>              <div>                <strong>Redacta acta</strong>                <span>{{ conv.redacta || \'Sin asignar\' }}</span>              </div>            </div>          </div>          <div class="card-actions mt-4 d-flex gap-2">            <button type="button" class="primary-button btn-sm flex-grow-1" (click)="seleccionarConvocatoria(conv.idConvocatoria)">              Ver detalle            </button>            <button type="button" class="secondary-button btn-sm" (click)="retomarConvocatoria(conv.idConvocatoria)" title="Retomar borrador">              Retomar            </button>            <button type="button" class="delete-button btn-sm" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="No borra nada">              <i class="bi bi-trash3"></i>            </button>          </div>        </div>      </div>    </section>    <section class="history-section" *ngIf="tabActiva === \'pasadas\'">      <div class="section-header">        <div>          <h3>Convocatorias pasadas</h3>          <p>Reuniones ya celebradas o que ya forman parte del histórico.</p>        </div>      </div>      <div *ngIf="pasadas.length === 0" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">        <p class="mb-0 text-muted">No hay convocatorias pasadas.</p>      </div>      <div *ngIf="pasadas.length > 0" class="convocatorias-grid">        <div *ngFor="let conv of pasadas" class="surface-card convocatoria-card convocatoria-card-historica">          <div class="card-header-main">            <div class="fecha-badge">              <i class="bi bi-clock-history"></i>              <span>{{ formatFecha(conv.fecha) }}</span>            </div>            <span class="status-badge" [ngClass]="getEstadoClase(conv.estado)">{{ getEstadoLabel(conv.estado) }}</span>          </div>          <div class="card-details mt-3">            <div class="detail-item">              <i class="bi bi-geo-alt-fill"></i>              <div>                <strong>Lugar</strong>                <span>{{ conv.lugar || \'Sin asignar\' }}</span>              </div>            </div>            <div class="detail-item mt-2">              <i class="bi bi-person-fill"></i>              <div>                <strong>Inicia</strong>                <span>{{ conv.inicia || \'Sin asignar\' }}</span>              </div>            </div>            <div class="detail-item mt-2">              <i class="bi bi-pencil-square"></i>              <div>                <strong>Redacta acta</strong>                <span>{{ conv.redacta || \'Sin asignar\' }}</span>              </div>            </div>          </div>          <div class="card-actions mt-4 d-flex gap-2">            <button type="button" class="primary-button btn-sm flex-grow-1" (click)="seleccionarConvocatoria(conv.idConvocatoria)">              Ver detalle            </button>            <button type="button" class="delete-button btn-sm" (click)="eliminarConvocatoria(conv.idConvocatoria, $event)" title="No borra nada">              <i class="bi bi-trash3"></i>            </button>          </div>        </div>      </div>    </section>  </div></section><section class="canceladas-page" *ngIf="vista === \'detalle\' && convocatoriaSeleccionada">  <header class="hero hero-canceladas">      <div>      <p class="hero-kicker">Reuniones de equipo</p>      <h1 class="hero-title">Detalle convocatoria</h1>      <p class="hero-subtitle">Consulta la información completa del histórico o retoma un borrador.</p>    </div>    <div class="hero-actions">      <span class="status-badge" [ngClass]="getEstadoClase(convocatoriaSeleccionada.estado)">{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}</span>    </div>  </header>  <div *ngIf="errorMsg" class="feedback feedback-error">{{ errorMsg }}</div>  <div *ngIf="feedback" class="feedback" [class.feedback-error]="feedbackError">{{ feedback }}</div>  <div *ngIf="cargandoDetalle" class="loading-state text-center py-5">    <div class="spinner-border text-danger" role="status">      <span class="visually-hidden">Cargando detalles...</span>    </div>  </div>  <div *ngIf="!cargandoDetalle" class="surface-card group-summary">    <div>      <p class="summary-label">Convocatoria</p>      <h2 class="summary-title">Datos base y orden del día</h2>    </div>    <div class="summary-meta">      <div>        <span>Fecha y hora</span>        <strong>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</strong>      </div>      <div>        <span>Lugar</span>        <strong>{{ convocatoriaSeleccionada.lugar || \'Sin asignar\' }}</strong>      </div>      <div>        <span>Estado</span>        <strong>{{ getEstadoLabel(convocatoriaSeleccionada.estado) }}</strong>      </div>    </div>  </div>  <div *ngIf="!cargandoDetalle" class="surface-card section-card">    <div class="section-header">      <div>        <h3>Información general</h3>        <p>Detalle completo de la convocatoria seleccionada.</p>      </div>    </div>    <div class="info-grid">      <div class="info-item">        <strong>Curso académico</strong>        <p>{{ convocatoriaSeleccionada.anioInicio }}/{{ convocatoriaSeleccionada.anioFin }}</p>      </div>      <div class="info-item">        <strong>Fecha y hora</strong>        <p>{{ formatFecha(convocatoriaSeleccionada.fecha) }}</p>      </div>      <div class="info-item">        <strong>Redacta la convocatoria</strong>        <p>{{ convocatoriaSeleccionada.redacta || \'Sin asignar\' }}</p>      </div>      <div class="info-item">        <strong>Inicia la reunión</strong>        <p>{{ convocatoriaSeleccionada.inicia || \'Sin asignar\' }}</p>      </div>      <div class="info-item">        <strong>Lugar</strong>        <p>{{ convocatoriaSeleccionada.lugar || \'Sin asignar\' }}</p>      </div>    </div>  </div>  <div *ngIf="!cargandoDetalle" class="surface-card section-card">    <div class="section-header">      <div>        <h3>Orden del día</h3>        <p>Estructura temporal y organizativa de la reunión.</p>      </div>    </div>    <div class="table-shell">      <table class="agenda-table">        <thead>          <tr>            <th>Min.</th>            <th>Punto / Descripción</th>            <th>Objetivo</th>            <th>Dinamiza</th>            <th>Lugar</th>            <th>Participa</th>          </tr>        </thead>        <tbody>          <tr *ngFor="let item of convocatoriaSeleccionada.ordenDia">            <td class="minutos-cell" data-label="Min.">              <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || \'0\' }} min</span>            </td>            <td data-label="Punto / Descripción">              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || \'Sin descripción\' }}</p>            </td>            <td data-label="Objetivo">              <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || \'Sin objetivo\' }}</p>            </td>            <td data-label="Dinamiza">              <span class="text-secondary font-weight-bold">{{ item.dinamiza || \'Sin asignar\' }}</span>            </td>            <td data-label="Lugar">              <span>{{ item.lugar || \'Sin asignar\' }}</span>            </td>            <td data-label="Participa">              <div class="participants-list row-participants">                <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>                <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">                  <span class="participant-type" [ngClass]="participante.tipo === \'grupo\' ? \'chip-tipo-grupo\' : \'chip-tipo-profesor\'">                    {{ participante.tipo === \'grupo\' ? \'Grupo\' : \'Profesor\' }}                  </span>                  <strong>{{ participante.nombre }}</strong>                </article>              </div>            </td>          </tr>        </tbody>      </table>    </div>    <footer class="agenda-footer">      <div class="total-badge total-badge-danger">        <span>Total previsto</span>        <strong>{{ minutosTotales }} minutos</strong>      </div>      <div class="footer-actions">        <button type="button" class="secondary-button" (click)="volverAlListado()">          <i class="bi bi-arrow-left me-2"></i> Volver al listado        </button>        <button *ngIf="puedeRetomar(convocatoriaSeleccionada.estado)" type="button" class="primary-button" (click)="retomarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">          <i class="bi bi-pencil-square me-2"></i> Retomar borrador        </button>        <button type="button" class="delete-button delete-button-wide" (click)="eliminarConvocatoria(convocatoriaSeleccionada.idConvocatoria)">          <i class="bi bi-trash3 me-2"></i> Borrar definitivamente        </button>      </div>    </footer>  </div></section></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ConvocatoriasCanceladasComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ConvocatoriasCanceladasComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

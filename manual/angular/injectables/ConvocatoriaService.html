@@ -1,0 +1,1006 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Inyectables</li>
+  <li class="breadcrumb-item" >ConvocatoriaService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Fichero</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/services/convocatoria.service.ts</code>
+        </p>
+
+
+
+
+
+            <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#cancelarConvocatoria" >cancelarConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#eliminar" >eliminar</a>
+                            </li>
+                            <li>
+                                <a href="#getConvocatoria" >getConvocatoria</a>
+                            </li>
+                            <li>
+                                <a href="#getFormulario" >getFormulario</a>
+                            </li>
+                            <li>
+                                <a href="#guardar" >guardar</a>
+                            </li>
+                            <li>
+                                <a href="#listarConvocatorias" >listarConvocatorias</a>
+                            </li>
+                            <li>
+                                <a href="#listarConvocatoriasCanceladas" >listarConvocatoriasCanceladas</a>
+                            </li>
+                            <li>
+                                <a href="#listarConvocatoriasCoordinador" >listarConvocatoriasCoordinador</a>
+                            </li>
+                            <li>
+                                <a href="#listarConvocatoriasHistoricas" >listarConvocatoriasHistoricas</a>
+                            </li>
+                            <li>
+                                <a href="#marcarComoPasada" >marcarComoPasada</a>
+                            </li>
+                            <li>
+                                <a href="#marcarTodasComoPasadas" >marcarTodasComoPasadas</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, apiService: <a href="../injectables/ApiService.html" target="_self">ApiService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="13" class="link-to-prism">src/app/services/convocatoria.service.ts:13</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>apiService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ApiService.html" target="_self" >ApiService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancelarConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>cancelarConvocatoria</b></span>
+                        <a href="#cancelarConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancelarConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="82"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminar"></a>
+                    <span class="name">
+                        <span ><b>eliminar</b></span>
+                        <a href="#eliminar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminar(_id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="76"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>_id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getConvocatoria"></a>
+                    <span class="name">
+                        <span ><b>getConvocatoria</b></span>
+                        <a href="#getConvocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getConvocatoria(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="70"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:70</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>id</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaDetalleDto.html" target="_self" >Observable&lt;ConvocatoriaDetalleDto&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getFormulario"></a>
+                    <span class="name">
+                        <span ><b>getFormulario</b></span>
+                        <a href="#getFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getFormulario()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="19"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaFormularioResponseDto.html" target="_self" >Observable&lt;ConvocatoriaFormularioResponseDto&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardar"></a>
+                    <span class="name">
+                        <span ><b>guardar</b></span>
+                        <a href="#guardar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardar(payload: <a href="../interfaces/GuardarConvocatoriaPayloadDto.html" target="_self">GuardarConvocatoriaPayloadDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="25"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>payload</td>
+                                            <td>
+                                                            <code><a href="../interfaces/GuardarConvocatoriaPayloadDto.html" target="_self" >GuardarConvocatoriaPayloadDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listarConvocatorias"></a>
+                    <span class="name">
+                        <span ><b>listarConvocatorias</b></span>
+                        <a href="#listarConvocatorias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listarConvocatorias()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="32"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >Observable&lt;ConvocatoriaListaItemDto[]&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listarConvocatoriasCanceladas"></a>
+                    <span class="name">
+                        <span ><b>listarConvocatoriasCanceladas</b></span>
+                        <a href="#listarConvocatoriasCanceladas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listarConvocatoriasCanceladas()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="64"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >Observable&lt;ConvocatoriaListaItemDto[]&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listarConvocatoriasCoordinador"></a>
+                    <span class="name">
+                        <span ><b>listarConvocatoriasCoordinador</b></span>
+                        <a href="#listarConvocatoriasCoordinador"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listarConvocatoriasCoordinador()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="38"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >Observable&lt;ConvocatoriaListaItemDto[]&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listarConvocatoriasHistoricas"></a>
+                    <span class="name">
+                        <span ><b>listarConvocatoriasHistoricas</b></span>
+                        <a href="#listarConvocatoriasHistoricas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listarConvocatoriasHistoricas()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="58"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:58</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/ConvocatoriaListaItemDto.html" target="_self" >Observable&lt;ConvocatoriaListaItemDto[]&gt;</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="marcarComoPasada"></a>
+                    <span class="name">
+                        <span ><b>marcarComoPasada</b></span>
+                        <a href="#marcarComoPasada"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>marcarComoPasada(idConvocatoria: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="44"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>idConvocatoria</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;literal type&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="marcarTodasComoPasadas"></a>
+                    <span class="name">
+                        <span ><b>marcarTodasComoPasadas</b></span>
+                        <a href="#marcarTodasComoPasadas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>marcarTodasComoPasadas()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="51"
+                                    class="link-to-prism">src/app/services/convocatoria.service.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>Observable&lt;literal type&gt;</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { Observable, throwError } from &#x27;rxjs&#x27;;
+import { ApiService } from &#x27;./api.service&#x27;;
+import { ConvocatoriaDetalleDto } from &#x27;../dto/convocatoria-detalle.dto&#x27;;
+import { ConvocatoriaFormularioResponseDto } from &#x27;../dto/convocatoria-formulario-response.dto&#x27;;
+import { ConvocatoriaListaItemDto } from &#x27;../dto/convocatoria-lista-item.dto&#x27;;
+import { GuardarConvocatoriaPayloadDto } from &#x27;../dto/guardar-convocatoria-payload.dto&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class ConvocatoriaService {
+  constructor(
+    private http: HttpClient,
+    private apiService: ApiService
+  ) {}
+
+  getFormulario(): Observable&lt;ConvocatoriaFormularioResponseDto&gt; {
+    return this.http.get&lt;ConvocatoriaFormularioResponseDto&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;formulario&#x60;
+    );
+  }
+
+  guardar(payload: GuardarConvocatoriaPayloadDto): Observable&lt;{ idConvocatoria: number; message: string }&gt; {
+    return this.http.post&lt;{ idConvocatoria: number; message: string }&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;guardar&#x60;,
+      payload
+    );
+  }
+
+  listarConvocatorias(): Observable&lt;ConvocatoriaListaItemDto[]&gt; {
+    return this.http.get&lt;ConvocatoriaListaItemDto[]&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;listarActivas&#x60;
+    );
+  }
+
+  listarConvocatoriasCoordinador(): Observable&lt;ConvocatoriaListaItemDto[]&gt; {
+    return this.http.get&lt;ConvocatoriaListaItemDto[]&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;listarTodas&#x60;
+    );
+  }
+
+  marcarComoPasada(idConvocatoria: number): Observable&lt;{ message: string }&gt; {
+    return this.http.post&lt;{ message: string }&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;marcarComoPasada&#x60;,
+      { idConvocatoria }
+    );
+  }
+
+  marcarTodasComoPasadas(): Observable&lt;{ message: string; actualizadas: number }&gt; {
+    return this.http.post&lt;{ message: string; actualizadas: number }&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;marcarTodasComoPasadas&#x60;,
+      {}
+    );
+  }
+
+  listarConvocatoriasHistoricas(): Observable&lt;ConvocatoriaListaItemDto[]&gt; {
+    return this.http.get&lt;ConvocatoriaListaItemDto[]&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;listarHistoricas&#x60;
+    );
+  }
+
+  listarConvocatoriasCanceladas(): Observable&lt;ConvocatoriaListaItemDto[]&gt; {
+    return this.http.get&lt;ConvocatoriaListaItemDto[]&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;listarPasadas&#x60;
+    );
+  }
+
+  getConvocatoria(id: number): Observable&lt;ConvocatoriaDetalleDto&gt; {
+    return this.http.get&lt;ConvocatoriaDetalleDto&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;detalle&amp;id&#x3D;${id}&#x60;
+    );
+  }
+
+  eliminar(_id: number): Observable&lt;{ message: string }&gt; {
+    return throwError(() &#x3D;&gt; ({
+      error: { message: &#x27;La eliminacion de convocatorias no esta disponible en esta fase.&#x27; }
+    }));
+  }
+
+  cancelarConvocatoria(id: number): Observable&lt;{ message: string }&gt; {
+    return this.http.post&lt;{ message: string }&gt;(
+      &#x60;${this.apiService.baseUrl}?c&#x3D;Convocatorias&amp;m&#x3D;cancelar&#x60;,
+      { idConvocatoria: id }
+    );
+  }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'ConvocatoriaService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

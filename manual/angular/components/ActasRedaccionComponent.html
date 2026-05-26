@@ -1,0 +1,1333 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ActasRedaccionComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-actas-redaccion</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                                <code><a href="https://angular.io/api/router/RouterModule" target="_blank" >RouterModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./actas-redaccion.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./actas-redaccion.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#acta" >acta</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#convocatoria" >convocatoria</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#estado" >estado</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalFinalizar" >mostrarModalFinalizar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoRuego" >nuevoRuego</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#puntosInformacion" >puntosInformacion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ruegosPreguntas" >ruegosPreguntas</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#abrirModalFinalizar" >abrirModalFinalizar</a>
+                            </li>
+                            <li>
+                                <a href="#agregarRuego" >agregarRuego</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarRuego" >eliminarRuego</a>
+                            </li>
+                            <li>
+                                <a href="#finalizarActa" >finalizarActa</a>
+                            </li>
+                            <li>
+                                <a href="#togglePunto" >togglePunto</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#cursoAcademico" >cursoAcademico</a>
+                                </li>
+                                <li>
+                                    <a href="#fechaFormateada" >fechaFormateada</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="abrirModalFinalizar"></a>
+                    <span class="name">
+                        <span ><b>abrirModalFinalizar</b></span>
+                        <a href="#abrirModalFinalizar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>abrirModalFinalizar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="108"
+                                    class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="agregarRuego"></a>
+                    <span class="name">
+                        <span ><b>agregarRuego</b></span>
+                        <a href="#agregarRuego"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>agregarRuego()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="79"
+                                    class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:79</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarRuego"></a>
+                    <span class="name">
+                        <span ><b>eliminarRuego</b></span>
+                        <a href="#eliminarRuego"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarRuego(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="89"
+                                    class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="finalizarActa"></a>
+                    <span class="name">
+                        <span ><b>finalizarActa</b></span>
+                        <a href="#finalizarActa"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>finalizarActa()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="112"
+                                    class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="togglePunto"></a>
+                    <span class="name">
+                        <span ><b>togglePunto</b></span>
+                        <a href="#togglePunto"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>togglePunto(punto: <a href="../interfaces/PuntoInformacion.html" target="_self">PuntoInformacion</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="103"
+                                    class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:103</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>punto</td>
+                                            <td>
+                                                            <code><a href="../interfaces/PuntoInformacion.html" target="_self" >PuntoInformacion</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="acta"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>acta</b></span>
+                        <a href="#acta"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>{
+    idActa: null as number | null,        // null &#x3D; aún no guardada en BD
+    fecha: null as Date | null,           // acta.fecha — se asigna al finalizar
+    idConvocatoria: 1
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="40" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Mock de acta (tabla acta):</p>
+<ul>
+<li>idActa: INT AUTO_INCREMENT</li>
+<li>fecha: DATE (fecha en que se redacta/cierra el acta)</li>
+<li>idConvocatoria: FK
+No hay campo título — se identifica por idConvocatoria</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convocatoria"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>convocatoria</b></span>
+                        <a href="#convocatoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>{
+    idConvocatoria: 1,
+    fecha: new Date(&#x27;2026-05-23T10:00:00&#x27;),
+    lugar: &#x27;Sala de Reuniones B-04&#x27;,
+    anioInicio: 2025,
+    anioFin: 2026,
+    asistentes: 5,
+    totalConvocados: 6
+  }</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="47" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Datos de la convocatoria asociada (tabla convocatoria + lugar + cursoAcademico)</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="estado"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>estado</b></span>
+                        <a href="#estado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;redactando&quot; | &quot;bloqueada&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;redactando&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="30" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalFinalizar"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalFinalizar</b></span>
+                        <a href="#mostrarModalFinalizar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="31" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoRuego"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoRuego</b></span>
+                        <a href="#nuevoRuego"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="77" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="puntosInformacion"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>puntosInformacion</b></span>
+                        <a href="#puntosInformacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>PuntoInformacion[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { numInformacion: 1, titulo_OrdenDia: &#x27;Lectura y aprobación del acta anterior&#x27;,     informacion: &#x27;&#x27;, expandido: true  },
+    { numInformacion: 2, titulo_OrdenDia: &#x27;Revisión de resultados de evaluación final&#x27;,  informacion: &#x27;&#x27;, expandido: false },
+    { numInformacion: 3, titulo_OrdenDia: &#x27;Coordinación de actividades de recuperación&#x27;, informacion: &#x27;&#x27;, expandido: false },
+    { numInformacion: 4, titulo_OrdenDia: &#x27;Planificación del próximo curso académico&#x27;,   informacion: &#x27;&#x27;, expandido: false },
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="62" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:62</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Mock de informacion (tabla informacion):
+Cada fila = un punto del acta con su titulo_OrdenDia e informacion redactada.
+Los títulos vienen de ordenDia.objetivo de la convocatoria.</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ruegosPreguntas"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ruegosPreguntas</b></span>
+                        <a href="#ruegosPreguntas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>literal type[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="76" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:76</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Mock de ruegosPreguntasActa (tabla ruegosPreguntasActa):</p>
+<ul>
+<li>idPreguntaActa: INT AUTO_INCREMENT</li>
+<li>idActa: FK</li>
+<li>ruegosPregunta: VARCHAR(250)
+Es una tabla separada → se gestiona como array de textos (múltiples filas)</li>
+</ul>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cursoAcademico"></a>
+                        <span class="name"><b>cursoAcademico</b><a href="#cursoAcademico"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>cursoAcademico()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="93" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:93</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fechaFormateada"></a>
+                        <span class="name"><b>fechaFormateada</b><a href="#fechaFormateada"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>fechaFormateada()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="97" class="link-to-prism">src/app/pages/profesor/actas-redaccion/actas-redaccion.component.ts:97</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { RouterModule } from &#x27;@angular/router&#x27;;
+
+/**
+ * Refleja la tabla &#x60;informacion&#x60;:
+ * - idActa (FK)
+ * - numInformacion (PK parcial)
+ * - titulo_OrdenDia VARCHAR(250) — título del punto del OdD
+ * - informacion VARCHAR(250) — texto redactado por el profesor
+ */
+interface PuntoInformacion {
+  numInformacion: number;
+  titulo_OrdenDia: string;   // campo real de BD
+  informacion: string;       // campo real de BD
+  expandido: boolean;
+}
+
+@Component({
+  selector: &#x27;app-actas-redaccion&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: &#x27;./actas-redaccion.component.html&#x27;,
+  styleUrl: &#x27;./actas-redaccion.component.css&#x27;
+})
+export class ActasRedaccionComponent {
+  // El acta existe o no existe en BD — no hay campo &quot;estado&quot;
+  // Si hay fila en &#x60;acta&#x60; para esta convocatoria → está cerrada (bloqueada)
+  public estado: &#x27;redactando&#x27; | &#x27;bloqueada&#x27; &#x3D; &#x27;redactando&#x27;;
+  public mostrarModalFinalizar &#x3D; false;
+
+  /**
+   * Mock de acta (tabla acta):
+   * - idActa: INT AUTO_INCREMENT
+   * - fecha: DATE (fecha en que se redacta/cierra el acta)
+   * - idConvocatoria: FK
+   * No hay campo título — se identifica por idConvocatoria
+   */
+  public acta &#x3D; {
+    idActa: null as number | null,        // null &#x3D; aún no guardada en BD
+    fecha: null as Date | null,           // acta.fecha — se asigna al finalizar
+    idConvocatoria: 1
+  };
+
+  /** Datos de la convocatoria asociada (tabla convocatoria + lugar + cursoAcademico) */
+  public convocatoria &#x3D; {
+    idConvocatoria: 1,
+    fecha: new Date(&#x27;2026-05-23T10:00:00&#x27;),
+    lugar: &#x27;Sala de Reuniones B-04&#x27;,
+    anioInicio: 2025,
+    anioFin: 2026,
+    asistentes: 5,
+    totalConvocados: 6
+  };
+
+  /**
+   * Mock de informacion (tabla informacion):
+   * Cada fila &#x3D; un punto del acta con su titulo_OrdenDia e informacion redactada.
+   * Los títulos vienen de ordenDia.objetivo de la convocatoria.
+   */
+  public puntosInformacion: PuntoInformacion[] &#x3D; [
+    { numInformacion: 1, titulo_OrdenDia: &#x27;Lectura y aprobación del acta anterior&#x27;,     informacion: &#x27;&#x27;, expandido: true  },
+    { numInformacion: 2, titulo_OrdenDia: &#x27;Revisión de resultados de evaluación final&#x27;,  informacion: &#x27;&#x27;, expandido: false },
+    { numInformacion: 3, titulo_OrdenDia: &#x27;Coordinación de actividades de recuperación&#x27;, informacion: &#x27;&#x27;, expandido: false },
+    { numInformacion: 4, titulo_OrdenDia: &#x27;Planificación del próximo curso académico&#x27;,   informacion: &#x27;&#x27;, expandido: false },
+  ];
+
+  /**
+   * Mock de ruegosPreguntasActa (tabla ruegosPreguntasActa):
+   * - idPreguntaActa: INT AUTO_INCREMENT
+   * - idActa: FK
+   * - ruegosPregunta: VARCHAR(250)
+   * Es una tabla separada → se gestiona como array de textos (múltiples filas)
+   */
+  public ruegosPreguntas: { id: number, texto: string }[] &#x3D; [];
+  public nuevoRuego: string &#x3D; &#x27;&#x27;;
+
+  agregarRuego(): void {
+    if (this.nuevoRuego.trim().length &gt; 0) {
+      this.ruegosPreguntas.push({
+        id: this.ruegosPreguntas.length + 1,
+        texto: this.nuevoRuego.trim()
+      });
+      this.nuevoRuego &#x3D; &#x27;&#x27;;
+    }
+  }
+
+  eliminarRuego(index: number): void {
+    this.ruegosPreguntas.splice(index, 1);
+  }
+
+  get cursoAcademico(): string {
+    return &#x60;${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}&#x60;;
+  }
+
+  get fechaFormateada(): string {
+    return this.convocatoria.fecha.toLocaleDateString(&#x27;es-ES&#x27;, {
+      day: &#x27;2-digit&#x27;, month: &#x27;long&#x27;, year: &#x27;numeric&#x27;
+    });
+  }
+
+  togglePunto(punto: PuntoInformacion): void {
+    if (this.estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27;) return;
+    punto.expandido &#x3D; !punto.expandido;
+  }
+
+  abrirModalFinalizar(): void {
+    this.mostrarModalFinalizar &#x3D; true;
+  }
+
+  finalizarActa(): void {
+    // En BD: INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), ?)
+    this.acta.idActa &#x3D; 1;
+    this.acta.fecha &#x3D; new Date();
+    this.estado &#x3D; &#x27;bloqueada&#x27;;
+    this.mostrarModalFinalizar &#x3D; false;
+    this.puntosInformacion.forEach((p, i) &#x3D;&gt; p.expandido &#x3D; i &#x3D;&#x3D;&#x3D; 0);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;header-container d-flex justify-content-between align-items-start mb-4&quot;&gt;
+  &lt;div&gt;
+    &lt;h2 class&#x3D;&quot;fw-bold text-dark m-0&quot;&gt;Redacción de Acta&lt;/h2&gt;
+    &lt;p class&#x3D;&quot;text-secondary small&quot;&gt;Redacta los acuerdos de cada punto del orden del día.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;span class&#x3D;&quot;badge-estado&quot; [ngClass]&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27; ? &#x27;badge-bloqueada&#x27; : &#x27;badge-redactando&#x27;&quot;&gt;
+    &lt;i class&#x3D;&quot;bi&quot; [ngClass]&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27; ? &#x27;bi-lock-fill&#x27; : &#x27;bi-pencil-square&#x27;&quot;&gt;&lt;/i&gt;
+    {{ estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27; ? &#x27;Acta Oficial Cerrada&#x27; : &#x27;En redacción&#x27; }}
+  &lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- INFO CONVOCATORIA --&gt;
+&lt;div class&#x3D;&quot;card border-0 shadow-sm rounded-3 mb-4 convocatoria-card&quot;&gt;
+  &lt;div class&#x3D;&quot;card-body p-3 d-flex align-items-center justify-content-between flex-wrap gap-3&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-center gap-3&quot;&gt;
+      &lt;div class&#x3D;&quot;icono-conv d-flex align-items-center justify-content-center rounded-3&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-file-earmark-text-fill text-white fs-5&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;h6 class&#x3D;&quot;fw-bold text-dark mb-0&quot;&gt;
+          Convocatoria #{{ convocatoria.idConvocatoria }}
+          &lt;span class&#x3D;&quot;text-secondary fw-normal small ms-1&quot;&gt;{{ cursoAcademico }}&lt;/span&gt;
+        &lt;/h6&gt;
+        &lt;span class&#x3D;&quot;text-secondary small&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-calendar3 me-1&quot;&gt;&lt;/i&gt;{{ fechaFormateada }} &amp;nbsp;·&amp;nbsp;
+          &lt;i class&#x3D;&quot;bi bi-geo-alt me-1&quot;&gt;&lt;/i&gt;{{ convocatoria.lugar }} &amp;nbsp;·&amp;nbsp;
+          &lt;i class&#x3D;&quot;bi bi-people me-1&quot;&gt;&lt;/i&gt;{{ convocatoria.asistentes }}/{{ convocatoria.totalConvocados }} asistentes
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+
+    &lt;!-- Fecha de cierre del acta (acta.fecha DATE) --&gt;
+    &lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27; &amp;&amp; acta.fecha&quot; class&#x3D;&quot;text-secondary small fst-italic&quot;&gt;
+      &lt;i class&#x3D;&quot;bi bi-clock-history me-1&quot;&gt;&lt;/i&gt;
+      Acta cerrada el {{ acta.fecha | date:&#x27;dd/MM/yyyy&#x27; }}
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- PUNTOS DE INFORMACIÓN --&gt;
+&lt;div class&#x3D;&quot;puntos-lista mb-3&quot;&gt;
+  &lt;p class&#x3D;&quot;x-small text-secondary fw-bold text-uppercase mb-2&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;
+    Puntos del acta
+  &lt;/p&gt;
+  &lt;div *ngFor&#x3D;&quot;let punto of puntosInformacion&quot; class&#x3D;&quot;punto-card card border-0 shadow-sm rounded-3 mb-3&quot;
+    [class.punto-completado]&#x3D;&quot;punto.informacion.trim().length &gt; 0&quot; [class.punto-bloqueado]&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27;&quot;&gt;
+
+    &lt;div class&#x3D;&quot;card-body p-3 d-flex align-items-center justify-content-between punto-header&quot;
+      (click)&#x3D;&quot;togglePunto(punto)&quot;&gt;
+      &lt;div class&#x3D;&quot;d-flex align-items-center gap-3&quot;&gt;
+        &lt;div class&#x3D;&quot;num-badge d-flex align-items-center justify-content-center rounded-circle fw-bold&quot;
+          [class.num-badge-done]&#x3D;&quot;punto.informacion.trim().length &gt; 0&quot;&gt;
+          &lt;i *ngIf&#x3D;&quot;punto.informacion.trim().length &gt; 0&quot; class&#x3D;&quot;bi bi-check2 fw-bold&quot;&gt;&lt;/i&gt;
+          &lt;span *ngIf&#x3D;&quot;punto.informacion.trim().length &#x3D;&#x3D;&#x3D; 0&quot;&gt;{{ punto.numInformacion }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class&#x3D;&quot;fw-bold text-dark small&quot;&gt;{{ punto.titulo_OrdenDia }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;i class&#x3D;&quot;bi text-secondary&quot; [class.bi-chevron-down]&#x3D;&quot;!punto.expandido&quot; [class.bi-chevron-up]&#x3D;&quot;punto.expandido&quot;&gt;
+      &lt;/i&gt;
+    &lt;/div&gt;
+
+    &lt;div *ngIf&#x3D;&quot;punto.expandido&quot; class&#x3D;&quot;card-footer bg-white border-top p-3&quot;&gt;
+      &lt;!-- Modo redacción --&gt;
+      &lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;redactando&#x27;&quot;&gt;
+        &lt;label class&#x3D;&quot;x-small text-secondary fw-bold text-uppercase mb-2 d-block&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;
+          Información / Acuerdos
+          &lt;span class&#x3D;&quot;text-muted fw-normal ms-1&quot;&gt;(máx. 250 caracteres)&lt;/span&gt;
+        &lt;/label&gt;
+        &lt;textarea class&#x3D;&quot;form-control area-texto&quot; [(ngModel)]&#x3D;&quot;punto.informacion&quot; rows&#x3D;&quot;4&quot; maxlength&#x3D;&quot;250&quot;
+          [placeholder]&#x3D;&quot;&#x27;Escribe aquí los acuerdos del punto &#x27; + punto.numInformacion + &#x27;…&#x27;&quot;&gt;
+        &lt;/textarea&gt;
+        &lt;div class&#x3D;&quot;d-flex justify-content-end mt-2&quot;&gt;
+          &lt;span class&#x3D;&quot;x-small&quot; [class.text-danger]&#x3D;&quot;punto.informacion.length &gt;&#x3D; 240&quot;
+            [class.text-secondary]&#x3D;&quot;punto.informacion.length &lt; 240&quot;&gt;
+            {{ punto.informacion.length }}/250
+          &lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Modo solo lectura (acta cerrada en BD) --&gt;
+      &lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27;&quot;&gt;
+        &lt;p class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;Información /
+          Acuerdos&lt;/p&gt;
+        &lt;div class&#x3D;&quot;contenido-bloqueado rounded-3 p-3&quot;&gt;
+          &lt;p class&#x3D;&quot;text-dark small mb-0&quot; *ngIf&#x3D;&quot;punto.informacion.trim().length &gt; 0&quot;&gt;{{ punto.informacion }}&lt;/p&gt;
+          &lt;p class&#x3D;&quot;text-secondary small fst-italic mb-0&quot; *ngIf&#x3D;&quot;punto.informacion.trim().length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+            Sin información registrada en este punto.
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- RUEGOS Y PREGUNTAS --&gt;
+&lt;div class&#x3D;&quot;card border-0 shadow-sm rounded-3 mb-4 ruegos-card&quot;&gt;
+  &lt;div class&#x3D;&quot;card-body p-3&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-center gap-2 mb-3&quot;&gt;
+      &lt;i class&#x3D;&quot;bi bi-chat-left-quote text-secondary&quot;&gt;&lt;/i&gt;
+      &lt;span class&#x3D;&quot;fw-bold text-dark small&quot;&gt;Ruegos y Preguntas&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Lista de ruegos actuales --&gt;
+    &lt;div *ngIf&#x3D;&quot;ruegosPreguntas.length &gt; 0&quot; class&#x3D;&quot;mb-3 d-flex flex-column gap-2&quot;&gt;
+      &lt;div *ngFor&#x3D;&quot;let ruego of ruegosPreguntas; let i &#x3D; index&quot;
+        class&#x3D;&quot;ruego-item p-2 rounded-2 d-flex justify-content-between align-items-start&quot;
+        style&#x3D;&quot;background-color: #f8f9fa; border: 1px solid #e9ecef;&quot;&gt;
+        &lt;span class&#x3D;&quot;small text-dark&quot;&gt;{{ ruego.texto }}&lt;/span&gt;
+        &lt;button *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;redactando&#x27;&quot; class&#x3D;&quot;btn btn-link text-danger p-0 ms-2&quot; (click)&#x3D;&quot;eliminarRuego(i)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-trash&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Formulario para nuevo ruego (solo si está redactando) --&gt;
+    &lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;redactando&#x27;&quot; class&#x3D;&quot;d-flex gap-2 align-items-start&quot;&gt;
+      &lt;div class&#x3D;&quot;flex-grow-1&quot;&gt;
+        &lt;textarea class&#x3D;&quot;form-control area-texto&quot; [(ngModel)]&#x3D;&quot;nuevoRuego&quot; rows&#x3D;&quot;2&quot; maxlength&#x3D;&quot;250&quot;
+          placeholder&#x3D;&quot;Añadir un nuevo ruego o pregunta (máx 250 car)...&quot;&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;button class&#x3D;&quot;btn btn-outline-dark btn-sm&quot; (click)&#x3D;&quot;agregarRuego()&quot; [disabled]&#x3D;&quot;nuevoRuego.trim().length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+        Añadir
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Solo lectura vacío --&gt;
+    &lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27; &amp;&amp; ruegosPreguntas.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;contenido-bloqueado rounded-3 p-3&quot;&gt;
+      &lt;p class&#x3D;&quot;text-secondary small fst-italic mb-0&quot;&gt;Sin ruegos ni preguntas registrados.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- BOTONES DE ACCIÓN --&gt;
+&lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;redactando&#x27;&quot; class&#x3D;&quot;d-flex justify-content-between align-items-center&quot;&gt;
+  &lt;a routerLink&#x3D;&quot;/profesor/proceso-de-actas/asistencia&quot;
+    class&#x3D;&quot;btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small&quot;&gt;
+    &lt;i class&#x3D;&quot;bi bi-arrow-left me-1&quot;&gt;&lt;/i&gt; Volver a asistencia
+  &lt;/a&gt;
+  &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+    &lt;button class&#x3D;&quot;btn btn-dark fw-bold text-uppercase px-5 btn-sm-accion&quot; (click)&#x3D;&quot;abrirModalFinalizar()&quot;&gt;
+      &lt;i class&#x3D;&quot;bi bi-lock-fill me-2&quot;&gt;&lt;/i&gt;Guardar y Finalizar Acta
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- AVISO BLOQUEADA --&gt;
+&lt;div *ngIf&#x3D;&quot;estado &#x3D;&#x3D;&#x3D; &#x27;bloqueada&#x27;&quot; class&#x3D;&quot;alerta-bloqueada rounded-3 p-3 d-flex align-items-center gap-3&quot;&gt;
+  &lt;i class&#x3D;&quot;bi bi-shield-lock-fill fs-4 text-secondary&quot;&gt;&lt;/i&gt;
+  &lt;div&gt;
+    &lt;p class&#x3D;&quot;fw-bold text-dark small mb-0&quot;&gt;Acta oficial bloqueada&lt;/p&gt;
+    &lt;p class&#x3D;&quot;text-secondary x-small mb-0&quot;&gt;
+      El acta ha sido finalizada y cerrada oficialmente.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- MODAL CONFIRMAR FINALIZACIÓN --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalFinalizar&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot; style&#x3D;&quot;max-width: 440px;&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-center gap-3 mb-3&quot;&gt;
+      &lt;div class&#x3D;&quot;rounded-circle d-flex align-items-center justify-content-center&quot;
+        style&#x3D;&quot;width:44px;height:44px;background:rgba(33,37,41,0.12);flex-shrink:0;&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-lock-fill text-dark fs-5&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;h5 class&#x3D;&quot;text-white fw-bold m-0&quot;&gt;Finalizar y bloquear acta&lt;/h5&gt;
+    &lt;/div&gt;
+
+    &lt;p class&#x3D;&quot;text-secondary mb-3&quot; style&#x3D;&quot;font-size: 0.9rem;&quot;&gt;
+      Se guardará el acta con la fecha de hoy y quedará
+      &lt;strong class&#x3D;&quot;text-white&quot;&gt;bloqueada permanentemente&lt;/strong&gt;. ¿Deseas continuar?
+    &lt;/p&gt;
+
+
+    &lt;div class&#x3D;&quot;puntos-resumen mb-4&quot;&gt;
+      &lt;div *ngFor&#x3D;&quot;let p of puntosInformacion&quot; class&#x3D;&quot;d-flex align-items-center gap-2 mb-1&quot;&gt;
+        &lt;i class&#x3D;&quot;bi x-small&quot; [class.bi-check-circle-fill]&#x3D;&quot;p.informacion.trim().length &gt; 0&quot;
+          [class.bi-circle]&#x3D;&quot;p.informacion.trim().length &#x3D;&#x3D;&#x3D; 0&quot; [class.text-success]&#x3D;&quot;p.informacion.trim().length &gt; 0&quot;
+          [class.text-secondary]&#x3D;&quot;p.informacion.trim().length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+        &lt;/i&gt;
+        &lt;span class&#x3D;&quot;text-secondary&quot; style&#x3D;&quot;font-size:0.82rem;&quot;&gt;{{ p.titulo_OrdenDia }}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalFinalizar &#x3D; false&quot;&gt;CANCELAR&lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot; (click)&#x3D;&quot;finalizarActa()&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-lock-fill me-1&quot;&gt;&lt;/i&gt;FINALIZAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="header-container d-flex justify-content-between align-items-start mb-4">  <div>    <h2 class="fw-bold text-dark m-0">Redacción de Acta</h2>    <p class="text-secondary small">Redacta los acuerdos de cada punto del orden del día.</p>  </div>  <span class="badge-estado" [ngClass]="estado === \'bloqueada\' ? \'badge-bloqueada\' : \'badge-redactando\'">    <i class="bi" [ngClass]="estado === \'bloqueada\' ? \'bi-lock-fill\' : \'bi-pencil-square\'"></i>    {{ estado === \'bloqueada\' ? \'Acta Oficial Cerrada\' : \'En redacción\' }}  </span></div><!-- INFO CONVOCATORIA --><div class="card border-0 shadow-sm rounded-3 mb-4 convocatoria-card">  <div class="card-body p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">    <div class="d-flex align-items-center gap-3">      <div class="icono-conv d-flex align-items-center justify-content-center rounded-3">        <i class="bi bi-file-earmark-text-fill text-white fs-5"></i>      </div>      <div>        <h6 class="fw-bold text-dark mb-0">          Convocatoria #{{ convocatoria.idConvocatoria }}          <span class="text-secondary fw-normal small ms-1">{{ cursoAcademico }}</span>        </h6>        <span class="text-secondary small">          <i class="bi bi-calendar3 me-1"></i>{{ fechaFormateada }} &nbsp;·&nbsp;          <i class="bi bi-geo-alt me-1"></i>{{ convocatoria.lugar }} &nbsp;·&nbsp;          <i class="bi bi-people me-1"></i>{{ convocatoria.asistentes }}/{{ convocatoria.totalConvocados }} asistentes        </span>      </div>    </div>    <!-- Fecha de cierre del acta (acta.fecha DATE) -->    <div *ngIf="estado === \'bloqueada\' && acta.fecha" class="text-secondary small fst-italic">      <i class="bi bi-clock-history me-1"></i>      Acta cerrada el {{ acta.fecha | date:\'dd/MM/yyyy\' }}    </div>  </div></div><!-- PUNTOS DE INFORMACIÓN --><div class="puntos-lista mb-3">  <p class="x-small text-secondary fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">    Puntos del acta  </p>  <div *ngFor="let punto of puntosInformacion" class="punto-card card border-0 shadow-sm rounded-3 mb-3"    [class.punto-completado]="punto.informacion.trim().length > 0" [class.punto-bloqueado]="estado === \'bloqueada\'">    <div class="card-body p-3 d-flex align-items-center justify-content-between punto-header"      (click)="togglePunto(punto)">      <div class="d-flex align-items-center gap-3">        <div class="num-badge d-flex align-items-center justify-content-center rounded-circle fw-bold"          [class.num-badge-done]="punto.informacion.trim().length > 0">          <i *ngIf="punto.informacion.trim().length > 0" class="bi bi-check2 fw-bold"></i>          <span *ngIf="punto.informacion.trim().length === 0">{{ punto.numInformacion }}</span>        </div>        <span class="fw-bold text-dark small">{{ punto.titulo_OrdenDia }}</span>      </div>      <i class="bi text-secondary" [class.bi-chevron-down]="!punto.expandido" [class.bi-chevron-up]="punto.expandido">      </i>    </div>    <div *ngIf="punto.expandido" class="card-footer bg-white border-top p-3">      <!-- Modo redacción -->      <div *ngIf="estado === \'redactando\'">        <label class="x-small text-secondary fw-bold text-uppercase mb-2 d-block" style="letter-spacing: 0.05rem;">          Información / Acuerdos          <span class="text-muted fw-normal ms-1">(máx. 250 caracteres)</span>        </label>        <textarea class="form-control area-texto" [(ngModel)]="punto.informacion" rows="4" maxlength="250"          [placeholder]="\'Escribe aquí los acuerdos del punto \' + punto.numInformacion + \'…\'">        </textarea>        <div class="d-flex justify-content-end mt-2">          <span class="x-small" [class.text-danger]="punto.informacion.length >= 240"            [class.text-secondary]="punto.informacion.length < 240">            {{ punto.informacion.length }}/250          </span>        </div>      </div>      <!-- Modo solo lectura (acta cerrada en BD) -->      <div *ngIf="estado === \'bloqueada\'">        <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">Información /          Acuerdos</p>        <div class="contenido-bloqueado rounded-3 p-3">          <p class="text-dark small mb-0" *ngIf="punto.informacion.trim().length > 0">{{ punto.informacion }}</p>          <p class="text-secondary small fst-italic mb-0" *ngIf="punto.informacion.trim().length === 0">            Sin información registrada en este punto.          </p>        </div>      </div>    </div>  </div></div><!-- RUEGOS Y PREGUNTAS --><div class="card border-0 shadow-sm rounded-3 mb-4 ruegos-card">  <div class="card-body p-3">    <div class="d-flex align-items-center gap-2 mb-3">      <i class="bi bi-chat-left-quote text-secondary"></i>      <span class="fw-bold text-dark small">Ruegos y Preguntas</span>    </div>    <!-- Lista de ruegos actuales -->    <div *ngIf="ruegosPreguntas.length > 0" class="mb-3 d-flex flex-column gap-2">      <div *ngFor="let ruego of ruegosPreguntas; let i = index"        class="ruego-item p-2 rounded-2 d-flex justify-content-between align-items-start"        style="background-color: #f8f9fa; border: 1px solid #e9ecef;">        <span class="small text-dark">{{ ruego.texto }}</span>        <button *ngIf="estado === \'redactando\'" class="btn btn-link text-danger p-0 ms-2" (click)="eliminarRuego(i)">          <i class="bi bi-trash"></i>        </button>      </div>    </div>    <!-- Formulario para nuevo ruego (solo si está redactando) -->    <div *ngIf="estado === \'redactando\'" class="d-flex gap-2 align-items-start">      <div class="flex-grow-1">        <textarea class="form-control area-texto" [(ngModel)]="nuevoRuego" rows="2" maxlength="250"          placeholder="Añadir un nuevo ruego o pregunta (máx 250 car)..."></textarea>      </div>      <button class="btn btn-outline-dark btn-sm" (click)="agregarRuego()" [disabled]="nuevoRuego.trim().length === 0">        Añadir      </button>    </div>    <!-- Solo lectura vacío -->    <div *ngIf="estado === \'bloqueada\' && ruegosPreguntas.length === 0" class="contenido-bloqueado rounded-3 p-3">      <p class="text-secondary small fst-italic mb-0">Sin ruegos ni preguntas registrados.</p>    </div>  </div></div><!-- BOTONES DE ACCIÓN --><div *ngIf="estado === \'redactando\'" class="d-flex justify-content-between align-items-center">  <a routerLink="/profesor/proceso-de-actas/asistencia"    class="btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small">    <i class="bi bi-arrow-left me-1"></i> Volver a asistencia  </a>  <div class="d-flex gap-3">    <button class="btn btn-dark fw-bold text-uppercase px-5 btn-sm-accion" (click)="abrirModalFinalizar()">      <i class="bi bi-lock-fill me-2"></i>Guardar y Finalizar Acta    </button>  </div></div><!-- AVISO BLOQUEADA --><div *ngIf="estado === \'bloqueada\'" class="alerta-bloqueada rounded-3 p-3 d-flex align-items-center gap-3">  <i class="bi bi-shield-lock-fill fs-4 text-secondary"></i>  <div>    <p class="fw-bold text-dark small mb-0">Acta oficial bloqueada</p>    <p class="text-secondary x-small mb-0">      El acta ha sido finalizada y cerrada oficialmente.    </p>  </div></div><!-- MODAL CONFIRMAR FINALIZACIÓN --><div *ngIf="mostrarModalFinalizar" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4" style="max-width: 440px;">    <div class="d-flex align-items-center gap-3 mb-3">      <div class="rounded-circle d-flex align-items-center justify-content-center"        style="width:44px;height:44px;background:rgba(33,37,41,0.12);flex-shrink:0;">        <i class="bi bi-lock-fill text-dark fs-5"></i>      </div>      <h5 class="text-white fw-bold m-0">Finalizar y bloquear acta</h5>    </div>    <p class="text-secondary mb-3" style="font-size: 0.9rem;">      Se guardará el acta con la fecha de hoy y quedará      <strong class="text-white">bloqueada permanentemente</strong>. ¿Deseas continuar?    </p>    <div class="puntos-resumen mb-4">      <div *ngFor="let p of puntosInformacion" class="d-flex align-items-center gap-2 mb-1">        <i class="bi x-small" [class.bi-check-circle-fill]="p.informacion.trim().length > 0"          [class.bi-circle]="p.informacion.trim().length === 0" [class.text-success]="p.informacion.trim().length > 0"          [class.text-secondary]="p.informacion.trim().length === 0">        </i>        <span class="text-secondary" style="font-size:0.82rem;">{{ p.titulo_OrdenDia }}</span>      </div>    </div>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalFinalizar = false">CANCELAR</button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="finalizarActa()">        <i class="bi bi-lock-fill me-1"></i>FINALIZAR      </button>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ActasRedaccionComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ActasRedaccionComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
