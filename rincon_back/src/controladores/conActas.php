@@ -30,6 +30,19 @@ class ConActas extends ControladorBase {
     }
 
     /**
+     * GET ?c=Actas&m=historialProfesor&idProfesor={id}
+     */
+    public function historialProfesor() {
+        $idProfesor = $_GET['idProfesor'] ?? null;
+        if (!$idProfesor) {
+            http_response_code(400);
+            return ["error" => "Parámetro 'idProfesor' es requerido."];
+        }
+
+        return $this->modelo->listarHistorialPorProfesor($idProfesor);
+    }
+
+    /**
      * GET ?c=Actas&m=pendiente
      */
     public function pendiente() {

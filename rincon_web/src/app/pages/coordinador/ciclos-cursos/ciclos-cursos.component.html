@@ -47,17 +47,6 @@
           <i class="bi bi-book text-secondary fs-5"></i>
           <span class="fw-bold text-dark small">{{ curso.nombre }}</span>
         </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-light btn-sm text-secondary fw-bold text-uppercase px-3 sub-action-btn"
-            (click)="abrirEditarCurso(ciclo, curso)">
-            EDITAR
-          </button>
-          <button
-            class="btn btn-link btn-sm text-danger text-decoration-none fw-bold text-uppercase px-3 sub-action-btn"
-            (click)="eliminarCurso(curso)">
-            ELIMINAR
-          </button>
-        </div>
       </div>
     </div>
   </div>
@@ -76,7 +65,8 @@
     <div class="mb-4">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia
         Profesional</label>
-      <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">
+      <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web"
+        [(ngModel)]="nuevaFamilia">
     </div>
 
     <div *ngIf="errorNuevoCiclo" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
@@ -122,34 +112,7 @@
   </div>
 </div>
 
-<!-- Modal Editar Curso -->
-<div *ngIf="mostrarModalEditarCurso" class="modal-overlay d-flex align-items-center justify-content-center">
-  <div class="custom-modal rounded-3 shadow-lg p-4">
-    <h5 class="text-white fw-bold mb-1">EDITAR CURSO</h5>
-    <p class="text-secondary x-small text-uppercase fw-bold mb-4" style="letter-spacing: 0.03rem;">
-      Ciclo: {{ cicloSeleccionado?.siglas }}
-    </p>
-
-    <div class="mb-4">
-      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre Curso</label>
-      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso">
-    </div>
-
-    <div *ngIf="errorEditarCurso" class="alert alert-danger py-2 mb-3 mt-2 small fw-bold">
-      <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorEditarCurso }}
-    </div>
-
-    <div class="d-flex justify-content-end gap-3 mt-5">
-      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
-        (click)="mostrarModalEditarCurso = false">
-        CANCELAR
-      </button>
-      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarEditarCurso()">
-        GUARDAR
-      </button>
-    </div>
-  </div>
-</div>
+<!-- Modal Editar Curso eliminado -->
 
 <!-- Modal Confirmar Eliminación -->
 <div *ngIf="mostrarModalConfirmar" class="modal-overlay d-flex align-items-center justify-content-center">

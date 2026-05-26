@@ -1,13 +1,22 @@
 [
     {
         "id": 1,
-        "nombre": "Plantilla de prueba",
-        "descripcion": "Esto es la primera prueba de la plantilla",
+        "nombre": "Ejemplo de plantilla de acta",
+        "descripcion": "",
         "bloques": [
-            "Apertura y bienvenida",
-            "Lectura del acta anterior",
-            "Acuerdos y compromisos"
+            {
+                "objetivo": "Acta anterior",
+                "descripcion": "Debate",
+                "minutos": 10,
+                "idLugar": "1",
+                "idProfesorDinamiza": "3",
+                "participantes": [
+                    101,
+                    102,
+                    103
+                ]
+            }
         ],
-        "fechaCreacion": "24\/05\/2026"
+        "fechaCreacion": "25\/05\/2026"
     }
 ]

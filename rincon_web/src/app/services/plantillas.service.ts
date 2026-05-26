@@ -3,11 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 
+export interface BloquePlantillaDatos {
+  objetivo: string;
+  descripcion: string;
+  minutos: number | null;
+  idLugar: number | null;
+  idProfesorDinamiza: number | null;
+  participantes: number[];
+}
+
 export interface Plantilla {
   id: number;
   nombre: string;
   descripcion: string;
-  bloques: string[];
+  bloques: BloquePlantillaDatos[];
   fechaCreacion: string;
 }
 
@@ -21,11 +30,11 @@ export class PlantillasService {
     return this.http.get<Plantilla[]>(`${this.apiService.baseUrl}?c=Plantillas&m=listar`);
   }
 
-  crearPlantilla(nombre: string, descripcion: string, bloques: string[]): Observable<Plantilla> {
+  crearPlantilla(nombre: string, descripcion: string, bloques: BloquePlantillaDatos[]): Observable<Plantilla> {
     return this.http.post<Plantilla>(`${this.apiService.baseUrl}?c=Plantillas&m=crear`, { nombre, descripcion, bloques });
   }
 
-  editarPlantilla(id: number, nombre: string, descripcion: string, bloques: string[]): Observable<any> {
+  editarPlantilla(id: number, nombre: string, descripcion: string, bloques: BloquePlantillaDatos[]): Observable<any> {
     return this.http.put<any>(`${this.apiService.baseUrl}?c=Plantillas&m=editar`, { id, nombre, descripcion, bloques });
   }
 

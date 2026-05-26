@@ -13,7 +13,6 @@ import { CiclosService } from '../../../services/ciclos.service';
 export class CiclosCursosComponent implements OnInit {
   public mostrarModalNuevoCiclo = false;
   public mostrarModalEditarCiclo = false;
-  public mostrarModalEditarCurso = false;
   public mostrarModalConfirmar = false;
   public confirmarMensaje: string = '';
 
@@ -21,13 +20,10 @@ export class CiclosCursosComponent implements OnInit {
   public nuevaFamilia: string = '';
   public cicloSeleccionado: any = null;
   public editarFamilia: string = '';
-  public cursoSeleccionado: any = null;
-  public editarNombreCurso: string = '';
 
   public errorNuevoCiclo: string = '';
-  public errorEditarCurso: string = '';
   
-  public accionConfirmar: 'eliminarCiclo' | 'eliminarCurso' | null = null;
+  public accionConfirmar: 'eliminarCiclo' | null = null;
   public itemAEliminar: any = null;
 
   public ciclos: any[] = [];
@@ -100,46 +96,6 @@ export class CiclosCursosComponent implements OnInit {
     this.mostrarModalConfirmar = true;
   }
 
-  abrirEditarCurso(ciclo: any, curso: any): void {
-    this.cicloSeleccionado = ciclo;
-    this.cursoSeleccionado = curso;
-    this.editarNombreCurso = curso.nombre;
-    this.errorEditarCurso = '';
-    this.mostrarModalEditarCurso = true;
-  }
-
-  guardarEditarCurso(): void {
-    this.errorEditarCurso = '';
-    if (!this.editarNombreCurso.trim()) return;
-    
-    // Comprobamos que no se repita el curso en la misma familia
-    const existe = this.cicloSeleccionado.cursos.some((c: any) => 
-      c.nombre.toLowerCase() === this.editarNombreCurso.trim().toLowerCase() && 
-      c.idCiclo !== this.cursoSeleccionado.idCiclo
-    );
-
-    if (existe) {
-      this.errorEditarCurso = 'No se puede introducir en el mismo curso';
-      return;
-    }
-
-    // OJO: Tirando directo con el servicio para usar el enviroment configurado
-    this.ciclosService.editarCurso(this.cursoSeleccionado.idCiclo, this.editarNombreCurso.trim()).subscribe({
-      next: () => {
-        this.cargarCiclos();
-        this.mostrarModalEditarCurso = false;
-      },
-      error: (err) => console.error(err)
-    });
-  }
-
-  eliminarCurso(curso: any): void {
-    this.confirmarMensaje = `¿Eliminar el curso "${curso.nombre}"?`;
-    this.accionConfirmar = 'eliminarCurso';
-    this.itemAEliminar = curso;
-    this.mostrarModalConfirmar = true;
-  }
-
   confirmarAccion(): void {
     if (this.accionConfirmar === 'eliminarCiclo' && this.itemAEliminar) {
       this.ciclosService.eliminarCiclo(this.itemAEliminar.idCiclo).subscribe({
@@ -148,14 +104,6 @@ export class CiclosCursosComponent implements OnInit {
           this.mostrarModalConfirmar = false;
         },
         error: (err) => console.error('Error al eliminar ciclo', err)
-      });
-    } else if (this.accionConfirmar === 'eliminarCurso' && this.itemAEliminar) {
-      this.ciclosService.eliminarCurso(this.itemAEliminar.idCiclo).subscribe({
-        next: () => {
-          this.cargarCiclos();
-          this.mostrarModalConfirmar = false;
-        },
-        error: (err) => console.error(err)
       });
     }
   }

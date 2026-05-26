@@ -110,6 +110,92 @@ class ModActas {
         return $actas;
     }
 
+    public function listarHistorialPorProfesor($idProfesor) {
+        $sql = "SELECT 
+                    a.idActa, 
+                    DATE_FORMAT(a.fecha, '%d/%m/%Y') as fecha, 
+                    co.idConvocatoria, 
+                    DATE_FORMAT(co.fecha, '%d/%m/%Y') as fechaConvocatoria, 
+                    DATE_FORMAT(co.fecha, '%H:%i') as horaConvocatoria, 
+                    l.nombre as lugar, 
+                    c.anioInicio, 
+                    c.anioFin,
+                    co.idProfesorRedactaActa,
+                    co.idProfesorIniciaReunion,
+                    (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes,
+                    (SELECT COUNT(DISTINCT pp.idParticipanteParticipa) FROM participanteParticipa pp WHERE pp.idConvocatoria = co.idConvocatoria) as totalConvocados
+                FROM acta a
+                JOIN convocatoria co ON a.idConvocatoria = co.idConvocatoria
+                JOIN lugar l ON co.idLugar = l.idLugar
+                JOIN cursoAcademico c ON co.idCurso = c.idCurso
+                WHERE a.idActa IN (SELECT idActa FROM profesor_asiste WHERE idProfesor = :idProfesor)
+                   OR co.idProfesorRedactaActa = :idProfesor
+                ORDER BY a.fecha DESC, co.fecha DESC";
+                
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':idProfesor' => $idProfesor]);
+        $actas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Reutilizamos la misma lógica de anidado (copiada de listarHistorialPorAnio)
+        foreach ($actas as &$acta) {
+            $acta['idActa'] = (int) $acta['idActa'];
+            $acta['idConvocatoria'] = (int) $acta['idConvocatoria'];
+            $acta['anioInicio'] = (int) $acta['anioInicio'];
+            $acta['anioFin'] = (int) $acta['anioFin'];
+            $acta['asistentes'] = (int) $acta['asistentes'];
+            $acta['totalConvocados'] = (int) $acta['totalConvocados'];
+
+            // Nombres de Asistentes
+            $sqlAsistentes = "SELECT p.nombre FROM profesor_asiste pa JOIN participantes p ON pa.idProfesor = p.idParticipante WHERE pa.idActa = :idActa";
+            $stmtAsis = $this->db->prepare($sqlAsistentes);
+            $stmtAsis->execute([':idActa' => $acta['idActa']]);
+            $acta['listaAsistentes'] = $stmtAsis->fetchAll(PDO::FETCH_COLUMN);
+
+            // Nombres de Ausentes
+            $sqlAusentes = "SELECT p.nombre FROM participanteParticipa pp JOIN participantes p ON pp.idParticipanteParticipa = p.idParticipante 
+                            WHERE pp.idConvocatoria = :idConvocatoria 
+                            AND pp.idParticipanteParticipa NOT IN (SELECT idProfesor FROM profesor_asiste WHERE idActa = :idActa)";
+            $stmtAus = $this->db->prepare($sqlAusentes);
+            $stmtAus->execute([':idConvocatoria' => $acta['idConvocatoria'], ':idActa' => $acta['idActa']]);
+            $acta['listaAusentes'] = $stmtAus->fetchAll(PDO::FETCH_COLUMN);
+
+            // Nombres de Redacta y Convoca
+            $sqlNombre = "SELECT nombre FROM participantes WHERE idParticipante = :id";
+            $stmtN = $this->db->prepare($sqlNombre);
+            
+            $stmtN->execute([':id' => $acta['idProfesorRedactaActa']]);
+            $acta['nombreRedacta'] = $stmtN->fetchColumn() ?: '';
+
+            $stmtN->execute([':id' => $acta['idProfesorIniciaReunion']]);
+            $acta['nombreConvoca'] = $stmtN->fetchColumn() ?: '';
+
+            // Obtener Informacion
+            $sqlInfo = "SELECT numInformacion, titulo_OrdenDia, informacion 
+                        FROM informacion 
+                        WHERE idActa = :idActa 
+                        ORDER BY numInformacion ASC";
+            $stmtInfo = $this->db->prepare($sqlInfo);
+            $stmtInfo->execute([':idActa' => $acta['idActa']]);
+            $acta['informacion'] = $stmtInfo->fetchAll(PDO::FETCH_ASSOC);
+
+            // Obtener Ruegos y preguntas
+            $sqlRuegos = "SELECT ruegosPregunta 
+                          FROM ruegosPreguntasActa 
+                          WHERE idActa = :idActa";
+            $stmtRuegos = $this->db->prepare($sqlRuegos);
+            $stmtRuegos->execute([':idActa' => $acta['idActa']]);
+            
+            $ruegos = [];
+            while ($row = $stmtRuegos->fetch(PDO::FETCH_ASSOC)) {
+                $ruegos[] = $row['ruegosPregunta'];
+            }
+            $acta['ruegosPregunta'] = $ruegos;
+        }
+
+        return $actas;
+    }
+
+
     public function obtenerConvocatoriaPendiente() {
         $sql = "SELECT 
                     co.idConvocatoria,

@@ -41,4 +41,8 @@ export class ActasService {
   getHistorialPorAnio(anio: number): Observable<ActaHistorial[]> {
     return this.http.get<ActaHistorial[]>(`${this.apiService.baseUrl}?c=Actas&m=historial&anio=${anio}`);
   }
+
+  getHistorialPorProfesor(idProfesor: number): Observable<ActaHistorial[]> {
+    return this.http.get<ActaHistorial[]>(`${this.apiService.baseUrl}?c=Actas&m=historialProfesor&idProfesor=${idProfesor}`);
+  }
 }

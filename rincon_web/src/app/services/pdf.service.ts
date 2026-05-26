@@ -8,144 +8,127 @@ import { ActaHistorial } from './actas.service';
 })
 export class PdfService {
 
-  constructor() {}
+  constructor() { }
 
-  generarPdfActa(acta: ActaHistorial): void {
+  generarActaPdf(acta: ActaHistorial): void {
     const doc = new jsPDF();
     
-    // Preparar strings
-    const strAsistentes = (acta.listaAsistentes && acta.listaAsistentes.length > 0) 
-      ? acta.listaAsistentes.join('\n') 
-      : 'Sin asistentes';
+    // Título Principal
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Acta Oficial - Convocatoria #${acta.idConvocatoria}`, 14, 20);
 
-    const strAusentes = (acta.listaAusentes && acta.listaAusentes.length > 0) 
-      ? acta.listaAusentes.join('\n') 
-      : 'Ninguno';
+    // Metadatos
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fecha de la reunión: ${acta.fechaConvocatoria} a las ${acta.horaConvocatoria}h`, 14, 30);
+    doc.text(`Lugar: ${acta.lugar}`, 14, 36);
+    doc.text(`Curso Académico: ${acta.anioInicio}/${acta.anioFin}`, 14, 42);
+    doc.text(`Asistencia: ${acta.asistentes} de ${acta.totalConvocados} convocados`, 14, 48);
 
-    // Construimos la lista de asuntos tratados
-    let strOrdenDia = '';
-    acta.informacion.forEach(info => {
-      strOrdenDia += `• ${info.titulo_OrdenDia}\n`;
-    });
-    if (acta.ruegosPregunta && acta.ruegosPregunta.length > 0) {
-      strOrdenDia += `• Ruegos y preguntas.\n`;
-    }
-    strOrdenDia = strOrdenDia.trim();
-
-    // Filas del cuerpo
-    const bodyRows: any[] = [];
-
-    // Fila 0
-    bodyRows.push([
-      { 
-        content: 'ACTA DE LA REUNIÓN\nEQUIPO PEDAGÓGICO DE CICLOS FORMATIVOS', 
-        colSpan: 4, 
-        styles: { halign: 'center', fontStyle: 'bold', fontSize: 11, fillColor: [255, 255, 255], textColor: 0 } 
-      }
-    ]);
-
-    // Fila 1: Grupo
-    bodyRows.push([
-      { content: 'GRUPO:', styles: { fontStyle: 'bold', fillColor: [220, 220, 220] } },
-      { content: `Coordinación Pedagógica CICLOS FORMATIVOS - Curso ${acta.anioInicio}/${acta.anioFin}`, colSpan: 3, styles: { fontStyle: 'bold' } }
-    ]);
-
-    // Fila 2: Día y Hora
-    bodyRows.push([
-      { content: 'DÍA Y\nHORA:', styles: { fontStyle: 'bold', fillColor: [220, 220, 220] } },
-      { content: `${acta.fechaConvocatoria} a las ${acta.horaConvocatoria} h`, colSpan: 3 }
-    ]);
-
-    // Fila 3: Lugar
-    bodyRows.push([
-      { content: 'LUGAR:', styles: { fontStyle: 'bold', fillColor: [220, 220, 220] } },
-      { content: `${acta.lugar}`, colSpan: 3, styles: { fontStyle: 'bold' } }
-    ]);
-
-    // Fila 4: Cabeceras Asistentes / Convoca
-    bodyRows.push([
-      { content: 'ASISTENTES', colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } },
-      { content: 'CONVOCA', colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } }
-    ]);
-
-    // Fila 5: Nombres Asistentes / Convoca
-    bodyRows.push([
-      { content: strAsistentes, colSpan: 2 },
-      { content: acta.nombreConvoca || 'Coordinación', colSpan: 2 }
-    ]);
-
-    // Fila 6: Cabeceras Ausentes / Realiza el Acta
-    bodyRows.push([
-      { content: 'AUSENTES', colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } },
-      { content: 'REALIZA EL ACTA', colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } }
-    ]);
-
-    // Fila 7: Nombres Ausentes / Realiza el Acta
-    bodyRows.push([
-      { content: strAusentes, colSpan: 2 },
-      { content: acta.nombreRedacta || 'Coordinación', colSpan: 2 }
-    ]);
-
-    // Fila 8: Cabecera ORDEN DEL DÍA
-    bodyRows.push([
-      { content: 'ORDEN DEL DÍA', colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } }
-    ]);
-
-    // Fila 9: Lista orden del día
-    bodyRows.push([
-      { content: strOrdenDia, colSpan: 4 }
-    ]);
-
-    // Fila 10: Cabecera ACTA DE LA REUNIÓN
-    bodyRows.push([
-      { content: 'ACTA DE LA REUNIÓN', colSpan: 4, styles: { halign: 'center', fontStyle: 'bold', fillColor: [220, 220, 220] } }
-    ]);
-
-    // Recorremos los acuerdos para listarlos
-    acta.informacion.forEach(info => {
-      const texto = `${info.titulo_OrdenDia}\n${info.informacion.trim() || 'Sin información registrada.'}`;
-      bodyRows.push([
-        { content: texto, colSpan: 4 }
-      ]);
+    // Listas de Asistencia
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("1. Asistentes", 14, 60);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    let yPos = 66;
+    acta.listaAsistentes.forEach(asistente => {
+      doc.text(`• ${asistente}`, 14, yPos);
+      yPos += 5;
     });
 
-    // Ruegos y preguntas
-    if (acta.ruegosPregunta && acta.ruegosPregunta.length > 0) {
-      // Cabecera Ruegos
-      bodyRows.push([
-        { content: 'Ruegos y preguntas', colSpan: 4, styles: { fontStyle: 'bold', fillColor: [255, 255, 255] } }
-      ]);
-      const strRuegos = acta.ruegosPregunta.map(r => `- ${r}`).join('\n');
-      bodyRows.push([
-        { content: strRuegos, colSpan: 4 }
-      ]);
+    if (acta.listaAusentes.length > 0) {
+      yPos += 5;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("Ausentes", 14, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      acta.listaAusentes.forEach(ausente => {
+        doc.text(`• ${ausente}`, 14, yPos);
+        yPos += 5;
+      });
     }
 
-    // Dibujar la tabla
+    // Orden del día / Información
+    yPos += 10;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("2. Desarrollo de la Reunión y Acuerdos", 14, yPos);
+    yPos += 8;
+
+    const tableData = acta.informacion.map(info => [
+      info.numInformacion.toString(),
+      info.titulo_OrdenDia,
+      info.informacion
+    ]);
+
     autoTable(doc, {
-      startY: 15,
-      body: bodyRows,
-      theme: 'grid',
-      styles: {
-        font: 'helvetica',
-        fontSize: 10,
-        textColor: [0, 0, 0],
-        lineColor: [0, 0, 0],
-        lineWidth: 0.2,
-        cellPadding: 4
-      },
+      startY: yPos,
+      head: [['#', 'Punto', 'Acuerdos / Desarrollo']],
+      body: tableData,
+      theme: 'striped',
+      headStyles: { fillColor: [41, 128, 185] },
+      styles: { fontSize: 10, cellPadding: 4 },
       columnStyles: {
-        0: { cellWidth: 25 },
-        1: { cellWidth: 65 },
-        2: { cellWidth: 25 },
-        3: { cellWidth: 65 }
-      },
-      // FIXME: Estilos de la tabla y formato de celdas. Pendiente revisar renderizado de negritas si falla.
-      didDrawCell: (data) => {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 50 },
+        2: { cellWidth: 'auto' }
       }
     });
 
-    // Guardar PDF
+    yPos = (doc as any).lastAutoTable.finalY + 10;
+
+    // Ruegos y Preguntas
+    if (acta.ruegosPregunta && acta.ruegosPregunta.length > 0) {
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("3. Ruegos y Preguntas", 14, yPos);
+      yPos += 6;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      
+      acta.ruegosPregunta.forEach(ruego => {
+        const lines = doc.splitTextToSize(`• ${ruego}`, 180);
+        doc.text(lines, 14, yPos);
+        yPos += (lines.length * 5) + 2;
+      });
+    }
+
+    // Firmas
+    yPos += 20;
+    if (yPos > 270) {
+      doc.addPage();
+      yPos = 20;
+    }
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "italic");
+    doc.text("Firmado:", 14, yPos);
+    
+    doc.setFont("helvetica", "bold");
+    doc.text("Redacta el Acta:", 14, yPos + 10);
+    doc.setFont("helvetica", "normal");
+    doc.text(acta.nombreRedacta || 'No especificado', 14, yPos + 15);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Convoca / Vº Bº:", 100, yPos + 10);
+    doc.setFont("helvetica", "normal");
+    doc.text(acta.nombreConvoca || 'No especificado', 100, yPos + 15);
+
+    // Pie de página con fecha de cierre
+    const pageCount = (doc as any).internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(`Acta cerrada oficialmente el ${acta.fecha} - Página ${i} de ${pageCount}`, 14, 290);
+    }
+
+    // Guardar el documento
     doc.save(`Acta_${acta.idConvocatoria}_${acta.fecha.replace(/\//g, '-')}.pdf`);
   }
 }
