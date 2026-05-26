@@ -1,7 +1,27 @@
 <?php
-// Modelo de convocatorias.
+/**
+ * Modelo de acceso a datos y reglas de negocio de convocatorias.
+ *
+ * Se encarga de validar el payload recibido desde el controlador, persistir la
+ * cabecera y el orden del día, reconstruir los DTO de salida y aplicar los
+ * cambios de estado de las convocatorias.
+ */
 class ModConvocatorias {
+    /**
+     * Conexión PDO utilizada por todas las consultas y transacciones del modelo.
+     *
+     * @var PDO
+     */
     private $db;
+
+    /**
+     * Consulta base reutilizable para los listados de convocatorias.
+     *
+     * Se completa dinámicamente con filtros por estado y el orden final del
+     * listado según el caso de uso.
+     *
+     * @var string
+     */
     private const SQL_LISTADO_BASE = "SELECT
                     c.idConvocatoria,
                     c.fecha,
@@ -17,11 +37,21 @@ class ModConvocatorias {
                 INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
                 INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion";
 
+    /**
+     * Inicializa el modelo con la conexión PDO de la aplicación.
+     *
+     * @param PDO $db Conexión a base de datos.
+     */
     public function __construct($db) {
         $this->db = $db;
     }
 
-    // Devuelve los combos base del formulario.
+    /**
+     * Devuelve los datos base necesarios para construir el formulario.
+     *
+     * @return array<string,mixed> Estructura con cursos, lugares, profesores,
+     * grupos y curso actual.
+     */
     public function obtenerFormulario() {
         return [
             'cursos' => $this->obtenerCursos(),
@@ -32,7 +62,17 @@ class ModConvocatorias {
         ];
     }
 
-    // Crea o actualiza una convocatoria activa o en borrador.
+    /**
+     * Crea o actualiza una convocatoria y su orden del día en una transacción.
+     *
+     * @param array<string,mixed> $payload Datos recibidos desde el frontend.
+     *
+     * @return array<string,mixed> Identificador persistido y mensaje de resultado.
+     *
+     * @throws InvalidArgumentException Si el payload no supera la validación.
+     * @throws RuntimeException Si se intenta editar una convocatoria no editable.
+     * @throws Exception Si ocurre un error durante la persistencia.
+     */
     public function guardar($payload) {
         $cabecera = $this->normalizarCabecera($payload);
         $lineas = $this->normalizarOrdenDia($payload['ordenDia'] ?? []);
@@ -63,27 +103,49 @@ class ModConvocatorias {
         }
     }
 
-    // Lista las convocatorias activas segun su estado persistido.
+    /**
+     * Lista las convocatorias activas.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarActivas() {
         return $this->listarPorEstados(['a']);
     }
 
-    // Lista todas las convocatorias para coordinacion en una sola pantalla.
+    /**
+     * Lista todas las convocatorias sin filtrar por estado.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarTodas() {
         return $this->listarPorEstados();
     }
 
-    // Lista solo borradores y pasadas para la pantalla de historico.
+    /**
+     * Lista borradores y convocatorias pasadas para el histórico.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarHistoricas() {
         return $this->listarPorEstados(['b', 'p'], true);
     }
 
-    // Lista solo las convocatorias pasadas.
+    /**
+     * Lista únicamente las convocatorias pasadas.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarPasadas() {
         return $this->listarPorEstados(['p'], true);
     }
 
-    // Carga la convocatoria completa con su orden del dia.
+    /**
+     * Recupera el detalle completo de una convocatoria.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return array<string,mixed>|null DTO completo o `null` si no existe.
+     */
     public function obtenerDetalle($idConvocatoria) {
         $sql = "SELECT
                     c.idConvocatoria,
@@ -132,7 +194,15 @@ class ModConvocatorias {
         ];
     }
 
-    // Marca una convocatoria activa concreta como pasada.
+    /**
+     * Marca como pasada una convocatoria activa.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return array<string,string> Mensaje de confirmación.
+     *
+     * @throws RuntimeException Si no existe o no está activa.
+     */
     public function marcarComoPasada($idConvocatoria) {
         return $this->actualizarEstadoConvocatoria(
             $idConvocatoria,
@@ -143,7 +213,11 @@ class ModConvocatorias {
         );
     }
 
-    // Marca todas las convocatorias activas como pasadas.
+    /**
+     * Marca como pasadas todas las convocatorias activas.
+     *
+     * @return array<string,int|string> Mensaje y número de filas actualizadas.
+     */
     public function marcarTodasComoPasadas() {
         $sql = "UPDATE convocatoria
                 SET cancelada = 'p'
@@ -158,7 +232,15 @@ class ModConvocatorias {
         ];
     }
 
-    // Cancela una convocatoria activa o un borrador moviendola a pasada.
+    /**
+     * Cancela una convocatoria activa o borrador moviéndola a pasada.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return array<string,string> Mensaje de confirmación.
+     *
+     * @throws RuntimeException Si no existe o no puede cancelarse.
+     */
     public function cancelarConvocatoria($idConvocatoria) {
         return $this->actualizarEstadoConvocatoria(
             $idConvocatoria,
@@ -169,7 +251,18 @@ class ModConvocatorias {
         );
     }
 
-    // Extrae y valida la cabecera principal.
+    /**
+     * Extrae y valida la cabecera principal del payload de convocatoria.
+     *
+     * Normaliza nombres de campo procedentes del frontend y comprueba que las
+     * claves foráneas, el estado y la fecha sean válidos.
+     *
+     * @param array<string,mixed> $payload Datos originales recibidos del cliente.
+     *
+     * @return array<string,mixed> Cabecera normalizada lista para persistir.
+     *
+     * @throws InvalidArgumentException Si falta información obligatoria o contiene valores inválidos.
+     */
     private function normalizarCabecera($payload) {
         if (!is_array($payload)) {
             throw new InvalidArgumentException('El cuerpo JSON no es valido.');
@@ -209,7 +302,18 @@ class ModConvocatorias {
         return $datos;
     }
 
-    // Normaliza las lineas del orden del dia al contrato persistente.
+    /**
+     * Normaliza el orden del día recibido desde el frontend.
+     *
+     * Elimina filas vacías, valida referencias y transforma la estructura en el
+     * contrato persistente utilizado por las sentencias SQL.
+     *
+     * @param mixed $ordenDia Estructura recibida en el payload.
+     *
+     * @return array<int,array<string,mixed>> Líneas listas para insertar.
+     *
+     * @throws InvalidArgumentException Si el orden del día no es válido.
+     */
     private function normalizarOrdenDia($ordenDia) {
         if (!is_array($ordenDia)) {
             throw new InvalidArgumentException('El orden del dia no tiene un formato valido.');
@@ -267,7 +371,15 @@ class ModConvocatorias {
         return $lineas;
     }
 
-    // Normaliza y deduplica participantes por tipo e id.
+    /**
+     * Normaliza y deduplica los participantes de un punto del orden del día.
+     *
+     * @param mixed $participantes Lista recibida desde el frontend.
+     *
+     * @return array<int,array<string,int|string>>
+     *
+     * @throws InvalidArgumentException Si el formato o las referencias no son válidas.
+     */
     private function normalizarParticipantes($participantes) {
         if (!is_array($participantes)) {
             throw new InvalidArgumentException('Los participantes del orden del dia no tienen un formato valido.');
@@ -301,7 +413,16 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Inserta o actualiza la cabecera segun corresponda.
+    /**
+     * Inserta una cabecera nueva o actualiza una convocatoria existente.
+     *
+     * @param array<string,mixed> $datos Cabecera normalizada.
+     *
+     * @return int Identificador de la convocatoria persistida.
+     *
+     * @throws RuntimeException Si la convocatoria existente no se encuentra.
+     * @throws InvalidArgumentException Si la convocatoria ya no es editable.
+     */
     private function guardarCabecera($datos) {
         if (!empty($datos['idConvocatoria'])) {
             $this->asegurarConvocatoriaEditable($datos['idConvocatoria']);
@@ -358,7 +479,17 @@ class ModConvocatorias {
         return (int)$this->db->lastInsertId();
     }
 
-    // Sustituye el detalle de la convocatoria de una sola vez.
+    /**
+     * Sustituye el detalle completo de una convocatoria.
+     *
+     * Primero elimina el detalle existente y después inserta de nuevo las
+     * líneas del orden del día y sus participantes.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     * @param array<int,array<string,mixed>> $lineas Orden del día normalizado.
+     *
+     * @return void
+     */
     private function reemplazarOrdenDia($idConvocatoria, $lineas) {
         $this->borrarOrdenDia($idConvocatoria);
 
@@ -415,7 +546,13 @@ class ModConvocatorias {
         }
     }
 
-    // Borra primero el detalle dependiente.
+    /**
+     * Elimina primero el detalle dependiente de una convocatoria.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return void
+     */
     private function borrarOrdenDia($idConvocatoria) {
         $stmt = $this->db->prepare("DELETE FROM participanteParticipa WHERE idConvocatoria = :idConvocatoria");
         $stmt->bindValue(':idConvocatoria', (int)$idConvocatoria, PDO::PARAM_INT);
@@ -426,7 +563,13 @@ class ModConvocatorias {
         $stmt->execute();
     }
 
-    // Recupera y formatea el orden del dia con sus participantes.
+    /**
+     * Recupera el orden del día y lo reconstruye en el DTO esperado por Angular.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     private function obtenerOrdenDia($idConvocatoria) {
         $sql = "SELECT
                     od.numOrden,
@@ -470,7 +613,13 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Reconstruye el listado de participantes de cada punto.
+    /**
+     * Reconstruye el listado de participantes agrupado por número de orden.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return array<int,array<int,array<string,int|string>>>
+     */
     private function obtenerParticipantesPorOrden($idConvocatoria) {
         $sql = "SELECT
                     pp.numOrden,
@@ -502,7 +651,13 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Convierte el listado SQL al DTO del frontend.
+    /**
+     * Convierte un conjunto de filas SQL al DTO de listado del frontend.
+     *
+     * @param array<int,array<string,mixed>> $filas Filas devueltas por la consulta.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     private function formatearListado($filas) {
         $resultado = [];
 
@@ -522,7 +677,14 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Ejecuta un listado reutilizando la misma consulta base y el mismo DTO.
+    /**
+     * Ejecuta un listado reutilizando la consulta base de convocatorias.
+     *
+     * @param array<int,string>|null $estados Estados permitidos o `null` para no filtrar.
+     * @param bool $ordenDescendente Indica si el listado debe devolverse descendente.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     private function listarPorEstados($estados = null, $ordenDescendente = false) {
         $sql = self::SQL_LISTADO_BASE;
         $parametros = [];
@@ -550,7 +712,11 @@ class ModConvocatorias {
         return $this->formatearListado($stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 
-    // Devuelve los cursos para el selector principal.
+    /**
+     * Devuelve los cursos académicos para el selector principal.
+     *
+     * @return array<int,array<string,int|string>>
+     */
     private function obtenerCursos() {
         $sql = "SELECT idCurso, anioInicio, anioFin FROM cursoAcademico ORDER BY anioInicio DESC, anioFin DESC";
         $stmt = $this->db->query($sql);
@@ -567,7 +733,11 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Devuelve los lugares disponibles para reuniones.
+    /**
+     * Devuelve los lugares disponibles para reuniones.
+     *
+     * @return array<int,array<string,int|string>>
+     */
     private function obtenerLugares() {
         $sql = "SELECT idLugar, nombre FROM lugar ORDER BY nombre ASC";
         $stmt = $this->db->query($sql);
@@ -583,7 +753,11 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Devuelve el profesorado seleccionable.
+    /**
+     * Devuelve el profesorado seleccionable en la convocatoria.
+     *
+     * @return array<int,array<string,int|string>>
+     */
     private function obtenerProfesores() {
         $sql = "SELECT p.idProfesor, pa.nombre
                 FROM profesor p
@@ -603,7 +777,11 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Devuelve los grupos disponibles como participantes.
+    /**
+     * Devuelve los grupos disponibles para participar en puntos del orden del día.
+     *
+     * @return array<int,array<string,int|string>>
+     */
     private function obtenerGrupos() {
         $sql = "SELECT g.idGrupo, pa.nombre
                 FROM grupo g
@@ -623,7 +801,14 @@ class ModConvocatorias {
         return $resultado;
     }
 
-    // Selecciona el curso academico actual por año de inicio.
+    /**
+     * Determina el curso académico actual a partir de la fecha del sistema.
+     *
+     * Considera que el curso empieza en septiembre, por lo que de enero a agosto
+     * sigue tomándose el año de inicio anterior.
+     *
+     * @return int|null Identificador del curso actual o `null` si no hay cursos.
+     */
     private function obtenerCursoActualId() {
         $cursos = $this->obtenerCursos();
         $anioActual = (int)date('Y');
@@ -639,7 +824,15 @@ class ModConvocatorias {
         return isset($cursos[0]) ? (int)$cursos[0]['idCurso'] : null;
     }
 
-    // Verifica que las FK de cabecera apunten a registros existentes.
+    /**
+     * Verifica que las referencias de cabecera apunten a registros existentes.
+     *
+     * @param array<string,mixed> $datos Cabecera normalizada.
+     *
+     * @return void
+     *
+     * @throws InvalidArgumentException Si alguna referencia no existe.
+     */
     private function validarCabeceraRelacionada($datos) {
         if (!$this->existeEnTabla('cursoAcademico', 'idCurso', $datos['idCurso'])) {
             throw new InvalidArgumentException('El curso academico seleccionado no es valido.');
@@ -658,7 +851,16 @@ class ModConvocatorias {
         }
     }
 
-    // Comprueba que el participante existe en la tabla que corresponde a su tipo.
+    /**
+     * Comprueba que un participante exista en la tabla asociada a su tipo.
+     *
+     * @param int $idParticipante Identificador del participante.
+     * @param string $tipo Tipo del participante: `profesor` o `grupo`.
+     *
+     * @return void
+     *
+     * @throws InvalidArgumentException Si el participante no existe.
+     */
     private function validarParticipante($idParticipante, $tipo) {
         if ($tipo === 'profesor' && !$this->existeEnTabla('profesor', 'idProfesor', $idParticipante)) {
             throw new InvalidArgumentException('Uno de los profesores participantes no es valido.');
@@ -669,7 +871,15 @@ class ModConvocatorias {
         }
     }
 
-    // Comprueba si existe un registro simple por clave primaria.
+    /**
+     * Comprueba si existe un registro simple por clave primaria.
+     *
+     * @param string $tabla Nombre de la tabla a consultar.
+     * @param string $columna Nombre de la columna identificadora.
+     * @param int $id Valor de la clave primaria o identificador.
+     *
+     * @return bool `true` si existe al menos un registro, `false` en caso contrario.
+     */
     private function existeEnTabla($tabla, $columna, $id) {
         $sql = "SELECT 1 FROM {$tabla} WHERE {$columna} = :id LIMIT 1";
         $stmt = $this->db->prepare($sql);
@@ -679,7 +889,19 @@ class ModConvocatorias {
         return (bool)$stmt->fetchColumn();
     }
 
-    // Actualiza el estado solo si la convocatoria sigue en uno de los estados permitidos.
+    /**
+     * Actualiza el estado de una convocatoria si su estado actual está permitido.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     * @param array<int,string> $estadosPermitidos Estados desde los que se permite la transición.
+     * @param string $nuevoEstado Estado destino.
+     * @param string $mensajeError Mensaje lanzado si no se actualiza ninguna fila.
+     * @param string $mensajeExito Mensaje devuelto si la actualización se aplica.
+     *
+     * @return array<string,string>
+     *
+     * @throws RuntimeException Si no se actualiza ninguna fila.
+     */
     private function actualizarEstadoConvocatoria($idConvocatoria, $estadosPermitidos, $nuevoEstado, $mensajeError, $mensajeExito) {
         $marcadores = [];
         $parametros = [
@@ -715,7 +937,16 @@ class ModConvocatorias {
         return ['message' => $mensajeExito];
     }
 
-    // Verifica que la convocatoria sigue activa y editable.
+    /**
+     * Verifica que una convocatoria existente sigue siendo editable.
+     *
+     * @param int $idConvocatoria Identificador de la convocatoria.
+     *
+     * @return void
+     *
+     * @throws RuntimeException Si la convocatoria no existe.
+     * @throws InvalidArgumentException Si la convocatoria ya está pasada.
+     */
     private function asegurarConvocatoriaEditable($idConvocatoria) {
         $sql = "SELECT cancelada, fecha
                 FROM convocatoria
@@ -736,7 +967,15 @@ class ModConvocatorias {
         }
     }
 
-    // Normaliza la fecha de entrada del formulario.
+    /**
+     * Normaliza una fecha del frontend al formato SQL `Y-m-d H:i:s`.
+     *
+     * @param string $fechaHora Fecha y hora recibida desde el cliente.
+     *
+     * @return string Fecha lista para persistir.
+     *
+     * @throws InvalidArgumentException Si la fecha no tiene un formato interpretable.
+     */
     private function normalizarFechaHora($fechaHora) {
         $timestamp = strtotime($fechaHora);
         if ($timestamp === false) {
@@ -746,7 +985,13 @@ class ModConvocatorias {
         return date('Y-m-d H:i:s', $timestamp);
     }
 
-    // Mantiene el contrato del frontend con formato ISO local.
+    /**
+     * Convierte una fecha SQL al formato ISO local consumido por el frontend.
+     *
+     * @param string $fecha Fecha original devuelta por la base de datos.
+     *
+     * @return string Fecha en formato `Y-m-dTH:i:s` o la original si no puede parsearse.
+     */
     private function formatearFechaApi($fecha) {
         $timestamp = strtotime($fecha);
         if ($timestamp === false) {
@@ -756,11 +1001,16 @@ class ModConvocatorias {
         return date('Y-m-d\TH:i:s', $timestamp);
     }
 
-    // Indica si la fecha recibida ya ha pasado o coincide con el momento actual.
+    /**
+     * Indica si una fecha ya ha pasado o coincide con el instante actual.
+     *
+     * @param string $fechaHora Fecha normalizada a comparar.
+     *
+     * @return bool `true` si la fecha es pasada o actual; `false` si es futura.
+     */
     private function esFechaHoraPasada($fechaHora) {
         $timestamp = strtotime($fechaHora);
         return $timestamp !== false && $timestamp <= time();
     }
-
 }
 ?>
