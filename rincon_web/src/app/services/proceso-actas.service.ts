@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { ApiService } from './api.service';
+import { Observable, of } from 'rxjs';
+import { tap, delay } from 'rxjs/operators';
 
 export interface PuntoOrdenDia {
   numOrden: number;
@@ -37,14 +35,34 @@ export class ProcesoActasService {
   private convocatoriaActiva: ConvocatoriaPendiente | null = null;
   private actaEnEdicion: any = null; // Guardará los datos del ActaHistorial a editar
   
-  constructor(private http: HttpClient, private apiService: ApiService) {}
+  constructor() {}
 
   // Recuperamos los datos del servidor para pintar la pantalla
   getConvocatoriaPendiente(): Observable<ConvocatoriaPendiente> {
-    return this.http.get<ConvocatoriaPendiente>(`${this.apiService.baseUrl}?c=Actas&m=pendiente`)
-      .pipe(
-        tap(convocatoria => this.convocatoriaActiva = convocatoria)
-      );
+    const mockData: ConvocatoriaPendiente = {
+      idConvocatoria: 68,
+      fechaOriginal: '2026-06-18 10:00:00',
+      fecha: '2026-06-18T10:00:00',
+      lugar: 'Aula de Informática 2.04',
+      anioInicio: 2025,
+      anioFin: 2026,
+      idProfesorRedactaActa: 1,
+      idProfesorIniciaReunion: 2,
+      ordenDia: [
+        { numOrden: 1, objetivo: 'Análisis de resultados finales', descripcion: 'Repasar las calificaciones del alumnado de 1º DAW y 2º SMR', minutos: 45 },
+        { numOrden: 2, objetivo: 'Propuestas de mejora', descripcion: 'Recopilar sugerencias de material y software para el próximo curso académico', minutos: 30 }
+      ],
+      profesores: [
+        { idProfesor: 1, nombre: 'Ana García', asiste: false },
+        { idProfesor: 2, nombre: 'Luis Pérez', asiste: false },
+        { idProfesor: 3, nombre: 'Marta Fernández', asiste: false },
+        { idProfesor: 4, nombre: 'Javier Ruiz', asiste: false }
+      ]
+    };
+    return of(mockData).pipe(
+      delay(300),
+      tap(convocatoria => this.convocatoriaActiva = convocatoria)
+    );
   }
 
   // Permite acceder a los datos que el usuario ya habia cargado
@@ -130,8 +148,9 @@ export class ProcesoActasService {
         .map(p => p.idProfesor);
     }
 
-    return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=guardar`, payload)
+    return of({ exito: true, mensaje: 'Acta guardada (MOCK)' })
       .pipe(
+        delay(400),
         tap(() => this.limpiarEstado())
       );
   }
