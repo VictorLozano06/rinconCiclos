@@ -73,41 +73,5 @@ class ConCiclos extends ControladorBase {
         return $resultado;
     }
 
-    /**
-     * PUT ?c=Ciclos&m=editarCurso
-     * Nota: En caso de que el frontend requiera editar sólo el nombre de un curso.
-     */
-    public function editarCurso() {
-        $datos = json_decode(file_get_contents("php://input"), true);
-        
-        if (empty($datos['idCiclo']) || empty($datos['nombre'])) {
-            http_response_code(400);
-            return ["error" => "Faltan campos obligatorios para editar el curso (idCiclo o nombre)."];
-        }
-
-        $resultado = $this->modelo->editarCurso($datos['idCiclo'], $datos['nombre']);
-        if (isset($resultado['error'])) {
-            http_response_code(404); 
-        }
-        return $resultado;
-    }
-
-    /**
-     * DELETE ?c=Ciclos&m=eliminarCurso
-     * Nota: En caso de que el frontend requiera borrar solo un curso.
-     */
-    public function eliminarCurso() {
-        $id = $_GET['id'] ?? null;
-        if (!$id) {
-            http_response_code(400);
-            return ["error" => "ID de curso no proporcionado."];
-        }
-
-        $resultado = $this->modelo->eliminarCurso($id);
-        if (isset($resultado['error'])) {
-            http_response_code(404);
-        }
-        return $resultado;
-    }
 }
 ?>

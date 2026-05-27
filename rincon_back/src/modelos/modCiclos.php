@@ -96,23 +96,6 @@ class ModCiclos {
     }
 
     /**
-     * Modifica el nombre de un curso individual específico (CU 1.5)
-     */
-    public function editarCurso($idCurso, $nuevoNombre) {
-        $sqlUpdate = "UPDATE cicloFormativo SET nombre = :nombre WHERE idCiclo = :id";
-        $stmtUpdate = $this->db->prepare($sqlUpdate);
-        try {
-            $stmtUpdate->execute([
-                ':nombre' => $nuevoNombre, 
-                ':id' => $idCurso
-            ]);
-            return ["success" => true, "mensaje" => "Curso actualizado correctamente."];
-        } catch (Exception $e) {
-            return ["error" => "Error al editar el curso: " . $e->getMessage()];
-        }
-    }
-
-    /**
      * Elimina todos los cursos pertenecientes a un ciclo, borrando el ciclo por completo (CU 1.4)
      */
     public function eliminarCiclo($idCicloRepresentativo) {
@@ -135,18 +118,5 @@ class ModCiclos {
         }
     }
 
-    /**
-     * Elimina un curso individual específico (CU 1.6)
-     */
-    public function eliminarCurso($idCurso) {
-        $sqlDelete = "DELETE FROM cicloFormativo WHERE idCiclo = :id";
-        $stmtDelete = $this->db->prepare($sqlDelete);
-        try {
-            $stmtDelete->execute([':id' => $idCurso]);
-            return ["success" => true, "mensaje" => "Curso eliminado correctamente."];
-        } catch (Exception $e) {
-            return ["error" => "Error al eliminar el curso: " . $e->getMessage()];
-        }
-    }
 }
 ?>
