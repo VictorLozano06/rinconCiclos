@@ -54,6 +54,13 @@
   font-size: 0.95rem;
 }
 
+.hero-actions .secondary-button[disabled] {
+  border-color: #d9dee7;
+  background: #eef1f5;
+  color: #9aa4b2;
+  cursor: not-allowed;
+}
+
 .participants-modal {
   width: min(920px, calc(100vw - 32px));
   max-height: min(88vh, 900px);
@@ -346,13 +353,34 @@
   margin-top: 16px;
 }
 
+.feedback-warning {
+  border: 1px solid #f4d58d;
+  background: #fff7df;
+  color: #7a5b12;
+}
+
+.field-clear-button {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #55657d;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: left;
+}
+
 .participants-modal .participants-empty {
   text-align: center;
   padding: 12px 0;
 }
 
 .participant-action {
-  width: 100%;
+  width: auto;
+  min-width: 0;
+  padding: 8px 12px;
+  font-size: 0.82rem;
 }
 
 .participants-debug {
@@ -392,17 +420,17 @@
 
 .agenda-table th:nth-child(4),
 .agenda-table td[data-label="Dinamiza"] {
-  width: 11%;
+  width: 12%;
 }
 
 .agenda-table th:nth-child(5),
 .agenda-table td[data-label="Lugar"] {
-  width: 11%;
+  width: 12%;
 }
 
 .agenda-table th:nth-child(6),
 .agenda-table td[data-label="Participa"] {
-  width: 28%;
+  width: 19%;
 }
 
 .agenda-table td[data-label="Orden del día"] textarea,
@@ -420,7 +448,16 @@
 }
 
 .participa-cell {
-  min-width: 180px;
+  min-width: 0;
+}
+
+.agenda-feedback {
+  flex: 1 1 320px;
+  min-width: 240px;
+}
+
+.agenda-feedback .feedback {
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -434,5 +471,10 @@
 
   .estado-summary-title {
     font-size: 1.05rem;
+  }
+
+  .agenda-feedback {
+    width: 100%;
+    order: 3;
   }
 }

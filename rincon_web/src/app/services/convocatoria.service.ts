@@ -35,6 +35,12 @@ export class ConvocatoriaService {
     );
   }
 
+  listarConvocatoriasProfesor(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.http.get<ConvocatoriaListaItemDto[]>(
+      `${this.apiService.baseUrl}?c=Convocatorias&m=listarVisiblesProfesor`
+    );
+  }
+
   listarConvocatoriasCoordinador(): Observable<ConvocatoriaListaItemDto[]> {
     return this.http.get<ConvocatoriaListaItemDto[]>(
       `${this.apiService.baseUrl}?c=Convocatorias&m=listarTodas`

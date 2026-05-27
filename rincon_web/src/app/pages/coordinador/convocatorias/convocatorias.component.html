@@ -7,6 +7,13 @@
       <p class="hero-subtitle">Todas las convocatorias se muestran juntas y ordenadas por fecha.</p>
     </div>
     <div class="hero-actions">
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="abrirArchivado()"
+        [disabled]="botonArchivarDeshabilitado">
+        <i class="bi bi-clock-history me-2"></i> Archivar pasadas
+      </button>
       <button type="button" class="primary-button" (click)="crearNueva()">
         <i class="bi bi-plus-lg me-2"></i> Nueva convocatoria
       </button>
@@ -253,9 +260,6 @@
               <div class="participants-list row-participants">
                 <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
                 <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">
-                  <span class="participant-type" [ngClass]="participante.tipo === 'grupo' ? 'chip-tipo-grupo' : 'chip-tipo-profesor'">
-                    {{ participante.tipo === 'grupo' ? 'Grupo' : 'Profesor' }}
-                  </span>
                   <strong>{{ participante.nombre }}</strong>
                 </article>
               </div>
@@ -377,6 +381,7 @@
 <section class="convocatoria-page" *ngIf="vista === 'formulario'">
   <p *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</p>
   <p *ngIf="feedback" class="feedback" [class.feedback-error]="feedbackError">{{ feedback }}</p>
+  <p *ngIf="avisoFormulario" class="feedback feedback-warning">{{ avisoFormulario }}</p>
 
   <header class="hero hero-form">
     <div>
@@ -474,6 +479,13 @@
             </div>
           </div>
         </div>
+        <button
+          *ngIf="convocatoria.iniciaId !== null"
+          type="button"
+          class="field-clear-button"
+          (click)="limpiarProfesor('inicia')">
+          Quitar selección
+        </button>
       </label>
     </div>
   </div>
@@ -581,9 +593,6 @@
                   <article
                     *ngFor="let participante of getParticipantesPreview(item)"
                     class="participant-chip chip-view">
-                    <span class="participant-type" [ngClass]="getParticipanteClase(participante)">
-                      {{ getParticipanteEtiqueta(participante) }}
-                    </span>
                     <strong>{{ participante.nombre }}</strong>
                   </article>
 
@@ -604,8 +613,8 @@
                   type="button"
                   class="secondary-button btn-sm participant-action"
                   (click)="abrirModalParticipantes(item)">
-                  <i class="bi bi-people me-2"></i>
-                  Añadir participantes
+                  <i class="bi bi-people me-1"></i>
+                  Añadir
                 </button>
               </div>
             </td>
@@ -630,9 +639,15 @@
         <strong>{{ minutosTotales }} minutos</strong>
       </div>
 
+      <div class="agenda-feedback">
+        <p *ngIf="errorFormulario" class="feedback feedback-error">{{ errorFormulario }}</p>
+        <p *ngIf="feedback" class="feedback" [class.feedback-error]="feedbackError">{{ feedback }}</p>
+        <p *ngIf="avisoFormulario" class="feedback feedback-warning">{{ avisoFormulario }}</p>
+      </div>
+
       <div class="footer-actions">
         <button type="button" class="secondary-button" (click)="cancelarConvocatoria()">
-          Cancelar convocatoria
+          Cancelar
         </button>
         <button type="button" class="secondary-button" (click)="guardarConvocatoria('b')" [disabled]="cargandoFormulario || guardando">
           Guardar borrador
@@ -732,7 +747,7 @@
 </div>
 
 <div
-  *ngIf="vista === 'formulario' && modalPublicacionAbierto"
+  *ngIf="modalPublicacionAbierto"
   class="participants-modal-backdrop"
   (click)="!modalPublicacionProcesando && !modalPublicacionCargando && cerrarModalPublicacion()">
   <div
@@ -744,9 +759,9 @@
     <div class="participants-modal-body">
       <header class="participants-modal-header">
         <div>
-          <p class="summary-label">Publicar convocatoria</p>
+          <p class="summary-label">{{ modalPublicacionTitulo }}</p>
           <h3 id="publicacion-modal-title">Tienes convocatorias activas</h3>
-          <p>Antes de publicar esta convocatoria, puedes marcar como pasadas las que sigan activas.</p>
+          <p>{{ modalPublicacionDescripcion }}</p>
         </div>
 
         <button
@@ -795,7 +810,7 @@
           </article>
 
           <p *ngIf="convocatoriasActivasPendientes.length === 0" class="participants-empty text-center mb-0">
-            No quedan convocatorias activas pendientes. Puedes publicar la nueva.
+            No quedan convocatorias activas pendientes.
           </p>
         </div>
 
@@ -812,7 +827,7 @@
             class="primary-button"
             (click)="continuarPublicacionNueva()"
             [disabled]="modalPublicacionProcesando">
-            Publicar convocatoria
+            {{ modalPublicacionAccionFinal }}
           </button>
         </footer>
       </ng-container>

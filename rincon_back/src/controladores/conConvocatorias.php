@@ -92,6 +92,20 @@ class ConConvocatorias extends ControladorBase {
     }
 
     /**
+     * Lista las convocatorias visibles para el perfil profesor.
+     *
+     * @return void
+     */
+    public function listarVisiblesProfesor() {
+        try {
+            $datos = $this->modelo->listarVisiblesProfesor();
+            $this->responderJson($datos);
+        } catch (Exception $e) {
+            $this->responderError('No se han podido cargar las convocatorias visibles para profesorado.');
+        }
+    }
+
+    /**
      * Lista todas las convocatorias sin filtrar por estado.
      *
      * @return void

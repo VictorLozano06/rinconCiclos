@@ -15,6 +15,7 @@ import { ConvocatoriaService } from '../../../services/convocatoria.service';
 
 type VistaConvocatoria = 'listado' | 'formulario' | 'detalle';
 type EstadoConvocatoriaFormulario = 'a' | 'p' | 'b';
+type ModalPublicacionModo = 'publicar' | 'archivar';
 
 interface ParticipanteBusqueda {
   idParticipante: number;
@@ -75,9 +76,11 @@ export class ConvocatoriasComponent implements OnInit {
   modalPublicacionAbierto = false;
   modalPublicacionCargando = false;
   modalPublicacionProcesando = false;
+  modalPublicacionModo: ModalPublicacionModo = 'archivar';
   convocatoriasActivasPendientes: ConvocatoriaListaItemDto[] = [];
-
   ordenDia: OrdenDiaCoordinadorDto[] = [this.createEmptyFila()];
+
+  private estadoInicialFormulario = '';
 
   constructor(
     private convocatoriaService: ConvocatoriaService,
@@ -108,6 +111,7 @@ export class ConvocatoriasComponent implements OnInit {
       }
 
       this.vista = 'listado';
+      this.aplicarEstadoNavegacion();
       this.cargarConvocatorias();
     });
   }
@@ -129,6 +133,10 @@ export class ConvocatoriasComponent implements OnInit {
 
         if (this.convocatoria.idConvocatoria === null && this.convocatoria.lugarId === null) {
           this.convocatoria.lugarId = this.lugares[0]?.idLugar ?? null;
+        }
+
+        if (this.vista === 'formulario' && this.convocatoria.idConvocatoria === null) {
+          this.estadoInicialFormulario = this.serializarEstadoFormulario();
         }
 
         this.cargandoFormulario = false;
@@ -156,6 +164,20 @@ export class ConvocatoriasComponent implements OnInit {
 
   crearNueva(): void {
     this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias/crear']);
+  }
+
+  abrirArchivado(): void {
+    if (this.convocatoriasActivas.length === 0) {
+      return;
+    }
+
+    this.modalPublicacionModo = 'archivar';
+    this.feedback = '';
+    this.feedbackError = false;
+    this.modalPublicacionAbierto = true;
+    this.modalPublicacionCargando = false;
+    this.modalPublicacionProcesando = false;
+    this.convocatoriasActivasPendientes = this.ordenarListado(this.convocatoriasActivas);
   }
 
   editarConvocatoria(id: number): void {
@@ -194,6 +216,7 @@ export class ConvocatoriasComponent implements OnInit {
     this.feedback = '';
     this.feedbackError = false;
     this.errorFormulario = '';
+    this.estadoInicialFormulario = this.serializarEstadoFormulario();
   }
 
   iniciarEdicion(id: number): void {
@@ -216,7 +239,7 @@ export class ConvocatoriasComponent implements OnInit {
           idConvocatoria: data.idConvocatoria,
           estado: data.estado ?? 'a',
           titulo: 'Editar convocatoria',
-          subtitulo: 'Actualiza la convocatoria activa y vuelve a publicarla.',
+          subtitulo: 'Actualiza la convocatoria activa.',
           fechaHora: data.fecha ? data.fecha.substring(0, 16) : '',
           lugarId: data.idLugar ? Number(data.idLugar) : null,
           redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
@@ -242,6 +265,7 @@ export class ConvocatoriasComponent implements OnInit {
             }))
           : [this.createEmptyFila()];
 
+        this.estadoInicialFormulario = this.serializarEstadoFormulario();
         this.cargandoFormulario = false;
       },
       error: (error) => {
@@ -329,6 +353,19 @@ export class ConvocatoriasComponent implements OnInit {
     this.iniciaOpen = false;
   }
 
+  limpiarProfesor(field: ProfesorField): void {
+    if (field === 'redacta') {
+      this.convocatoria.redactaId = null;
+      this.redactaQuery = '';
+      this.redactaOpen = false;
+      return;
+    }
+
+    this.convocatoria.iniciaId = null;
+    this.iniciaQuery = '';
+    this.iniciaOpen = false;
+  }
+
   getProfesoresFilaFiltrados(item: OrdenDiaCoordinadorDto): ProfesorOptionDto[] {
     const query = this.normalizarTexto(item.dinamizaQuery);
 
@@ -382,7 +419,6 @@ export class ConvocatoriasComponent implements OnInit {
     }
 
     this.modalParticipantesFilaActiva.participantes = this.modalParticipantesSeleccionados.map((participante) => ({ ...participante }));
-
     this.cerrarModalParticipantes();
   }
 
@@ -450,16 +486,6 @@ export class ConvocatoriasComponent implements OnInit {
       return;
     }
 
-    if (estadoDestino === 'b') {
-      this.ejecutarGuardado(estadoDestino);
-      return;
-    }
-
-    if (this.convocatoria.idConvocatoria === null) {
-      this.prepararPublicacionNueva();
-      return;
-    }
-
     this.ejecutarGuardado(estadoDestino);
   }
 
@@ -482,6 +508,11 @@ export class ConvocatoriasComponent implements OnInit {
         this.convocatoriasActivasPendientes = this.convocatoriasActivasPendientes.filter(
           (convocatoria) => convocatoria.idConvocatoria !== idConvocatoria
         );
+        this.convocatorias = this.convocatorias.map((convocatoria) =>
+          convocatoria.idConvocatoria === idConvocatoria
+            ? { ...convocatoria, estado: 'p' }
+            : convocatoria
+        );
         this.modalPublicacionProcesando = false;
       },
       error: (error) => {
@@ -501,6 +532,12 @@ export class ConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.marcarTodasComoPasadas().subscribe({
       next: () => {
+        const idsPasadas = new Set(this.convocatoriasActivasPendientes.map((convocatoria) => convocatoria.idConvocatoria));
+        this.convocatorias = this.convocatorias.map((convocatoria) =>
+          idsPasadas.has(convocatoria.idConvocatoria)
+            ? { ...convocatoria, estado: 'p' }
+            : convocatoria
+        );
         this.convocatoriasActivasPendientes = [];
         this.modalPublicacionProcesando = false;
       },
@@ -514,40 +551,6 @@ export class ConvocatoriasComponent implements OnInit {
 
   continuarPublicacionNueva(): void {
     this.cerrarModalPublicacion();
-    this.ejecutarGuardado('a');
-  }
-
-  private prepararPublicacionNueva(): void {
-    this.guardando = true;
-    this.modalPublicacionCargando = true;
-    this.modalPublicacionAbierto = true;
-    this.convocatoriasActivasPendientes = [];
-
-    this.convocatoriaService.listarConvocatorias().subscribe({
-      next: (data) => {
-        const activas = this.ordenarListado(data).filter(
-          (convocatoria) => convocatoria.idConvocatoria !== this.convocatoria.idConvocatoria
-        );
-
-        this.modalPublicacionCargando = false;
-        this.guardando = false;
-
-        if (activas.length === 0) {
-          this.cerrarModalPublicacion();
-          this.ejecutarGuardado('a');
-          return;
-        }
-
-        this.convocatoriasActivasPendientes = activas;
-      },
-      error: (error) => {
-        this.modalPublicacionCargando = false;
-        this.modalPublicacionAbierto = false;
-        this.guardando = false;
-        this.feedback = error?.error?.message || 'No se pudieron comprobar las convocatorias activas.';
-        this.feedbackError = true;
-      }
-    });
   }
 
   private ejecutarGuardado(estadoDestino: 'a' | 'b'): void {
@@ -558,9 +561,13 @@ export class ConvocatoriasComponent implements OnInit {
     this.convocatoriaService.guardar(payload).subscribe({
       next: (response) => {
         this.guardando = false;
-        this.feedback = response.message;
-        this.feedbackError = false;
-        this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias', response.idConvocatoria]);
+        this.estadoInicialFormulario = this.serializarEstadoFormulario();
+        this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias'], {
+          state: {
+            feedback: response.message,
+            feedbackError: false
+          }
+        });
       },
       error: (error) => {
         this.guardando = false;
@@ -591,26 +598,14 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   cancelarConvocatoria(): void {
-    if (!this.convocatoria.idConvocatoria) {
-      this.feedback = 'La convocatoria se cancelará cuando exista en el listado.';
-      this.feedbackError = false;
+    const hayCambios = this.hayCambiosSinGuardar();
+    const confirmarSalida = !hayCambios || confirm('Hay cambios sin guardar. Si continúas, se perderán. ¿Deseas salir igualmente?');
+
+    if (!confirmarSalida) {
       return;
     }
 
-    this.convocatoriaService.cancelarConvocatoria(this.convocatoria.idConvocatoria).subscribe({
-      next: (response: { message: string }) => {
-        this.feedback = response.message;
-        this.feedbackError = false;
-        this.router.navigate(
-          ['/coordinador/reuniones-de-equipo/convocatorias/historico'],
-          { queryParams: { tab: 'pasadas' } }
-        );
-      },
-      error: (error: { error?: { message?: string } }) => {
-        this.feedback = error?.error?.message || 'No se pudo cancelar la convocatoria.';
-        this.feedbackError = true;
-      }
-    });
+    this.router.navigate(['/coordinador/reuniones-de-equipo/convocatorias']);
   }
 
   esFechaPasada(fechaStr: string): boolean {
@@ -672,7 +667,27 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   get iniciaLabel(): string {
-    return this.getProfesorNombre(this.convocatoria.iniciaId) || 'Selecciona un profesor';
+    return this.getProfesorNombre(this.convocatoria.iniciaId) || 'Pendiente de decidir';
+  }
+
+  get avisoFormulario(): string {
+    return this.convocatoria.iniciaId === null
+      ? 'Aviso: puedes guardar o publicar sin indicar todavía quién inicia la reunión.'
+      : '';
+  }
+
+  get modalPublicacionTitulo(): string {
+    return this.modalPublicacionModo === 'archivar' ? 'Archivar convocatorias' : 'Publicar convocatoria';
+  }
+
+  get modalPublicacionDescripcion(): string {
+    return this.modalPublicacionModo === 'archivar'
+      ? 'Marca como pasadas las convocatorias activas que ya deban ir al histórico.'
+      : 'Antes de publicar esta convocatoria, puedes marcar como pasadas las que sigan activas.';
+  }
+
+  get modalPublicacionAccionFinal(): string {
+    return this.modalPublicacionModo === 'archivar' ? 'Cerrar' : 'Publicar convocatoria';
   }
 
   getCursoLabel(cursoId: number | null): string {
@@ -701,7 +716,7 @@ export class ConvocatoriasComponent implements OnInit {
   }
 
   getParticipanteNombres(participantes: ParticipanteDto[]): string[] {
-    return participantes.map((participante) => `${this.getParticipanteEtiqueta(participante)}: ${participante.nombre}`);
+    return participantes.map((participante) => participante.nombre);
   }
 
   getEstadoLabel(estado?: string | null): string {
@@ -744,6 +759,10 @@ export class ConvocatoriasComponent implements OnInit {
 
   get convocatoriasBorradores(): ConvocatoriaListaItemDto[] {
     return this.convocatorias.filter((convocatoria) => convocatoria.estado === 'b');
+  }
+
+  get botonArchivarDeshabilitado(): boolean {
+    return this.convocatoriasActivas.length === 0;
   }
 
   getParticipantesResumen(item: OrdenDiaCoordinadorDto): string {
@@ -800,6 +819,49 @@ export class ConvocatoriasComponent implements OnInit {
   private ordenarListado(convocatorias: ConvocatoriaListaItemDto[]): ConvocatoriaListaItemDto[] {
     return [...convocatorias].sort((a, b) => {
       return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
+    });
+  }
+
+  private aplicarEstadoNavegacion(): void {
+    const navigation = this.router.getCurrentNavigation();
+    const state = (navigation?.extras?.state ?? history.state) as {
+      feedback?: string;
+      feedbackError?: boolean;
+    };
+
+    if (state?.feedback) {
+      this.feedback = state.feedback;
+      this.feedbackError = !!state.feedbackError;
+    }
+  }
+
+  private hayCambiosSinGuardar(): boolean {
+    return this.estadoInicialFormulario !== this.serializarEstadoFormulario();
+  }
+
+  private serializarEstadoFormulario(): string {
+    return JSON.stringify({
+      convocatoria: {
+        idConvocatoria: this.convocatoria.idConvocatoria,
+        fechaHora: this.convocatoria.fechaHora,
+        lugarId: this.convocatoria.lugarId,
+        redactaId: this.convocatoria.redactaId,
+        iniciaId: this.convocatoria.iniciaId,
+        cursoId: this.convocatoria.cursoId
+      },
+      ordenDia: this.ordenDia.map((item) => ({
+        minutos: item.minutos,
+        ordenDia: item.ordenDia,
+        objetivo: item.objetivo,
+        dinamizaId: item.dinamizaId,
+        lugarId: item.lugarId,
+        participantes: item.participantes
+          .map((participante) => ({
+            idParticipante: participante.idParticipante,
+            tipo: participante.tipo
+          }))
+          .sort((a, b) => `${a.tipo}:${a.idParticipante}`.localeCompare(`${b.tipo}:${b.idParticipante}`))
+      }))
     });
   }
 

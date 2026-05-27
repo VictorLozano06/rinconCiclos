@@ -35,7 +35,7 @@ class ModConvocatorias extends ConexionBD {
                 INNER JOIN lugar l ON l.idLugar = c.idLugar
                 INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
                 INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion";
+                LEFT JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion";
 
     /**
      * Inicializa el modelo con la conexión PDO de la aplicación.
@@ -114,6 +114,15 @@ class ModConvocatorias extends ConexionBD {
     }
 
     /**
+     * Lista las convocatorias visibles para profesor: activas y pasadas.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public function listarVisiblesProfesor() {
+        return $this->listarPorEstados(['a', 'p']);
+    }
+
+    /**
      * Lista todas las convocatorias sin filtrar por estado.
      *
      * @return array<int,array<string,mixed>>
@@ -165,7 +174,7 @@ class ModConvocatorias extends ConexionBD {
                 INNER JOIN lugar l ON l.idLugar = c.idLugar
                 INNER JOIN cursoAcademico ca ON ca.idCurso = c.idCurso
                 INNER JOIN participantes pr ON pr.idParticipante = c.idProfesorRedactaActa
-                INNER JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
+                LEFT JOIN participantes pi ON pi.idParticipante = c.idProfesorIniciaReunion
                 WHERE c.idConvocatoria = :idConvocatoria
                 LIMIT 1";
 
@@ -185,12 +194,12 @@ class ModConvocatorias extends ConexionBD {
             'idLugar' => (int)$fila['idLugar'],
             'idCurso' => (int)$fila['idCurso'],
             'idProfesorRedactaActa' => (int)$fila['idProfesorRedactaActa'],
-            'idProfesorIniciaReunion' => (int)$fila['idProfesorIniciaReunion'],
+            'idProfesorIniciaReunion' => $fila['idProfesorIniciaReunion'] !== null ? (int)$fila['idProfesorIniciaReunion'] : null,
             'lugar' => $fila['lugar'],
             'anioInicio' => (string)$fila['anioInicio'],
             'anioFin' => (string)$fila['anioFin'],
             'redacta' => $fila['redacta'],
-            'inicia' => $fila['inicia'],
+            'inicia' => $fila['inicia'] !== null ? $fila['inicia'] : null,
             'ordenDia' => $this->obtenerOrdenDia($idConvocatoria)
         ];
     }
@@ -279,7 +288,9 @@ class ModConvocatorias extends ConexionBD {
             'idCurso' => (int)($payload['cursoId'] ?? 0),
             'idLugar' => (int)($payload['lugarId'] ?? 0),
             'idProfesorRedactaActa' => (int)($payload['redactaId'] ?? 0),
-            'idProfesorIniciaReunion' => (int)($payload['iniciaId'] ?? 0),
+            'idProfesorIniciaReunion' => isset($payload['iniciaId']) && $payload['iniciaId'] !== ''
+                ? (int)$payload['iniciaId']
+                : null,
             'fecha' => trim((string)($payload['fechaHora'] ?? '')),
             'estado' => $estado
         ];
@@ -288,7 +299,6 @@ class ModConvocatorias extends ConexionBD {
             $datos['idCurso'] <= 0 ||
             $datos['idLugar'] <= 0 ||
             $datos['idProfesorRedactaActa'] <= 0 ||
-            $datos['idProfesorIniciaReunion'] <= 0 ||
             $datos['fecha'] === ''
         ) {
             throw new InvalidArgumentException('Faltan datos obligatorios de la convocatoria.');
@@ -671,7 +681,7 @@ class ModConvocatorias extends ConexionBD {
                 'anioInicio' => (string)$fila['anioInicio'],
                 'anioFin' => (string)$fila['anioFin'],
                 'redacta' => $fila['redacta'],
-                'inicia' => $fila['inicia']
+                'inicia' => $fila['inicia'] !== null ? $fila['inicia'] : null
             ];
         }
 
@@ -847,7 +857,7 @@ class ModConvocatorias extends ConexionBD {
             throw new InvalidArgumentException('El profesor que redacta no es valido.');
         }
 
-        if (!$this->existeEnTabla('profesor', 'idProfesor', $datos['idProfesorIniciaReunion'])) {
+        if ($datos['idProfesorIniciaReunion'] !== null && !$this->existeEnTabla('profesor', 'idProfesor', $datos['idProfesorIniciaReunion'])) {
             throw new InvalidArgumentException('El profesor que inicia la reunion no es valido.');
         }
     }

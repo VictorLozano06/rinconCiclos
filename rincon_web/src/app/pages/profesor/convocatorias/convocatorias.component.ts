@@ -40,6 +40,7 @@ export class ProfesorConvocatoriasComponent implements OnInit {
         this.iniciarDetalle(Number(idParam));
       } else {
         this.convocatoriaSeleccionada = null;
+        this.aplicarEstadoNavegacion();
         this.cargarConvocatorias();
       }
     });
@@ -48,9 +49,9 @@ export class ProfesorConvocatoriasComponent implements OnInit {
   cargarConvocatorias(): void {
     this.cargandoListado = true;
     this.errorMsg = '';
-    this.convocatoriaService.listarConvocatorias().subscribe({
+    this.convocatoriaService.listarConvocatoriasProfesor().subscribe({
       next: (data) => {
-        this.convocatoras = data;
+        this.convocatoras = this.ordenarListado(data);
         this.cargandoListado = false;
       },
       error: (error) => {
@@ -77,6 +78,16 @@ export class ProfesorConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
+        if (data.estado === 'b') {
+          this.router.navigate(['/profesor/reuniones-de-equipo/convocatorias'], {
+            state: {
+              feedback: 'Los borradores no están disponibles para el perfil profesor.',
+              feedbackError: true
+            }
+          });
+          return;
+        }
+
         this.convocatoriaSeleccionada = data;
         this.cargandoDetalle = false;
       },
@@ -103,6 +114,14 @@ export class ProfesorConvocatoriasComponent implements OnInit {
   get minutosTotales(): number {
     if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
     return this.convocatoriaSeleccionada.ordenDia.reduce((total, item) => total + Number(item.minutos || 0), 0);
+  }
+
+  get convocatoriasActivas(): ConvocatoriaListaItemDto[] {
+    return this.convocatoras.filter((convocatoria) => convocatoria.estado === 'a');
+  }
+
+  get convocatoriasPasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatoras.filter((convocatoria) => convocatoria.estado === 'p');
   }
 
   get resultadoBuscadorProfesor(): { encontrado: boolean; coincidencias: CoincidenciaProfesorConvocatoria[] } | null {
@@ -175,5 +194,21 @@ export class ProfesorConvocatoriasComponent implements OnInit {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/\s+/g, ' ')
       .trim();
+  }
+
+  private ordenarListado(convocatorias: ConvocatoriaListaItemDto[]): ConvocatoriaListaItemDto[] {
+    return [...convocatorias].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+  }
+
+  private aplicarEstadoNavegacion(): void {
+    const navigation = this.router.getCurrentNavigation();
+    const state = (navigation?.extras?.state ?? history.state) as {
+      feedback?: string;
+      feedbackError?: boolean;
+    };
+
+    if (state?.feedback) {
+      this.errorMsg = state.feedback;
+    }
   }
 }

@@ -6,5 +6,5 @@ export interface ConvocatoriaListaItemDto {
   anioInicio: string;
   anioFin: string;
   redacta: string;
-  inicia: string;
+  inicia: string | null;
 }
