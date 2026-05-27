@@ -25,58 +25,85 @@
     </div>
   </div>
 
-  <!-- List Grid -->
-  <div *ngIf="!cargandoListado && convocatoras.length > 0" class="convocatorias-grid">
-    <div *ngFor="let conv of convocatoras" class="surface-card convocatoria-card" [class.convocatoria-card-activa]="conv.estado === 'a'">
-      <div class="card-header-main">
-        <div class="fecha-badge">
-          <i class="bi bi-calendar3"></i>
-          <span>{{ formatFecha(conv.fecha) }}</span>
-        </div>
-        <span class="status-badge" [class.status-badge-activa]="conv.estado === 'a'" [class.status-badge-historica]="conv.estado !== 'a'">
-          {{ conv.estado === 'a' ? 'Actual' : (conv.estado === 'b' ? 'Borrador' : 'Pasada') }}
-        </span>
-      </div>
+  <div *ngIf="!cargandoListado && convocatoras.length > 0" class="convocatorias-accordion">
+    <details class="estado-panel" open>
+      <summary class="estado-summary">
+        <span class="estado-summary-title">Activas</span>
+      </summary>
 
-      <div class="card-details mt-3">
-        <div class="detail-item">
-          <i class="bi bi-geo-alt-fill"></i>
-          <div>
-            <strong>Lugar</strong>
-            <span>{{ conv.lugar || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-person-fill"></i>
-          <div>
-            <strong>Inicia</strong>
-            <span>{{ conv.inicia || 'Sin asignar' }}</span>
-          </div>
-        </div>
-
-        <div class="detail-item mt-2">
-          <i class="bi bi-pencil-square"></i>
-          <div>
-            <strong>Redacta acta</strong>
-            <span>{{ conv.redacta || 'Sin asignar' }}</span>
-          </div>
+      <div class="estado-panel-body">
+        <p *ngIf="convocatoriasActivas.length === 0" class="estado-empty">No hay convocatorias activas.</p>
+        <div *ngIf="convocatoriasActivas.length > 0" class="convocatorias-grid">
+          <ng-container *ngTemplateOutlet="convocatoriaCards; context: { $implicit: convocatoriasActivas }"></ng-container>
         </div>
       </div>
+    </details>
 
-      <div class="card-actions mt-4">
-        <button
-          type="button"
-          class="btn-sm w-100"
-          [class.primary-button]="conv.estado === 'a'"
-          [class.secondary-button]="conv.estado !== 'a'"
-          (click)="seleccionarConvocatoria(conv.idConvocatoria)">
-          Ver convocatoria <i class="bi bi-arrow-right ms-2"></i>
-        </button>
+    <details class="estado-panel">
+      <summary class="estado-summary">
+        <span class="estado-summary-title">Pasadas</span>
+      </summary>
+
+      <div class="estado-panel-body">
+        <p *ngIf="convocatoriasPasadas.length === 0" class="estado-empty">No hay convocatorias pasadas.</p>
+        <div *ngIf="convocatoriasPasadas.length > 0" class="convocatorias-grid">
+          <ng-container *ngTemplateOutlet="convocatoriaCards; context: { $implicit: convocatoriasPasadas }"></ng-container>
+        </div>
       </div>
-    </div>
+    </details>
   </div>
 </section>
+
+<ng-template #convocatoriaCards let-items>
+  <div *ngFor="let conv of items" class="surface-card convocatoria-card" [class.convocatoria-card-activa]="conv.estado === 'a'">
+    <div class="card-header-main">
+      <div class="fecha-badge">
+        <i class="bi bi-calendar3"></i>
+        <span>{{ formatFecha(conv.fecha) }}</span>
+      </div>
+      <span class="status-badge" [class.status-badge-activa]="conv.estado === 'a'" [class.status-badge-historica]="conv.estado !== 'a'">
+        {{ conv.estado === 'a' ? 'Actual' : 'Pasada' }}
+      </span>
+    </div>
+
+    <div class="card-details mt-3">
+      <div class="detail-item">
+        <i class="bi bi-geo-alt-fill"></i>
+        <div>
+          <strong>Lugar</strong>
+          <span>{{ conv.lugar || 'Sin asignar' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item mt-2">
+        <i class="bi bi-person-fill"></i>
+        <div>
+          <strong>Inicia</strong>
+          <span>{{ conv.inicia || 'Sin asignar' }}</span>
+        </div>
+      </div>
+
+      <div class="detail-item mt-2">
+        <i class="bi bi-pencil-square"></i>
+        <div>
+          <strong>Redacta acta</strong>
+          <span>{{ conv.redacta || 'Sin asignar' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-actions mt-4">
+      <button
+        type="button"
+        class="btn-sm w-100"
+        [class.primary-button]="conv.estado === 'a'"
+        [class.secondary-button]="conv.estado !== 'a'"
+        (click)="seleccionarConvocatoria(conv.idConvocatoria)">
+        Ver convocatoria <i class="bi bi-arrow-right ms-2"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
 
 <!-- Detail View -->
 <section class="convocatoria-page" *ngIf="convocatoriaSeleccionada">
@@ -238,9 +265,6 @@
               <div class="participants-list row-participants">
                 <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
                 <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">
-                  <span class="participant-type" [ngClass]="participante.tipo === 'grupo' ? 'chip-tipo-grupo' : 'chip-tipo-profesor'">
-                    {{ participante.tipo === 'grupo' ? 'Grupo' : 'Profesor' }}
-                  </span>
                   <strong>{{ participante.nombre }}</strong>
                 </article>
               </div>

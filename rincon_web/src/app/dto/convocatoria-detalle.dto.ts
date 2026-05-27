@@ -7,11 +7,11 @@ export interface ConvocatoriaDetalleDto {
   idLugar: number;
   idCurso: number;
   idProfesorRedactaActa: number;
-  idProfesorIniciaReunion: number;
+  idProfesorIniciaReunion: number | null;
   lugar: string;
   anioInicio: string;
   anioFin: string;
   redacta: string;
-  inicia: string;
+  inicia: string | null;
   ordenDia: OrdenDiaProfesorDto[];
 }

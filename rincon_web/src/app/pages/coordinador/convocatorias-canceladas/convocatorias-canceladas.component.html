@@ -295,9 +295,6 @@
               <div class="participants-list row-participants">
                 <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
                 <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">
-                  <span class="participant-type" [ngClass]="participante.tipo === 'grupo' ? 'chip-tipo-grupo' : 'chip-tipo-profesor'">
-                    {{ participante.tipo === 'grupo' ? 'Grupo' : 'Profesor' }}
-                  </span>
                   <strong>{{ participante.nombre }}</strong>
                 </article>
               </div>
