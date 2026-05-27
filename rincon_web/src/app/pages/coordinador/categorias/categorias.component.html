@@ -1,0 +1,132 @@
+<section class="seccion-gestion">
+  <div class="cabecera-gestion">
+    <div>
+      <h2 class="titulo-seccion">Categorias</h2>
+      <p class="texto-intro">{{ textoIntro }}</p>
+    </div>
+  </div>
+
+  <p *ngIf="feedback" class="feedback-accion" [class.feedback-error]="feedbackError">{{ feedback }}</p>
+
+  <div *ngIf="cargando" class="estado-carga">
+    <p>Cargando categorias...</p>
+  </div>
+
+  <div *ngIf="errorCarga" class="estado-carga">
+    <p>No se pudieron cargar las categorias.</p>
+  </div>
+
+  <div *ngIf="!cargando && !errorCarga" class="contenido-gestion">
+    <section class="panel-gestion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Arbol</h3>
+          <p>{{ categorias.length }} categorias</p>
+        </div>
+      </div>
+
+      <div class="lista-grupos">
+        <section *ngFor="let categoria of categoriasRaiz" class="grupo-categorias">
+          <div class="grupo-titulo">
+            <div>
+              <h4>{{ categoria.nombre }}</h4>
+              <div class="fila-meta">Categoria padre</div>
+            </div>
+
+            <div class="fila-acciones">
+              <span class="estado-pill" [class.estado-pill-bloqueada]="categoria.predeterminada">
+                {{ categoria.predeterminada ? 'Predeterminada' : 'No predeterminada' }}
+              </span>
+              <button *ngIf="puedeGestionarse(categoria)" type="button" class="boton-secundario" (click)="editarCategoria(categoria)">Editar</button>
+              <button *ngIf="puedeGestionarse(categoria)" type="button" class="boton-peligro" (click)="eliminarCategoria(categoria)">Eliminar</button>
+              <span *ngIf="!puedeGestionarse(categoria)" class="fila-estado-bloqueada">No editable</span>
+            </div>
+          </div>
+
+          <div class="lista-items">
+            <article
+              *ngFor="let hija of getHijos(categoria.idCategoria)"
+              class="fila-item fila-item-hija"
+              [class.fila-item-activa]="esCategoriaActiva(hija)">
+              <div>
+                <div class="fila-meta">Hija de {{ categoria.nombre }}</div>
+                <strong>{{ hija.nombre }}</strong>
+              </div>
+
+              <div class="fila-acciones">
+                <button *ngIf="puedeGestionarse(hija)" type="button" class="boton-secundario" (click)="editarCategoria(hija)">Editar</button>
+                <button *ngIf="puedeGestionarse(hija)" type="button" class="boton-peligro" (click)="eliminarCategoria(hija)">Eliminar</button>
+                <span *ngIf="!puedeGestionarse(hija)" class="fila-estado-bloqueada">No editable</span>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel-gestion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Crear categoria</h3>
+          <p>Alta manual</p>
+        </div>
+      </div>
+
+      <form class="formulario-simple" (ngSubmit)="guardarCategoriaNueva()">
+        <label class="campo-formulario">
+          <span>Nombre</span>
+          <input type="text" [(ngModel)]="formularioCrear.nombre" name="nombreCrear" placeholder="Ej. Recuperaciones">
+        </label>
+
+        <label class="campo-formulario">
+          <span>Categoria padre</span>
+          <select [(ngModel)]="formularioCrear.idCategoriaPadre" name="idCategoriaPadreCrear">
+            <option [ngValue]="null">Sin categoria padre (para luego poner subcategorias)</option>
+            <option *ngFor="let categoria of categoriasPadreDisponiblesCrear" [ngValue]="categoria.idCategoria">
+              {{ categoria.nombre }}
+            </option>
+          </select>
+        </label>
+
+        <p class="texto-ayuda">Bloqueadas: categorias predeterminadas y especiales ({{ categoriasEspecialesInfo }}).</p>
+
+        <div class="acciones-formulario">
+          <button type="submit" class="boton-primario">Crear categoria</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div *ngIf="modalEdicionAbierto" class="modal-overlay">
+    <div class="modal-edicion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Editar categoria</h3>
+          <p>{{ categoriaEditando?.nombre }}</p>
+        </div>
+      </div>
+
+      <form class="formulario-simple" (ngSubmit)="guardarCategoriaEditada()">
+        <label class="campo-formulario">
+          <span>Nombre</span>
+          <input type="text" [(ngModel)]="formularioEditar.nombre" name="nombreEditar">
+        </label>
+
+        <label class="campo-formulario">
+          <span>Categoria padre</span>
+          <select [(ngModel)]="formularioEditar.idCategoriaPadre" name="idCategoriaPadreEditar">
+            <option [ngValue]="null">Sin categoria padre (para luego poner subcategorias)</option>
+            <option *ngFor="let categoria of categoriasPadreDisponiblesEditar" [ngValue]="categoria.idCategoria">
+              {{ categoria.nombre }}
+            </option>
+          </select>
+        </label>
+
+        <div class="acciones-formulario">
+          <button type="button" class="boton-secundario" (click)="cerrarModalEdicion()">Cancelar</button>
+          <button type="submit" class="boton-primario">Guardar categoria</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
+import { CategoriaService } from '../../services/categoria.service';
 
 interface SidebarItem {
   nombre: string;
@@ -33,7 +33,7 @@ export class SidebarCoordinadorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
-  // Carga categorias para construir el menu lateral de coordinador.
+  // Carga las categorias del backend para pintar solo lo que existe de verdad.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data: CategoriaDto[]) => {
@@ -47,18 +47,14 @@ export class SidebarCoordinadorComponent implements OnInit {
     });
   }
 
-  // Monta los grupos del sidebar, incluyendo accesos fijos y categorias dinamicas.
+  // Mezcla accesos fijos con las categorias dinamicas que vienen de la BD.
   private construirMenu(categorias: CategoriaDto[]): SidebarItem[] {
     const catReuniones = categorias.find((cat) => cat.nombre === 'Reuniones de Equipo');
 
-    let subCategoriasReuniones: SidebarItem[] = [];
-    if (catReuniones && catReuniones.subcategorias) {
-      subCategoriasReuniones = this.mapearCategorias(
-        catReuniones.subcategorias,
-        '/coordinador',
-        '/coordinador/reuniones-de-equipo'
-      );
-    }
+    const subCategoriasReuniones =
+      catReuniones?.subcategorias?.length
+        ? this.mapearCategorias(catReuniones.subcategorias, '/coordinador', '/coordinador/reuniones-de-equipo')
+        : [];
 
     return [
       {
@@ -80,26 +76,17 @@ export class SidebarCoordinadorComponent implements OnInit {
       {
         nombre: 'Categorías',
         icono: 'categorias',
-        ruta: null,
-        abierto: true,
-        subcategorias: [
-          {
-            nombre: 'Crear categoría',
-            icono: 'categoria-generica',
-            ruta: '/coordinador/categorias/crear',
-            abierto: false,
-            subcategorias: [],
-            deshabilitado: true
-          },
-          {
-            nombre: 'Modificar categoría',
-            icono: 'categoria-generica',
-            ruta: '/coordinador/categorias/modificar',
-            abierto: false,
-            subcategorias: [],
-            deshabilitado: true
-          }
-        ],
+        ruta: '/coordinador/categorias',
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
+        nombre: 'Lugares',
+        icono: 'tag',
+        ruta: '/coordinador/lugares',
+        abierto: false,
+        subcategorias: [],
         deshabilitado: false
       },
       {
@@ -138,64 +125,57 @@ export class SidebarCoordinadorComponent implements OnInit {
     ];
   }
 
-  // Convierte categorias anidadas en items navegables.
-  private mapearCategorias(cats: CategoriaDto[], prefijoRuta: string, rutaPadre: string = ''): SidebarItem[] {
-    const mapaIconos: { [key: string]: string } = {
-      'Inicio': 'home',
+  // Convierte las categorias anidadas en items navegables del sidebar.
+  private mapearCategorias(cats: CategoriaDto[], prefijoRuta: string, rutaPadre = ''): SidebarItem[] {
+    const mapaIconos: Record<string, string> = {
       'Reuniones de Equipo': 'reuniones',
-      'Tutorias': 'tutorias',
+      Tutorias: 'tutorias',
       'Tutorías': 'tutorias',
-      'Evaluaciones': 'evaluaciones',
-      'Otros': 'otros'
+      Evaluaciones: 'evaluaciones',
+      Otros: 'otros'
     };
 
-    const subcategoriasDeshabilitadas = ['BOCC', 'Calendario de reuniones'];
+    const subcategoriasBloqueadas = ['BOCC', 'Calendario de reuniones'];
 
-    return cats.map((cat) => {
-      const nombre = cat.nombre;
-
-      const slug = nombre
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[ºª]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/[^a-z0-9-]/g, '');
-
-
-
-      let ruta = '';
-      if (nombre === 'Inicio') {
-        ruta = `${prefijoRuta}/inicio`;
-      } else if (rutaPadre) {
-        ruta = `${rutaPadre}/${slug}`;
-      } else {
-        ruta = `${prefijoRuta}/${slug}`;
-      }
-
-      const subcategorias = cat.subcategorias ? this.mapearCategorias(cat.subcategorias, prefijoRuta, ruta) : [];
+    return cats.map((categoria) => {
+      const slug = this.generarSlug(categoria.nombre);
+      const ruta = rutaPadre ? `${rutaPadre}/${slug}` : `${prefijoRuta}/${slug}`;
+      const subcategorias = categoria.subcategorias?.length
+        ? this.mapearCategorias(categoria.subcategorias, prefijoRuta, ruta)
+        : [];
 
       return {
-        nombre,
-        icono: mapaIconos[nombre] || 'categoria-generica',
+        nombre: categoria.nombre,
+        icono: mapaIconos[categoria.nombre] || 'categoria-generica',
         ruta,
         abierto: false,
         subcategorias,
-        deshabilitado: subcategoriasDeshabilitadas.includes(nombre)
+        deshabilitado: subcategoriasBloqueadas.includes(categoria.nombre)
       };
     });
   }
 
+  // Pasa el nombre a una ruta simple, sin tildes ni espacios raros.
+  private generarSlug(texto: string): string {
+    return texto
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[ºª]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
+  }
+
   // Abre o cierra el bloque de menu que corresponda.
-  alternarMenu(cat: SidebarItem): void {
-    if (cat.subcategorias.length > 0) {
-      cat.abierto = !cat.abierto;
+  alternarMenu(item: SidebarItem): void {
+    if (item.subcategorias.length > 0) {
+      item.abierto = !item.abierto;
     }
   }
 
-  // Indica si un item tiene hijos para decidir si se pinta como boton o enlace.
-  tieneHijos(cat: SidebarItem): boolean {
-    return cat.subcategorias.length > 0;
+  // Indica si un item tiene hijos para pintarlo como boton o como enlace.
+  tieneHijos(item: SidebarItem): boolean {
+    return item.subcategorias.length > 0;
   }
 
   // Cierra el sidebar en mobile.
