@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
 import { RecursoDto } from '../dto/recurso.dto';
+import { MockBackendService } from './mock-backend.service';
 
 export interface RecursoFormularioResponse {
   cursoActualId: number | null;
@@ -21,60 +20,46 @@ export interface RecursoFormularioResponse {
   providedIn: 'root'
 })
 export class RecursoService {
-  constructor(
-    private http: HttpClient,
-    private apiService: ApiService
-  ) {}
+  constructor(private mockBackend: MockBackendService) {}
 
   // Obtiene los recursos recientes de profesor.
   getRecientesProfesor(limite = 5): Observable<RecursoDto[]> {
-    return this.http.get<RecursoDto[]>(this.construirUrlSinCache(`${this.apiService.baseUrl}?c=Recursos&m=listarRecientesProfesor&limite=${limite}`));
+    return this.mockBackend.getRecursosRecientesProfesor(limite);
   }
 
   // Lista todos los recursos para coordinacion.
   getTodos(): Observable<RecursoDto[]> {
-    return this.http.get<RecursoDto[]>(this.construirUrlSinCache(`${this.apiService.baseUrl}?c=Recursos&m=listarTodos`));
+    return this.mockBackend.getTodosLosRecursos();
   }
 
   // Devuelve los cursos y ciclos necesarios para el formulario.
   getFormulario(): Observable<RecursoFormularioResponse> {
-    return this.http.get<RecursoFormularioResponse>(this.construirUrlSinCache(`${this.apiService.baseUrl}?c=Recursos&m=obtenerFormulario`));
+    return this.mockBackend.getRecursoFormulario();
   }
 
   // Filtra los recursos por categoria.
   getPorCategoria(idCategoria: number): Observable<RecursoDto[]> {
-    return this.http.get<RecursoDto[]>(this.construirUrlSinCache(`${this.apiService.baseUrl}?c=Recursos&m=listarPorCategoria&idCategoria=${idCategoria}`));
+    return this.mockBackend.getRecursosPorCategoria(idCategoria);
   }
 
   // Devuelve la ficha detallada de un recurso concreto.
   getDetalle(idCategoria: number, numRecurso: number): Observable<RecursoDto> {
-    return this.http.get<RecursoDto>(
-      this.construirUrlSinCache(`${this.apiService.baseUrl}?c=Recursos&m=detalle&idCategoria=${idCategoria}&numRecurso=${numRecurso}`)
-    );
+    return this.mockBackend.getDetalleRecurso(idCategoria, numRecurso);
   }
 
   // Guarda un recurso nuevo o actualiza uno existente.
   guardar(payload: unknown): Observable<unknown> {
-    return this.http.post(`${this.apiService.baseUrl}?c=Recursos&m=guardar`, payload);
+    return this.mockBackend.guardarRecurso(payload as any);
   }
 
   // Elimina un recurso completo.
   eliminar(idCategoria: number, numRecurso: number): Observable<unknown> {
-    return this.http.post(`${this.apiService.baseUrl}?c=Recursos&m=eliminar`, {
-      idCategoria,
-      numRecurso
-    });
+    return this.mockBackend.eliminarRecurso(idCategoria, numRecurso);
   }
 
   // Borra del servidor un archivo que estaba en la carpeta temporal
   // y que el usuario ha quitado antes de guardar el recurso final.
   eliminarArchivoTemporalSubido(identificadorTemporal: string): Observable<unknown> {
-    return this.http.request('delete', `${this.apiService.baseUrl}?c=Recursos&m=eliminarArchivoTemporal`, {
-      body: identificadorTemporal
-    });
-  }
-
-  private construirUrlSinCache(url: string): string {
-    return `${url}&_=${Date.now()}`;
+    return this.mockBackend.eliminarArchivoTemporal(identificadorTemporal);
   }
 }

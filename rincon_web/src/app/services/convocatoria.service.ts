@@ -1,82 +1,55 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { ApiService } from './api.service';
 import { ConvocatoriaDetalleDto } from '../dto/convocatoria-detalle.dto';
 import { ConvocatoriaFormularioResponseDto } from '../dto/convocatoria-formulario-response.dto';
 import { ConvocatoriaListaItemDto } from '../dto/convocatoria-lista-item.dto';
 import { GuardarConvocatoriaPayloadDto } from '../dto/guardar-convocatoria-payload.dto';
+import { MockBackendService } from './mock-backend.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConvocatoriaService {
-  constructor(
-    private http: HttpClient,
-    private apiService: ApiService
-  ) {}
+  constructor(private mockBackend: MockBackendService) {}
 
   getFormulario(): Observable<ConvocatoriaFormularioResponseDto> {
-    return this.http.get<ConvocatoriaFormularioResponseDto>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=formulario`
-    );
+    return this.mockBackend.getConvocatoriaFormulario();
   }
 
   guardar(payload: GuardarConvocatoriaPayloadDto): Observable<{ idConvocatoria: number; message: string }> {
-    return this.http.post<{ idConvocatoria: number; message: string }>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=guardar`,
-      payload
-    );
+    return this.mockBackend.guardarConvocatoria(payload);
   }
 
   listarConvocatorias(): Observable<ConvocatoriaListaItemDto[]> {
-    return this.http.get<ConvocatoriaListaItemDto[]>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=listarActivas`
-    );
+    return this.mockBackend.listarConvocatoriasActivas();
   }
 
   listarConvocatoriasProfesor(): Observable<ConvocatoriaListaItemDto[]> {
-    return this.http.get<ConvocatoriaListaItemDto[]>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=listarVisiblesProfesor`
-    );
+    return this.mockBackend.listarConvocatoriasProfesor();
   }
 
   listarConvocatoriasCoordinador(): Observable<ConvocatoriaListaItemDto[]> {
-    return this.http.get<ConvocatoriaListaItemDto[]>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=listarTodas`
-    );
+    return this.mockBackend.listarConvocatoriasCoordinador();
   }
 
   marcarComoPasada(idConvocatoria: number): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=marcarComoPasada`,
-      { idConvocatoria }
-    );
+    return this.mockBackend.marcarConvocatoriaComoPasada(idConvocatoria);
   }
 
   marcarTodasComoPasadas(): Observable<{ message: string; actualizadas: number }> {
-    return this.http.post<{ message: string; actualizadas: number }>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=marcarTodasComoPasadas`,
-      {}
-    );
+    return this.mockBackend.marcarTodasLasConvocatoriasActivasComoPasadas();
   }
 
   listarConvocatoriasHistoricas(): Observable<ConvocatoriaListaItemDto[]> {
-    return this.http.get<ConvocatoriaListaItemDto[]>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=listarHistoricas`
-    );
+    return this.mockBackend.listarConvocatoriasHistoricas();
   }
 
   listarConvocatoriasCanceladas(): Observable<ConvocatoriaListaItemDto[]> {
-    return this.http.get<ConvocatoriaListaItemDto[]>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=listarPasadas`
-    );
+    return this.mockBackend.listarConvocatoriasCanceladas();
   }
 
   getConvocatoria(id: number): Observable<ConvocatoriaDetalleDto> {
-    return this.http.get<ConvocatoriaDetalleDto>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=detalle&id=${id}`
-    );
+    return this.mockBackend.getConvocatoria(id);
   }
 
   eliminar(_id: number): Observable<{ message: string }> {
@@ -86,9 +59,6 @@ export class ConvocatoriaService {
   }
 
   cancelarConvocatoria(id: number): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=cancelar`,
-      { idConvocatoria: id }
-    );
+    return this.mockBackend.cancelarConvocatoria(id);
   }
 }
