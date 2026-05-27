@@ -1,0 +1,196 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.filtro-card {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.badge-id {
+  display: inline-block;
+  background-color: #f1f3f5;
+  color: #495057;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.375rem;
+  border: 1px solid #dee2e6;
+}
+
+.badge-acta-oficial {
+  display: inline-flex;
+  align-items: center;
+  background-color: #d1e7dd;
+  color: #0a3622;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1.25rem;
+}
+
+.select-curso {
+  font-size: 0.88rem;
+  border-color: #dee2e6;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.select-curso:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 2px rgba(33, 37, 41, 0.1);
+}
+
+.btn-buscar {
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+  border-radius: 0.5rem;
+  height: 2.375rem;
+}
+
+.estado-inicial {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.tabla-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.tabla-actas {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.th-col {
+  background-color: #f8f9fa;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  color: #6c757d;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid #e9ecef;
+  border-top: none;
+}
+
+.td-col {
+  padding: 0.9rem 1.1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.fila-acta {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.fila-acta:hover {
+  background-color: #f8fafc;
+}
+
+.fila-acta:last-child td {
+  border-bottom: none;
+}
+
+.badge-acta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1.25rem;
+}
+
+.badge-bloqueada {
+  background-color: #d1e7dd;
+  color: #0a3622;
+}
+
+.badge-cerrada {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.btn-xs {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1050;
+  backdrop-filter: blur(3px);
+}
+
+.custom-modal-acta {
+  background-color: #2d2d2d;
+  width: 100%;
+  max-width: 38.75rem;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-acta-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.modal-acta-body {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-acta-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.punto-acta-modal {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.punto-acta-modal:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.num-modal {
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 0.78rem;
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #2d2d2d;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04rem;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
+
+.x-small {
+  font-size: 0.7rem;
+}

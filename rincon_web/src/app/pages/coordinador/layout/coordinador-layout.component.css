@@ -6,13 +6,24 @@
 }
 
 .sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.35);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 20;
+  display: none;
+}
+
+.sidebar-shell {
+  width: 0;
+  flex: 0 0 0;
+  overflow: hidden;
+  transition: width 0.22s ease, flex-basis 0.22s ease;
+}
+
+.sidebar-shell-open {
+  width: 260px;
+  flex-basis: 260px;
+}
+
+.sidebar-shell app-sidebar-coordinador {
+  display: block;
+  width: 260px;
 }
 
 .sidebar-overlay-visible {
@@ -28,21 +39,26 @@
 }
 
 .barra-superior {
-  height: 90px;
+  min-height: 5.625rem;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 0 40px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
+  gap: 1rem;
+  padding: 0 2.5rem;
+  background: #fff;
+  border-bottom: 0.0625rem solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .boton-sidebar {
-  display: none;
-  width: 46px;
-  height: 46px;
-  border: 1px solid #d9e2f0;
-  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.875rem;
+  height: 2.875rem;
+  border: 0.0625rem solid #d9e2f0;
+  border-radius: 0.875rem;
   background: #f8fbff;
   color: #243043;
   font-size: 1.4rem;
@@ -50,49 +66,58 @@
 
 
 .contenedor-contenido {
-  padding: 40px;
+  padding: 2.5rem;
   flex: 1;
   overflow-y: auto;
 }
 
 .ajuste-ancho {
-  max-width: 1100px;
+  width: 100%;
+  max-width: none;
   margin: 0;
 }
 
 app-buscador {
   width: 100%;
-  max-width: 1100px;
+  max-width: none;
 }
 
 @media (max-width: 1024px) {
   .barra-superior {
     height: auto;
-    padding: 18px 20px;
+    padding: 1.125rem 1.25rem;
   }
 
   .contenedor-contenido {
-    padding: 24px 20px;
+    padding: 1.5rem 1.25rem;
   }
 }
 
 @media (max-width: 768px) {
-  .boton-sidebar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    display: block;
+    background: rgba(15, 23, 42, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 20;
+  }
+
+  .sidebar-shell,
+  .sidebar-shell-open {
+    width: 0;
+    flex-basis: 0;
+    overflow: visible;
   }
 
   .barra-superior {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
   }
 
   .contenedor-contenido {
-    padding: 18px 14px 24px;
+    padding: 1.125rem 0.875rem 1.5rem;
   }
 }

@@ -1,60 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ConvocatoriaService } from '../../../services/convocatoria.service';
+import { ConvocatoriaDetalleDto } from '../../../dto/convocatoria-detalle.dto';
+import { ConvocatoriaListaItemDto } from '../../../dto/convocatoria-lista-item.dto';
 
-interface Participante {
-  idProfesor: number;
+interface CoincidenciaProfesorConvocatoria {
   nombre: string;
-}
-
-interface OrdenDiaItem {
-  numOrden: number;
-  minutos: number | null;
-  descripcion: string;
-  objetivo: string;
-  idLugar: number;
-  idProfesorDinamiza: number;
-  lugar: string;
-  dinamiza: string;
-  participantes: Participante[];
-}
-
-interface ConvocatoriaDetalle {
-  idConvocatoria: number;
-  fecha: string;
-  idLugar: number;
-  idCurso: number;
-  idProfesorRedactaActa: number;
-  idProfesorIniciaReunion: number;
-  lugar: string;
-  anioInicio: string;
-  anioFin: string;
-  redacta: string;
-  inicia: string;
-  ordenDia: OrdenDiaItem[];
-}
-
-interface ConvocatoriaListaItem {
-  idConvocatoria: number;
-  fecha: string;
-  lugar: string;
-  anioInicio: string;
-  anioFin: string;
-  redacta: string;
-  inicia: string;
+  contexto: string;
+  tipo: 'Profesor' | 'Grupo';
 }
 
 @Component({
   selector: 'app-convocatorias-profesor',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './convocatorias.component.html',
   styleUrl: './convocatorias.component.css'
 })
 export class ProfesorConvocatoriasComponent implements OnInit {
-  convocatoras: ConvocatoriaListaItem[] = [];
-  convocatoriaSeleccionada: ConvocatoriaDetalle | null = null;
+  convocatoras: ConvocatoriaListaItemDto[] = [];
+  convocatoriaSeleccionada: ConvocatoriaDetalleDto | null = null;
+  buscadorProfesor = '';
   cargandoListado = true;
   cargandoDetalle = false;
   errorMsg = '';
@@ -72,6 +40,7 @@ export class ProfesorConvocatoriasComponent implements OnInit {
         this.iniciarDetalle(Number(idParam));
       } else {
         this.convocatoriaSeleccionada = null;
+        this.aplicarEstadoNavegacion();
         this.cargarConvocatorias();
       }
     });
@@ -80,9 +49,9 @@ export class ProfesorConvocatoriasComponent implements OnInit {
   cargarConvocatorias(): void {
     this.cargandoListado = true;
     this.errorMsg = '';
-    this.convocatoriaService.listarConvocatorias().subscribe({
+    this.convocatoriaService.listarConvocatoriasProfesor().subscribe({
       next: (data) => {
-        this.convocatoras = data;
+        this.convocatoras = this.ordenarListado(data);
         this.cargandoListado = false;
       },
       error: (error) => {
@@ -109,6 +78,16 @@ export class ProfesorConvocatoriasComponent implements OnInit {
 
     this.convocatoriaService.getConvocatoria(id).subscribe({
       next: (data) => {
+        if (data.estado === 'b') {
+          this.router.navigate(['/profesor/reuniones-de-equipo/convocatorias'], {
+            state: {
+              feedback: 'Los borradores no están disponibles para el perfil profesor.',
+              feedbackError: true
+            }
+          });
+          return;
+        }
+
         this.convocatoriaSeleccionada = data;
         this.cargandoDetalle = false;
       },
@@ -135,5 +114,101 @@ export class ProfesorConvocatoriasComponent implements OnInit {
   get minutosTotales(): number {
     if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
     return this.convocatoriaSeleccionada.ordenDia.reduce((total, item) => total + Number(item.minutos || 0), 0);
+  }
+
+  get convocatoriasActivas(): ConvocatoriaListaItemDto[] {
+    return this.convocatoras.filter((convocatoria) => convocatoria.estado === 'a');
+  }
+
+  get convocatoriasPasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatoras.filter((convocatoria) => convocatoria.estado === 'p');
+  }
+
+  get resultadoBuscadorProfesor(): { encontrado: boolean; coincidencias: CoincidenciaProfesorConvocatoria[] } | null {
+    const convocatoria = this.convocatoriaSeleccionada;
+    const termino = this.normalizarTexto(this.buscadorProfesor);
+
+    if (!convocatoria || !termino) {
+      return null;
+    }
+
+    const coincidencias: CoincidenciaProfesorConvocatoria[] = [];
+
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.redacta, 'Redacta la convocatoria', 'Profesor');
+    this.agregarCoincidencia(coincidencias, termino, convocatoria.inicia, 'Inicia la reunión', 'Profesor');
+
+    (convocatoria.ordenDia || []).forEach((punto) => {
+      this.agregarCoincidencia(
+        coincidencias,
+        termino,
+        punto.dinamiza,
+        `Punto ${punto.numOrden}: dinamiza`,
+        'Profesor'
+      );
+
+      (punto.participantes || []).forEach((participante) => {
+        this.agregarCoincidencia(
+          coincidencias,
+          termino,
+          participante.nombre,
+          `Punto ${punto.numOrden}: participa`,
+          participante.tipo === 'grupo' ? 'Grupo' : 'Profesor'
+        );
+      });
+    });
+
+    return {
+      encontrado: coincidencias.length > 0,
+      coincidencias
+    };
+  }
+
+  limpiarBuscadorProfesor(): void {
+    this.buscadorProfesor = '';
+  }
+
+  private agregarCoincidencia(
+    coincidencias: CoincidenciaProfesorConvocatoria[],
+    termino: string,
+    nombre: string | null | undefined,
+    contexto: string,
+    tipo: 'Profesor' | 'Grupo'
+  ): void {
+    if (!nombre) {
+      return;
+    }
+
+    if (this.normalizarTexto(nombre).includes(termino)) {
+      coincidencias.push({
+        nombre,
+        contexto,
+        tipo
+      });
+    }
+  }
+
+  private normalizarTexto(valor: string | null | undefined): string {
+    return (valor || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  private ordenarListado(convocatorias: ConvocatoriaListaItemDto[]): ConvocatoriaListaItemDto[] {
+    return [...convocatorias].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+  }
+
+  private aplicarEstadoNavegacion(): void {
+    const navigation = this.router.getCurrentNavigation();
+    const state = (navigation?.extras?.state ?? history.state) as {
+      feedback?: string;
+      feedbackError?: boolean;
+    };
+
+    if (state?.feedback) {
+      this.errorMsg = state.feedback;
+    }
   }
 }

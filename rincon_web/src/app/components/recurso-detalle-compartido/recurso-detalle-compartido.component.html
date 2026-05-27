@@ -1,0 +1,83 @@
+<section class="recurso-detalle" *ngIf="!cargando && recurso">
+  <p class="ruta-detalle" *ngIf="textoRutaNavegacion">{{ textoRutaNavegacion }}</p>
+
+  <header class="hero-detalle">
+    <div class="hero-contenido">
+      <p class="categoria-detalle">{{ recurso.categoriaNombre }}</p>
+      <h1 class="titulo-detalle">{{ recurso.nombre }}</h1>
+      <p class="descripcion-detalle">{{ recurso.descripcion }}</p>
+    </div>
+
+    <aside class="hero-resumen">
+      <div class="dato-resumen">
+        <span class="etiqueta-resumen">Publicado</span>
+        <strong>{{ recurso.fechaPublicacion | date:'dd/MM/yyyy' }}</strong>
+      </div>
+
+      <div class="dato-resumen">
+        <span class="etiqueta-resumen">Curso</span>
+        <strong>{{ recurso.anioInicio }}/{{ recurso.anioFin }}</strong>
+      </div>
+
+      <div class="dato-resumen" *ngIf="obtenerCiclos().length > 0">
+        <span class="etiqueta-resumen">Ciclos</span>
+        <div class="lista-etiquetas">
+          <span *ngFor="let ciclo of obtenerCiclos()" class="etiqueta-ciclo">{{ ciclo }}</span>
+        </div>
+      </div>
+    </aside>
+  </header>
+
+  <section class="bloque-detalle bloque-recursos" *ngIf="obtenerEnlaces().length > 0">
+    <div class="cabecera-bloque">
+      <h2>Enlaces</h2>
+      <p>Accesos externos asociados a este recurso.</p>
+    </div>
+
+    <div class="lista-recursos-detalle">
+      <a
+        *ngFor="let enlace of obtenerEnlaces()"
+        class="item-recurso-detalle"
+        [href]="enlace.url"
+        target="_blank"
+        rel="noopener noreferrer">
+        <div class="contenido-recurso-detalle">
+          <span class="tipo-recurso">Acceso</span>
+          <strong class="nombre-recurso-detalle">{{ getNombreEnlace(enlace) }}</strong>
+          <span class="valor-recurso-detalle">{{ enlace.url }}</span>
+        </div>
+        <span class="accion-recurso">Abrir</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="bloque-detalle bloque-recursos" *ngIf="obtenerArchivos().length > 0">
+    <div class="cabecera-bloque">
+      <h2>Archivos</h2>
+      <p>Descargas disponibles dentro del recurso.</p>
+    </div>
+
+    <div class="lista-recursos-detalle">
+      <a
+        *ngFor="let archivo of obtenerArchivos()"
+        class="item-recurso-detalle"
+        [href]="archivo.archivo"
+        download>
+        <div class="contenido-recurso-detalle">
+          <span class="tipo-recurso">Adjunto</span>
+          <strong class="nombre-recurso-detalle">{{ getNombreArchivoAdjunto(archivo) }}</strong>
+          <span class="valor-recurso-detalle">{{ archivo.archivo }}</span>
+        </div>
+        <span class="accion-recurso">Descargar</span>
+      </a>
+    </div>
+  </section>
+</section>
+
+<section class="recurso-detalle" *ngIf="cargando">
+  <div class="mensaje-estado">Cargando detalle del recurso...</div>
+</section>
+
+<section class="recurso-detalle" *ngIf="errorCarga">
+  <div class="mensaje-estado">{{ mensajeError }}</div>
+</section>

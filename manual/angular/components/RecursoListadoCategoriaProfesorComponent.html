@@ -1,0 +1,1986 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  RecursoListadoCategoriaProfesorComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-recurso-listado-categoria-profesor</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="../components/RecursoItemComponent.html" target="_self" >RecursoItemComponent</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./recurso-listado-categoria.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./recurso-listado-categoria.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#categoriaActual" >categoriaActual</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ciclosFiltro" >ciclosFiltro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cursosFiltro" >cursosFiltro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorCarga" >errorCarga</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#filtroCiclo" >filtroCiclo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#filtroCurso" >filtroCurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#recursos" >recursos</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#rutaCategoria" >rutaCategoria</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#seccion" >seccion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#subseccion" >subseccion</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buscarCategoriaPorRuta" >buscarCategoriaPorRuta</a>
+                            </li>
+                            <li>
+                                <a href="#cambiarCiclo" >cambiarCiclo</a>
+                            </li>
+                            <li>
+                                <a href="#cambiarCurso" >cambiarCurso</a>
+                            </li>
+                            <li>
+                                <a href="#cargarRecursos" >cargarRecursos</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#coincideCiclo" >coincideCiclo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#coincideCurso" >coincideCurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#construirCiclosFiltro" >construirCiclosFiltro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#construirCursosFiltro" >construirCursosFiltro</a>
+                            </li>
+                            <li>
+                                <a href="#formatearCiclos" >formatearCiclos</a>
+                            </li>
+                            <li>
+                                <a href="#formatearCurso" >formatearCurso</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#slug" >slug</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#recursosFiltrados" >recursosFiltrados</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, categoriaService: <a href="../injectables/CategoriaService.html" target="_self">CategoriaService</a>, recursoService: <a href="../injectables/RecursoService.html" target="_self">RecursoService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="44" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:44</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>categoriaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CategoriaService.html" target="_self" >CategoriaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>recursoService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/RecursoService.html" target="_self" >RecursoService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buscarCategoriaPorRuta"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>buscarCategoriaPorRuta</b></span>
+                        <a href="#buscarCategoriaPorRuta"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buscarCategoriaPorRuta(categorias: <a href="../interfaces/CategoriaDto.html" target="_self">CategoriaDto[]</a>, segmentos: string[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="124"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:124</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>categorias</td>
+                                            <td>
+                                                            <code><a href="../interfaces/CategoriaDto.html" target="_self" >CategoriaDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>segmentos</td>
+                                            <td>
+                                                        <code>string[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>CategoriaRuta | null</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cambiarCiclo"></a>
+                    <span class="name">
+                        <span ><b>cambiarCiclo</b></span>
+                        <a href="#cambiarCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cambiarCiclo(evento: <a href="https://angular.io/api/router/Event" target="_blank">Event</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="118"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:118</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>evento</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/router/Event" target="_blank" >Event</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cambiarCurso"></a>
+                    <span class="name">
+                        <span ><b>cambiarCurso</b></span>
+                        <a href="#cambiarCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cambiarCurso(evento: <a href="https://angular.io/api/router/Event" target="_blank">Event</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="113"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:113</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>evento</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/router/Event" target="_blank" >Event</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarRecursos"></a>
+                    <span class="name">
+                        <span ><b>cargarRecursos</b></span>
+                        <a href="#cargarRecursos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cargarRecursos()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="61"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:61</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="coincideCiclo"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>coincideCiclo</b></span>
+                        <a href="#coincideCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>coincideCiclo(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="184"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:184</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="coincideCurso"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>coincideCurso</b></span>
+                        <a href="#coincideCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>coincideCurso(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="180"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:180</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="construirCiclosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>construirCiclosFiltro</b></span>
+                        <a href="#construirCiclosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>construirCiclosFiltro(recursos: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="165"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:165</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recursos</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>CicloFiltro[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="construirCursosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>construirCursosFiltro</b></span>
+                        <a href="#construirCursosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>construirCursosFiltro(recursos: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="152"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:152</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recursos</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>CursoFiltro[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatearCiclos"></a>
+                    <span class="name">
+                        <span ><b>formatearCiclos</b></span>
+                        <a href="#formatearCiclos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>formatearCiclos(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="196"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:196</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formatearCurso"></a>
+                    <span class="name">
+                        <span ><b>formatearCurso</b></span>
+                        <a href="#formatearCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>formatearCurso(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="192"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:192</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="52"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="slug"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>slug</b></span>
+                        <a href="#slug"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>slug(valor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="203"
+                                    class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:203</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="43" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="categoriaActual"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>categoriaActual</b></span>
+                        <a href="#categoriaActual"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="36" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ciclosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ciclosFiltro</b></span>
+                        <a href="#ciclosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>CicloFiltro[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="40" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cursosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cursosFiltro</b></span>
+                        <a href="#cursosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>CursoFiltro[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="39" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorCarga"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>errorCarga</b></span>
+                        <a href="#errorCarga"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="44" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filtroCiclo"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>filtroCiclo</b></span>
+                        <a href="#filtroCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>number | &quot;Todos&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;Todos&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="42" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filtroCurso"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>filtroCurso</b></span>
+                        <a href="#filtroCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>number | &quot;Todos&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;Todos&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="41" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recursos"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>recursos</b></span>
+                        <a href="#recursos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="38" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rutaCategoria"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>rutaCategoria</b></span>
+                        <a href="#rutaCategoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="37" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seccion"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>seccion</b></span>
+                        <a href="#seccion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="34" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="subseccion"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>subseccion</b></span>
+                        <a href="#subseccion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="35" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="recursosFiltrados"></a>
+                        <span class="name"><b>recursosFiltrados</b><a href="#recursosFiltrados"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>recursosFiltrados()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="109" class="link-to-prism">src/app/pages/profesor/recurso-listado-categoria/recurso-listado-categoria.component.ts:109</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { CategoriaService } from &#x27;../../../services/categoria.service&#x27;;
+import { RecursoService } from &#x27;../../../services/recurso.service&#x27;;
+import { CategoriaDto } from &#x27;../../../dto/categoria.dto&#x27;;
+import { RecursoDto } from &#x27;../../../dto/recurso.dto&#x27;;
+import { RecursoItemComponent } from &#x27;../../../components/recurso-item/recurso-item.component&#x27;;
+
+interface CursoFiltro {
+  idCurso: number | &#x27;Todos&#x27;;
+  etiqueta: string;
+}
+
+interface CicloFiltro {
+  idCiclo: number | &#x27;Todos&#x27;;
+  nombre: string;
+}
+
+interface CategoriaRuta {
+  categoria: CategoriaDto;
+  ruta: string[];
+}
+
+@Component({
+  selector: &#x27;app-recurso-listado-categoria-profesor&#x27;,
+  standalone: true,
+  imports: [CommonModule, RecursoItemComponent],
+  templateUrl: &#x27;./recurso-listado-categoria.component.html&#x27;,
+  styleUrl: &#x27;./recurso-listado-categoria.component.css&#x27;
+})
+export class RecursoListadoCategoriaProfesorComponent implements OnInit {
+  // Ruta actual y subtipo seleccionado dentro del arbol de categorias.
+  public seccion: string | null &#x3D; null;
+  public subseccion: string | null &#x3D; null;
+  public categoriaActual: string | null &#x3D; null;
+  public rutaCategoria: string[] &#x3D; [];
+  public recursos: RecursoDto[] &#x3D; [];
+  public cursosFiltro: CursoFiltro[] &#x3D; [];
+  public ciclosFiltro: CicloFiltro[] &#x3D; [];
+  public filtroCurso: number | &#x27;Todos&#x27; &#x3D; &#x27;Todos&#x27;;
+  public filtroCiclo: number | &#x27;Todos&#x27; &#x3D; &#x27;Todos&#x27;;
+  public cargando &#x3D; true;
+  public errorCarga &#x3D; false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private categoriaService: CategoriaService,
+    private recursoService: RecursoService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) &#x3D;&gt; {
+      this.seccion &#x3D; params[&#x27;section&#x27;] || null;
+      this.subseccion &#x3D; params[&#x27;subsection&#x27;] || null;
+      this.cargarRecursos();
+    });
+  }
+
+  // Resuelve la categoria real desde la ruta y pide sus recursos.
+  cargarRecursos(): void {
+    this.cargando &#x3D; true;
+    this.errorCarga &#x3D; false;
+    this.recursos &#x3D; [];
+    this.categoriaActual &#x3D; null;
+    this.rutaCategoria &#x3D; [];
+    this.cursosFiltro &#x3D; [];
+    this.ciclosFiltro &#x3D; [];
+    this.filtroCurso &#x3D; &#x27;Todos&#x27;;
+    this.filtroCiclo &#x3D; &#x27;Todos&#x27;;
+
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) &#x3D;&gt; {
+        const encontrada &#x3D; this.buscarCategoriaPorRuta(
+          categorias,
+          [this.seccion, this.subseccion].filter((valor): valor is string &#x3D;&gt; !!valor)
+        );
+
+        if (!encontrada) {
+          this.cargando &#x3D; false;
+          return;
+        }
+
+        this.categoriaActual &#x3D; encontrada.categoria.nombre;
+        this.rutaCategoria &#x3D; encontrada.ruta;
+
+        this.recursoService.getPorCategoria(encontrada.categoria.idCategoria).subscribe({
+          next: (recursos) &#x3D;&gt; {
+            this.recursos &#x3D; recursos;
+            this.cursosFiltro &#x3D; this.construirCursosFiltro(recursos);
+            this.ciclosFiltro &#x3D; this.construirCiclosFiltro(recursos);
+            this.cargando &#x3D; false;
+          },
+          error: (err) &#x3D;&gt; {
+            this.errorCarga &#x3D; true;
+            this.cargando &#x3D; false;
+            console.error(&#x27;Error al cargar los recursos de la categoria:&#x27;, err);
+          }
+        });
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        this.cargando &#x3D; false;
+        console.error(&#x27;Error al cargar las categorias del profesor:&#x27;, err);
+      }
+    });
+  }
+
+  get recursosFiltrados(): RecursoDto[] {
+    return this.recursos.filter((recurso) &#x3D;&gt; this.coincideCurso(recurso) &amp;&amp; this.coincideCiclo(recurso));
+  }
+
+  cambiarCurso(evento: Event): void {
+    const select &#x3D; evento.target as HTMLSelectElement | null;
+    this.filtroCurso &#x3D; select?.value &#x3D;&#x3D;&#x3D; &#x27;Todos&#x27; ? &#x27;Todos&#x27; : Number(select?.value || 0);
+  }
+
+  cambiarCiclo(evento: Event): void {
+    const select &#x3D; evento.target as HTMLSelectElement | null;
+    this.filtroCiclo &#x3D; select?.value &#x3D;&#x3D;&#x3D; &#x27;Todos&#x27; ? &#x27;Todos&#x27; : Number(select?.value || 0);
+  }
+
+  // Busca la categoria correspondiente recorriendo el arbol de categorias.
+  private buscarCategoriaPorRuta(categorias: CategoriaDto[], segmentos: string[]): CategoriaRuta | null {
+    if (segmentos.length &#x3D;&#x3D;&#x3D; 0) {
+      return null;
+    }
+
+    for (const categoria of categorias) {
+      if (this.slug(categoria.nombre) !&#x3D;&#x3D; segmentos[0]) {
+        continue;
+      }
+
+      if (segmentos.length &#x3D;&#x3D;&#x3D; 1) {
+        return { categoria, ruta: [categoria.nombre] };
+      }
+
+      if (categoria.subcategorias &amp;&amp; categoria.subcategorias.length &gt; 0) {
+        const encontrada &#x3D; this.buscarCategoriaPorRuta(categoria.subcategorias, segmentos.slice(1));
+        if (encontrada) {
+          return {
+            categoria: encontrada.categoria,
+            ruta: [categoria.nombre, ...encontrada.ruta]
+          };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
+    const cursos &#x3D; new Map&lt;number, string&gt;();
+
+    for (const recurso of recursos) {
+      cursos.set(recurso.idCurso, &#x60;${recurso.anioInicio}/${recurso.anioFin}&#x60;);
+    }
+
+    return [
+      { idCurso: &#x27;Todos&#x27;, etiqueta: &#x27;Todos&#x27; },
+      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) &#x3D;&gt; ({ idCurso, etiqueta }))
+    ];
+  }
+
+  private construirCiclosFiltro(recursos: RecursoDto[]): CicloFiltro[] {
+    const ciclos &#x3D; new Map&lt;number, string&gt;();
+
+    for (const recurso of recursos) {
+      for (const ciclo of recurso.ciclos || []) {
+        ciclos.set(ciclo.idCiclo, ciclo.nombre);
+      }
+    }
+
+    return [
+      { idCiclo: &#x27;Todos&#x27;, nombre: &#x27;Todos&#x27; },
+      ...Array.from(ciclos.entries()).map(([idCiclo, nombre]) &#x3D;&gt; ({ idCiclo, nombre }))
+    ];
+  }
+
+  private coincideCurso(recurso: RecursoDto): boolean {
+    return this.filtroCurso &#x3D;&#x3D;&#x3D; &#x27;Todos&#x27; || recurso.idCurso &#x3D;&#x3D;&#x3D; this.filtroCurso;
+  }
+
+  private coincideCiclo(recurso: RecursoDto): boolean {
+    if (this.filtroCiclo &#x3D;&#x3D;&#x3D; &#x27;Todos&#x27;) {
+      return true;
+    }
+
+    return (recurso.ciclos || []).some((ciclo) &#x3D;&gt; ciclo.idCiclo &#x3D;&#x3D;&#x3D; this.filtroCiclo);
+  }
+
+  formatearCurso(recurso: RecursoDto): string {
+    return &#x60;${recurso.anioInicio}/${recurso.anioFin}&#x60;;
+  }
+
+  formatearCiclos(recurso: RecursoDto): string {
+    return (recurso.ciclos || [])
+      .map((ciclo) &#x3D;&gt; ciclo.nombre.split(&#x27; &#x27;)[0])
+      .join(&#x27; · &#x27;);
+  }
+
+  // Convierte un nombre visible a slug URL.
+  private slug(valor: string): string {
+    return valor
+      .toLowerCase()
+      .normalize(&#x27;NFD&#x27;)
+      .replace(/[\u0300-\u036f]/g, &#x27;&#x27;)
+      .replace(/\s+/g, &#x27;-&#x27;)
+      .replace(/[^a-z0-9-]/g, &#x27;&#x27;);
+  }
+}
+
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;section class&#x3D;&quot;seccion-recursos&quot;&gt;
+  &lt;div class&#x3D;&quot;cabecera-seccion-categoria mb-4&quot;&gt;
+    &lt;h2 class&#x3D;&quot;titulo-seccion text-capitalize&quot;&gt;{{ rutaCategoria[0] || categoriaActual || seccion }}&lt;/h2&gt;
+    &lt;p *ngIf&#x3D;&quot;rutaCategoria[1]&quot; class&#x3D;&quot;ruta-seccion mt-2&quot;&gt;
+      Subcategoria: &lt;span class&#x3D;&quot;badge bg-primary text-uppercase px-3 py-2 fs-6&quot;&gt;{{ rutaCategoria[1] }}&lt;/span&gt;
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;cargando&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;p class&#x3D;&quot;text-muted mb-0&quot;&gt;Cargando recursos...&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorCarga&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;h4 class&#x3D;&quot;card-title text-secondary&quot;&gt;No se han podido cargar los recursos&lt;/h4&gt;
+      &lt;p class&#x3D;&quot;card-text text-muted mb-0&quot;&gt;Vuelve a intentarlo mas tarde.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;ng-container *ngIf&#x3D;&quot;!cargando &amp;&amp; !errorCarga&quot;&gt;
+    &lt;div class&#x3D;&quot;filtros-recursos&quot;&gt;
+      &lt;label class&#x3D;&quot;filtro-bloque&quot;&gt;
+        &lt;span class&#x3D;&quot;filtro-etiqueta&quot;&gt;Filtrar por curso&lt;/span&gt;
+        &lt;select class&#x3D;&quot;filtro-select&quot; [value]&#x3D;&quot;filtroCurso&quot; (change)&#x3D;&quot;cambiarCurso($event)&quot;&gt;
+          &lt;option *ngFor&#x3D;&quot;let curso of cursosFiltro&quot; [value]&#x3D;&quot;curso.idCurso&quot;&gt;{{ curso.etiqueta }}&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/label&gt;
+
+      &lt;label class&#x3D;&quot;filtro-bloque&quot;&gt;
+        &lt;span class&#x3D;&quot;filtro-etiqueta&quot;&gt;Filtrar por ciclo&lt;/span&gt;
+        &lt;select class&#x3D;&quot;filtro-select&quot; [value]&#x3D;&quot;filtroCiclo&quot; (change)&#x3D;&quot;cambiarCiclo($event)&quot;&gt;
+          &lt;option *ngFor&#x3D;&quot;let ciclo of ciclosFiltro&quot; [value]&#x3D;&quot;ciclo.idCiclo&quot;&gt;{{ ciclo.nombre }}&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/label&gt;
+    &lt;/div&gt;
+
+    &lt;div *ngIf&#x3D;&quot;recursosFiltrados.length; else sinRecursos&quot; class&#x3D;&quot;lista-recursos&quot;&gt;
+      &lt;app-recurso-item
+        *ngFor&#x3D;&quot;let recurso of recursosFiltrados&quot;
+        [categoria]&#x3D;&quot;recurso.categoriaNombre&quot;
+        [fechaPublicacion]&#x3D;&quot;recurso.fechaPublicacion&quot;
+        [nombre]&#x3D;&quot;recurso.nombre&quot;
+        [descripcion]&#x3D;&quot;recurso.descripcion&quot;
+        [curso]&#x3D;&quot;formatearCurso(recurso)&quot;
+        [ciclos]&#x3D;&quot;formatearCiclos(recurso)&quot;
+        [detalleRuta]&#x3D;&quot;[&#x27;/profesor&#x27;, &#x27;recurso&#x27;, recurso.idCategoria, recurso.numRecurso]&quot;&gt;
+      &lt;/app-recurso-item&gt;
+    &lt;/div&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-template #sinRecursos&gt;
+    &lt;div *ngIf&#x3D;&quot;!cargando &amp;&amp; !errorCarga&quot; class&#x3D;&quot;card shadow-sm border-0 p-5 text-center bg-white rounded-4&quot;&gt;
+      &lt;div class&#x3D;&quot;card-body&quot;&gt;
+        &lt;h4 class&#x3D;&quot;card-title text-secondary&quot;&gt;Aun no hay recursos en esta categoria&lt;/h4&gt;
+        &lt;p class&#x3D;&quot;card-text text-muted mb-0&quot;&gt;Prueba con otra categoria o revisa mas tarde.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/ng-template&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><section class="seccion-recursos">  <div class="cabecera-seccion-categoria mb-4">    <h2 class="titulo-seccion text-capitalize">{{ rutaCategoria[0] || categoriaActual || seccion }}</h2>    <p *ngIf="rutaCategoria[1]" class="ruta-seccion mt-2">      Subcategoria: <span class="badge bg-primary text-uppercase px-3 py-2 fs-6">{{ rutaCategoria[1] }}</span>    </p>  </div>  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">    <div class="card-body">      <p class="text-muted mb-0">Cargando recursos...</p>    </div>  </div>  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">    <div class="card-body">      <h4 class="card-title text-secondary">No se han podido cargar los recursos</h4>      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>    </div>  </div>  <ng-container *ngIf="!cargando && !errorCarga">    <div class="filtros-recursos">      <label class="filtro-bloque">        <span class="filtro-etiqueta">Filtrar por curso</span>        <select class="filtro-select" [value]="filtroCurso" (change)="cambiarCurso($event)">          <option *ngFor="let curso of cursosFiltro" [value]="curso.idCurso">{{ curso.etiqueta }}</option>        </select>      </label>      <label class="filtro-bloque">        <span class="filtro-etiqueta">Filtrar por ciclo</span>        <select class="filtro-select" [value]="filtroCiclo" (change)="cambiarCiclo($event)">          <option *ngFor="let ciclo of ciclosFiltro" [value]="ciclo.idCiclo">{{ ciclo.nombre }}</option>        </select>      </label>    </div>    <div *ngIf="recursosFiltrados.length; else sinRecursos" class="lista-recursos">      <app-recurso-item        *ngFor="let recurso of recursosFiltrados"        [categoria]="recurso.categoriaNombre"        [fechaPublicacion]="recurso.fechaPublicacion"        [nombre]="recurso.nombre"        [descripcion]="recurso.descripcion"        [curso]="formatearCurso(recurso)"        [ciclos]="formatearCiclos(recurso)"        [detalleRuta]="[\'/profesor\', \'recurso\', recurso.idCategoria, recurso.numRecurso]">      </app-recurso-item>    </div>  </ng-container>  <ng-template #sinRecursos>    <div *ngIf="!cargando && !errorCarga" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">      <div class="card-body">        <h4 class="card-title text-secondary">Aun no hay recursos en esta categoria</h4>        <p class="card-text text-muted mb-0">Prueba con otra categoria o revisa mas tarde.</p>      </div>    </div>  </ng-template></section></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'RecursoListadoCategoriaProfesorComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'RecursoListadoCategoriaProfesorComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,698 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  SidebarItem</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Fichero</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/components/sidebar-coordinador/sidebar-coordinador.component.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Índice</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Propiedades</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#abierto" 
+>
+                                            abierto
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#deshabilitado" 
+>
+                                            deshabilitado
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#icono" 
+>
+                                            icono
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#nombre" 
+>
+                                            nombre
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#ruta" 
+>
+                                            ruta
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#subcategorias" 
+>
+                                            subcategorias
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Propiedades</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="abierto"></a>
+                                        <span class="name "><b>abierto</b>
+                                            <a href="#abierto">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>abierto:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="deshabilitado"></a>
+                                        <span class="name "><b>deshabilitado</b>
+                                            <a href="#deshabilitado">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>deshabilitado:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="icono"></a>
+                                        <span class="name "><b>icono</b>
+                                            <a href="#icono">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>icono:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="nombre"></a>
+                                        <span class="name "><b>nombre</b>
+                                            <a href="#nombre">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>nombre:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="ruta"></a>
+                                        <span class="name "><b>ruta</b>
+                                            <a href="#ruta">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>ruta:     <code>string | null</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>    <code>string | null</code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="subcategorias"></a>
+                                        <span class="name "><b>subcategorias</b>
+                                            <a href="#subcategorias">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>subcategorias:         <code><a href="../interfaces/SidebarItem.html" target="_self" >SidebarItem[]</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="../interfaces/SidebarItem.html" target="_self" >SidebarItem[]</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, EventEmitter, Input, OnInit, Output } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { RouterModule } from &#x27;@angular/router&#x27;;
+import { CategoriaService } from &#x27;../../services/categoria.service&#x27;;
+import { CategoriaDto } from &#x27;../../dto/categoria.dto&#x27;;
+
+interface SidebarItem {
+  nombre: string;
+  icono: string;
+  ruta: string | null;
+  abierto: boolean;
+  subcategorias: SidebarItem[];
+  deshabilitado: boolean;
+}
+
+@Component({
+  selector: &#x27;app-sidebar-coordinador&#x27;,
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: &#x27;./sidebar-coordinador.component.html&#x27;,
+  styleUrl: &#x27;./sidebar-coordinador.component.css&#x27;
+})
+export class SidebarCoordinadorComponent implements OnInit {
+  @Input() mobileOpen &#x3D; false;
+  @Output() requestClose &#x3D; new EventEmitter&lt;void&gt;();
+
+  public menuItems: SidebarItem[] &#x3D; [];
+  public errorCarga &#x3D; false;
+
+  constructor(private categoriaService: CategoriaService) {}
+
+  ngOnInit(): void {
+    this.obtenerCategorias();
+  }
+
+  // Carga categorias para construir el menu lateral de coordinador.
+  obtenerCategorias(): void {
+    this.categoriaService.getCategorias().subscribe({
+      next: (data: CategoriaDto[]) &#x3D;&gt; {
+        this.errorCarga &#x3D; false;
+        this.menuItems &#x3D; this.construirMenu(data);
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        console.error(&#x27;Error al obtener categorias para el sidebar de coordinador:&#x27;, err);
+      }
+    });
+  }
+
+  // Monta los grupos del sidebar, incluyendo accesos fijos y categorias dinamicas.
+  private construirMenu(categorias: CategoriaDto[]): SidebarItem[] {
+    const catReuniones &#x3D; categorias.find((cat) &#x3D;&gt; cat.nombre &#x3D;&#x3D;&#x3D; &#x27;Reuniones de Equipo&#x27;);
+
+    let subCategoriasReuniones: SidebarItem[] &#x3D; [];
+    if (catReuniones &amp;&amp; catReuniones.subcategorias) {
+      subCategoriasReuniones &#x3D; this.mapearCategorias(
+        catReuniones.subcategorias,
+        &#x27;/coordinador&#x27;,
+        &#x27;/coordinador/reuniones-de-equipo&#x27;
+      );
+    }
+
+    return [
+      {
+        nombre: &#x27;Inicio&#x27;,
+        icono: &#x27;home&#x27;,
+        ruta: &#x27;/coordinador/inicio&#x27;,
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
+        nombre: &#x27;Gestión de Ciclos&#x27;,
+        icono: &#x27;categorias&#x27;,
+        ruta: &#x27;/coordinador/gestion-de-ciclos&#x27;,
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
+        nombre: &#x27;Categorías&#x27;,
+        icono: &#x27;categorias&#x27;,
+        ruta: null,
+        abierto: true,
+        subcategorias: [
+          {
+            nombre: &#x27;Crear categoría&#x27;,
+            icono: &#x27;categoria-generica&#x27;,
+            ruta: &#x27;/coordinador/categorias/crear&#x27;,
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          },
+          {
+            nombre: &#x27;Modificar categoría&#x27;,
+            icono: &#x27;categoria-generica&#x27;,
+            ruta: &#x27;/coordinador/categorias/modificar&#x27;,
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: true
+          }
+        ],
+        deshabilitado: false
+      },
+      {
+        nombre: &#x27;Reuniones&#x27;,
+        icono: &#x27;reuniones&#x27;,
+        ruta: null,
+        abierto: true,
+        subcategorias: subCategoriasReuniones,
+        deshabilitado: false
+      },
+      {
+        nombre: &#x27;Recursos&#x27;,
+        icono: &#x27;tag&#x27;,
+        ruta: null,
+        abierto: true,
+        subcategorias: [
+          {
+            nombre: &#x27;Ver todos&#x27;,
+            icono: &#x27;categoria-generica&#x27;,
+            ruta: &#x27;/coordinador/recursos&#x27;,
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          },
+          {
+            nombre: &#x27;Crear recurso&#x27;,
+            icono: &#x27;categoria-generica&#x27;,
+            ruta: &#x27;/coordinador/recursos/crear&#x27;,
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          }
+        ],
+        deshabilitado: false
+      }
+    ];
+  }
+
+  // Convierte categorias anidadas en items navegables.
+  private mapearCategorias(cats: CategoriaDto[], prefijoRuta: string, rutaPadre: string &#x3D; &#x27;&#x27;): SidebarItem[] {
+    const mapaIconos: { [key: string]: string } &#x3D; {
+      &#x27;Inicio&#x27;: &#x27;home&#x27;,
+      &#x27;Reuniones de Equipo&#x27;: &#x27;reuniones&#x27;,
+      &#x27;Tutorias&#x27;: &#x27;tutorias&#x27;,
+      &#x27;Tutorías&#x27;: &#x27;tutorias&#x27;,
+      &#x27;Evaluaciones&#x27;: &#x27;evaluaciones&#x27;,
+      &#x27;Otros&#x27;: &#x27;otros&#x27;
+    };
+
+    const subcategoriasDeshabilitadas &#x3D; [&#x27;BOCC&#x27;, &#x27;Calendario de reuniones&#x27;];
+
+    return cats.map((cat) &#x3D;&gt; {
+      const nombre &#x3D; cat.nombre;
+
+      const slug &#x3D; nombre
+        .toLowerCase()
+        .normalize(&#x27;NFD&#x27;)
+        .replace(/[\u0300-\u036f]/g, &#x27;&#x27;)
+        .replace(/[ºª]/g, &#x27;&#x27;)
+        .replace(/\s+/g, &#x27;-&#x27;)
+        .replace(/[^a-z0-9-]/g, &#x27;&#x27;);
+
+
+
+      let ruta &#x3D; &#x27;&#x27;;
+      if (nombre &#x3D;&#x3D;&#x3D; &#x27;Inicio&#x27;) {
+        ruta &#x3D; &#x60;${prefijoRuta}/inicio&#x60;;
+      } else if (rutaPadre) {
+        ruta &#x3D; &#x60;${rutaPadre}/${slug}&#x60;;
+      } else {
+        ruta &#x3D; &#x60;${prefijoRuta}/${slug}&#x60;;
+      }
+
+      const subcategorias &#x3D; cat.subcategorias ? this.mapearCategorias(cat.subcategorias, prefijoRuta, ruta) : [];
+
+      return {
+        nombre,
+        icono: mapaIconos[nombre] || &#x27;categoria-generica&#x27;,
+        ruta,
+        abierto: false,
+        subcategorias,
+        deshabilitado: subcategoriasDeshabilitadas.includes(nombre)
+      };
+    });
+  }
+
+  // Abre o cierra el bloque de menu que corresponda.
+  alternarMenu(cat: SidebarItem): void {
+    if (cat.subcategorias.length &gt; 0) {
+      cat.abierto &#x3D; !cat.abierto;
+    }
+  }
+
+  // Indica si un item tiene hijos para decidir si se pinta como boton o enlace.
+  tieneHijos(cat: SidebarItem): boolean {
+    return cat.subcategorias.length &gt; 0;
+  }
+
+  // Cierra el sidebar en mobile.
+  cerrarSidebar(): void {
+    this.requestClose.emit();
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'SidebarItem.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

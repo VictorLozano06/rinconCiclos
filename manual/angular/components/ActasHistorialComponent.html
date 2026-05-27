@@ -1,0 +1,1339 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ActasHistorialComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/coordinador/actas-historial/actas-historial.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-actas-historial</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./actas-historial.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./actas-historial.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#actasFiltradas" >actasFiltradas</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#actaVisualizando" >actaVisualizando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#aniosDisponibles" >aniosDisponibles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#anioSeleccionado" >anioSeleccionado</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#buscando" >buscando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#busquedaRealizada" >busquedaRealizada</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#todasLasActas" >todasLasActas</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#buscar" >buscar</a>
+                            </li>
+                            <li>
+                                <a href="#cerrarModal" >cerrarModal</a>
+                            </li>
+                            <li>
+                                <a href="#descargarActa" >descargarActa</a>
+                            </li>
+                            <li>
+                                <a href="#verActa" >verActa</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#cursoSeleccionado" >cursoSeleccionado</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buscar"></a>
+                    <span class="name">
+                        <span ><b>buscar</b></span>
+                        <a href="#buscar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>buscar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="151"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:151</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cerrarModal"></a>
+                    <span class="name">
+                        <span ><b>cerrarModal</b></span>
+                        <a href="#cerrarModal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cerrarModal()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="164"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:164</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="descargarActa"></a>
+                    <span class="name">
+                        <span ><b>descargarActa</b></span>
+                        <a href="#descargarActa"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>descargarActa(acta: <a href="../interfaces/ActaHistorial.html" target="_self">ActaHistorial</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="168"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:168</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>acta</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ActaHistorial.html" target="_self" >ActaHistorial</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verActa"></a>
+                    <span class="name">
+                        <span ><b>verActa</b></span>
+                        <a href="#verActa"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>verActa(acta: <a href="../interfaces/ActaHistorial.html" target="_self">ActaHistorial</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="160"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:160</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>acta</td>
+                                            <td>
+                                                            <code><a href="../interfaces/ActaHistorial.html" target="_self" >ActaHistorial</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actasFiltradas"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>actasFiltradas</b></span>
+                        <a href="#actasFiltradas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ActaHistorial.html" target="_self" >ActaHistorial[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="143" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:143</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actaVisualizando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>actaVisualizando</b></span>
+                        <a href="#actaVisualizando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ActaHistorial.html" target="_self" >ActaHistorial | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="51" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="aniosDisponibles"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>aniosDisponibles</b></span>
+                        <a href="#aniosDisponibles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[2025, 2024, 2023, 2022]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="48" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>cursoAcademico.anioInicio values disponibles en BD</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="anioSeleccionado"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>anioSeleccionado</b></span>
+                        <a href="#anioSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>2025</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="49" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buscando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>buscando</b></span>
+                        <a href="#buscando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="50" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="busquedaRealizada"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>busquedaRealizada</b></span>
+                        <a href="#busquedaRealizada"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="144" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:144</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="todasLasActas"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>todasLasActas</b></span>
+                        <a href="#todasLasActas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/ActaHistorial.html" target="_self" >ActaHistorial[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    {
+      idActa: 1,
+      fecha: &#x27;23/05/2026&#x27;,
+      idConvocatoria: 1,
+      fechaConvocatoria: &#x27;23/05/2026&#x27;,
+      horaConvocatoria: &#x27;10:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Lectura y aprobación del acta anterior&#x27;,       informacion: &#x27;Se aprueba el acta anterior por unanimidad sin observaciones.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Revisión de resultados de evaluación final&#x27;,    informacion: &#x27;El 82% del alumnado supera la convocatoria ordinaria.&#x27; },
+        { numInformacion: 3, titulo_OrdenDia: &#x27;Coordinación de actividades de recuperación&#x27;,   informacion: &#x27;Se acuerda organizar sesiones de recuperación durante la última semana de junio.&#x27; },
+        { numInformacion: 4, titulo_OrdenDia: &#x27;Planificación del próximo curso académico&#x27;,     informacion: &#x27;Se delega en el coordinador la elaboración del calendario lectivo provisional.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Sin ruegos ni preguntas adicionales.&#x27;]
+    },
+    {
+      idActa: 2,
+      fecha: &#x27;15/03/2026&#x27;,
+      idConvocatoria: 2,
+      fechaConvocatoria: &#x27;15/03/2026&#x27;,
+      horaConvocatoria: &#x27;09:00&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión de la 2ª evaluación&#x27;,  informacion: &#x27;Los resultados mejoran un 8% respecto al trimestre anterior.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Acuerdos de mejora&#x27;,             informacion: &#x27;Se incrementan actividades prácticas en módulos con mayor índice de suspenso.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Se solicita actualizar el inventario de equipos del aula de informática.&#x27;]
+    },
+    {
+      idActa: 3,
+      fecha: &#x27;10/12/2025&#x27;,
+      idConvocatoria: 3,
+      fechaConvocatoria: &#x27;10/12/2025&#x27;,
+      horaConvocatoria: &#x27;10:30&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 4,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Resultados 1ª evaluación&#x27;, informacion: &#x27;Se revisan resultados por módulos y grupos.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas de mejora&#x27;,      informacion: &#x27;Seguimiento semanal para alumnos con más de 2 módulos suspensos.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;El profesor de SMR solicita recursos adicionales para la sala de redes.&#x27;]
+    },
+    {
+      idActa: 4,
+      fecha: &#x27;18/06/2025&#x27;,
+      idConvocatoria: 4,
+      fechaConvocatoria: &#x27;18/06/2025&#x27;,
+      horaConvocatoria: &#x27;11:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Balance del curso 2024/2025&#x27;, informacion: &#x27;Valoración positiva: 79% de tasa de éxito global.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas para el siguiente curso&#x27;, informacion: &#x27;Se acuerda revisar la programación didáctica de 3 módulos.&#x27; }
+      ],
+      ruegosPregunta: []
+    },
+    {
+      idActa: 5,
+      fecha: &#x27;14/03/2025&#x27;,
+      idConvocatoria: 5,
+      fechaConvocatoria: &#x27;14/03/2025&#x27;,
+      horaConvocatoria: &#x27;09:30&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión 2ª evaluación&#x27;, informacion: &#x27;Resultados similares al año anterior.&#x27; }
+      ],
+      ruegosPregunta: []
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="54" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:54</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Mock basado en la estructura real de BD</p>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="cursoSeleccionado"></a>
+                        <span class="name"><b>cursoSeleccionado</b><a href="#cursoSeleccionado"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>cursoSeleccionado()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="146" class="link-to-prism">src/app/pages/coordinador/actas-historial/actas-historial.component.ts:146</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+
+/**
+ * Refleja la tabla &#x60;informacion&#x60;:
+ * - numInformacion: PK parcial
+ * - titulo_OrdenDia: VARCHAR(250)
+ * - informacion: VARCHAR(250)
+ */
+interface Informacion {
+  numInformacion: number;
+  titulo_OrdenDia: string;
+  informacion: string;
+}
+
+/**
+ * Refleja la tabla &#x60;acta&#x60; + joins:
+ * - idActa: INT AUTO_INCREMENT
+ * - fecha: DATE — fecha de cierre del acta
+ * - idConvocatoria: FK → convocatoria (fecha DATETIME, lugar.nombre, cursoAcademico)
+ * No hay campo &quot;estado&quot; — si existe fila en acta → está cerrada
+ */
+interface ActaHistorial {
+  idActa: number;
+  fecha: string;                  // acta.fecha DATE
+  idConvocatoria: number;
+  fechaConvocatoria: string;      // convocatoria.fecha DATETIME (parte fecha)
+  horaConvocatoria: string;       // convocatoria.fecha DATETIME (parte hora)
+  lugar: string;                  // lugar.nombre
+  anioInicio: number;             // cursoAcademico.anioInicio
+  anioFin: number;                // cursoAcademico.anioFin
+  asistentes: number;             // COUNT de profesor_asiste
+  totalConvocados: number;
+  informacion: Informacion[];     // tabla informacion
+  ruegosPregunta: string[];       // tabla ruegosPreguntasActa
+}
+
+@Component({
+  selector: &#x27;app-actas-historial&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: &#x27;./actas-historial.component.html&#x27;,
+  styleUrl: &#x27;./actas-historial.component.css&#x27;
+})
+export class ActasHistorialComponent {
+  /** cursoAcademico.anioInicio values disponibles en BD */
+  public aniosDisponibles &#x3D; [2025, 2024, 2023, 2022];
+  public anioSeleccionado &#x3D; 2025;
+  public buscando &#x3D; false;
+  public actaVisualizando: ActaHistorial | null &#x3D; null;
+
+  /** Mock basado en la estructura real de BD */
+  private todasLasActas: ActaHistorial[] &#x3D; [
+    {
+      idActa: 1,
+      fecha: &#x27;23/05/2026&#x27;,
+      idConvocatoria: 1,
+      fechaConvocatoria: &#x27;23/05/2026&#x27;,
+      horaConvocatoria: &#x27;10:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Lectura y aprobación del acta anterior&#x27;,       informacion: &#x27;Se aprueba el acta anterior por unanimidad sin observaciones.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Revisión de resultados de evaluación final&#x27;,    informacion: &#x27;El 82% del alumnado supera la convocatoria ordinaria.&#x27; },
+        { numInformacion: 3, titulo_OrdenDia: &#x27;Coordinación de actividades de recuperación&#x27;,   informacion: &#x27;Se acuerda organizar sesiones de recuperación durante la última semana de junio.&#x27; },
+        { numInformacion: 4, titulo_OrdenDia: &#x27;Planificación del próximo curso académico&#x27;,     informacion: &#x27;Se delega en el coordinador la elaboración del calendario lectivo provisional.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Sin ruegos ni preguntas adicionales.&#x27;]
+    },
+    {
+      idActa: 2,
+      fecha: &#x27;15/03/2026&#x27;,
+      idConvocatoria: 2,
+      fechaConvocatoria: &#x27;15/03/2026&#x27;,
+      horaConvocatoria: &#x27;09:00&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión de la 2ª evaluación&#x27;,  informacion: &#x27;Los resultados mejoran un 8% respecto al trimestre anterior.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Acuerdos de mejora&#x27;,             informacion: &#x27;Se incrementan actividades prácticas en módulos con mayor índice de suspenso.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;Se solicita actualizar el inventario de equipos del aula de informática.&#x27;]
+    },
+    {
+      idActa: 3,
+      fecha: &#x27;10/12/2025&#x27;,
+      idConvocatoria: 3,
+      fechaConvocatoria: &#x27;10/12/2025&#x27;,
+      horaConvocatoria: &#x27;10:30&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2025,
+      anioFin: 2026,
+      asistentes: 4,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Resultados 1ª evaluación&#x27;, informacion: &#x27;Se revisan resultados por módulos y grupos.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas de mejora&#x27;,      informacion: &#x27;Seguimiento semanal para alumnos con más de 2 módulos suspensos.&#x27; }
+      ],
+      ruegosPregunta: [&#x27;El profesor de SMR solicita recursos adicionales para la sala de redes.&#x27;]
+    },
+    {
+      idActa: 4,
+      fecha: &#x27;18/06/2025&#x27;,
+      idConvocatoria: 4,
+      fechaConvocatoria: &#x27;18/06/2025&#x27;,
+      horaConvocatoria: &#x27;11:00&#x27;,
+      lugar: &#x27;Sala de Reuniones B-04&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 6,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Balance del curso 2024/2025&#x27;, informacion: &#x27;Valoración positiva: 79% de tasa de éxito global.&#x27; },
+        { numInformacion: 2, titulo_OrdenDia: &#x27;Propuestas para el siguiente curso&#x27;, informacion: &#x27;Se acuerda revisar la programación didáctica de 3 módulos.&#x27; }
+      ],
+      ruegosPregunta: []
+    },
+    {
+      idActa: 5,
+      fecha: &#x27;14/03/2025&#x27;,
+      idConvocatoria: 5,
+      fechaConvocatoria: &#x27;14/03/2025&#x27;,
+      horaConvocatoria: &#x27;09:30&#x27;,
+      lugar: &#x27;Aula de Coordinación A-12&#x27;,
+      anioInicio: 2024,
+      anioFin: 2025,
+      asistentes: 5,
+      totalConvocados: 6,
+      informacion: [
+        { numInformacion: 1, titulo_OrdenDia: &#x27;Revisión 2ª evaluación&#x27;, informacion: &#x27;Resultados similares al año anterior.&#x27; }
+      ],
+      ruegosPregunta: []
+    }
+  ];
+
+  public actasFiltradas: ActaHistorial[] &#x3D; [];
+  public busquedaRealizada &#x3D; false;
+
+  get cursoSeleccionado(): string {
+    const anio &#x3D; this.aniosDisponibles.find(a &#x3D;&gt; a &#x3D;&#x3D;&#x3D; this.anioSeleccionado);
+    return anio ? &#x60;${anio}/${anio + 1}&#x60; : &#x27;&#x27;;
+  }
+
+  buscar(): void {
+    this.buscando &#x3D; true;
+    setTimeout(() &#x3D;&gt; {
+      this.actasFiltradas &#x3D; this.todasLasActas.filter(a &#x3D;&gt; a.anioInicio &#x3D;&#x3D;&#x3D; this.anioSeleccionado);
+      this.buscando &#x3D; false;
+      this.busquedaRealizada &#x3D; true;
+    }, 400);
+  }
+
+  verActa(acta: ActaHistorial): void {
+    this.actaVisualizando &#x3D; acta;
+  }
+
+  cerrarModal(): void {
+    this.actaVisualizando &#x3D; null;
+  }
+
+  descargarActa(acta: ActaHistorial): void {
+    console.log(&#x27;Descargar acta idActa:&#x27;, acta.idActa);
+    alert(&#x60;Descargando Acta #${acta.idActa} — Convocatoria #${acta.idConvocatoria}&#x60;);
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;header-container d-flex justify-content-between align-items-start mb-4&quot;&gt;
+  &lt;div&gt;
+    &lt;h2 class&#x3D;&quot;fw-bold text-dark m-0&quot;&gt;Historial de Actas&lt;/h2&gt;
+    &lt;p class&#x3D;&quot;text-secondary small&quot;&gt;Consulta el registro histórico de actas oficiales cerradas.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Panel de filtro — cursoAcademico.anioInicio + anioFin --&gt;
+&lt;div class&#x3D;&quot;card border-0 shadow-sm rounded-3 mb-4 filtro-card&quot;&gt;
+  &lt;div class&#x3D;&quot;card-body p-4&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-end gap-3 flex-wrap&quot;&gt;
+      &lt;div class&#x3D;&quot;flex-grow-1&quot; style&#x3D;&quot;max-width: 300px;&quot;&gt;
+        &lt;label class&#x3D;&quot;x-small fw-bold text-uppercase text-secondary mb-2 d-block&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;
+          Curso Académico
+        &lt;/label&gt;
+        &lt;select class&#x3D;&quot;form-select form-select-sm select-curso&quot; [(ngModel)]&#x3D;&quot;anioSeleccionado&quot;&gt;
+          &lt;option *ngFor&#x3D;&quot;let anio of aniosDisponibles&quot; [value]&#x3D;&quot;anio&quot;&gt;{{ anio }}/{{ anio + 1 }}&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+      &lt;button class&#x3D;&quot;btn btn-dark fw-bold text-uppercase px-4 btn-buscar&quot; (click)&#x3D;&quot;buscar()&quot; [disabled]&#x3D;&quot;buscando&quot;&gt;
+        &lt;span *ngIf&#x3D;&quot;!buscando&quot;&gt;&lt;i class&#x3D;&quot;bi bi-search me-2&quot;&gt;&lt;/i&gt;Buscar&lt;/span&gt;
+        &lt;span *ngIf&#x3D;&quot;buscando&quot;&gt;&lt;i class&#x3D;&quot;bi bi-hourglass-split me-2&quot;&gt;&lt;/i&gt;Buscando…&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Estado inicial --&gt;
+&lt;div *ngIf&#x3D;&quot;!busquedaRealizada&quot; class&#x3D;&quot;card border-0 shadow-sm rounded-3 p-5 text-center estado-inicial&quot;&gt;
+  &lt;i class&#x3D;&quot;bi bi-clock-history text-muted fs-1 mb-3&quot;&gt;&lt;/i&gt;
+  &lt;h5 class&#x3D;&quot;text-secondary&quot;&gt;Selecciona un curso académico&lt;/h5&gt;
+  &lt;p class&#x3D;&quot;text-muted small&quot;&gt;Elige el año y pulsa &quot;Buscar&quot; para ver las actas cerradas de ese periodo.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Sin resultados --&gt;
+&lt;div *ngIf&#x3D;&quot;busquedaRealizada &amp;&amp; actasFiltradas.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card border-0 shadow-sm rounded-3 p-5 text-center&quot;&gt;
+  &lt;i class&#x3D;&quot;bi bi-folder2-open text-muted fs-1 mb-3&quot;&gt;&lt;/i&gt;
+  &lt;h5 class&#x3D;&quot;text-secondary&quot;&gt;Sin actas en este curso&lt;/h5&gt;
+  &lt;p class&#x3D;&quot;text-muted small&quot;&gt;No se encontraron actas para el curso {{ cursoSeleccionado }}.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Tabla de resultados --&gt;
+&lt;div *ngIf&#x3D;&quot;busquedaRealizada &amp;&amp; actasFiltradas.length &gt; 0&quot; class&#x3D;&quot;tabla-container&quot;&gt;
+  &lt;div class&#x3D;&quot;d-flex align-items-center justify-content-between mb-3&quot;&gt;
+    &lt;p class&#x3D;&quot;text-secondary small m-0&quot;&gt;
+      &lt;strong class&#x3D;&quot;text-dark&quot;&gt;{{ actasFiltradas.length }}&lt;/strong&gt; actas en el curso
+      &lt;strong class&#x3D;&quot;text-dark&quot;&gt;{{ cursoSeleccionado }}&lt;/strong&gt;
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;card border-0 shadow-sm rounded-3 overflow-hidden&quot;&gt;
+    &lt;table class&#x3D;&quot;table tabla-actas mb-0&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th class&#x3D;&quot;th-col&quot;&gt;ID Acta&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col&quot;&gt;Fecha cierre&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col&quot;&gt;Convocatoria #&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col&quot;&gt;Fecha reunión&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col&quot;&gt;Lugar&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col text-center&quot;&gt;Asistentes&lt;/th&gt;
+          &lt;th class&#x3D;&quot;th-col text-center&quot;&gt;Acciones&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr *ngFor&#x3D;&quot;let acta of actasFiltradas&quot; class&#x3D;&quot;fila-acta&quot; (click)&#x3D;&quot;verActa(acta)&quot;&gt;
+          &lt;td class&#x3D;&quot;td-col&quot;&gt;
+            &lt;span class&#x3D;&quot;badge-id&quot;&gt;#{{ acta.idActa }}&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col&quot;&gt;
+            &lt;span class&#x3D;&quot;fw-bold text-dark small&quot;&gt;{{ acta.fecha }}&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col&quot;&gt;
+            &lt;span class&#x3D;&quot;text-secondary small&quot;&gt;#{{ acta.idConvocatoria }}&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col&quot;&gt;
+            &lt;span class&#x3D;&quot;text-dark small&quot;&gt;{{ acta.fechaConvocatoria }}&lt;/span&gt;
+            &lt;span class&#x3D;&quot;text-secondary x-small ms-1&quot;&gt;{{ acta.horaConvocatoria }} h&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col&quot;&gt;
+            &lt;span class&#x3D;&quot;text-secondary small&quot;&gt;{{ acta.lugar }}&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col text-center&quot;&gt;
+            &lt;span class&#x3D;&quot;small text-dark&quot;&gt;{{ acta.asistentes }}/{{ acta.totalConvocados }}&lt;/span&gt;
+          &lt;/td&gt;
+          &lt;td class&#x3D;&quot;td-col text-center&quot; (click)&#x3D;&quot;$event.stopPropagation()&quot;&gt;
+            &lt;div class&#x3D;&quot;d-flex gap-2 justify-content-center&quot;&gt;
+              &lt;button class&#x3D;&quot;btn btn-outline-secondary btn-xs fw-bold text-uppercase px-2&quot; (click)&#x3D;&quot;verActa(acta)&quot;&gt;
+                &lt;i class&#x3D;&quot;bi bi-eye me-1&quot;&gt;&lt;/i&gt;Ver
+              &lt;/button&gt;
+              &lt;button class&#x3D;&quot;btn btn-outline-dark btn-xs fw-bold text-uppercase px-2&quot; (click)&#x3D;&quot;descargarActa(acta)&quot;&gt;
+                &lt;i class&#x3D;&quot;bi bi-download me-1&quot;&gt;&lt;/i&gt;PDF
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- MODAL: VISUALIZAR ACTA --&gt;
+&lt;div *ngIf&#x3D;&quot;actaVisualizando&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center p-3&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal-acta rounded-3 shadow-lg&quot;&gt;
+    &lt;!-- Cabecera --&gt;
+    &lt;div class&#x3D;&quot;modal-acta-header p-4 d-flex align-items-start justify-content-between&quot;&gt;
+      &lt;div class&#x3D;&quot;flex-grow-1&quot;&gt;
+        &lt;div class&#x3D;&quot;d-flex align-items-center gap-2 mb-2&quot;&gt;
+          &lt;span class&#x3D;&quot;badge-acta-oficial&quot;&gt;
+            &lt;i class&#x3D;&quot;bi bi-lock-fill me-1&quot;&gt;&lt;/i&gt;Acta Oficial
+          &lt;/span&gt;
+          &lt;span class&#x3D;&quot;text-secondary x-small&quot;&gt;ID Acta: #{{ actaVisualizando.idActa }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;h5 class&#x3D;&quot;text-white fw-bold mb-1&quot;&gt;Convocatoria #{{ actaVisualizando.idConvocatoria }}&lt;/h5&gt;
+        &lt;div class&#x3D;&quot;d-flex flex-wrap gap-3 text-secondary&quot; style&#x3D;&quot;font-size: 0.8rem;&quot;&gt;
+          &lt;span&gt;&lt;i class&#x3D;&quot;bi bi-calendar3 me-1&quot;&gt;&lt;/i&gt;Reunión: {{ actaVisualizando.fechaConvocatoria }} {{ actaVisualizando.horaConvocatoria }} h&lt;/span&gt;
+          &lt;span&gt;&lt;i class&#x3D;&quot;bi bi-geo-alt me-1&quot;&gt;&lt;/i&gt;{{ actaVisualizando.lugar }}&lt;/span&gt;
+          &lt;span&gt;&lt;i class&#x3D;&quot;bi bi-people me-1&quot;&gt;&lt;/i&gt;{{ actaVisualizando.asistentes }}/{{ actaVisualizando.totalConvocados }} asistentes&lt;/span&gt;
+          &lt;span&gt;&lt;i class&#x3D;&quot;bi bi-file-earmark-check me-1&quot;&gt;&lt;/i&gt;Cerrada: {{ actaVisualizando.fecha }}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-secondary p-0 ms-3&quot; (click)&#x3D;&quot;cerrarModal()&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-x-lg fs-5&quot;&gt;&lt;/i&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Cuerpo: tabla informacion --&gt;
+    &lt;div class&#x3D;&quot;modal-acta-body p-4&quot;&gt;
+      &lt;p class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-3&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;
+        Puntos del Acta
+      &lt;/p&gt;
+
+      &lt;div *ngFor&#x3D;&quot;let info of actaVisualizando.informacion&quot; class&#x3D;&quot;punto-acta-modal mb-3&quot;&gt;
+        &lt;div class&#x3D;&quot;d-flex gap-3&quot;&gt;
+          &lt;div class&#x3D;&quot;num-modal d-flex align-items-center justify-content-center rounded-circle fw-bold flex-shrink-0&quot;&gt;
+            {{ info.numInformacion }}
+          &lt;/div&gt;
+          &lt;div class&#x3D;&quot;flex-grow-1&quot;&gt;
+            &lt;!-- titulo_OrdenDia --&gt;
+            &lt;p class&#x3D;&quot;fw-bold text-white small mb-1&quot;&gt;{{ info.titulo_OrdenDia }}&lt;/p&gt;
+            &lt;!-- informacion --&gt;
+            &lt;p class&#x3D;&quot;text-secondary mb-0&quot; style&#x3D;&quot;font-size: 0.85rem;&quot;&gt;{{ info.informacion }}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Ruegos y preguntas (tabla ruegosPreguntasActa) --&gt;
+      &lt;div *ngIf&#x3D;&quot;actaVisualizando.ruegosPregunta.length &gt; 0&quot; class&#x3D;&quot;mt-3 pt-3&quot; style&#x3D;&quot;border-top: 1px solid rgba(255,255,255,0.08)&quot;&gt;
+        &lt;p class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2&quot; style&#x3D;&quot;letter-spacing: 0.05rem;&quot;&gt;
+          Ruegos y Preguntas
+        &lt;/p&gt;
+        &lt;p *ngFor&#x3D;&quot;let r of actaVisualizando.ruegosPregunta&quot; class&#x3D;&quot;text-secondary mb-1&quot; style&#x3D;&quot;font-size:0.85rem;&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-chat-left-quote me-1&quot;&gt;&lt;/i&gt;{{ r }}
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Footer --&gt;
+    &lt;div class&#x3D;&quot;modal-acta-footer p-4 d-flex justify-content-between align-items-center&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small p-0&quot;
+        (click)&#x3D;&quot;cerrarModal()&quot;&gt;
+        CERRAR
+      &lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot; (click)&#x3D;&quot;descargarActa(actaVisualizando!)&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-download me-2&quot;&gt;&lt;/i&gt;Descargar PDF
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="header-container d-flex justify-content-between align-items-start mb-4">  <div>    <h2 class="fw-bold text-dark m-0">Historial de Actas</h2>    <p class="text-secondary small">Consulta el registro histórico de actas oficiales cerradas.</p>  </div></div><!-- Panel de filtro — cursoAcademico.anioInicio + anioFin --><div class="card border-0 shadow-sm rounded-3 mb-4 filtro-card">  <div class="card-body p-4">    <div class="d-flex align-items-end gap-3 flex-wrap">      <div class="flex-grow-1" style="max-width: 300px;">        <label class="x-small fw-bold text-uppercase text-secondary mb-2 d-block" style="letter-spacing: 0.05rem;">          Curso Académico        </label>        <select class="form-select form-select-sm select-curso" [(ngModel)]="anioSeleccionado">          <option *ngFor="let anio of aniosDisponibles" [value]="anio">{{ anio }}/{{ anio + 1 }}</option>        </select>      </div>      <button class="btn btn-dark fw-bold text-uppercase px-4 btn-buscar" (click)="buscar()" [disabled]="buscando">        <span *ngIf="!buscando"><i class="bi bi-search me-2"></i>Buscar</span>        <span *ngIf="buscando"><i class="bi bi-hourglass-split me-2"></i>Buscando…</span>      </button>    </div>  </div></div><!-- Estado inicial --><div *ngIf="!busquedaRealizada" class="card border-0 shadow-sm rounded-3 p-5 text-center estado-inicial">  <i class="bi bi-clock-history text-muted fs-1 mb-3"></i>  <h5 class="text-secondary">Selecciona un curso académico</h5>  <p class="text-muted small">Elige el año y pulsa "Buscar" para ver las actas cerradas de ese periodo.</p></div><!-- Sin resultados --><div *ngIf="busquedaRealizada && actasFiltradas.length === 0" class="card border-0 shadow-sm rounded-3 p-5 text-center">  <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>  <h5 class="text-secondary">Sin actas en este curso</h5>  <p class="text-muted small">No se encontraron actas para el curso {{ cursoSeleccionado }}.</p></div><!-- Tabla de resultados --><div *ngIf="busquedaRealizada && actasFiltradas.length > 0" class="tabla-container">  <div class="d-flex align-items-center justify-content-between mb-3">    <p class="text-secondary small m-0">      <strong class="text-dark">{{ actasFiltradas.length }}</strong> actas en el curso      <strong class="text-dark">{{ cursoSeleccionado }}</strong>    </p>  </div>  <div class="card border-0 shadow-sm rounded-3 overflow-hidden">    <table class="table tabla-actas mb-0">      <thead>        <tr>          <th class="th-col">ID Acta</th>          <th class="th-col">Fecha cierre</th>          <th class="th-col">Convocatoria #</th>          <th class="th-col">Fecha reunión</th>          <th class="th-col">Lugar</th>          <th class="th-col text-center">Asistentes</th>          <th class="th-col text-center">Acciones</th>        </tr>      </thead>      <tbody>        <tr *ngFor="let acta of actasFiltradas" class="fila-acta" (click)="verActa(acta)">          <td class="td-col">            <span class="badge-id">#{{ acta.idActa }}</span>          </td>          <td class="td-col">            <span class="fw-bold text-dark small">{{ acta.fecha }}</span>          </td>          <td class="td-col">            <span class="text-secondary small">#{{ acta.idConvocatoria }}</span>          </td>          <td class="td-col">            <span class="text-dark small">{{ acta.fechaConvocatoria }}</span>            <span class="text-secondary x-small ms-1">{{ acta.horaConvocatoria }} h</span>          </td>          <td class="td-col">            <span class="text-secondary small">{{ acta.lugar }}</span>          </td>          <td class="td-col text-center">            <span class="small text-dark">{{ acta.asistentes }}/{{ acta.totalConvocados }}</span>          </td>          <td class="td-col text-center" (click)="$event.stopPropagation()">            <div class="d-flex gap-2 justify-content-center">              <button class="btn btn-outline-secondary btn-xs fw-bold text-uppercase px-2" (click)="verActa(acta)">                <i class="bi bi-eye me-1"></i>Ver              </button>              <button class="btn btn-outline-dark btn-xs fw-bold text-uppercase px-2" (click)="descargarActa(acta)">                <i class="bi bi-download me-1"></i>PDF              </button>            </div>          </td>        </tr>      </tbody>    </table>  </div></div><!-- MODAL: VISUALIZAR ACTA --><div *ngIf="actaVisualizando" class="modal-overlay d-flex align-items-center justify-content-center p-3">  <div class="custom-modal-acta rounded-3 shadow-lg">    <!-- Cabecera -->    <div class="modal-acta-header p-4 d-flex align-items-start justify-content-between">      <div class="flex-grow-1">        <div class="d-flex align-items-center gap-2 mb-2">          <span class="badge-acta-oficial">            <i class="bi bi-lock-fill me-1"></i>Acta Oficial          </span>          <span class="text-secondary x-small">ID Acta: #{{ actaVisualizando.idActa }}</span>        </div>        <h5 class="text-white fw-bold mb-1">Convocatoria #{{ actaVisualizando.idConvocatoria }}</h5>        <div class="d-flex flex-wrap gap-3 text-secondary" style="font-size: 0.8rem;">          <span><i class="bi bi-calendar3 me-1"></i>Reunión: {{ actaVisualizando.fechaConvocatoria }} {{ actaVisualizando.horaConvocatoria }} h</span>          <span><i class="bi bi-geo-alt me-1"></i>{{ actaVisualizando.lugar }}</span>          <span><i class="bi bi-people me-1"></i>{{ actaVisualizando.asistentes }}/{{ actaVisualizando.totalConvocados }} asistentes</span>          <span><i class="bi bi-file-earmark-check me-1"></i>Cerrada: {{ actaVisualizando.fecha }}</span>        </div>      </div>      <button class="btn btn-link text-secondary p-0 ms-3" (click)="cerrarModal()">        <i class="bi bi-x-lg fs-5"></i>      </button>    </div>    <!-- Cuerpo: tabla informacion -->    <div class="modal-acta-body p-4">      <p class="text-secondary x-small fw-bold text-uppercase mb-3" style="letter-spacing: 0.05rem;">        Puntos del Acta      </p>      <div *ngFor="let info of actaVisualizando.informacion" class="punto-acta-modal mb-3">        <div class="d-flex gap-3">          <div class="num-modal d-flex align-items-center justify-content-center rounded-circle fw-bold flex-shrink-0">            {{ info.numInformacion }}          </div>          <div class="flex-grow-1">            <!-- titulo_OrdenDia -->            <p class="fw-bold text-white small mb-1">{{ info.titulo_OrdenDia }}</p>            <!-- informacion -->            <p class="text-secondary mb-0" style="font-size: 0.85rem;">{{ info.informacion }}</p>          </div>        </div>      </div>      <!-- Ruegos y preguntas (tabla ruegosPreguntasActa) -->      <div *ngIf="actaVisualizando.ruegosPregunta.length > 0" class="mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.08)">        <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">          Ruegos y Preguntas        </p>        <p *ngFor="let r of actaVisualizando.ruegosPregunta" class="text-secondary mb-1" style="font-size:0.85rem;">          <i class="bi bi-chat-left-quote me-1"></i>{{ r }}        </p>      </div>    </div>    <!-- Footer -->    <div class="modal-acta-footer p-4 d-flex justify-content-between align-items-center">      <button class="btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small p-0"        (click)="cerrarModal()">        CERRAR      </button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="descargarActa(actaVisualizando!)">        <i class="bi bi-download me-2"></i>Descargar PDF      </button>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ActasHistorialComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ActasHistorialComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

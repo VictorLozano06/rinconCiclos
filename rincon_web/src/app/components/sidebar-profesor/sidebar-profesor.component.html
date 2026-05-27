@@ -1,47 +1,39 @@
-<aside class="barra-lateral">
+<aside class="barra-lateral" [class.barra-lateral-abierta]="mobileOpen">
   <div class="cabecera-sidebar">
     <h1 class="titulo-web">Rincón de Ciclos</h1>
     <p class="subtitulo-web">Portal Docente</p>
+    <button type="button" class="cerrar-sidebar" (click)="cerrarSidebar()" aria-label="Cerrar menu">
+      <i class="bi bi-x-lg"></i>
+    </button>
   </div>
 
   <nav class="navegacion-sidebar">
     <div *ngFor="let cat of categorias" class="grupo-navegacion">
-      
-      <button 
-        class="item-menu" 
-        (click)="toggleMenu(cat)"
+      <button
+        class="item-menu"
+        (click)="activarCategoria(cat)"
         [routerLink]="cat.subcategorias.length === 0 ? cat.ruta : null"
         routerLinkActive="enlace-activo">
-        
-        <div class="contenido-item">
-          <span class="icono-item">
-            <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
-          </span>
-          <span class="texto-item">{{ cat.nombre }}</span>
-        </div>
+        <img [src]="'assets/icons/' + cat.icono + '.svg'" [alt]="cat.nombre" class="imagen-icono">
+        <span class="texto-item">{{ cat.nombre }}</span>
       </button>
 
       <div *ngIf="cat.abierto && cat.subcategorias.length > 0" class="lista-subcategorias">
-        <ng-container *ngFor="let sub of cat.subcategorias">
-          <!-- Habilitado: Enlace activo normal -->
-          <a 
+        <div *ngFor="let sub of cat.subcategorias" class="subcategoria-item">
+          <a
             *ngIf="!sub.deshabilitado"
-            [routerLink]="sub.ruta" 
+            [routerLink]="sub.ruta"
             routerLinkActive="enlace-activo"
-            class="item-subcategoria">
+            class="item-subcategoria"
+            (click)="cerrarSidebar()">
             {{ sub.nombre }}
           </a>
-          <!-- Deshabilitado: Texto plano inactivo sin routerLink -->
-          <span 
-            *ngIf="sub.deshabilitado"
-            class="item-subcategoria sub-deshabilitada"
-            title="Sección en desarrollo"
-            style="opacity: 0.5; cursor: not-allowed; display: block; padding: 6px 12px 6px 44px; font-size: 0.9rem; color: var(--color-texto-secundario);">
+
+          <span *ngIf="sub.deshabilitado" class="item-subcategoria sub-deshabilitada">
             {{ sub.nombre }}
           </span>
-        </ng-container>
+        </div>
       </div>
-
     </div>
   </nav>
 </aside>

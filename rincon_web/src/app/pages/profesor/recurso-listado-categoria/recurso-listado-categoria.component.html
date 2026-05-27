@@ -1,0 +1,14 @@
+<app-recurso-listado-categoria-compartido
+  [titulo]="rutaCategoria[0] || categoriaActual || seccion || ''"
+  [subcategoria]="rutaCategoria[1] || ''"
+  [cargando]="cargando"
+  [errorCarga]="errorCarga"
+  [cursosFiltro]="cursosFiltro"
+  [ciclosFiltro]="ciclosFiltro"
+  [filtroCurso]="filtroCurso"
+  [filtroCiclo]="filtroCiclo"
+  [recursos]="recursosFiltrados"
+  rutaDetalleBase="profesor"
+  (cursoChange)="cambiarCurso($event)"
+  (cicloChange)="cambiarCiclo($event)">
+</app-recurso-listado-categoria-compartido>
