@@ -35,6 +35,7 @@ export interface ConvocatoriaPendiente {
 })
 export class ProcesoActasService {
   private convocatoriaActiva: ConvocatoriaPendiente | null = null;
+  private actaEnEdicion: any = null; // Guardará los datos del ActaHistorial a editar
   
   constructor(private http: HttpClient, private apiService: ApiService) {}
 
@@ -51,6 +52,52 @@ export class ProcesoActasService {
     return this.convocatoriaActiva;
   }
 
+  // Permite cargar un acta ya creada para poder editar su redacción
+  cargarActaParaEdicion(actaHistorial: any): void {
+    this.actaEnEdicion = actaHistorial;
+
+    // Convertir DD/MM/YYYY a YYYY-MM-DD HH:mm:ss para evitar Invalid Date en JS
+    const partesFecha = actaHistorial.fechaConvocatoria.split('/');
+    const fechaFormat = partesFecha.length === 3 
+      ? `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]} ${actaHistorial.horaConvocatoria}:00`
+      : actaHistorial.fechaConvocatoria;
+
+    // Reconstruir la lista de profesores para que no se vea vacío el control de asistencia
+    const asistentes = (actaHistorial.listaAsistentes || []).map((nombre: string, i: number) => ({
+      idProfesor: i + 1,
+      nombre: nombre,
+      asiste: true
+    }));
+
+    const ausentes = (actaHistorial.listaAusentes || []).map((nombre: string, i: number) => ({
+      idProfesor: asistentes.length + i + 1,
+      nombre: nombre,
+      asiste: false
+    }));
+
+    this.convocatoriaActiva = {
+      idConvocatoria: actaHistorial.idConvocatoria,
+      fechaOriginal: fechaFormat,
+      fecha: fechaFormat.replace(' ', 'T'),
+      lugar: actaHistorial.lugar,
+      anioInicio: actaHistorial.anioInicio,
+      anioFin: actaHistorial.anioFin,
+      idProfesorRedactaActa: 0,
+      idProfesorIniciaReunion: 0,
+      ordenDia: actaHistorial.informacion.map((info: any) => ({
+        numOrden: info.numInformacion,
+        objetivo: info.titulo_OrdenDia,
+        descripcion: null,
+        minutos: null
+      })),
+      profesores: [...asistentes, ...ausentes] // Recreamos los profesores para la UI
+    };
+  }
+
+  getActaEnEdicion(): any | null {
+    return this.actaEnEdicion;
+  }
+
   // Guardamos la lista de checks para la siguiente pantalla
   guardarAsistencia(profesores: ProfesorAsistente[]): void {
     if (this.convocatoriaActiva) {
@@ -60,6 +107,7 @@ export class ProcesoActasService {
 
   limpiarEstado(): void {
     this.convocatoriaActiva = null;
+    this.actaEnEdicion = null;
   }
 
   // Llama al controlador para registrar definitivamente los acuerdos
@@ -68,16 +116,19 @@ export class ProcesoActasService {
       throw new Error('No hay convocatoria activa en memoria');
     }
 
-    const asistentes = this.convocatoriaActiva.profesores
-      .filter(p => p.asiste)
-      .map(p => p.idProfesor);
-
-    const payload = {
+    const payload: any = {
       idConvocatoria: this.convocatoriaActiva.idConvocatoria,
-      asistentes: asistentes,
       informacion: informacion,
       ruegos: ruegos
     };
+
+    if (this.actaEnEdicion) {
+      payload.idActa = this.actaEnEdicion.idActa;
+    } else {
+      payload.asistentes = this.convocatoriaActiva.profesores
+        .filter(p => p.asiste)
+        .map(p => p.idProfesor);
+    }
 
     return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=guardar`, payload)
       .pipe(

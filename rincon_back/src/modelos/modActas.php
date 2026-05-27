@@ -37,8 +37,7 @@ class ModActas {
                     c.anioFin,
                     co.idProfesorRedactaActa,
                     co.idProfesorIniciaReunion,
-                    (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes,
-                    (SELECT COUNT(DISTINCT pp.idParticipanteParticipa) FROM participanteParticipa pp WHERE pp.idConvocatoria = co.idConvocatoria) as totalConvocados
+                    (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes
                 FROM acta a
                 JOIN convocatoria co ON a.idConvocatoria = co.idConvocatoria
                 JOIN lugar l ON co.idLugar = l.idLugar
@@ -58,7 +57,6 @@ class ModActas {
             $acta['anioInicio'] = (int) $acta['anioInicio'];
             $acta['anioFin'] = (int) $acta['anioFin'];
             $acta['asistentes'] = (int) $acta['asistentes'];
-            $acta['totalConvocados'] = (int) $acta['totalConvocados'];
 
             // Nombres de Asistentes
             $sqlAsistentes = "SELECT p.nombre FROM profesor_asiste pa JOIN participantes p ON pa.idProfesor = p.idParticipante WHERE pa.idActa = :idActa";
@@ -66,13 +64,37 @@ class ModActas {
             $stmtAsis->execute([':idActa' => $acta['idActa']]);
             $acta['listaAsistentes'] = $stmtAsis->fetchAll(PDO::FETCH_COLUMN);
 
-            // Nombres de Ausentes
-            $sqlAusentes = "SELECT p.nombre FROM participanteParticipa pp JOIN participantes p ON pp.idParticipanteParticipa = p.idParticipante 
-                            WHERE pp.idConvocatoria = :idConvocatoria 
-                            AND pp.idParticipanteParticipa NOT IN (SELECT idProfesor FROM profesor_asiste WHERE idActa = :idActa)";
-            $stmtAus = $this->db->prepare($sqlAusentes);
-            $stmtAus->execute([':idConvocatoria' => $acta['idConvocatoria'], ':idActa' => $acta['idActa']]);
-            $acta['listaAusentes'] = $stmtAus->fetchAll(PDO::FETCH_COLUMN);
+            // Nombres de Ausentes y total convocados reales (incluyendo a quien redacta e inicia)
+            $sqlConvocados = "SELECT DISTINCT prof.idProfesor, p.nombre 
+                              FROM (
+                                  SELECT idParticipanteParticipa as idProf FROM participanteParticipa WHERE idConvocatoria = :idConvocatoria
+                                  UNION
+                                  SELECT :idRedacta as idProf
+                                  UNION
+                                  SELECT :idInicia as idProf
+                              ) tmp
+                              JOIN profesor prof ON tmp.idProf = prof.idProfesor
+                              JOIN participantes p ON prof.idProfesor = p.idParticipante";
+                              
+            $stmtConv = $this->db->prepare($sqlConvocados);
+            $stmtConv->execute([
+                ':idConvocatoria' => $acta['idConvocatoria'],
+                ':idRedacta' => $acta['idProfesorRedactaActa'],
+                ':idInicia' => $acta['idProfesorIniciaReunion']
+            ]);
+            $convocados = $stmtConv->fetchAll(PDO::FETCH_ASSOC);
+            
+            $acta['totalConvocados'] = count($convocados);
+            
+            // Los ausentes son los convocados que no están en listaAsistentes
+            $nombresAsistentes = $acta['listaAsistentes'];
+            $ausentes = [];
+            foreach ($convocados as $c) {
+                if (!in_array($c['nombre'], $nombresAsistentes)) {
+                    $ausentes[] = $c['nombre'];
+                }
+            }
+            $acta['listaAusentes'] = $ausentes;
 
             // Nombres de Redacta y Convoca
             $sqlNombre = "SELECT nombre FROM participantes WHERE idParticipante = :id";
@@ -122,18 +144,15 @@ class ModActas {
                     c.anioFin,
                     co.idProfesorRedactaActa,
                     co.idProfesorIniciaReunion,
-                    (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes,
-                    (SELECT COUNT(DISTINCT pp.idParticipanteParticipa) FROM participanteParticipa pp WHERE pp.idConvocatoria = co.idConvocatoria) as totalConvocados
+                    (SELECT COUNT(*) FROM profesor_asiste pa WHERE pa.idActa = a.idActa) as asistentes
                 FROM acta a
                 JOIN convocatoria co ON a.idConvocatoria = co.idConvocatoria
                 JOIN lugar l ON co.idLugar = l.idLugar
                 JOIN cursoAcademico c ON co.idCurso = c.idCurso
-                WHERE a.idActa IN (SELECT idActa FROM profesor_asiste WHERE idProfesor = :idProfesor)
-                   OR co.idProfesorRedactaActa = :idProfesor
                 ORDER BY a.fecha DESC, co.fecha DESC";
                 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':idProfesor' => $idProfesor]);
+        $stmt->execute();
         $actas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Reutilizamos la misma lógica de anidado (copiada de listarHistorialPorAnio)
@@ -143,7 +162,6 @@ class ModActas {
             $acta['anioInicio'] = (int) $acta['anioInicio'];
             $acta['anioFin'] = (int) $acta['anioFin'];
             $acta['asistentes'] = (int) $acta['asistentes'];
-            $acta['totalConvocados'] = (int) $acta['totalConvocados'];
 
             // Nombres de Asistentes
             $sqlAsistentes = "SELECT p.nombre FROM profesor_asiste pa JOIN participantes p ON pa.idProfesor = p.idParticipante WHERE pa.idActa = :idActa";
@@ -151,13 +169,37 @@ class ModActas {
             $stmtAsis->execute([':idActa' => $acta['idActa']]);
             $acta['listaAsistentes'] = $stmtAsis->fetchAll(PDO::FETCH_COLUMN);
 
-            // Nombres de Ausentes
-            $sqlAusentes = "SELECT p.nombre FROM participanteParticipa pp JOIN participantes p ON pp.idParticipanteParticipa = p.idParticipante 
-                            WHERE pp.idConvocatoria = :idConvocatoria 
-                            AND pp.idParticipanteParticipa NOT IN (SELECT idProfesor FROM profesor_asiste WHERE idActa = :idActa)";
-            $stmtAus = $this->db->prepare($sqlAusentes);
-            $stmtAus->execute([':idConvocatoria' => $acta['idConvocatoria'], ':idActa' => $acta['idActa']]);
-            $acta['listaAusentes'] = $stmtAus->fetchAll(PDO::FETCH_COLUMN);
+            // Nombres de Ausentes y total convocados reales (incluyendo a quien redacta e inicia)
+            $sqlConvocados = "SELECT DISTINCT prof.idProfesor, p.nombre 
+                              FROM (
+                                  SELECT idParticipanteParticipa as idProf FROM participanteParticipa WHERE idConvocatoria = :idConvocatoria
+                                  UNION
+                                  SELECT :idRedacta as idProf
+                                  UNION
+                                  SELECT :idInicia as idProf
+                              ) tmp
+                              JOIN profesor prof ON tmp.idProf = prof.idProfesor
+                              JOIN participantes p ON prof.idProfesor = p.idParticipante";
+                              
+            $stmtConv = $this->db->prepare($sqlConvocados);
+            $stmtConv->execute([
+                ':idConvocatoria' => $acta['idConvocatoria'],
+                ':idRedacta' => $acta['idProfesorRedactaActa'],
+                ':idInicia' => $acta['idProfesorIniciaReunion']
+            ]);
+            $convocados = $stmtConv->fetchAll(PDO::FETCH_ASSOC);
+            
+            $acta['totalConvocados'] = count($convocados);
+            
+            // Los ausentes son los convocados que no están en listaAsistentes
+            $nombresAsistentes = $acta['listaAsistentes'];
+            $ausentes = [];
+            foreach ($convocados as $c) {
+                if (!in_array($c['nombre'], $nombresAsistentes)) {
+                    $ausentes[] = $c['nombre'];
+                }
+            }
+            $acta['listaAusentes'] = $ausentes;
 
             // Nombres de Redacta y Convoca
             $sqlNombre = "SELECT nombre FROM participantes WHERE idParticipante = :id";
@@ -265,21 +307,32 @@ class ModActas {
         try {
             $this->db->beginTransaction();
 
-            // Bloqueamos el acta creando su registro
-            $sqlActa = "INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), :idConvocatoria)";
-            $stmtActa = $this->db->prepare($sqlActa);
-            $stmtActa->execute([':idConvocatoria' => $datos['idConvocatoria']]);
-            $idActa = $this->db->lastInsertId();
+            $idActa = null;
+            if (isset($datos['idActa']) && $datos['idActa']) {
+                $idActa = $datos['idActa'];
+                // En modo edición, limpiamos la información y ruegos antiguos para reemplazarlos
+                $stmtDelInfo = $this->db->prepare("DELETE FROM informacion WHERE idActa = :idActa");
+                $stmtDelInfo->execute([':idActa' => $idActa]);
 
-            // Vinculamos profesores presentes
-            if (isset($datos['asistentes']) && is_array($datos['asistentes'])) {
-                $sqlAsiste = "INSERT INTO profesor_asiste (idActa, idProfesor) VALUES (:idActa, :idProfesor)";
-                $stmtAsiste = $this->db->prepare($sqlAsiste);
-                foreach ($datos['asistentes'] as $idProf) {
-                    $stmtAsiste->execute([
-                        ':idActa' => $idActa,
-                        ':idProfesor' => $idProf
-                    ]);
+                $stmtDelRuegos = $this->db->prepare("DELETE FROM ruegosPreguntasActa WHERE idActa = :idActa");
+                $stmtDelRuegos->execute([':idActa' => $idActa]);
+            } else {
+                // Bloqueamos el acta creando su registro
+                $sqlActa = "INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), :idConvocatoria)";
+                $stmtActa = $this->db->prepare($sqlActa);
+                $stmtActa->execute([':idConvocatoria' => $datos['idConvocatoria']]);
+                $idActa = $this->db->lastInsertId();
+
+                // Vinculamos profesores presentes
+                if (isset($datos['asistentes']) && is_array($datos['asistentes'])) {
+                    $sqlAsiste = "INSERT INTO profesor_asiste (idActa, idProfesor) VALUES (:idActa, :idProfesor)";
+                    $stmtAsiste = $this->db->prepare($sqlAsiste);
+                    foreach ($datos['asistentes'] as $idProf) {
+                        $stmtAsiste->execute([
+                            ':idActa' => $idActa,
+                            ':idProfesor' => $idProf
+                        ]);
+                    }
                 }
             }
 

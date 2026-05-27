@@ -51,12 +51,29 @@ export class ActasRedaccionComponent implements OnInit {
     this.acta.idConvocatoria = conv.idConvocatoria;
 
     // Mapeamos los temas a tratar
-    this.puntosInformacion = conv.ordenDia.map((od, index) => ({
-      numInformacion: od.numOrden,
-      titulo_OrdenDia: od.objetivo,
-      informacion: '',
-      expandido: index === 0
-    }));
+    const actaEnEdicion = this.procesoActasService.getActaEnEdicion();
+    
+    if (actaEnEdicion) {
+      this.acta.idActa = actaEnEdicion.idActa;
+      this.puntosInformacion = actaEnEdicion.informacion.map((info: any, index: number) => ({
+        numInformacion: info.numInformacion,
+        titulo_OrdenDia: info.titulo_OrdenDia,
+        informacion: info.informacion,
+        expandido: index === 0
+      }));
+      
+      this.ruegosPreguntas = (actaEnEdicion.ruegosPregunta || []).map((texto: string, index: number) => ({
+        id: index + 1,
+        texto: texto
+      }));
+    } else {
+      this.puntosInformacion = conv.ordenDia.map((od, index) => ({
+        numInformacion: od.numOrden,
+        titulo_OrdenDia: od.objetivo,
+        informacion: '',
+        expandido: index === 0
+      }));
+    }
   }
 
   agregarRuego(): void {

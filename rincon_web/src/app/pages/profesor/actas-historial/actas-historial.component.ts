@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActasService, ActaHistorial, Informacion } from '../../../services/actas.service';
 import { PdfService } from '../../../services/pdf.service';
+import { ProcesoActasService } from '../../../services/proceso-actas.service';
 
 @Component({
   selector: 'app-actas-historial',
@@ -24,6 +25,7 @@ export class ActasHistorialComponent implements OnInit {
   constructor(
     private actasService: ActasService,
     private pdfService: PdfService,
+    private procesoActasService: ProcesoActasService,
     private router: Router
   ) {}
 
@@ -51,7 +53,7 @@ export class ActasHistorialComponent implements OnInit {
   }
 
   editarActa(acta: ActaHistorial): void {
-    alert(`Modo Edición Activado para el acta #${acta.idActa}. Se redirigiría al editor de acuerdos sin bloquear.`);
+    this.procesoActasService.cargarActaParaEdicion(acta);
     this.router.navigate(['/profesor/reuniones-de-equipo/actas/redaccion']);
   }
 
