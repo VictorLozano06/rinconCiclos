@@ -80,23 +80,6 @@ El backend expone respuestas JSON desde `index.php` y reparte la logica por cont
 - `conexionBD.php`: conexion PDO.
 - `rutas.php`: rutas internas del backend.
 
-Modulos ya presentes:
-
-- `Categorias`
-- `Ciclos`
-- `Convocatorias`
-- `Actas`
-- `Recursos`
-- `Plantillas`
-
-### Recursos
-
-El modulo de recursos ha crecido respecto a la version inicial:
-
-- subida de archivos con FilePond
-- carpeta temporal en `rincon_back/uploads/recursos/temp`
-- carpeta final por recurso dentro de `rincon_back/uploads/recursos/`
-- gestion de enlaces y archivos por separado en base de datos
 
 ## Frontend
 
@@ -107,26 +90,8 @@ El frontend esta organizado por:
 - `pages/`: vistas por rol
 - `services/`: acceso HTTP al backend
 
-### Componentes reutilizables importantes
 
-- `buscador`: buscador global de recursos con sugerencias
-- `recurso-item`: tarjeta comun de recurso
-- `recurso-detalle-compartido`: detalle comun de recurso
-- `recurso-formulario`: formulario de creacion y edicion de recursos
-- `recurso-listado-categoria-compartido`: listado compartido por categoria
-- `sidebar-profesor` y `sidebar-coordinador`
 
-### Paginas de coordinador añadidas o relevantes
-
-- `categorias/`
-- `lugares/`
-- `recurso-formulario/`
-- `recurso-listado/`
-- `recurso-listado-categoria/`
-- `convocatorias/`
-- `convocatorias-canceladas/`
-- `actas-inicio/`
-- `actas-historial/`
 
 ## Flujo de datos basico
 
