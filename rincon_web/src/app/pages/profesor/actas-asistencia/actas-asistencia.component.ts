@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -25,18 +25,16 @@ interface PuntoOrdenDia {
   templateUrl: './actas-asistencia.component.html',
   styleUrl: './actas-asistencia.component.css'
 })
-export class ActasAsistenciaComponent {
+export class ActasAsistenciaComponent implements OnInit {
   // Estados: 'previo' | 'en-progreso' | 'confirmado'
   public estado: 'previo' | 'en-progreso' | 'confirmado' = 'previo';
 
-  /**
-   * Mock de convocatoria (tabla convocatoria):
-   * - fecha: DATETIME
-   * - lugar: nombre del lugar (tabla lugar)
-   * - cursoAcademico: anioInicio/anioFin (tabla cursoAcademico)
-   * - idProfesorRedactaActa / idProfesorIniciaReunion: referencias a profesor
-   * No existe campo "titulo" en BD — se muestra como fecha + lugar
-   */
+  ngOnInit(): void {
+    const savedState = sessionStorage.getItem('asistencia_estado');
+    if (savedState) {
+      this.estado = savedState as any;
+    }
+  }
   public convocatoria = {
     idConvocatoria: 1,
     fecha: new Date('2026-05-23T10:00:00'),
@@ -49,11 +47,11 @@ export class ActasAsistenciaComponent {
 
   /** Mock de ordenDia: objetivo (NOT NULL) + descripcion (NULL) */
   public ordenDelDia: PuntoOrdenDia[] = [
-    { numOrden: 1, objetivo: 'Lectura y aprobación del acta anterior',       descripcion: null,                                              minutos: 10 },
-    { numOrden: 2, objetivo: 'Revisión de resultados de evaluación final',    descripcion: 'Análisis por módulos y grupos',                   minutos: 30 },
-    { numOrden: 3, objetivo: 'Coordinación de actividades de recuperación',   descripcion: null,                                              minutos: 20 },
-    { numOrden: 4, objetivo: 'Planificación del próximo curso académico',     descripcion: 'Calendario, programaciones y distribución horaria', minutos: 25 },
-    { numOrden: 5, objetivo: 'Ruegos y preguntas',                           descripcion: null,                                              minutos: null }
+    { numOrden: 1, objetivo: 'Lectura y aprobación del acta anterior', descripcion: null, minutos: 10 },
+    { numOrden: 2, objetivo: 'Revisión de resultados de evaluación final', descripcion: 'Análisis por módulos y grupos', minutos: 30 },
+    { numOrden: 3, objetivo: 'Coordinación de actividades de recuperación', descripcion: null, minutos: 20 },
+    { numOrden: 4, objetivo: 'Planificación del próximo curso académico', descripcion: 'Calendario, programaciones y distribución horaria', minutos: 25 },
+    { numOrden: 5, objetivo: 'Ruegos y preguntas', descripcion: null, minutos: null }
   ];
 
   /**
@@ -62,12 +60,12 @@ export class ActasAsistenciaComponent {
    * El campo `asiste` aquí determina qué filas se insertarán.
    */
   public participantes: Profesor[] = [
-    { idProfesor: 1, nombre: 'Ana García López',      asiste: true },
-    { idProfesor: 2, nombre: 'Carlos Martínez Ruiz',  asiste: true },
-    { idProfesor: 3, nombre: 'Laura Sánchez Pérez',   asiste: true },
-    { idProfesor: 4, nombre: 'Miguel Torres Herrero',  asiste: true },
-    { idProfesor: 5, nombre: 'Elena Rodríguez Vega',  asiste: true },
-    { idProfesor: 6, nombre: 'David Fernández Mora',  asiste: true },
+    { idProfesor: 1, nombre: 'Ana García López', asiste: true },
+    { idProfesor: 2, nombre: 'Carlos Martínez Ruiz', asiste: true },
+    { idProfesor: 3, nombre: 'Laura Sánchez Pérez', asiste: true },
+    { idProfesor: 4, nombre: 'Miguel Torres Herrero', asiste: true },
+    { idProfesor: 5, nombre: 'Elena Rodríguez Vega', asiste: true },
+    { idProfesor: 6, nombre: 'David Fernández Mora', asiste: true },
   ];
 
   get asistentes(): Profesor[] {
@@ -98,10 +96,12 @@ export class ActasAsistenciaComponent {
 
   confirmarAsistencia(): void {
     this.estado = 'confirmado';
+    sessionStorage.setItem('asistencia_estado', 'confirmado');
   }
 
   reiniciar(): void {
     this.estado = 'previo';
+    sessionStorage.removeItem('asistencia_estado');
     this.participantes.forEach(p => p.asiste = true);
   }
 }

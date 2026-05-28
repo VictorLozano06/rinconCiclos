@@ -29,6 +29,7 @@ export class ActasRedaccionComponent {
   // Si hay fila en `acta` para esta convocatoria → está cerrada (bloqueada)
   public estado: 'redactando' | 'bloqueada' = 'redactando';
   public mostrarModalFinalizar = false;
+  public errorMensaje = '';
 
   /**
    * Mock de acta (tabla acta):
@@ -110,6 +111,15 @@ export class ActasRedaccionComponent {
   }
 
   finalizarActa(): void {
+    this.errorMensaje = '';
+    const excede = this.puntosInformacion.find(p => p.informacion.length > 250);
+    const ruegoExcede = this.ruegosPreguntas.find(r => r.texto.length > 250);
+    if (excede || ruegoExcede) {
+      this.errorMensaje = 'Error: El texto supera el límite permitido de 250 caracteres';
+      this.mostrarModalFinalizar = false;
+      return;
+    }
+    
     // En BD: INSERT INTO acta (fecha, idConvocatoria) VALUES (NOW(), ?)
     this.acta.idActa = 1;
     this.acta.fecha = new Date();
