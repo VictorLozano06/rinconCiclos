@@ -6,9 +6,15 @@
   ],
   "scripts": {
     "back:start": "php -S 127.0.0.1:8000 -t rincon_back",
-    "back:start:detached": "powershell -NoProfile -Command \"Start-Process -FilePath php -ArgumentList '-S','127.0.0.1:8000','-t','rincon_back' -WorkingDirectory (Get-Location).Path\"",
+    "back:start:detached": "powershell -NoProfile -Command \"Start-Process -WindowStyle Hidden -FilePath php -ArgumentList '-S','127.0.0.1:8000','-t','rincon_back' -WorkingDirectory (Get-Location).Path\"",
+    "docs": "npm run docs:web && npm run docs:back",
+    "docs:web": "typedoc --options typedoc.json",
+    "docs:back": "composer --working-dir rincon_back run docs",
     "web:install": "npm install --prefix rincon_web",
     "web:start": "npm run back:start:detached && npm run start --prefix rincon_web",
     "web:build": "npm run build --prefix rincon_web"
+  },
+  "devDependencies": {
+    "typedoc": "^0.28.19"
   }
 }

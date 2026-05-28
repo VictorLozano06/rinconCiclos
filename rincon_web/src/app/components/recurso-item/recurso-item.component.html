@@ -1,16 +1,18 @@
-<div class="tarjeta-recurso">
-  <div class="info-recurso">
-    <div class="etiqueta-recurso">
-      <img src="assets/icons/tag.svg" alt="Etiqueta" class="icono-etiqueta">
-      <span>{{ categoria }} • {{ fechaPublicacion }}</span>
+<div class="recurso-item">
+  <div>
+    <div class="recurso-dato">{{ metaSuperior }}</div>
+    <h3 class="recurso-titulo">{{ nombre }}</h3>
+    <p class="recurso-texto">{{ descripcion }}</p>
+    <div *ngIf="curso || ciclosMostrados" class="recurso-dato">
+      <span *ngIf="curso">{{ curso }}</span>
+      <span *ngIf="curso && ciclosMostrados"> - </span>
+      <span *ngIf="ciclosMostrados">{{ ciclosMostrados }}</span>
     </div>
-    <h3 class="titulo-recurso">{{ nombre }}</h3>
-    <p class="descripcion-recurso">{{ descripcion }}</p>
   </div>
-  <div class="accion-recurso">
-    <a href="https://www.google.com" target="_blank" class="boton-ver">
-      <img src="assets/icons/arrow-circle.svg" alt="Ver" class="icono-accion">
-      Ver recurso
-    </a>
+
+  <div>
+    <a *ngIf="detalleRuta" [routerLink]="detalleRuta" class="recurso-enlace">Ver recurso</a>
+    <a *ngIf="!detalleRuta && enlace" [href]="enlace" target="_blank" rel="noopener noreferrer" class="recurso-enlace">Ver recurso</a>
+    <span *ngIf="!detalleRuta && !enlace" class="recurso-vacio">Sin vista disponible</span>
   </div>
 </div>

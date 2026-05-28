@@ -5,4 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
   readonly baseUrl = '/api/index.php';
+  readonly uploadsBaseUrl = '/mock/uploads';
 }

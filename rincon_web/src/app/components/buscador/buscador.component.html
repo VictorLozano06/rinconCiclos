@@ -1,11 +1,41 @@
 <div class="contenedor-buscador">
   <div class="contenido-buscador d-flex align-items-center">
-    <img src="assets/icons/search.svg" alt="Buscar" class="icono-buscador">
-    
-    <input 
-      type="text" 
-      class="entrada-buscador" 
-      placeholder="Buscar recursos, actas, convocatorias..." 
-      (input)="onSearch($event)">
+    <button
+      type="button"
+      class="boton-buscador"
+      aria-label="Buscar"
+      (click)="ejecutarPrimeraSugerencia()">
+      <img src="assets/icons/search.svg" alt="" class="icono-buscador">
+    </button>
+
+    <input
+      type="text"
+      class="entrada-buscador"
+      placeholder="Buscar recursos..."
+      [value]="terminoBusquedaActual"
+      (input)="alEscribir($event)"
+      (focus)="alEntrarEnElBuscador()"
+      (blur)="ocultarSugerencias()"
+      (keydown.enter)="ejecutarPrimeraSugerencia()">
+  </div>
+
+  <div *ngIf="mostrarSugerencias" class="caja-sugerencias">
+    <div *ngIf="buscando" class="estado-sugerencias">
+      Buscando...
+    </div>
+
+    <button
+      *ngFor="let sugerencia of sugerencias"
+      type="button"
+      class="item-sugerencia"
+      (mousedown)="irASugerencia(sugerencia)">
+      <div class="tipo-sugerencia">{{ sugerencia.tipo }}</div>
+      <div class="titulo-sugerencia">{{ sugerencia.titulo }}</div>
+      <div class="subtitulo-sugerencia">{{ sugerencia.subtitulo }}</div>
+    </button>
+
+    <div *ngIf="!buscando && sugerencias.length === 0" class="estado-sugerencias">
+      No se encontraron sugerencias.
+    </div>
   </div>
 </div>

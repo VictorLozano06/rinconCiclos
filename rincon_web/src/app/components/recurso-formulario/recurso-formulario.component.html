@@ -1,0 +1,116 @@
+<section class="formulario-recurso">
+  <div class="cabecera-formulario">
+    <h2 class="titulo-seccion">{{ titulo }}</h2>
+    <p class="texto-intro">{{ textoIntro }}</p>
+  </div>
+
+  <div *ngIf="erroresFormulario.length" class="errores-formulario">
+    <p class="errores-titulo">Revisa estos campos:</p>
+    <ul>
+      <li *ngFor="let error of erroresFormulario">{{ error }}</li>
+    </ul>
+  </div>
+
+  <div class="formulario-recurso">
+    <label class="campo-formulario">
+      <span>Titulo</span>
+      <input type="text" [(ngModel)]="formulario.nombre" maxlength="150" placeholder="Titulo del recurso">
+    </label>
+
+    <label class="campo-formulario">
+      <span>Subcategoria</span>
+      <select [(ngModel)]="formulario.idCategoria">
+        <option [ngValue]="null">Selecciona una subcategoria</option>
+        <option *ngFor="let categoria of categoriasFormulario" [ngValue]="categoria.idCategoria">{{ categoria.nombre }}</option>
+      </select>
+    </label>
+
+    <label class="campo-formulario campo-completo">
+      <span>Descripcion</span>
+      <textarea rows="4" [(ngModel)]="formulario.descripcion" placeholder="Describe el recurso"></textarea>
+    </label>
+
+    <label class="campo-formulario">
+      <span>Curso</span>
+      <select [(ngModel)]="formulario.cursoId">
+        <option [ngValue]="null">Selecciona un curso</option>
+        <option *ngFor="let curso of cursosFiltro" [ngValue]="curso.idCurso">
+          {{ curso.etiqueta }}
+        </option>
+      </select>
+    </label>
+
+    <label class="campo-formulario">
+      <span>Ciclos asociados</span>
+      <div class="linea-adjunto">
+        <select [ngModel]="nuevoCicloId" (ngModelChange)="actualizarNuevoCiclo($event)">
+          <option [ngValue]="null">Selecciona un ciclo</option>
+          <option *ngFor="let ciclo of ciclosFormulario" [ngValue]="ciclo.idCiclo">{{ ciclo.nombre }}</option>
+        </select>
+        <button type="button" class="boton-secundario" (click)="agregarCiclo.emit()">+</button>
+      </div>
+
+      <div *ngIf="formulario.ciclosSeleccionados.length" class="lista-adjuntos">
+        <div *ngFor="let idCiclo of formulario.ciclosSeleccionados; let i = index" class="adjunto-item">
+          <span>{{ obtenerNombreCiclo(idCiclo) }}</span>
+          <button type="button" class="adjunto-borrar" (click)="eliminarCiclo.emit(idCiclo)">Quitar</button>
+        </div>
+      </div>
+      <small class="ayuda-campo">Pulsa `+` para anadir ciclos al array del formulario.</small>
+    </label>
+
+    <div class="campo-formulario campo-completo">
+      <span>Enlaces</span>
+      <div class="linea-adjunto">
+        <input [ngModel]="nuevoNombreEnlace" (ngModelChange)="actualizarNuevoNombreEnlace($event)" type="text" placeholder="Nombre visible">
+        <input [ngModel]="nuevoEnlace" (ngModelChange)="actualizarNuevoEnlace($event)" type="text" placeholder="https://ejemplo.com/documento">
+        <button type="button" class="boton-secundario" (click)="agregarEnlace.emit()">Anadir</button>
+      </div>
+
+      <div *ngIf="formulario.enlaces.length" class="lista-adjuntos">
+        <div *ngFor="let enlace of formulario.enlaces; let i = index" class="adjunto-item adjunto-item-vertical">
+          <div class="adjunto-contenido">
+            <input class="entrada-adjunto" [(ngModel)]="enlace.nombre" type="text" placeholder="Nombre visible del enlace">
+            <span class="adjunto-valor">{{ enlace.valor }}</span>
+          </div>
+          <button type="button" class="adjunto-borrar" (click)="eliminarEnlace.emit(i)">Quitar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="campo-formulario campo-completo">
+      <span>Archivos</span>
+
+      <div class="filepond-bloque">
+        <div class="filepond-bloque-icono"><i class="bi bi-cloud-arrow-up"></i></div>
+        <p class="filepond-bloque-texto">Arrastra archivos aqui o pulsa para subirlos al servidor</p>
+        <p class="filepond-bloque-ayuda">
+          Maximo 10 archivos, 10 MB por archivo y 25 MB en total por recurso.
+        </p>
+        <file-pond
+          [options]="opcionesFilePond"
+          [files]="archivosFilePond"
+          (onprocessfile)="registrarArchivoSubidoTemporalmente($event)"
+          (onprocessfiles)="limpiarArchivosTemporalesDeFilePond()">
+        </file-pond>
+      </div>
+
+      <p class="ayuda-adjunto">Formatos permitidos: pdf, doc, docx, xls, xlsx, ppt, pptx.</p>
+
+      <div *ngIf="formulario.archivos.length" class="lista-adjuntos">
+        <div *ngFor="let archivo of formulario.archivos; let i = index" class="adjunto-item adjunto-item-vertical">
+          <div class="adjunto-contenido">
+            <input class="entrada-adjunto" [(ngModel)]="archivo.nombre" type="text" placeholder="Nombre visible del archivo">
+            <span class="adjunto-valor">{{ archivo.valor }}</span>
+          </div>
+          <button type="button" class="adjunto-borrar" (click)="eliminarArchivo.emit(i)">Quitar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acciones-formulario">
+    <button type="button" class="boton-secundario" (click)="cancelar.emit()">Cancelar</button>
+    <button type="button" class="boton-primario" (click)="guardar.emit()">{{ textoBotonGuardar }}</button>
+  </div>
+</section>

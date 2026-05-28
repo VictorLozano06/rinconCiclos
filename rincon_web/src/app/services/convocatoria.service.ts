@@ -1,75 +1,64 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
-
-export interface ProfesorOption {
-  idProfesor: number;
-  nombre: string;
-}
-
-export interface LugarOption {
-  idLugar: number;
-  nombre: string;
-}
-
-export interface CursoOption {
-  idCurso: number;
-  anioInicio: string;
-  anioFin: string;
-}
-
-export interface ConvocatoriaFormularioResponse {
-  cursos: CursoOption[];
-  lugares: LugarOption[];
-  profesores: ProfesorOption[];
-  cursoActualId: number | null;
-}
-
-export interface OrdenDiaPayload {
-  minutos: number | null;
-  ordenDia: string;
-  objetivo: string;
-  dinamizaId: number | null;
-  lugarId: number | null;
-  participaIds: number[];
-}
-
-export interface GuardarConvocatoriaPayload {
-  idConvocatoria?: number;
-  fechaHora: string;
-  lugarId: number | null;
-  redactaId: number | null;
-  iniciaId: number | null;
-  cursoId: number | null;
-  ordenDia: OrdenDiaPayload[];
-}
+import { Observable, throwError } from 'rxjs';
+import { ConvocatoriaDetalleDto } from '../dto/convocatoria-detalle.dto';
+import { ConvocatoriaFormularioResponseDto } from '../dto/convocatoria-formulario-response.dto';
+import { ConvocatoriaListaItemDto } from '../dto/convocatoria-lista-item.dto';
+import { GuardarConvocatoriaPayloadDto } from '../dto/guardar-convocatoria-payload.dto';
+import { MockBackendService } from './mock-backend.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConvocatoriaService {
-  constructor(
-    private http: HttpClient,
-    private apiService: ApiService
-  ) {}
+  constructor(private mockBackend: MockBackendService) {}
 
-  getFormulario(): Observable<ConvocatoriaFormularioResponse> {
-    return this.http.get<ConvocatoriaFormularioResponse>(`${this.apiService.baseUrl}?c=Convocatorias&m=formulario`);
+  getFormulario(): Observable<ConvocatoriaFormularioResponseDto> {
+    return this.mockBackend.getConvocatoriaFormulario();
   }
 
-  guardar(payload: GuardarConvocatoriaPayload): Observable<{ idConvocatoria: number; message: string }> {
-    return this.http.post<{ idConvocatoria: number; message: string }>(
-      `${this.apiService.baseUrl}?c=Convocatorias&m=guardar`,
-      payload
-    );
+  guardar(payload: GuardarConvocatoriaPayloadDto): Observable<{ idConvocatoria: number; message: string }> {
+    return this.mockBackend.guardarConvocatoria(payload);
   }
 
-  listarConvocatorias(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiService.baseUrl}?c=Convocatorias&m=listar`);
+  listarConvocatorias(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.mockBackend.listarConvocatoriasActivas();
   }
 
-  getConvocatoria(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiService.baseUrl}?c=Convocatorias&m=detalle&id=${id}`);
+  listarConvocatoriasProfesor(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.mockBackend.listarConvocatoriasProfesor();
+  }
+
+  listarConvocatoriasCoordinador(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.mockBackend.listarConvocatoriasCoordinador();
+  }
+
+  marcarComoPasada(idConvocatoria: number): Observable<{ message: string }> {
+    return this.mockBackend.marcarConvocatoriaComoPasada(idConvocatoria);
+  }
+
+  marcarTodasComoPasadas(): Observable<{ message: string; actualizadas: number }> {
+    return this.mockBackend.marcarTodasLasConvocatoriasActivasComoPasadas();
+  }
+
+  listarConvocatoriasHistoricas(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.mockBackend.listarConvocatoriasHistoricas();
+  }
+
+  listarConvocatoriasCanceladas(): Observable<ConvocatoriaListaItemDto[]> {
+    return this.mockBackend.listarConvocatoriasCanceladas();
+  }
+
+  getConvocatoria(id: number): Observable<ConvocatoriaDetalleDto> {
+    return this.mockBackend.getConvocatoria(id);
+  }
+
+  eliminar(_id: number): Observable<{ message: string }> {
+    return throwError(() => ({
+      error: { message: 'La eliminacion de convocatorias no esta disponible en esta fase.' }
+    }));
+  }
+
+  cancelarConvocatoria(id: number): Observable<{ message: string }> {
+    return this.mockBackend.cancelarConvocatoria(id);
   }
 }

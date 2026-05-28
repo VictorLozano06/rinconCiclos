@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CategoriaDto } from '../dto/categoria.dto';
 import { ApiService } from './api.service';
+import { MockBackendService } from './mock-backend.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +12,14 @@ import { ApiService } from './api.service';
 export class CategoriaService {
   constructor(
     private http: HttpClient,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private mockBackend: MockBackendService
   ) {}
 
+  // Carga el arbol de categorias que usan los sidebars y rutas dinamicas.
   getCategorias(): Observable<CategoriaDto[]> {
-    return this.http.get<CategoriaDto[]>(`${this.apiService.baseUrl}?c=Categorias&m=listar`);
+    return this.http
+      .get<CategoriaDto[]>(`${this.apiService.baseUrl}?c=Categorias&m=listar`)
+      .pipe(catchError(() => this.mockBackend.getCategorias()));
   }
 }

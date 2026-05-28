@@ -1,0 +1,540 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  RutaNavegacionItem</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Fichero</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/components/recurso-detalle-compartido/recurso-detalle-compartido.component.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Índice</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Propiedades</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#nombre" 
+>
+                                            nombre
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#ruta" 
+>
+                                            ruta
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Propiedades</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="nombre"></a>
+                                        <span class="name "><b>nombre</b>
+                                            <a href="#nombre">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>nombre:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="ruta"></a>
+                                        <span class="name "><b>ruta</b>
+                                            <a href="#ruta">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>ruta:     <code>string | any[] | null</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>    <code>string | any[] | null</code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { forkJoin } from &#x27;rxjs&#x27;;
+import { CategoriaService } from &#x27;../../services/categoria.service&#x27;;
+import { RecursoService } from &#x27;../../services/recurso.service&#x27;;
+import { CategoriaDto } from &#x27;../../dto/categoria.dto&#x27;;
+import { RecursoArchivoDto, RecursoDto, RecursoEnlaceDto } from &#x27;../../dto/recurso.dto&#x27;;
+
+interface RutaNavegacionItem {
+  nombre: string;
+  ruta: string | any[] | null;
+}
+
+@Component({
+  selector: &#x27;app-recurso-detalle-compartido&#x27;,
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: &#x27;./recurso-detalle-compartido.component.html&#x27;,
+  styleUrl: &#x27;./recurso-detalle-compartido.component.css&#x27;
+})
+export class RecursoDetalleCompartidoComponent implements OnInit {
+  // Ficha completa del recurso que se muestra en pantalla.
+  public recurso: RecursoDto | null &#x3D; null;
+  // Ruta jerarquica visible arriba del detalle: Inicio / Categoria / Recurso.
+  public rutaNavegacion: RutaNavegacionItem[] &#x3D; [];
+  public cargando &#x3D; true;
+  public errorCarga &#x3D; false;
+  public mensajeError &#x3D; &#x27;&#x27;;
+  public rutaBase &#x3D; &#x27;/profesor&#x27;;
+  public rutaInicio &#x3D; &#x27;/profesor/inicio&#x27;;
+
+  private idCategoria &#x3D; 0;
+  private numRecurso &#x3D; 0;
+
+  constructor(
+    private route: ActivatedRoute,
+    private categoriaService: CategoriaService,
+    private recursoService: RecursoService
+  ) {}
+
+  ngOnInit(): void {
+    // subscribe escucha cambios de la ruta. Si cambia el id del recurso, se recarga el detalle.
+    this.route.params.subscribe((params) &#x3D;&gt; {
+      this.idCategoria &#x3D; Number(params[&#x27;idCategoria&#x27;] || 0);
+      this.numRecurso &#x3D; Number(params[&#x27;numRecurso&#x27;] || 0);
+      // snapshot es una foto instantanea del estado actual de la ruta en este momento.
+      this.rutaBase &#x3D; this.route.snapshot.data[&#x27;rutaBase&#x27;] || &#x27;/profesor&#x27;;
+      this.rutaInicio &#x3D; this.route.snapshot.data[&#x27;rutaInicio&#x27;] || &#x27;/profesor/inicio&#x27;;
+      this.cargarDetalle();
+    });
+  }
+
+  // Trae categorias y detalle del recurso para construir la vista final.
+  cargarDetalle(): void {
+    this.cargando &#x3D; true;
+    this.errorCarga &#x3D; false;
+    this.mensajeError &#x3D; &#x27;&#x27;;
+    this.recurso &#x3D; null;
+    this.rutaNavegacion &#x3D; [];
+
+    if (!this.idCategoria || !this.numRecurso) {
+      this.errorCarga &#x3D; true;
+      this.cargando &#x3D; false;
+      return;
+    }
+
+    // forkJoin lanza varias peticiones en paralelo y espera a que todas terminen.
+    forkJoin({
+      categorias: this.categoriaService.getCategorias(),
+      recurso: this.recursoService.getDetalle(this.idCategoria, this.numRecurso)
+    }).subscribe({
+      next: ({ categorias, recurso }) &#x3D;&gt; {
+        this.recurso &#x3D; recurso;
+        this.rutaNavegacion &#x3D; this.construirRutaNavegacion(categorias, this.idCategoria, recurso.nombre);
+        this.cargando &#x3D; false;
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        this.mensajeError &#x3D; err?.error?.message || err?.error?.error || &#x27;No se ha podido cargar el recurso.&#x27;;
+        this.cargando &#x3D; false;
+        console.error(&#x27;Error al cargar el detalle del recurso:&#x27;, err);
+      }
+    });
+  }
+
+  // Devuelve los enlaces externos asociados al recurso.
+  obtenerEnlaces(): RecursoEnlaceDto[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    if (this.recurso.enlacesDetalle &amp;&amp; this.recurso.enlacesDetalle.length &gt; 0) {
+      return this.recurso.enlacesDetalle;
+    }
+
+    return (this.recurso.urls || []).map((url, index) &#x3D;&gt; ({
+      nombre: this.obtenerEtiquetaDesdeUrl(url, &#x60;Acceso ${index + 1}&#x60;),
+      url
+    }));
+  }
+
+  // Devuelve los archivos adjuntos asociados al recurso.
+  obtenerArchivos(): RecursoArchivoDto[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    if (this.recurso.archivosDetalle &amp;&amp; this.recurso.archivosDetalle.length &gt; 0) {
+      return this.recurso.archivosDetalle;
+    }
+
+    return (this.recurso.archivos || []).map((archivo, index) &#x3D;&gt; ({
+      nombre: &#x60;Adjunto ${index + 1}&#x60;,
+      archivo
+    }));
+  }
+
+  // Devuelve los ciclos asociados al recurso en formato visual.
+  obtenerCiclos(): string[] {
+    if (!this.recurso) {
+      return [];
+    }
+
+    return (this.recurso.ciclos || []).map((ciclo) &#x3D;&gt; ciclo.nombre);
+  }
+
+  get textoRutaNavegacion(): string {
+    return this.rutaNavegacion.map((item) &#x3D;&gt; item.nombre).join(&#x27; / &#x27;);
+  }
+
+  // Extrae el nombre legible de un archivo o ruta.
+  getNombreArchivo(archivo: string): string {
+    const limpio &#x3D; archivo.replace(/\\/g, &#x27;/&#x27;);
+    return limpio.split(&#x27;/&#x27;).pop() || archivo;
+  }
+
+  getNombreEnlace(enlace: RecursoEnlaceDto): string {
+    const nombre &#x3D; (enlace.nombre || &#x27;&#x27;).trim();
+    if (nombre) {
+      return nombre;
+    }
+
+    return this.obtenerEtiquetaDesdeUrl(enlace.url, &#x27;Acceso externo&#x27;);
+  }
+
+  getNombreArchivoAdjunto(archivo: RecursoArchivoDto): string {
+    const nombre &#x3D; (archivo.nombre || &#x27;&#x27;).trim();
+    return nombre || this.getNombreArchivo(archivo.archivo);
+  }
+
+  private obtenerEtiquetaDesdeUrl(url: string, fallback: string): string {
+    try {
+      const parsed &#x3D; new URL(url);
+      const host &#x3D; parsed.hostname.replace(/^www\./, &#x27;&#x27;);
+      const path &#x3D; parsed.pathname.replace(/\/+$/, &#x27;&#x27;);
+
+      if (host &amp;&amp; path &amp;&amp; path !&#x3D;&#x3D; &#x27;/&#x27;) {
+        return &#x60;${host}${path}&#x60;.slice(0, 80);
+      }
+
+      return host || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  // Construye la ruta superior visible a partir de la categoria real del recurso.
+  private construirRutaNavegacion(categorias: CategoriaDto[], idCategoria: number, nombreRecurso: string): RutaNavegacionItem[] {
+    const ruta &#x3D; this.buscarRutaCategoria(categorias, idCategoria);
+    const rutaNavegacion: RutaNavegacionItem[] &#x3D; [{ nombre: &#x27;Inicio&#x27;, ruta: this.rutaInicio }];
+
+    if (ruta.length &gt; 0) {
+      ruta.forEach((nombre, index) &#x3D;&gt; {
+        rutaNavegacion.push({
+          nombre,
+          ruta: index &#x3D;&#x3D;&#x3D; ruta.length - 1 ? null : this.rutaInicio
+        });
+      });
+    }
+
+    rutaNavegacion.push({ nombre: nombreRecurso, ruta: &#x27;&#x27; });
+    return rutaNavegacion;
+  }
+
+  // Localiza la ruta jerarquica de una categoria dentro del arbol.
+  private buscarRutaCategoria(categorias: CategoriaDto[], idCategoria: number): string[] {
+    for (const categoria of categorias) {
+      if (categoria.idCategoria &#x3D;&#x3D;&#x3D; idCategoria) {
+        return [categoria.nombre];
+      }
+
+      if (categoria.subcategorias &amp;&amp; categoria.subcategorias.length &gt; 0) {
+        const encontrada &#x3D; this.buscarRutaCategoria(categoria.subcategorias, idCategoria);
+        if (encontrada.length &gt; 0) {
+          return [categoria.nombre, ...encontrada];
+        }
+      }
+    }
+
+    return [];
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'RutaNavegacionItem.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

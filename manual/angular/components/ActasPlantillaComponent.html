@@ -1,0 +1,1475 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  ActasPlantillaComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-actas-plantilla</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./actas-plantilla.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./actas-plantilla.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#bloquesDisponibles" >bloquesDisponibles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#confirmarMensaje" >confirmarMensaje</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#descripcionNueva" >descripcionNueva</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalConfirmar" >mostrarModalConfirmar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalEditar" >mostrarModalEditar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalNueva" >mostrarModalNueva</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#nextId" >nextId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nombreNueva" >nombreNueva</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#plantillaAEliminar" >plantillaAEliminar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#plantillaEditando" >plantillaEditando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#plantillas" >plantillas</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#abrirEditar" >abrirEditar</a>
+                            </li>
+                            <li>
+                                <a href="#abrirModalNueva" >abrirModalNueva</a>
+                            </li>
+                            <li>
+                                <a href="#cancelarConfirmacion" >cancelarConfirmacion</a>
+                            </li>
+                            <li>
+                                <a href="#confirmarAccion" >confirmarAccion</a>
+                            </li>
+                            <li>
+                                <a href="#confirmarEliminar" >confirmarEliminar</a>
+                            </li>
+                            <li>
+                                <a href="#guardarEdicion" >guardarEdicion</a>
+                            </li>
+                            <li>
+                                <a href="#guardarNueva" >guardarNueva</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#bloquesSeleccionados" >bloquesSeleccionados</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="abrirEditar"></a>
+                    <span class="name">
+                        <span ><b>abrirEditar</b></span>
+                        <a href="#abrirEditar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>abrirEditar(plantilla: <a href="../interfaces/Plantilla.html" target="_self">Plantilla</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="89"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>plantilla</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Plantilla.html" target="_self" >Plantilla</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="abrirModalNueva"></a>
+                    <span class="name">
+                        <span ><b>abrirModalNueva</b></span>
+                        <a href="#abrirModalNueva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>abrirModalNueva()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="70"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:70</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancelarConfirmacion"></a>
+                    <span class="name">
+                        <span ><b>cancelarConfirmacion</b></span>
+                        <a href="#cancelarConfirmacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancelarConfirmacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="122"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:122</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmarAccion"></a>
+                    <span class="name">
+                        <span ><b>confirmarAccion</b></span>
+                        <a href="#confirmarAccion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>confirmarAccion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="114"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:114</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmarEliminar"></a>
+                    <span class="name">
+                        <span ><b>confirmarEliminar</b></span>
+                        <a href="#confirmarEliminar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>confirmarEliminar(plantilla: <a href="../interfaces/Plantilla.html" target="_self">Plantilla</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="108"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>plantilla</td>
+                                            <td>
+                                                            <code><a href="../interfaces/Plantilla.html" target="_self" >Plantilla</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarEdicion"></a>
+                    <span class="name">
+                        <span ><b>guardarEdicion</b></span>
+                        <a href="#guardarEdicion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarEdicion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="99"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarNueva"></a>
+                    <span class="name">
+                        <span ><b>guardarNueva</b></span>
+                        <a href="#guardarNueva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarNueva()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="77"
+                                    class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bloquesDisponibles"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>bloquesDisponibles</b></span>
+                        <a href="#bloquesDisponibles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>BloquePlantilla[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    { id: &#x27;apertura&#x27;, etiqueta: &#x27;Apertura y bienvenida&#x27;, seleccionado: false },
+    { id: &#x27;asistencia&#x27;, etiqueta: &#x27;Control de asistencia&#x27;, seleccionado: false },
+    { id: &#x27;lectura&#x27;, etiqueta: &#x27;Lectura del acta anterior&#x27;, seleccionado: false },
+    { id: &#x27;puntos&#x27;, etiqueta: &#x27;Puntos del orden del día&#x27;, seleccionado: false },
+    { id: &#x27;acuerdos&#x27;, etiqueta: &#x27;Acuerdos y compromisos&#x27;, seleccionado: false },
+    { id: &#x27;ruegos&#x27;, etiqueta: &#x27;Ruegos y preguntas&#x27;, seleccionado: false },
+    { id: &#x27;cierre&#x27;, etiqueta: &#x27;Cierre de sesión&#x27;, seleccionado: false }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="37" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmarMensaje"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>confirmarMensaje</b></span>
+                        <a href="#confirmarMensaje"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="30" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="descripcionNueva"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>descripcionNueva</b></span>
+                        <a href="#descripcionNueva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="35" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalConfirmar"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalConfirmar</b></span>
+                        <a href="#mostrarModalConfirmar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="29" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalEditar"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalEditar</b></span>
+                        <a href="#mostrarModalEditar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="28" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalNueva"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalNueva</b></span>
+                        <a href="#mostrarModalNueva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="27" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nextId"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>nextId</b></span>
+                        <a href="#nextId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>3</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="64" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nombreNueva"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nombreNueva</b></span>
+                        <a href="#nombreNueva"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="34" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="plantillaAEliminar"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>plantillaAEliminar</b></span>
+                        <a href="#plantillaAEliminar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/Plantilla.html" target="_self" >Plantilla | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="31" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="plantillaEditando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>plantillaEditando</b></span>
+                        <a href="#plantillaEditando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/Plantilla.html" target="_self" >Plantilla | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="32" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="plantillas"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>plantillas</b></span>
+                        <a href="#plantillas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/Plantilla.html" target="_self" >Plantilla[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    {
+      id: 1,
+      nombre: &#x27;Plantilla Reunión de Equipo&#x27;,
+      descripcion: &#x27;Estructura estándar para reuniones de coordinación de equipo docente.&#x27;,
+      bloques: [&#x27;Control de asistencia&#x27;, &#x27;Lectura del acta anterior&#x27;, &#x27;Puntos del orden del día&#x27;, &#x27;Acuerdos y compromisos&#x27;, &#x27;Ruegos y preguntas&#x27;],
+      fechaCreacion: &#x27;10/01/2026&#x27;
+    },
+    {
+      id: 2,
+      nombre: &#x27;Plantilla Evaluaciones&#x27;,
+      descripcion: &#x27;Formato específico para las sesiones de evaluación trimestral.&#x27;,
+      bloques: [&#x27;Control de asistencia&#x27;, &#x27;Puntos del orden del día&#x27;, &#x27;Acuerdos y compromisos&#x27;, &#x27;Cierre de sesión&#x27;],
+      fechaCreacion: &#x27;15/03/2026&#x27;
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="47" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="bloquesSeleccionados"></a>
+                        <span class="name"><b>bloquesSeleccionados</b><a href="#bloquesSeleccionados"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>bloquesSeleccionados()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="66" class="link-to-prism">src/app/pages/coordinador/actas-plantilla/actas-plantilla.component.ts:66</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+
+interface BloquePlantilla {
+  id: string;
+  etiqueta: string;
+  seleccionado: boolean;
+}
+
+interface Plantilla {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  bloques: string[];
+  fechaCreacion: string;
+}
+
+@Component({
+  selector: &#x27;app-actas-plantilla&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: &#x27;./actas-plantilla.component.html&#x27;,
+  styleUrl: &#x27;./actas-plantilla.component.css&#x27;
+})
+export class ActasPlantillaComponent {
+  public mostrarModalNueva &#x3D; false;
+  public mostrarModalEditar &#x3D; false;
+  public mostrarModalConfirmar &#x3D; false;
+  public confirmarMensaje &#x3D; &#x27;&#x27;;
+  public plantillaAEliminar: Plantilla | null &#x3D; null;
+  public plantillaEditando: Plantilla | null &#x3D; null;
+
+  public nombreNueva &#x3D; &#x27;&#x27;;
+  public descripcionNueva &#x3D; &#x27;&#x27;;
+
+  public bloquesDisponibles: BloquePlantilla[] &#x3D; [
+    { id: &#x27;apertura&#x27;, etiqueta: &#x27;Apertura y bienvenida&#x27;, seleccionado: false },
+    { id: &#x27;asistencia&#x27;, etiqueta: &#x27;Control de asistencia&#x27;, seleccionado: false },
+    { id: &#x27;lectura&#x27;, etiqueta: &#x27;Lectura del acta anterior&#x27;, seleccionado: false },
+    { id: &#x27;puntos&#x27;, etiqueta: &#x27;Puntos del orden del día&#x27;, seleccionado: false },
+    { id: &#x27;acuerdos&#x27;, etiqueta: &#x27;Acuerdos y compromisos&#x27;, seleccionado: false },
+    { id: &#x27;ruegos&#x27;, etiqueta: &#x27;Ruegos y preguntas&#x27;, seleccionado: false },
+    { id: &#x27;cierre&#x27;, etiqueta: &#x27;Cierre de sesión&#x27;, seleccionado: false }
+  ];
+
+  public plantillas: Plantilla[] &#x3D; [
+    {
+      id: 1,
+      nombre: &#x27;Plantilla Reunión de Equipo&#x27;,
+      descripcion: &#x27;Estructura estándar para reuniones de coordinación de equipo docente.&#x27;,
+      bloques: [&#x27;Control de asistencia&#x27;, &#x27;Lectura del acta anterior&#x27;, &#x27;Puntos del orden del día&#x27;, &#x27;Acuerdos y compromisos&#x27;, &#x27;Ruegos y preguntas&#x27;],
+      fechaCreacion: &#x27;10/01/2026&#x27;
+    },
+    {
+      id: 2,
+      nombre: &#x27;Plantilla Evaluaciones&#x27;,
+      descripcion: &#x27;Formato específico para las sesiones de evaluación trimestral.&#x27;,
+      bloques: [&#x27;Control de asistencia&#x27;, &#x27;Puntos del orden del día&#x27;, &#x27;Acuerdos y compromisos&#x27;, &#x27;Cierre de sesión&#x27;],
+      fechaCreacion: &#x27;15/03/2026&#x27;
+    }
+  ];
+
+  private nextId &#x3D; 3;
+
+  get bloquesSeleccionados(): string[] {
+    return this.bloquesDisponibles.filter(b &#x3D;&gt; b.seleccionado).map(b &#x3D;&gt; b.etiqueta);
+  }
+
+  abrirModalNueva(): void {
+    this.nombreNueva &#x3D; &#x27;&#x27;;
+    this.descripcionNueva &#x3D; &#x27;&#x27;;
+    this.bloquesDisponibles.forEach(b &#x3D;&gt; b.seleccionado &#x3D; false);
+    this.mostrarModalNueva &#x3D; true;
+  }
+
+  guardarNueva(): void {
+    if (!this.nombreNueva.trim() || this.bloquesSeleccionados.length &#x3D;&#x3D;&#x3D; 0) return;
+    this.plantillas.push({
+      id: this.nextId++,
+      nombre: this.nombreNueva.trim(),
+      descripcion: this.descripcionNueva.trim(),
+      bloques: [...this.bloquesSeleccionados],
+      fechaCreacion: new Date().toLocaleDateString(&#x27;es-ES&#x27;)
+    });
+    this.mostrarModalNueva &#x3D; false;
+  }
+
+  abrirEditar(plantilla: Plantilla): void {
+    this.plantillaEditando &#x3D; plantilla;
+    this.nombreNueva &#x3D; plantilla.nombre;
+    this.descripcionNueva &#x3D; plantilla.descripcion;
+    this.bloquesDisponibles.forEach(b &#x3D;&gt; {
+      b.seleccionado &#x3D; plantilla.bloques.includes(b.etiqueta);
+    });
+    this.mostrarModalEditar &#x3D; true;
+  }
+
+  guardarEdicion(): void {
+    if (!this.plantillaEditando || !this.nombreNueva.trim()) return;
+    this.plantillaEditando.nombre &#x3D; this.nombreNueva.trim();
+    this.plantillaEditando.descripcion &#x3D; this.descripcionNueva.trim();
+    this.plantillaEditando.bloques &#x3D; [...this.bloquesSeleccionados];
+    this.mostrarModalEditar &#x3D; false;
+    this.plantillaEditando &#x3D; null;
+  }
+
+  confirmarEliminar(plantilla: Plantilla): void {
+    this.plantillaAEliminar &#x3D; plantilla;
+    this.confirmarMensaje &#x3D; &#x60;¿Eliminar la plantilla &quot;${plantilla.nombre}&quot;? Esta acción no se puede deshacer.&#x60;;
+    this.mostrarModalConfirmar &#x3D; true;
+  }
+
+  confirmarAccion(): void {
+    if (this.plantillaAEliminar) {
+      this.plantillas &#x3D; this.plantillas.filter(p &#x3D;&gt; p.id !&#x3D;&#x3D; this.plantillaAEliminar!.id);
+      this.plantillaAEliminar &#x3D; null;
+    }
+    this.mostrarModalConfirmar &#x3D; false;
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarModalConfirmar &#x3D; false;
+    this.plantillaAEliminar &#x3D; null;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;header-container d-flex justify-content-between align-items-start mb-4&quot;&gt;
+  &lt;div&gt;
+    &lt;h2 class&#x3D;&quot;fw-bold text-dark m-0&quot;&gt;Plantillas de Acta&lt;/h2&gt;
+    &lt;p class&#x3D;&quot;text-secondary small&quot;&gt;Configura las estructuras base para la redacción de actas.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;button class&#x3D;&quot;btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nueva&quot;
+    (click)&#x3D;&quot;abrirModalNueva()&quot;&gt;
+    + NUEVA PLANTILLA
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Lista de plantillas --&gt;
+&lt;div class&#x3D;&quot;plantillas-list&quot;&gt;
+  &lt;div *ngFor&#x3D;&quot;let plantilla of plantillas&quot; class&#x3D;&quot;card border-0 shadow-sm rounded-3 mb-3&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body p-4&quot;&gt;
+      &lt;div class&#x3D;&quot;d-flex align-items-start justify-content-between&quot;&gt;
+        &lt;div class&#x3D;&quot;flex-grow-1&quot;&gt;
+          &lt;div class&#x3D;&quot;d-flex align-items-center gap-2 mb-1&quot;&gt;
+            &lt;div class&#x3D;&quot;icono-plantilla d-flex align-items-center justify-content-center rounded-2&quot;&gt;
+              &lt;i class&#x3D;&quot;bi bi-file-earmark-ruled-fill text-white&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;h6 class&#x3D;&quot;fw-bold text-dark m-0&quot;&gt;{{ plantilla.nombre }}&lt;/h6&gt;
+          &lt;/div&gt;
+          &lt;p *ngIf&#x3D;&quot;plantilla.descripcion&quot; class&#x3D;&quot;text-secondary small mb-2 ps-1&quot;&gt;{{ plantilla.descripcion }}&lt;/p&gt;
+
+          &lt;!-- Bloques como chips --&gt;
+          &lt;div class&#x3D;&quot;d-flex flex-wrap gap-2 mt-2&quot;&gt;
+            &lt;span *ngFor&#x3D;&quot;let bloque of plantilla.bloques&quot; class&#x3D;&quot;chip-bloque&quot;&gt;{{ bloque }}&lt;/span&gt;
+          &lt;/div&gt;
+          &lt;p class&#x3D;&quot;text-secondary x-small mt-2 mb-0&quot;&gt;
+            &lt;i class&#x3D;&quot;bi bi-calendar3 me-1&quot;&gt;&lt;/i&gt;Creada el {{ plantilla.fechaCreacion }}
+          &lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;d-flex gap-2 ms-3 flex-shrink-0&quot;&gt;
+          &lt;button class&#x3D;&quot;btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3 action-btn&quot;
+            (click)&#x3D;&quot;abrirEditar(plantilla)&quot;&gt;
+            &lt;i class&#x3D;&quot;bi bi-pencil-fill small&quot;&gt;&lt;/i&gt;
+            &lt;span class&#x3D;&quot;text-uppercase small fw-bold&quot;&gt;editar&lt;/span&gt;
+          &lt;/button&gt;
+          &lt;button class&#x3D;&quot;btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 action-btn delete-btn&quot;
+            (click)&#x3D;&quot;confirmarEliminar(plantilla)&quot;&gt;
+            &lt;i class&#x3D;&quot;bi bi-trash-fill small&quot;&gt;&lt;/i&gt;
+            &lt;span class&#x3D;&quot;text-uppercase small fw-bold&quot;&gt;eliminar&lt;/span&gt;
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Estado vacío --&gt;
+  &lt;div *ngIf&#x3D;&quot;plantillas.length &#x3D;&#x3D;&#x3D; 0&quot; class&#x3D;&quot;card border-0 shadow-sm rounded-3 p-5 text-center&quot;&gt;
+    &lt;i class&#x3D;&quot;bi bi-file-earmark-ruled text-muted fs-1 mb-3&quot;&gt;&lt;/i&gt;
+    &lt;h5 class&#x3D;&quot;text-secondary&quot;&gt;No hay plantillas creadas&lt;/h5&gt;
+    &lt;p class&#x3D;&quot;text-muted small&quot;&gt;Crea una plantilla para automatizar el formato de las actas.&lt;/p&gt;
+    &lt;button class&#x3D;&quot;btn btn-dark fw-bold text-uppercase px-4 mx-auto&quot; (click)&#x3D;&quot;abrirModalNueva()&quot;&gt;
+      + Nueva Plantilla
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; MODAL: NUEVA PLANTILLA &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalNueva&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot;&gt;
+    &lt;h5 class&#x3D;&quot;text-white fw-bold mb-4&quot;&gt;NUEVA PLANTILLA DE ACTA&lt;/h5&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Nombre de la plantilla&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot;
+        placeholder&#x3D;&quot;ej: Plantilla Reunión de Equipo&quot; [(ngModel)]&#x3D;&quot;nombreNueva&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Descripción (opcional)&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot;
+        placeholder&#x3D;&quot;Breve descripción del uso de esta plantilla&quot; [(ngModel)]&#x3D;&quot;descripcionNueva&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-3 d-block label-spacing&quot;&gt;
+        Bloques del orden del día
+      &lt;/label&gt;
+      &lt;div class&#x3D;&quot;bloques-grid&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let bloque of bloquesDisponibles&quot; class&#x3D;&quot;bloque-item&quot;&gt;
+          &lt;label class&#x3D;&quot;bloque-label&quot; [class.bloque-activo]&#x3D;&quot;bloque.seleccionado&quot;&gt;
+            &lt;input type&#x3D;&quot;checkbox&quot; [(ngModel)]&#x3D;&quot;bloque.seleccionado&quot; class&#x3D;&quot;visually-hidden&quot;&gt;
+            &lt;i class&#x3D;&quot;bi me-2&quot; [class.bi-check-square-fill]&#x3D;&quot;bloque.seleccionado&quot; [class.bi-square]&#x3D;&quot;!bloque.seleccionado&quot;&gt;&lt;/i&gt;
+            {{ bloque.etiqueta }}
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalNueva &#x3D; false&quot;&gt;CANCELAR&lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot;
+        (click)&#x3D;&quot;guardarNueva()&quot;
+        [disabled]&#x3D;&quot;!nombreNueva.trim() || bloquesSeleccionados.length &#x3D;&#x3D;&#x3D; 0&quot;&gt;
+        GUARDAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; MODAL: EDITAR PLANTILLA &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalEditar&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot;&gt;
+    &lt;h5 class&#x3D;&quot;text-white fw-bold mb-4&quot;&gt;EDITAR PLANTILLA&lt;/h5&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Nombre de la plantilla&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; [(ngModel)]&#x3D;&quot;nombreNueva&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Descripción (opcional)&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; [(ngModel)]&#x3D;&quot;descripcionNueva&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-3 d-block label-spacing&quot;&gt;Bloques del orden del día&lt;/label&gt;
+      &lt;div class&#x3D;&quot;bloques-grid&quot;&gt;
+        &lt;div *ngFor&#x3D;&quot;let bloque of bloquesDisponibles&quot; class&#x3D;&quot;bloque-item&quot;&gt;
+          &lt;label class&#x3D;&quot;bloque-label&quot; [class.bloque-activo]&#x3D;&quot;bloque.seleccionado&quot;&gt;
+            &lt;input type&#x3D;&quot;checkbox&quot; [(ngModel)]&#x3D;&quot;bloque.seleccionado&quot; class&#x3D;&quot;visually-hidden&quot;&gt;
+            &lt;i class&#x3D;&quot;bi me-2&quot; [class.bi-check-square-fill]&#x3D;&quot;bloque.seleccionado&quot; [class.bi-square]&#x3D;&quot;!bloque.seleccionado&quot;&gt;&lt;/i&gt;
+            {{ bloque.etiqueta }}
+          &lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalEditar &#x3D; false&quot;&gt;CANCELAR&lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot;
+        (click)&#x3D;&quot;guardarEdicion()&quot;&gt;
+        GUARDAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; MODAL: CONFIRMAR ELIMINACIÓN &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalConfirmar&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot; style&#x3D;&quot;max-width: 420px;&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-center gap-3 mb-3&quot;&gt;
+      &lt;div class&#x3D;&quot;rounded-circle d-flex align-items-center justify-content-center&quot;
+        style&#x3D;&quot;width:42px;height:42px;background:rgba(220,53,69,0.15);flex-shrink:0;&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-trash-fill text-danger&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;h5 class&#x3D;&quot;text-white fw-bold m-0&quot;&gt;Confirmar eliminación&lt;/h5&gt;
+    &lt;/div&gt;
+    &lt;p class&#x3D;&quot;text-secondary mb-5&quot; style&#x3D;&quot;font-size: 0.93rem;&quot;&gt;{{ confirmarMensaje }}&lt;/p&gt;
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;cancelarConfirmacion()&quot;&gt;CANCELAR&lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-danger fw-bold text-uppercase px-4&quot; (click)&#x3D;&quot;confirmarAccion()&quot;&gt;ELIMINAR&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="header-container d-flex justify-content-between align-items-start mb-4">  <div>    <h2 class="fw-bold text-dark m-0">Plantillas de Acta</h2>    <p class="text-secondary small">Configura las estructuras base para la redacción de actas.</p>  </div>  <button class="btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nueva"    (click)="abrirModalNueva()">    + NUEVA PLANTILLA  </button></div><!-- Lista de plantillas --><div class="plantillas-list">  <div *ngFor="let plantilla of plantillas" class="card border-0 shadow-sm rounded-3 mb-3">    <div class="card-body p-4">      <div class="d-flex align-items-start justify-content-between">        <div class="flex-grow-1">          <div class="d-flex align-items-center gap-2 mb-1">            <div class="icono-plantilla d-flex align-items-center justify-content-center rounded-2">              <i class="bi bi-file-earmark-ruled-fill text-white"></i>            </div>            <h6 class="fw-bold text-dark m-0">{{ plantilla.nombre }}</h6>          </div>          <p *ngIf="plantilla.descripcion" class="text-secondary small mb-2 ps-1">{{ plantilla.descripcion }}</p>          <!-- Bloques como chips -->          <div class="d-flex flex-wrap gap-2 mt-2">            <span *ngFor="let bloque of plantilla.bloques" class="chip-bloque">{{ bloque }}</span>          </div>          <p class="text-secondary x-small mt-2 mb-0">            <i class="bi bi-calendar3 me-1"></i>Creada el {{ plantilla.fechaCreacion }}          </p>        </div>        <div class="d-flex gap-2 ms-3 flex-shrink-0">          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3 action-btn"            (click)="abrirEditar(plantilla)">            <i class="bi bi-pencil-fill small"></i>            <span class="text-uppercase small fw-bold">editar</span>          </button>          <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 action-btn delete-btn"            (click)="confirmarEliminar(plantilla)">            <i class="bi bi-trash-fill small"></i>            <span class="text-uppercase small fw-bold">eliminar</span>          </button>        </div>      </div>    </div>  </div>  <!-- Estado vacío -->  <div *ngIf="plantillas.length === 0" class="card border-0 shadow-sm rounded-3 p-5 text-center">    <i class="bi bi-file-earmark-ruled text-muted fs-1 mb-3"></i>    <h5 class="text-secondary">No hay plantillas creadas</h5>    <p class="text-muted small">Crea una plantilla para automatizar el formato de las actas.</p>    <button class="btn btn-dark fw-bold text-uppercase px-4 mx-auto" (click)="abrirModalNueva()">      + Nueva Plantilla    </button>  </div></div><!-- ======= MODAL: NUEVA PLANTILLA ======= --><div *ngIf="mostrarModalNueva" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4">    <h5 class="text-white fw-bold mb-4">NUEVA PLANTILLA DE ACTA</h5>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre de la plantilla</label>      <input type="text" class="form-control custom-input py-2"        placeholder="ej: Plantilla Reunión de Equipo" [(ngModel)]="nombreNueva">    </div>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Descripción (opcional)</label>      <input type="text" class="form-control custom-input py-2"        placeholder="Breve descripción del uso de esta plantilla" [(ngModel)]="descripcionNueva">    </div>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-3 d-block label-spacing">        Bloques del orden del día      </label>      <div class="bloques-grid">        <div *ngFor="let bloque of bloquesDisponibles" class="bloque-item">          <label class="bloque-label" [class.bloque-activo]="bloque.seleccionado">            <input type="checkbox" [(ngModel)]="bloque.seleccionado" class="visually-hidden">            <i class="bi me-2" [class.bi-check-square-fill]="bloque.seleccionado" [class.bi-square]="!bloque.seleccionado"></i>            {{ bloque.etiqueta }}          </label>        </div>      </div>    </div>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalNueva = false">CANCELAR</button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save"        (click)="guardarNueva()"        [disabled]="!nombreNueva.trim() || bloquesSeleccionados.length === 0">        GUARDAR      </button>    </div>  </div></div><!-- ======= MODAL: EDITAR PLANTILLA ======= --><div *ngIf="mostrarModalEditar" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4">    <h5 class="text-white fw-bold mb-4">EDITAR PLANTILLA</h5>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre de la plantilla</label>      <input type="text" class="form-control custom-input py-2" [(ngModel)]="nombreNueva">    </div>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Descripción (opcional)</label>      <input type="text" class="form-control custom-input py-2" [(ngModel)]="descripcionNueva">    </div>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-3 d-block label-spacing">Bloques del orden del día</label>      <div class="bloques-grid">        <div *ngFor="let bloque of bloquesDisponibles" class="bloque-item">          <label class="bloque-label" [class.bloque-activo]="bloque.seleccionado">            <input type="checkbox" [(ngModel)]="bloque.seleccionado" class="visually-hidden">            <i class="bi me-2" [class.bi-check-square-fill]="bloque.seleccionado" [class.bi-square]="!bloque.seleccionado"></i>            {{ bloque.etiqueta }}          </label>        </div>      </div>    </div>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalEditar = false">CANCELAR</button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save"        (click)="guardarEdicion()">        GUARDAR      </button>    </div>  </div></div><!-- ======= MODAL: CONFIRMAR ELIMINACIÓN ======= --><div *ngIf="mostrarModalConfirmar" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4" style="max-width: 420px;">    <div class="d-flex align-items-center gap-3 mb-3">      <div class="rounded-circle d-flex align-items-center justify-content-center"        style="width:42px;height:42px;background:rgba(220,53,69,0.15);flex-shrink:0;">        <i class="bi bi-trash-fill text-danger"></i>      </div>      <h5 class="text-white fw-bold m-0">Confirmar eliminación</h5>    </div>    <p class="text-secondary mb-5" style="font-size: 0.93rem;">{{ confirmarMensaje }}</p>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="cancelarConfirmacion()">CANCELAR</button>      <button class="btn btn-danger fw-bold text-uppercase px-4" (click)="confirmarAccion()">ELIMINAR</button>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ActasPlantillaComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ActasPlantillaComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

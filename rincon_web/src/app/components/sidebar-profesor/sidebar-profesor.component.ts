@@ -1,8 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
+
+interface CategoriaSidebar extends CategoriaDto {
+  icono: string;
+  ruta: string;
+  abierto: boolean;
+  subcategorias: CategoriaSidebar[];
+  deshabilitado: boolean;
+}
 
 @Component({
   selector: 'app-sidebar-profesor',
@@ -12,7 +20,10 @@ import { CategoriaDto } from '../../dto/categoria.dto';
   styleUrl: './sidebar-profesor.component.css'
 })
 export class SidebarProfesorComponent implements OnInit {
-  public categorias: any[] = [];
+  @Input() mobileOpen = false;
+  @Output() requestClose = new EventEmitter<void>();
+
+  public categorias: CategoriaSidebar[] = [];
 
   constructor(private categoriaService: CategoriaService) {}
 
@@ -20,71 +31,90 @@ export class SidebarProfesorComponent implements OnInit {
     this.obtenerCategorias();
   }
 
+  // Carga las categorias reales de la BD y solo les añade lo visual del sidebar.
   obtenerCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
-      next: (data: CategoriaDto[]) => {
-        // Carga directa de los datos dinamicos de la base de datos
-        this.categorias = this.mapCategorias(data, '/profesor');
+      next: (datos: CategoriaDto[]) => {
+        this.categorias = [
+          {
+            idCategoria: 0,
+            nombre: 'Inicio',
+            predeterminada: true,
+            idCategoriaPadre: 0,
+            icono: 'home',
+            ruta: '/profesor/inicio',
+            abierto: false,
+            subcategorias: [],
+            deshabilitado: false
+          },
+          ...this.mapCategorias(datos, '/profesor')
+        ];
       },
       error: (err) => {
-        console.error('Error de conexion con el servidor backend PHP:', err);
+        console.error('Error al cargar las categorias del sidebar:', err);
       }
     });
   }
 
-  /*Mapear rutas de forma dinamica con lo que venga de la bd*/
-
-  private mapCategorias(cats: CategoriaDto[], prefix: string, parentRuta: string = ''): any[] {
-    /*Iconos solo para las predeterminadas*/
-    const iconMap: { [key: string]: string } = {
-      'Inicio': 'home',
+  // Convierte el arbol de categorias en items navegables.
+  private mapCategorias(categorias: CategoriaDto[], prefijo: string, rutaPadre = ''): CategoriaSidebar[] {
+    const iconosPorNombre: Record<string, string> = {
       'Reuniones de Equipo': 'reuniones',
-      'Tutorías': 'tutorias',
+      'Tutorias': 'tutorias',
       'Evaluaciones': 'evaluaciones',
       'Otros': 'otros'
     };
 
-    const disabledSubs = ['Actas', 'BOCC', 'Calendario de reuniones'];
+    const deshabilitadas = ['BOCC', 'Calendario de reuniones'];
 
-    return cats.map(cat => {
-      const nombre = cat.nombre;
-      
-      // Generación automática de slug URL amigable 
-      const slug = nombre.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // elimina acentos
-        .replace(/º/g, "") // los elimina los simbolos º
-        .replace(/ª/g, "") // los elimina los simbolos ª
-        .replace(/\s+/g, '-') // convierte espacios en guiones
-        .replace(/[^a-z0-9-]/g, ''); // elimina caracteres no deseados
+    return categorias.map((categoria) => {
+      const nombreNormalizado = this.normalizarTexto(categoria.nombre);
+      const slug = this.crearSlug(categoria.nombre);
+      const ruta = rutaPadre ? `${rutaPadre}/${slug}` : `${prefijo}/${slug}`;
+      const subcategorias = categoria.subcategorias ? this.mapCategorias(categoria.subcategorias, prefijo, ruta) : [];
 
-      // Construcción de la ruta
-      let ruta = '';
-      if (nombre === 'Inicio') {
-        ruta = `${prefix}/inicio`;
-      } else if (parentRuta) {
-        ruta = `${parentRuta}/${slug}`;
-      } else {
-        ruta = `${prefix}/${slug}`;
-      }
-
-      const subcategorias = cat.subcategorias ? this.mapCategorias(cat.subcategorias, prefix, ruta) : [];
-      const deshabilitado = disabledSubs.includes(nombre);
-      
       return {
-        nombre: nombre,
-        icono: iconMap[nombre] || 'categoria-generica',
-        ruta: ruta,
-        abierto: subcategorias.length > 0, // abierto por defecto si tiene hijos
-        subcategorias: subcategorias,
-        deshabilitado: deshabilitado
+        ...categoria,
+        icono: categoria.predeterminada ? (iconosPorNombre[nombreNormalizado] || 'categoria-generica') : 'categoria-generica',
+        ruta,
+        abierto: subcategorias.length > 0,
+        subcategorias,
+        deshabilitado: deshabilitadas.includes(categoria.nombre)
       };
     });
   }
 
-  toggleMenu(cat: any): void {
-    if (cat.subcategorias.length > 0) {
-      cat.abierto = !cat.abierto;
+  toggleMenu(categoria: CategoriaSidebar): void {
+    if (categoria.subcategorias.length > 0) {
+      categoria.abierto = !categoria.abierto;
     }
+  }
+
+  cerrarSidebar(): void {
+    this.requestClose.emit();
+  }
+
+  activarCategoria(categoria: CategoriaSidebar): void {
+    this.toggleMenu(categoria);
+
+    if (categoria.subcategorias.length === 0) {
+      this.cerrarSidebar();
+    }
+  }
+
+  // Sirve para comparar nombres aunque vengan con o sin tilde.
+  private normalizarTexto(valor: string): string {
+    return valor
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // Convierte el nombre visible en una ruta tipo /tutorias/pat.
+  private crearSlug(valor: string): string {
+    return this.normalizarTexto(valor)
+      .toLowerCase()
+      .replace(/[ºª]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '');
   }
 }

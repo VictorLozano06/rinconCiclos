@@ -1,0 +1,3226 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  RecursoFormularioPaginaComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implementa</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-recurso-formulario-pagina</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="../components/RecursoFormularioMockComponent.html" target="_self" >RecursoFormularioMockComponent</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./recurso-formulario-pagina.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./recurso-formulario-pagina.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cargando" >cargando</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#categoriasBase" >categoriasBase</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ciclosFormulario" >ciclosFormulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cursosFiltro" >cursosFiltro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorCarga" >errorCarga</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#erroresFormulario" >erroresFormulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#formulario" >formulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#modoFormulario" >modoFormulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoArchivo" >nuevoArchivo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoCicloId" >nuevoCicloId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoEnlace" >nuevoEnlace</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoNombreArchivo" >nuevoNombreArchivo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoNombreEnlace" >nuevoNombreEnlace</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#recursoOriginal" >recursoOriginal</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#actualizarNuevoArchivo" >actualizarNuevoArchivo</a>
+                            </li>
+                            <li>
+                                <a href="#actualizarNuevoEnlace" >actualizarNuevoEnlace</a>
+                            </li>
+                            <li>
+                                <a href="#actualizarNuevoNombreArchivo" >actualizarNuevoNombreArchivo</a>
+                            </li>
+                            <li>
+                                <a href="#actualizarNuevoNombreEnlace" >actualizarNuevoNombreEnlace</a>
+                            </li>
+                            <li>
+                                <a href="#agregarArchivoMock" >agregarArchivoMock</a>
+                            </li>
+                            <li>
+                                <a href="#agregarCicloMock" >agregarCicloMock</a>
+                            </li>
+                            <li>
+                                <a href="#agregarEnlaceMock" >agregarEnlaceMock</a>
+                            </li>
+                            <li>
+                                <a href="#cancelar" >cancelar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#cargarContextoFormulario" >cargarContextoFormulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#cargarRecursosBase" >cargarRecursosBase</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#construirCiclosFormulario" >construirCiclosFormulario</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#construirCursosFiltro" >construirCursosFiltro</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#crearFormularioVacio" >crearFormularioVacio</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarArchivoMock" >eliminarArchivoMock</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarCicloMock" >eliminarCicloMock</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarEnlaceMock" >eliminarEnlaceMock</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#esArchivoValido" >esArchivoValido</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#esUrlValida" >esUrlValida</a>
+                            </li>
+                            <li>
+                                <a href="#guardarMock" >guardarMock</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#obtenerArchivosRecurso" >obtenerArchivosRecurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#obtenerEnlacesRecurso" >obtenerEnlacesRecurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#obtenerNombreCategoria" >obtenerNombreCategoria</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#obtenerSiguienteCicloDisponible" >obtenerSiguienteCicloDisponible</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#prepararFormularioCreacion" >prepararFormularioCreacion</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#prepararFormularioDesdeRecursos" >prepararFormularioDesdeRecursos</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#recorrerCategorias" >recorrerCategorias</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#validarFormularioMock" >validarFormularioMock</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accesorios</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#categoriasFormulario" >categoriasFormulario</a>
+                                </li>
+                                <li>
+                                    <a href="#tituloFormulario" >tituloFormulario</a>
+                                </li>
+                                <li>
+                                    <a href="#textoIntroFormulario" >textoIntroFormulario</a>
+                                </li>
+                                <li>
+                                    <a href="#textoBotonGuardar" >textoBotonGuardar</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(route: <a href="https://angular.io/api/router/ActivatedRoute" target="_blank">ActivatedRoute</a>, router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, recursoService: <a href="../injectables/RecursoService.html" target="_self">RecursoService</a>, categoriaService: <a href="../injectables/CategoriaService.html" target="_self">CategoriaService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="55" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:55</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parámetros :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Nombre</td>
+                                                    <td>Tipo</td>
+                                                <td>Opcional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/ActivatedRoute" target="_blank" >ActivatedRoute</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>recursoService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/RecursoService.html" target="_self" >RecursoService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>categoriaService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CategoriaService.html" target="_self" >CategoriaService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actualizarNuevoArchivo"></a>
+                    <span class="name">
+                        <span ><b>actualizarNuevoArchivo</b></span>
+                        <a href="#actualizarNuevoArchivo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>actualizarNuevoArchivo(valor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="102"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:102</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actualizarNuevoEnlace"></a>
+                    <span class="name">
+                        <span ><b>actualizarNuevoEnlace</b></span>
+                        <a href="#actualizarNuevoEnlace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>actualizarNuevoEnlace(valor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="94"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actualizarNuevoNombreArchivo"></a>
+                    <span class="name">
+                        <span ><b>actualizarNuevoNombreArchivo</b></span>
+                        <a href="#actualizarNuevoNombreArchivo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>actualizarNuevoNombreArchivo(valor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="106"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:106</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="actualizarNuevoNombreEnlace"></a>
+                    <span class="name">
+                        <span ><b>actualizarNuevoNombreEnlace</b></span>
+                        <a href="#actualizarNuevoNombreEnlace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>actualizarNuevoNombreEnlace(valor: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="98"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>valor</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="agregarArchivoMock"></a>
+                    <span class="name">
+                        <span ><b>agregarArchivoMock</b></span>
+                        <a href="#agregarArchivoMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>agregarArchivoMock()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="146"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:146</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="agregarCicloMock"></a>
+                    <span class="name">
+                        <span ><b>agregarCicloMock</b></span>
+                        <a href="#agregarCicloMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>agregarCicloMock()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="110"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:110</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="agregarEnlaceMock"></a>
+                    <span class="name">
+                        <span ><b>agregarEnlaceMock</b></span>
+                        <a href="#agregarEnlaceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>agregarEnlaceMock()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="129"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:129</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancelar"></a>
+                    <span class="name">
+                        <span ><b>cancelar</b></span>
+                        <a href="#cancelar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancelar()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="163"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:163</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarContextoFormulario"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cargarContextoFormulario</b></span>
+                        <a href="#cargarContextoFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>cargarContextoFormulario()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="190"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:190</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargarRecursosBase"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>cargarRecursosBase</b></span>
+                        <a href="#cargarRecursosBase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>cargarRecursosBase()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="207"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:207</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="construirCiclosFormulario"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>construirCiclosFormulario</b></span>
+                        <a href="#construirCiclosFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>construirCiclosFormulario(recursos: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="311"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:311</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recursos</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>CicloFormulario[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="construirCursosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>construirCursosFiltro</b></span>
+                        <a href="#construirCursosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>construirCursosFiltro(recursos: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="298"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:298</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recursos</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>CursoFiltro[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="crearFormularioVacio"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>crearFormularioVacio</b></span>
+                        <a href="#crearFormularioVacio"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>crearFormularioVacio()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="276"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:276</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="../interfaces/RecursoFormularioMock.html" target="_self" >RecursoFormularioMock</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarArchivoMock"></a>
+                    <span class="name">
+                        <span ><b>eliminarArchivoMock</b></span>
+                        <a href="#eliminarArchivoMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarArchivoMock(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="159"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:159</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarCicloMock"></a>
+                    <span class="name">
+                        <span ><b>eliminarCicloMock</b></span>
+                        <a href="#eliminarCicloMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarCicloMock(idCiclo: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="122"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:122</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>idCiclo</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarEnlaceMock"></a>
+                    <span class="name">
+                        <span ><b>eliminarEnlaceMock</b></span>
+                        <a href="#eliminarEnlaceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarEnlaceMock(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="142"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:142</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>index</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="esArchivoValido"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>esArchivoValido</b></span>
+                        <a href="#esArchivoValido"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>esArchivoValido(archivo: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="419"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:419</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>archivo</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="esUrlValida"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>esUrlValida</b></span>
+                        <a href="#esUrlValida"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>esUrlValida(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="423"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:423</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>url</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarMock"></a>
+                    <span class="name">
+                        <span ><b>guardarMock</b></span>
+                        <a href="#guardarMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarMock()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="167"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:167</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="64"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:64</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerArchivosRecurso"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>obtenerArchivosRecurso</b></span>
+                        <a href="#obtenerArchivosRecurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>obtenerArchivosRecurso(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="349"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:349</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>AdjuntoFormulario[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerEnlacesRecurso"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>obtenerEnlacesRecurso</b></span>
+                        <a href="#obtenerEnlacesRecurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>obtenerEnlacesRecurso(recurso: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="337"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:337</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recurso</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>AdjuntoFormulario[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerNombreCategoria"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>obtenerNombreCategoria</b></span>
+                        <a href="#obtenerNombreCategoria"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>obtenerNombreCategoria(idCategoria: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="333"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:333</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>idCategoria</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="obtenerSiguienteCicloDisponible"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>obtenerSiguienteCicloDisponible</b></span>
+                        <a href="#obtenerSiguienteCicloDisponible"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>obtenerSiguienteCicloDisponible()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="325"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:325</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>number | null</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="prepararFormularioCreacion"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>prepararFormularioCreacion</b></span>
+                        <a href="#prepararFormularioCreacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>prepararFormularioCreacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="261"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:261</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="prepararFormularioDesdeRecursos"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>prepararFormularioDesdeRecursos</b></span>
+                        <a href="#prepararFormularioDesdeRecursos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>prepararFormularioDesdeRecursos(recursos: <a href="../interfaces/RecursoDto.html" target="_self">RecursoDto[]</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="220"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:220</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>recursos</td>
+                                            <td>
+                                                            <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recorrerCategorias"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>recorrerCategorias</b></span>
+                        <a href="#recorrerCategorias"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>recorrerCategorias(categorias: <a href="../interfaces/CategoriaDto.html" target="_self">CategoriaDto[]</a>, mapa: Map<number | string>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="288"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:288</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>categorias</td>
+                                            <td>
+                                                            <code><a href="../interfaces/CategoriaDto.html" target="_self" >CategoriaDto[]</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>mapa</td>
+                                            <td>
+                                                        <code>Map&lt;number | string&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validarFormularioMock"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>validarFormularioMock</b></span>
+                        <a href="#validarFormularioMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>validarFormularioMock()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="361"
+                                    class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:361</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>    <code>string[]</code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cargando"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cargando</b></span>
+                        <a href="#cargando"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>true</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="46" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="categoriasBase"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>categoriasBase</b></span>
+                        <a href="#categoriasBase"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/CategoriaDto.html" target="_self" >CategoriaDto[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="43" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ciclosFormulario"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ciclosFormulario</b></span>
+                        <a href="#ciclosFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>CicloFormulario[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="45" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:45</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cursosFiltro"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cursosFiltro</b></span>
+                        <a href="#cursosFiltro"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>CursoFiltro[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="44" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorCarga"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>errorCarga</b></span>
+                        <a href="#errorCarga"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="47" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="erroresFormulario"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>erroresFormulario</b></span>
+                        <a href="#erroresFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>string[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="48" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="formulario"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>formulario</b></span>
+                        <a href="#formulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/RecursoFormularioMock.html" target="_self" >RecursoFormularioMock</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>this.crearFormularioVacio()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="49" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:49</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="modoFormulario"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>modoFormulario</b></span>
+                        <a href="#modoFormulario"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>&quot;crear&quot; | &quot;editar&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;crear&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="42" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoArchivo"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoArchivo</b></span>
+                        <a href="#nuevoArchivo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="54" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:54</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoCicloId"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoCicloId</b></span>
+                        <a href="#nuevoCicloId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>number | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="50" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoEnlace"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoEnlace</b></span>
+                        <a href="#nuevoEnlace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="52" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoNombreArchivo"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoNombreArchivo</b></span>
+                        <a href="#nuevoNombreArchivo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="53" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoNombreEnlace"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoNombreEnlace</b></span>
+                        <a href="#nuevoNombreEnlace"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="51" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="recursoOriginal"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>recursoOriginal</b></span>
+                        <a href="#recursoOriginal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="../interfaces/RecursoDto.html" target="_self" >RecursoDto | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="55" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:55</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accesorios
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="categoriasFormulario"></a>
+                        <span class="name"><b>categoriasFormulario</b><a href="#categoriasFormulario"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>categoriasFormulario()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="71" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:71</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="tituloFormulario"></a>
+                        <span class="name"><b>tituloFormulario</b><a href="#tituloFormulario"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>tituloFormulario()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="80" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:80</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="textoIntroFormulario"></a>
+                        <span class="name"><b>textoIntroFormulario</b><a href="#textoIntroFormulario"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>textoIntroFormulario()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="84" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:84</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="textoBotonGuardar"></a>
+                        <span class="name"><b>textoBotonGuardar</b><a href="#textoBotonGuardar"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>textoBotonGuardar()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Definido en <a href="" data-line="90" class="link-to-prism">src/app/pages/coordinador/recurso-formulario-pagina/recurso-formulario-pagina.component.ts:90</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { RecursoFormularioMockComponent } from &#x27;../../../components/recurso-formulario-mock/recurso-formulario-mock.component&#x27;;
+import { CategoriaDto } from &#x27;../../../dto/categoria.dto&#x27;;
+import { CicloRecursoDto } from &#x27;../../../dto/ciclo-recurso.dto&#x27;;
+import { RecursoDto } from &#x27;../../../dto/recurso.dto&#x27;;
+import { CategoriaService } from &#x27;../../../services/categoria.service&#x27;;
+import { RecursoService } from &#x27;../../../services/recurso.service&#x27;;
+
+interface CursoFiltro {
+  idCurso: number | &#x27;Todos&#x27;;
+  etiqueta: string;
+}
+
+type CategoriaFormulario &#x3D; Pick&lt;CategoriaDto, &#x27;idCategoria&#x27; | &#x27;nombre&#x27;&gt;;
+type CicloFormulario &#x3D; CicloRecursoDto;
+
+interface AdjuntoFormulario {
+  nombre: string;
+  valor: string;
+}
+
+interface RecursoFormularioMock {
+  idCategoria: number | null;
+  nombre: string;
+  descripcion: string;
+  cursoId: number | null;
+  ciclosSeleccionados: number[];
+  enlaces: AdjuntoFormulario[];
+  archivos: AdjuntoFormulario[];
+}
+
+@Component({
+  selector: &#x27;app-recurso-formulario-pagina&#x27;,
+  standalone: true,
+  imports: [CommonModule, RecursoFormularioMockComponent],
+  templateUrl: &#x27;./recurso-formulario-pagina.component.html&#x27;,
+  styleUrl: &#x27;./recurso-formulario-pagina.component.css&#x27;
+})
+export class RecursoFormularioPaginaComponent implements OnInit {
+  public modoFormulario: &#x27;crear&#x27; | &#x27;editar&#x27; &#x3D; &#x27;crear&#x27;;
+  public categoriasBase: CategoriaDto[] &#x3D; [];
+  public cursosFiltro: CursoFiltro[] &#x3D; [];
+  public ciclosFormulario: CicloFormulario[] &#x3D; [];
+  public cargando &#x3D; true;
+  public errorCarga &#x3D; false;
+  public erroresFormulario: string[] &#x3D; [];
+  public formulario: RecursoFormularioMock &#x3D; this.crearFormularioVacio();
+  public nuevoCicloId: number | null &#x3D; null;
+  public nuevoNombreEnlace &#x3D; &#x27;&#x27;;
+  public nuevoEnlace &#x3D; &#x27;&#x27;;
+  public nuevoNombreArchivo &#x3D; &#x27;&#x27;;
+  public nuevoArchivo &#x3D; &#x27;&#x27;;
+  private recursoOriginal: RecursoDto | null &#x3D; null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private recursoService: RecursoService,
+    private categoriaService: CategoriaService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.data.subscribe((data) &#x3D;&gt; {
+      this.modoFormulario &#x3D; data[&#x27;modoFormulario&#x27;] &#x3D;&#x3D;&#x3D; &#x27;editar&#x27; ? &#x27;editar&#x27; : &#x27;crear&#x27;;
+      this.cargarContextoFormulario();
+    });
+  }
+
+  get categoriasFormulario(): CategoriaFormulario[] {
+    const mapa &#x3D; new Map&lt;number, string&gt;();
+    this.recorrerCategorias(this.categoriasBase, mapa);
+
+    return Array.from(mapa.entries())
+      .map(([idCategoria, nombre]) &#x3D;&gt; ({ idCategoria, nombre }))
+      .sort((a, b) &#x3D;&gt; a.nombre.localeCompare(b.nombre));
+  }
+
+  get tituloFormulario(): string {
+    return this.modoFormulario &#x3D;&#x3D;&#x3D; &#x27;crear&#x27; ? &#x27;Crear recurso&#x27; : &#x27;Editar recurso&#x27;;
+  }
+
+  get textoIntroFormulario(): string {
+    return this.modoFormulario &#x3D;&#x3D;&#x3D; &#x27;crear&#x27;
+      ? &#x27;Formulario mock de alta para coordinacion. No guarda nada en backend.&#x27;
+      : &#x27;Formulario mock de edicion para coordinacion. Carga el recurso real, pero no guarda cambios.&#x27;;
+  }
+
+  get textoBotonGuardar(): string {
+    return this.modoFormulario &#x3D;&#x3D;&#x3D; &#x27;crear&#x27; ? &#x27;Guardar&#x27; : &#x27;Actualizar&#x27;;
+  }
+
+  actualizarNuevoEnlace(valor: string): void {
+    this.nuevoEnlace &#x3D; valor;
+  }
+
+  actualizarNuevoNombreEnlace(valor: string): void {
+    this.nuevoNombreEnlace &#x3D; valor;
+  }
+
+  actualizarNuevoArchivo(valor: string): void {
+    this.nuevoArchivo &#x3D; valor;
+  }
+
+  actualizarNuevoNombreArchivo(valor: string): void {
+    this.nuevoNombreArchivo &#x3D; valor;
+  }
+
+  agregarCicloMock(): void {
+    if (this.nuevoCicloId &#x3D;&#x3D;&#x3D; null) {
+      return;
+    }
+
+    if (!this.formulario.ciclosSeleccionados.includes(this.nuevoCicloId)) {
+      this.formulario.ciclosSeleccionados &#x3D; [...this.formulario.ciclosSeleccionados, this.nuevoCicloId].sort((a, b) &#x3D;&gt; a - b);
+    }
+
+    this.nuevoCicloId &#x3D; this.obtenerSiguienteCicloDisponible();
+  }
+
+  eliminarCicloMock(idCiclo: number): void {
+    this.formulario.ciclosSeleccionados &#x3D; this.formulario.ciclosSeleccionados.filter((ciclo) &#x3D;&gt; ciclo !&#x3D;&#x3D; idCiclo);
+    if (this.nuevoCicloId &#x3D;&#x3D;&#x3D; idCiclo) {
+      this.nuevoCicloId &#x3D; this.obtenerSiguienteCicloDisponible();
+    }
+  }
+
+  agregarEnlaceMock(): void {
+    const nombre &#x3D; this.nuevoNombreEnlace.trim();
+    const enlace &#x3D; this.nuevoEnlace.trim();
+
+    if (!nombre || !enlace) {
+      return;
+    }
+
+    this.formulario.enlaces &#x3D; [...this.formulario.enlaces, { nombre, valor: enlace }];
+    this.nuevoNombreEnlace &#x3D; &#x27;&#x27;;
+    this.nuevoEnlace &#x3D; &#x27;&#x27;;
+  }
+
+  eliminarEnlaceMock(index: number): void {
+    this.formulario.enlaces &#x3D; this.formulario.enlaces.filter((_, i) &#x3D;&gt; i !&#x3D;&#x3D; index);
+  }
+
+  agregarArchivoMock(): void {
+    const nombre &#x3D; this.nuevoNombreArchivo.trim();
+    const archivo &#x3D; this.nuevoArchivo.trim();
+
+    if (!nombre || !archivo) {
+      return;
+    }
+
+    this.formulario.archivos &#x3D; [...this.formulario.archivos, { nombre, valor: archivo }];
+    this.nuevoNombreArchivo &#x3D; &#x27;&#x27;;
+    this.nuevoArchivo &#x3D; &#x27;&#x27;;
+  }
+
+  eliminarArchivoMock(index: number): void {
+    this.formulario.archivos &#x3D; this.formulario.archivos.filter((_, i) &#x3D;&gt; i !&#x3D;&#x3D; index);
+  }
+
+  cancelar(): void {
+    this.router.navigate([&#x27;/coordinador/recursos&#x27;]);
+  }
+
+  guardarMock(): void {
+    this.erroresFormulario &#x3D; this.validarFormularioMock();
+
+    if (this.erroresFormulario.length &gt; 0) {
+      return;
+    }
+
+    if (this.modoFormulario &#x3D;&#x3D;&#x3D; &#x27;crear&#x27;) {
+      this.router.navigate([&#x27;/coordinador/recursos&#x27;], {
+        state: { feedbackMock: &#x27;Mock de creacion completado. No se ha creado ningun recurso real.&#x27; }
+      });
+      return;
+    }
+
+    if (!this.recursoOriginal) {
+      return;
+    }
+
+    this.router.navigate([&#x27;/coordinador/recursos&#x27;], {
+      state: { feedbackMock: &#x60;Mock de edicion completado para &quot;${this.recursoOriginal.nombre}&quot;. No se ha guardado nada.&#x60; }
+    });
+  }
+
+  private cargarContextoFormulario(): void {
+    this.cargando &#x3D; true;
+    this.errorCarga &#x3D; false;
+
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) &#x3D;&gt; {
+        this.categoriasBase &#x3D; categorias;
+        this.cargarRecursosBase();
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        this.cargando &#x3D; false;
+        console.error(&#x27;Error al cargar categorias para el formulario de recursos:&#x27;, err);
+      }
+    });
+  }
+
+  private cargarRecursosBase(): void {
+    this.recursoService.getTodos().subscribe({
+      next: (recursos) &#x3D;&gt; {
+        this.prepararFormularioDesdeRecursos(recursos);
+      },
+      error: (err) &#x3D;&gt; {
+        this.errorCarga &#x3D; true;
+        this.cargando &#x3D; false;
+        console.error(&#x27;Error al cargar recursos para el formulario de coordinador:&#x27;, err);
+      }
+    });
+  }
+
+  private prepararFormularioDesdeRecursos(recursos: RecursoDto[]): void {
+    this.cursosFiltro &#x3D; this.construirCursosFiltro(recursos);
+    this.ciclosFormulario &#x3D; this.construirCiclosFormulario(recursos);
+
+    if (this.modoFormulario &#x3D;&#x3D;&#x3D; &#x27;crear&#x27;) {
+      this.prepararFormularioCreacion();
+      this.cargando &#x3D; false;
+      return;
+    }
+
+    const idCategoria &#x3D; Number(this.route.snapshot.paramMap.get(&#x27;idCategoria&#x27;));
+    const numRecurso &#x3D; Number(this.route.snapshot.paramMap.get(&#x27;numRecurso&#x27;));
+    const recurso &#x3D; recursos.find(
+      (item) &#x3D;&gt; item.idCategoria &#x3D;&#x3D;&#x3D; idCategoria &amp;&amp; item.numRecurso &#x3D;&#x3D;&#x3D; numRecurso
+    ) || null;
+
+    if (!recurso) {
+      this.errorCarga &#x3D; true;
+      this.cargando &#x3D; false;
+      return;
+    }
+
+    this.recursoOriginal &#x3D; recurso;
+    this.formulario &#x3D; {
+      idCategoria: recurso.idCategoria,
+      nombre: recurso.nombre,
+      descripcion: recurso.descripcion,
+      cursoId: recurso.idCurso,
+      ciclosSeleccionados: (recurso.ciclos || []).map((ciclo) &#x3D;&gt; ciclo.idCiclo),
+      enlaces: this.obtenerEnlacesRecurso(recurso),
+      archivos: this.obtenerArchivosRecurso(recurso)
+    };
+    this.nuevoArchivo &#x3D; &#x27;&#x27;;
+    this.nuevoNombreArchivo &#x3D; &#x27;&#x27;;
+    this.nuevoEnlace &#x3D; &#x27;&#x27;;
+    this.nuevoNombreEnlace &#x3D; &#x27;&#x27;;
+    this.nuevoCicloId &#x3D; this.obtenerSiguienteCicloDisponible();
+    this.erroresFormulario &#x3D; [];
+    this.cargando &#x3D; false;
+  }
+
+  private prepararFormularioCreacion(): void {
+    const primerCurso &#x3D; this.cursosFiltro.find((curso) &#x3D;&gt; curso.idCurso !&#x3D;&#x3D; &#x27;Todos&#x27;);
+
+    this.recursoOriginal &#x3D; null;
+    this.formulario &#x3D; this.crearFormularioVacio();
+    this.formulario.idCategoria &#x3D; this.categoriasFormulario[0]?.idCategoria ?? null;
+    this.formulario.cursoId &#x3D; typeof primerCurso?.idCurso &#x3D;&#x3D;&#x3D; &#x27;number&#x27; ? primerCurso.idCurso : null;
+    this.nuevoArchivo &#x3D; &#x27;&#x27;;
+    this.nuevoNombreArchivo &#x3D; &#x27;&#x27;;
+    this.nuevoEnlace &#x3D; &#x27;&#x27;;
+    this.nuevoNombreEnlace &#x3D; &#x27;&#x27;;
+    this.nuevoCicloId &#x3D; this.obtenerSiguienteCicloDisponible();
+    this.erroresFormulario &#x3D; [];
+  }
+
+  private crearFormularioVacio(): RecursoFormularioMock {
+    return {
+      idCategoria: null,
+      nombre: &#x27;&#x27;,
+      descripcion: &#x27;&#x27;,
+      cursoId: null,
+      ciclosSeleccionados: [],
+      enlaces: [],
+      archivos: []
+    };
+  }
+
+  private recorrerCategorias(categorias: CategoriaDto[], mapa: Map&lt;number, string&gt;): void {
+    for (const categoria of categorias) {
+      mapa.set(categoria.idCategoria, categoria.nombre);
+
+      if (categoria.subcategorias &amp;&amp; categoria.subcategorias.length &gt; 0) {
+        this.recorrerCategorias(categoria.subcategorias, mapa);
+      }
+    }
+  }
+
+  private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {
+    const cursos &#x3D; new Map&lt;number, string&gt;();
+
+    for (const recurso of recursos) {
+      cursos.set(recurso.idCurso, &#x60;${recurso.anioInicio}/${recurso.anioFin}&#x60;);
+    }
+
+    return [
+      { idCurso: &#x27;Todos&#x27;, etiqueta: &#x27;Todos&#x27; },
+      ...Array.from(cursos.entries()).map(([idCurso, etiqueta]) &#x3D;&gt; ({ idCurso, etiqueta }))
+    ];
+  }
+
+  private construirCiclosFormulario(recursos: RecursoDto[]): CicloFormulario[] {
+    const ciclos &#x3D; new Map&lt;number, string&gt;();
+
+    for (const recurso of recursos) {
+      for (const ciclo of recurso.ciclos || []) {
+        ciclos.set(ciclo.idCiclo, ciclo.nombre);
+      }
+    }
+
+    return Array.from(ciclos.entries())
+      .map(([idCiclo, nombre]) &#x3D;&gt; ({ idCiclo, nombre }))
+      .sort((a, b) &#x3D;&gt; a.nombre.localeCompare(b.nombre));
+  }
+
+  private obtenerSiguienteCicloDisponible(): number | null {
+    const cicloLibre &#x3D; this.ciclosFormulario.find(
+      (ciclo) &#x3D;&gt; !this.formulario.ciclosSeleccionados.includes(ciclo.idCiclo)
+    );
+
+    return cicloLibre?.idCiclo ?? null;
+  }
+
+  private obtenerNombreCategoria(idCategoria: number): string {
+    return this.categoriasFormulario.find((categoria) &#x3D;&gt; categoria.idCategoria &#x3D;&#x3D;&#x3D; idCategoria)?.nombre || &#x27;Sin categoria&#x27;;
+  }
+
+  private obtenerEnlacesRecurso(recurso: RecursoDto): AdjuntoFormulario[] {
+    const enlacesDetalle &#x3D; recurso.enlacesDetalle || [];
+    if (enlacesDetalle.length &gt; 0) {
+      return enlacesDetalle.map((enlace) &#x3D;&gt; ({ nombre: enlace.nombre, valor: enlace.url }));
+    }
+
+    return (recurso.urls || []).map((url, index) &#x3D;&gt; ({
+      nombre: &#x60;Acceso ${index + 1}&#x60;,
+      valor: url
+    }));
+  }
+
+  private obtenerArchivosRecurso(recurso: RecursoDto): AdjuntoFormulario[] {
+    const archivosDetalle &#x3D; recurso.archivosDetalle || [];
+    if (archivosDetalle.length &gt; 0) {
+      return archivosDetalle.map((archivo) &#x3D;&gt; ({ nombre: archivo.nombre, valor: archivo.archivo }));
+    }
+
+    return (recurso.archivos || []).map((archivo, index) &#x3D;&gt; ({
+      nombre: &#x60;Adjunto ${index + 1}&#x60;,
+      valor: archivo
+    }));
+  }
+
+  private validarFormularioMock(): string[] {
+    const errores: string[] &#x3D; [];
+    const nombre &#x3D; this.formulario.nombre.trim();
+    const descripcion &#x3D; this.formulario.descripcion.trim();
+
+    if (!nombre) {
+      errores.push(&#x27;El titulo es obligatorio.&#x27;);
+    } else if (nombre.length &gt; 150) {
+      errores.push(&#x27;El titulo no puede superar los 150 caracteres.&#x27;);
+    }
+
+    if (!descripcion) {
+      errores.push(&#x27;La descripcion es obligatoria.&#x27;);
+    }
+
+    if (!this.formulario.idCategoria) {
+      errores.push(&#x27;Debes seleccionar una subcategoria.&#x27;);
+    }
+
+    if (!this.formulario.cursoId) {
+      errores.push(&#x27;Debes seleccionar un curso.&#x27;);
+    }
+
+    if (this.formulario.enlaces.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; this.formulario.archivos.length &#x3D;&#x3D;&#x3D; 0) {
+      errores.push(&#x27;Debes anadir al menos un archivo o un enlace.&#x27;);
+    }
+
+    if (this.formulario.archivos.length &gt; 10) {
+      errores.push(&#x27;No puedes anadir mas de 10 archivos.&#x27;);
+    }
+
+    if (this.formulario.enlaces.length &gt; 10) {
+      errores.push(&#x27;No puedes anadir mas de 10 enlaces.&#x27;);
+    }
+
+    for (const archivo of this.formulario.archivos) {
+      if (!archivo.nombre.trim()) {
+        errores.push(&#x27;Cada archivo necesita un nombre visible.&#x27;);
+      }
+
+      if (!this.esArchivoValido(archivo.valor)) {
+        errores.push(&#x60;Formato de archivo no permitido: ${archivo.valor}&#x60;);
+      }
+    }
+
+    for (const enlace of this.formulario.enlaces) {
+      if (!enlace.nombre.trim()) {
+        errores.push(&#x27;Cada enlace necesita un nombre visible.&#x27;);
+      }
+
+      if (!this.esUrlValida(enlace.valor)) {
+        errores.push(&#x60;URL no valida: ${enlace.valor}&#x60;);
+      }
+    }
+
+    return errores;
+  }
+
+  private esArchivoValido(archivo: string): boolean {
+    return /\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$/i.test(archivo.trim());
+  }
+
+  private esUrlValida(url: string): boolean {
+    try {
+      const parsed &#x3D; new URL(url.trim());
+      return parsed.protocol &#x3D;&#x3D;&#x3D; &#x27;http:&#x27; || parsed.protocol &#x3D;&#x3D;&#x3D; &#x27;https:&#x27;;
+    } catch {
+      return false;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;section class&#x3D;&quot;seccion-recursos&quot;&gt;
+  &lt;div *ngIf&#x3D;&quot;cargando&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;p class&#x3D;&quot;text-muted mb-0&quot;&gt;Cargando formulario...&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;errorCarga&quot; class&#x3D;&quot;card shadow-sm border-0 p-4 text-center bg-white rounded-4&quot;&gt;
+    &lt;div class&#x3D;&quot;card-body&quot;&gt;
+      &lt;h4 class&#x3D;&quot;card-title text-secondary&quot;&gt;No se pudo cargar el formulario&lt;/h4&gt;
+      &lt;p class&#x3D;&quot;card-text text-muted mb-0&quot;&gt;Vuelve a intentarlo mas tarde.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div *ngIf&#x3D;&quot;!cargando &amp;&amp; !errorCarga&quot; class&#x3D;&quot;pagina-formulario-recurso&quot;&gt;
+    &lt;app-recurso-formulario-mock
+      [titulo]&#x3D;&quot;tituloFormulario&quot;
+      [textoIntro]&#x3D;&quot;textoIntroFormulario&quot;
+      [textoBotonGuardar]&#x3D;&quot;textoBotonGuardar&quot;
+      [formulario]&#x3D;&quot;formulario&quot;
+      [categoriasFormulario]&#x3D;&quot;categoriasFormulario&quot;
+      [cursosFiltro]&#x3D;&quot;cursosFiltro&quot;
+      [ciclosFormulario]&#x3D;&quot;ciclosFormulario&quot;
+      [erroresFormulario]&#x3D;&quot;erroresFormulario&quot;
+      [nuevoCicloId]&#x3D;&quot;nuevoCicloId&quot;
+      [nuevoEnlace]&#x3D;&quot;nuevoEnlace&quot;
+      [nuevoArchivo]&#x3D;&quot;nuevoArchivo&quot;
+      (nuevoCicloIdChange)&#x3D;&quot;nuevoCicloId &#x3D; $event&quot;
+      (agregarCiclo)&#x3D;&quot;agregarCicloMock()&quot;
+      (eliminarCiclo)&#x3D;&quot;eliminarCicloMock($event)&quot;
+      (nuevoEnlaceChange)&#x3D;&quot;actualizarNuevoEnlace($event)&quot;
+      (nuevoArchivoChange)&#x3D;&quot;actualizarNuevoArchivo($event)&quot;
+      (agregarEnlace)&#x3D;&quot;agregarEnlaceMock()&quot;
+      (eliminarEnlace)&#x3D;&quot;eliminarEnlaceMock($event)&quot;
+      (agregarArchivo)&#x3D;&quot;agregarArchivoMock()&quot;
+      (eliminarArchivo)&#x3D;&quot;eliminarArchivoMock($event)&quot;
+      (cancelar)&#x3D;&quot;cancelar()&quot;
+      (guardar)&#x3D;&quot;guardarMock()&quot;&gt;
+    &lt;/app-recurso-formulario-mock&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><section class="seccion-recursos">  <div *ngIf="cargando" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">    <div class="card-body">      <p class="text-muted mb-0">Cargando formulario...</p>    </div>  </div>  <div *ngIf="errorCarga" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">    <div class="card-body">      <h4 class="card-title text-secondary">No se pudo cargar el formulario</h4>      <p class="card-text text-muted mb-0">Vuelve a intentarlo mas tarde.</p>    </div>  </div>  <div *ngIf="!cargando && !errorCarga" class="pagina-formulario-recurso">    <app-recurso-formulario-mock      [titulo]="tituloFormulario"      [textoIntro]="textoIntroFormulario"      [textoBotonGuardar]="textoBotonGuardar"      [formulario]="formulario"      [categoriasFormulario]="categoriasFormulario"      [cursosFiltro]="cursosFiltro"      [ciclosFormulario]="ciclosFormulario"      [erroresFormulario]="erroresFormulario"      [nuevoCicloId]="nuevoCicloId"      [nuevoEnlace]="nuevoEnlace"      [nuevoArchivo]="nuevoArchivo"      (nuevoCicloIdChange)="nuevoCicloId = $event"      (agregarCiclo)="agregarCicloMock()"      (eliminarCiclo)="eliminarCicloMock($event)"      (nuevoEnlaceChange)="actualizarNuevoEnlace($event)"      (nuevoArchivoChange)="actualizarNuevoArchivo($event)"      (agregarEnlace)="agregarEnlaceMock()"      (eliminarEnlace)="eliminarEnlaceMock($event)"      (agregarArchivo)="agregarArchivoMock()"      (eliminarArchivo)="eliminarArchivoMock($event)"      (cancelar)="cancelar()"      (guardar)="guardarMock()">    </app-recurso-formulario-mock>  </div></section></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'RecursoFormularioPaginaComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'RecursoFormularioPaginaComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

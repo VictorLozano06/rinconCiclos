@@ -1,0 +1,1696 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Componentes</li>
+  <li class="breadcrumb-item"
+  >
+  CiclosCursosComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>Fichero</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts</code>
+</p>
+
+
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Meta datos</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-ciclos-cursos</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                                <code><a href="https://angular.io/api/common/CommonModule" target="_blank" >CommonModule</a></code>
+                                <code><a href="https://angular.io/api/forms/FormsModule" target="_blank" >FormsModule</a></code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./ciclos-cursos.component.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./ciclos-cursos.component.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Índice</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Propiedades</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ciclos" >ciclos</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cicloSeleccionado" >cicloSeleccionado</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#confirmarMensaje" >confirmarMensaje</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#cursoSeleccionado" >cursoSeleccionado</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#editarFamilia" >editarFamilia</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#editarNombreCurso" >editarNombreCurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalConfirmar" >mostrarModalConfirmar</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalEditarCiclo" >mostrarModalEditarCiclo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalEditarCurso" >mostrarModalEditarCurso</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#mostrarModalNuevoCiclo" >mostrarModalNuevoCiclo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevaFamilia" >nuevaFamilia</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#nuevoNombre" >nuevoNombre</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Métodos</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#abrirEditarCiclo" >abrirEditarCiclo</a>
+                            </li>
+                            <li>
+                                <a href="#abrirEditarCurso" >abrirEditarCurso</a>
+                            </li>
+                            <li>
+                                <a href="#cancelarConfirmacion" >cancelarConfirmacion</a>
+                            </li>
+                            <li>
+                                <a href="#confirmarAccion" >confirmarAccion</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarCiclo" >eliminarCiclo</a>
+                            </li>
+                            <li>
+                                <a href="#eliminarCurso" >eliminarCurso</a>
+                            </li>
+                            <li>
+                                <a href="#guardarEditarCiclo" >guardarEditarCiclo</a>
+                            </li>
+                            <li>
+                                <a href="#guardarEditarCurso" >guardarEditarCurso</a>
+                            </li>
+                            <li>
+                                <a href="#guardarNuevoCiclo" >guardarNuevoCiclo</a>
+                            </li>
+                            <li>
+                                <a href="#toggleCiclo" >toggleCiclo</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Métodos
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="abrirEditarCiclo"></a>
+                    <span class="name">
+                        <span ><b>abrirEditarCiclo</b></span>
+                        <a href="#abrirEditarCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>abrirEditarCiclo(ciclo: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="72"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:72</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ciclo</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="abrirEditarCurso"></a>
+                    <span class="name">
+                        <span ><b>abrirEditarCurso</b></span>
+                        <a href="#abrirEditarCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>abrirEditarCurso(ciclo: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, curso: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="90"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ciclo</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>curso</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cancelarConfirmacion"></a>
+                    <span class="name">
+                        <span ><b>cancelarConfirmacion</b></span>
+                        <a href="#cancelarConfirmacion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>cancelarConfirmacion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="112"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:112</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmarAccion"></a>
+                    <span class="name">
+                        <span ><b>confirmarAccion</b></span>
+                        <a href="#confirmarAccion"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>confirmarAccion()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="108"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:108</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarCiclo"></a>
+                    <span class="name">
+                        <span ><b>eliminarCiclo</b></span>
+                        <a href="#eliminarCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarCiclo(ciclo: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="85"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ciclo</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eliminarCurso"></a>
+                    <span class="name">
+                        <span ><b>eliminarCurso</b></span>
+                        <a href="#eliminarCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>eliminarCurso(curso: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="103"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:103</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>curso</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarEditarCiclo"></a>
+                    <span class="name">
+                        <span ><b>guardarEditarCiclo</b></span>
+                        <a href="#guardarEditarCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarEditarCiclo()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="78"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:78</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarEditarCurso"></a>
+                    <span class="name">
+                        <span ><b>guardarEditarCurso</b></span>
+                        <a href="#guardarEditarCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarEditarCurso()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="97"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:97</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="guardarNuevoCiclo"></a>
+                    <span class="name">
+                        <span ><b>guardarNuevoCiclo</b></span>
+                        <a href="#guardarNuevoCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>guardarNuevoCiclo()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="56"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:56</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleCiclo"></a>
+                    <span class="name">
+                        <span ><b>toggleCiclo</b></span>
+                        <a href="#toggleCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleCiclo(ciclo: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Definido en <a href="" data-line="116"
+                                    class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:116</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parámetros :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                                <td>Tipo</td>
+                                            <td>Opcional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ciclo</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Devuelve : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Propiedades
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ciclos"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ciclos</b></span>
+                        <a href="#ciclos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>[
+    {
+      siglas: &#x27;DAW&#x27;,
+      familia: &#x27;Desarrollo de Aplicaciones Web&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1DAW&#x27;, familia: &#x27;Desarrollo de Aplicaciones Web&#x27; },
+        { nombre: &#x27;2DAW&#x27;, familia: &#x27;Desarrollo de Aplicaciones Web&#x27; }
+      ]
+    },
+    {
+      siglas: &#x27;DAM&#x27;,
+      familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1DAM&#x27;, familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27; },
+        { nombre: &#x27;2DAM&#x27;, familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27; }
+      ]
+    },
+    {
+      siglas: &#x27;SMR&#x27;,
+      familia: &#x27;Sistemas Microinformáticos y Redes&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1SMR&#x27;, familia: &#x27;Sistemas Microinformáticos y Redes&#x27; },
+        { nombre: &#x27;2SMR&#x27;, familia: &#x27;Sistemas Microinformáticos y Redes&#x27; }
+      ]
+    }
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="26" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cicloSeleccionado"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cicloSeleccionado</b></span>
+                        <a href="#cicloSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="21" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:21</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="confirmarMensaje"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>confirmarMensaje</b></span>
+                        <a href="#confirmarMensaje"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="17" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:17</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="cursoSeleccionado"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>cursoSeleccionado</b></span>
+                        <a href="#cursoSeleccionado"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="23" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editarFamilia"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>editarFamilia</b></span>
+                        <a href="#editarFamilia"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="22" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:22</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editarNombreCurso"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>editarNombreCurso</b></span>
+                        <a href="#editarNombreCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="24" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalConfirmar"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalConfirmar</b></span>
+                        <a href="#mostrarModalConfirmar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="16" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalEditarCiclo"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalEditarCiclo</b></span>
+                        <a href="#mostrarModalEditarCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="14" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:14</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalEditarCurso"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalEditarCurso</b></span>
+                        <a href="#mostrarModalEditarCurso"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="15" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="mostrarModalNuevoCiclo"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>mostrarModalNuevoCiclo</b></span>
+                        <a href="#mostrarModalNuevoCiclo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="13" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:13</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevaFamilia"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevaFamilia</b></span>
+                        <a href="#nuevaFamilia"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="20" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:20</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="nuevoNombre"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>nuevoNombre</b></span>
+                        <a href="#nuevoNombre"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Valor por defecto : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Definido en <a href="" data-line="19" class="link-to-prism">src/app/pages/coordinador/ciclos-cursos/ciclos-cursos.component.ts:19</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+
+@Component({
+  selector: &#x27;app-ciclos-cursos&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: &#x27;./ciclos-cursos.component.html&#x27;,
+  styleUrl: &#x27;./ciclos-cursos.component.css&#x27;
+})
+export class CiclosCursosComponent {
+  public mostrarModalNuevoCiclo &#x3D; false;
+  public mostrarModalEditarCiclo &#x3D; false;
+  public mostrarModalEditarCurso &#x3D; false;
+  public mostrarModalConfirmar &#x3D; false;
+  public confirmarMensaje: string &#x3D; &#x27;&#x27;;
+
+  public nuevoNombre: string &#x3D; &#x27;&#x27;;
+  public nuevaFamilia: string &#x3D; &#x27;&#x27;;
+  public cicloSeleccionado: any &#x3D; null;
+  public editarFamilia: string &#x3D; &#x27;&#x27;;
+  public cursoSeleccionado: any &#x3D; null;
+  public editarNombreCurso: string &#x3D; &#x27;&#x27;;
+
+  public ciclos &#x3D; [
+    {
+      siglas: &#x27;DAW&#x27;,
+      familia: &#x27;Desarrollo de Aplicaciones Web&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1DAW&#x27;, familia: &#x27;Desarrollo de Aplicaciones Web&#x27; },
+        { nombre: &#x27;2DAW&#x27;, familia: &#x27;Desarrollo de Aplicaciones Web&#x27; }
+      ]
+    },
+    {
+      siglas: &#x27;DAM&#x27;,
+      familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1DAM&#x27;, familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27; },
+        { nombre: &#x27;2DAM&#x27;, familia: &#x27;Desarrollo de Aplicaciones Multiplataforma&#x27; }
+      ]
+    },
+    {
+      siglas: &#x27;SMR&#x27;,
+      familia: &#x27;Sistemas Microinformáticos y Redes&#x27;,
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1SMR&#x27;, familia: &#x27;Sistemas Microinformáticos y Redes&#x27; },
+        { nombre: &#x27;2SMR&#x27;, familia: &#x27;Sistemas Microinformáticos y Redes&#x27; }
+      ]
+    }
+  ];
+
+  guardarNuevoCiclo(): void {
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
+    this.ciclos.push({
+      siglas: this.nuevoNombre.trim(),
+      familia: this.nuevaFamilia.trim(),
+      abierto: false,
+      cursos: [
+        { nombre: &#x27;1&#x27; + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() },
+        { nombre: &#x27;2&#x27; + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() }
+      ]
+    });
+    this.mostrarModalNuevoCiclo &#x3D; false;
+    this.nuevoNombre &#x3D; &#x27;&#x27;;
+    this.nuevaFamilia &#x3D; &#x27;&#x27;;
+  }
+
+  abrirEditarCiclo(ciclo: any): void {
+    this.cicloSeleccionado &#x3D; ciclo;
+    this.editarFamilia &#x3D; ciclo.familia;
+    this.mostrarModalEditarCiclo &#x3D; true;
+  }
+
+  guardarEditarCiclo(): void {
+    if (!this.editarFamilia.trim()) return;
+    this.cicloSeleccionado.familia &#x3D; this.editarFamilia.trim();
+    this.cicloSeleccionado.cursos.forEach((c: any) &#x3D;&gt; c.familia &#x3D; this.editarFamilia.trim());
+    this.mostrarModalEditarCiclo &#x3D; false;
+  }
+
+  eliminarCiclo(ciclo: any): void {
+    this.confirmarMensaje &#x3D; &#x60;¿Eliminar el ciclo &quot;${ciclo.siglas}&quot; y todos sus cursos?&#x60;;
+    this.mostrarModalConfirmar &#x3D; true;
+  }
+
+  abrirEditarCurso(ciclo: any, curso: any): void {
+    this.cicloSeleccionado &#x3D; ciclo;
+    this.cursoSeleccionado &#x3D; curso;
+    this.editarNombreCurso &#x3D; curso.nombre;
+    this.mostrarModalEditarCurso &#x3D; true;
+  }
+
+  guardarEditarCurso(): void {
+    if (!this.editarNombreCurso.trim()) return;
+    this.cursoSeleccionado.nombre &#x3D; this.editarNombreCurso.trim();
+    this.mostrarModalEditarCurso &#x3D; false;
+  }
+
+  eliminarCurso(curso: any): void {
+    this.confirmarMensaje &#x3D; &#x60;¿Eliminar el curso &quot;${curso.nombre}&quot;?&#x60;;
+    this.mostrarModalConfirmar &#x3D; true;
+  }
+
+  confirmarAccion(): void {
+    this.mostrarModalConfirmar &#x3D; false;
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarModalConfirmar &#x3D; false;
+  }
+
+  toggleCiclo(ciclo: any): void {
+    ciclo.abierto &#x3D; !ciclo.abierto;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;header-container d-flex justify-content-between align-items-start mb-4&quot;&gt;
+  &lt;div&gt;
+    &lt;h2 class&#x3D;&quot;fw-bold text-dark m-0&quot;&gt;Ciclos y Cursos&lt;/h2&gt;
+    &lt;p class&#x3D;&quot;text-secondary small&quot;&gt;Gestión de ciclos formativos y cursos.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;button class&#x3D;&quot;btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nuevo-ciclo&quot;
+    (click)&#x3D;&quot;mostrarModalNuevoCiclo &#x3D; true&quot;&gt;
+    + NUEVO CICLO
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class&#x3D;&quot;ciclos-list&quot;&gt;
+  &lt;div *ngFor&#x3D;&quot;let ciclo of ciclos&quot; class&#x3D;&quot;card border-0 shadow-sm rounded-3 mb-3&quot;&gt;
+    &lt;!-- Fila del Ciclo --&gt;
+    &lt;div class&#x3D;&quot;card-body p-3 d-flex align-items-center justify-content-between&quot;&gt;
+      &lt;div class&#x3D;&quot;d-flex align-items-center gap-3&quot;&gt;
+        &lt;button class&#x3D;&quot;btn btn-link p-0 text-dark&quot; (click)&#x3D;&quot;toggleCiclo(ciclo)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi&quot; [class.bi-chevron-right]&#x3D;&quot;!ciclo.abierto&quot; [class.bi-chevron-down]&#x3D;&quot;ciclo.abierto&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+        &lt;div&gt;
+          &lt;h6 class&#x3D;&quot;m-0 fw-bold text-dark&quot;&gt;
+            {{ ciclo.siglas }}
+          &lt;/h6&gt;
+          &lt;span class&#x3D;&quot;text-secondary small&quot;&gt;{{ ciclo.familia }}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;d-flex gap-2&quot;&gt;
+        &lt;button class&#x3D;&quot;btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3 action-btn&quot;
+          (click)&#x3D;&quot;abrirEditarCiclo(ciclo)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-pencil-fill small&quot;&gt;&lt;/i&gt;
+          &lt;span class&#x3D;&quot;text-uppercase small fw-bold&quot;&gt;editar&lt;/span&gt;
+        &lt;/button&gt;
+        &lt;button class&#x3D;&quot;btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 action-btn delete-btn&quot;
+          (click)&#x3D;&quot;eliminarCiclo(ciclo)&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-trash-fill small&quot;&gt;&lt;/i&gt;
+          &lt;span class&#x3D;&quot;text-uppercase small fw-bold&quot;&gt;eliminar&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Cursos del Ciclo (si está abierto) --&gt;
+    &lt;div *ngIf&#x3D;&quot;ciclo.abierto &amp;&amp; ciclo.cursos.length &gt; 0&quot; class&#x3D;&quot;card-footer bg-white border-top-0 p-0&quot;&gt;
+      &lt;div *ngFor&#x3D;&quot;let curso of ciclo.cursos&quot;
+        class&#x3D;&quot;d-flex align-items-center justify-content-between border-top px-5 py-2&quot;&gt;
+        &lt;div class&#x3D;&quot;d-flex align-items-center gap-3 ps-3&quot;&gt;
+          &lt;i class&#x3D;&quot;bi bi-book text-secondary fs-5&quot;&gt;&lt;/i&gt;
+          &lt;span class&#x3D;&quot;fw-bold text-dark small&quot;&gt;{{ curso.nombre }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;d-flex gap-2&quot;&gt;
+          &lt;button class&#x3D;&quot;btn btn-light btn-sm text-secondary fw-bold text-uppercase px-3 sub-action-btn&quot;
+            (click)&#x3D;&quot;abrirEditarCurso(ciclo, curso)&quot;&gt;
+            EDITAR
+          &lt;/button&gt;
+          &lt;button
+            class&#x3D;&quot;btn btn-link btn-sm text-danger text-decoration-none fw-bold text-uppercase px-3 sub-action-btn&quot;
+            (click)&#x3D;&quot;eliminarCurso(curso)&quot;&gt;
+            ELIMINAR
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Nuevo Ciclo --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalNuevoCiclo&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot;&gt;
+    &lt;h5 class&#x3D;&quot;text-white fw-bold mb-4&quot;&gt;NUEVO CICLO FORMATIVO&lt;/h5&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Nombre del Ciclo&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; placeholder&#x3D;&quot;ej: DAW&quot; [(ngModel)]&#x3D;&quot;nuevoNombre&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Familia
+        Profesional&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; placeholder&#x3D;&quot;ej: Desarrollo de Aplicaciones Web&quot; [(ngModel)]&#x3D;&quot;nuevaFamilia&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;p class&#x3D;&quot;text-secondary small mb-5 modal-helper-text&quot;&gt;
+      se crearán automáticamente los cursos 1º y 2º al guardar
+    &lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalNuevoCiclo &#x3D; false&quot;&gt;
+        CANCELAR
+      &lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot; (click)&#x3D;&quot;guardarNuevoCiclo()&quot;&gt;
+        GUARDAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Editar Ciclo --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalEditarCiclo&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot;&gt;
+    &lt;h5 class&#x3D;&quot;text-white fw-bold mb-4&quot;&gt;EDITAR CICLO FORMATIVO&lt;/h5&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Familia
+        Profesional&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; [(ngModel)]&#x3D;&quot;editarFamilia&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3 mt-5&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalEditarCiclo &#x3D; false&quot;&gt;
+        CANCELAR
+      &lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot; (click)&#x3D;&quot;guardarEditarCiclo()&quot;&gt;
+        GUARDAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Editar Curso --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalEditarCurso&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot;&gt;
+    &lt;h5 class&#x3D;&quot;text-white fw-bold mb-1&quot;&gt;EDITAR CURSO&lt;/h5&gt;
+    &lt;p class&#x3D;&quot;text-secondary x-small text-uppercase fw-bold mb-4&quot; style&#x3D;&quot;letter-spacing: 0.03rem;&quot;&gt;
+      Ciclo: {{ cicloSeleccionado?.siglas }}
+    &lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;mb-4&quot;&gt;
+      &lt;label class&#x3D;&quot;text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing&quot;&gt;Nombre Curso&lt;/label&gt;
+      &lt;input type&#x3D;&quot;text&quot; class&#x3D;&quot;form-control custom-input py-2&quot; [(ngModel)]&#x3D;&quot;editarNombreCurso&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3 mt-5&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;mostrarModalEditarCurso &#x3D; false&quot;&gt;
+        CANCELAR
+      &lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-white fw-bold text-uppercase px-4 btn-save&quot; (click)&#x3D;&quot;guardarEditarCurso()&quot;&gt;
+        GUARDAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Confirmar Eliminación --&gt;
+&lt;div *ngIf&#x3D;&quot;mostrarModalConfirmar&quot; class&#x3D;&quot;modal-overlay d-flex align-items-center justify-content-center&quot;&gt;
+  &lt;div class&#x3D;&quot;custom-modal rounded-3 shadow-lg p-4&quot; style&#x3D;&quot;max-width: 420px;&quot;&gt;
+    &lt;div class&#x3D;&quot;d-flex align-items-center gap-3 mb-3&quot;&gt;
+      &lt;div class&#x3D;&quot;rounded-circle d-flex align-items-center justify-content-center&quot;
+        style&#x3D;&quot;width:42px;height:42px;background:rgba(220,53,69,0.15);flex-shrink:0;&quot;&gt;
+        &lt;i class&#x3D;&quot;bi bi-trash-fill text-danger&quot;&gt;&lt;/i&gt;
+      &lt;/div&gt;
+      &lt;h5 class&#x3D;&quot;text-white fw-bold m-0&quot;&gt;Confirmar eliminación&lt;/h5&gt;
+    &lt;/div&gt;
+
+    &lt;p class&#x3D;&quot;text-secondary mb-5&quot; style&#x3D;&quot;font-size: 0.93rem;&quot;&gt;{{ confirmarMensaje }}&lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;d-flex justify-content-end gap-3&quot;&gt;
+      &lt;button class&#x3D;&quot;btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel&quot;
+        (click)&#x3D;&quot;cancelarConfirmacion()&quot;&gt;
+        CANCELAR
+      &lt;/button&gt;
+      &lt;button class&#x3D;&quot;btn btn-danger fw-bold text-uppercase px-4&quot; (click)&#x3D;&quot;confirmarAccion()&quot;&gt;
+        ELIMINAR
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Leyenda</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Elemento Html</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Componente</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Elemento Html con directiva</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="header-container d-flex justify-content-between align-items-start mb-4">  <div>    <h2 class="fw-bold text-dark m-0">Ciclos y Cursos</h2>    <p class="text-secondary small">Gestión de ciclos formativos y cursos.</p>  </div>  <button class="btn btn-dark btn-sm px-3 fw-bold rounded-1 text-uppercase btn-nuevo-ciclo"    (click)="mostrarModalNuevoCiclo = true">    + NUEVO CICLO  </button></div><div class="ciclos-list">  <div *ngFor="let ciclo of ciclos" class="card border-0 shadow-sm rounded-3 mb-3">    <!-- Fila del Ciclo -->    <div class="card-body p-3 d-flex align-items-center justify-content-between">      <div class="d-flex align-items-center gap-3">        <button class="btn btn-link p-0 text-dark" (click)="toggleCiclo(ciclo)">          <i class="bi" [class.bi-chevron-right]="!ciclo.abierto" [class.bi-chevron-down]="ciclo.abierto"></i>        </button>        <div>          <h6 class="m-0 fw-bold text-dark">            {{ ciclo.siglas }}          </h6>          <span class="text-secondary small">{{ ciclo.familia }}</span>        </div>      </div>      <div class="d-flex gap-2">        <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3 action-btn"          (click)="abrirEditarCiclo(ciclo)">          <i class="bi bi-pencil-fill small"></i>          <span class="text-uppercase small fw-bold">editar</span>        </button>        <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2 px-3 action-btn delete-btn"          (click)="eliminarCiclo(ciclo)">          <i class="bi bi-trash-fill small"></i>          <span class="text-uppercase small fw-bold">eliminar</span>        </button>      </div>    </div>    <!-- Cursos del Ciclo (si está abierto) -->    <div *ngIf="ciclo.abierto && ciclo.cursos.length > 0" class="card-footer bg-white border-top-0 p-0">      <div *ngFor="let curso of ciclo.cursos"        class="d-flex align-items-center justify-content-between border-top px-5 py-2">        <div class="d-flex align-items-center gap-3 ps-3">          <i class="bi bi-book text-secondary fs-5"></i>          <span class="fw-bold text-dark small">{{ curso.nombre }}</span>        </div>        <div class="d-flex gap-2">          <button class="btn btn-light btn-sm text-secondary fw-bold text-uppercase px-3 sub-action-btn"            (click)="abrirEditarCurso(ciclo, curso)">            EDITAR          </button>          <button            class="btn btn-link btn-sm text-danger text-decoration-none fw-bold text-uppercase px-3 sub-action-btn"            (click)="eliminarCurso(curso)">            ELIMINAR          </button>        </div>      </div>    </div>  </div></div><!-- Modal Nuevo Ciclo --><div *ngIf="mostrarModalNuevoCiclo" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4">    <h5 class="text-white fw-bold mb-4">NUEVO CICLO FORMATIVO</h5>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre del Ciclo</label>      <input type="text" class="form-control custom-input py-2" placeholder="ej: DAW" [(ngModel)]="nuevoNombre">    </div>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia        Profesional</label>      <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">    </div>    <p class="text-secondary small mb-5 modal-helper-text">      se crearán automáticamente los cursos 1º y 2º al guardar    </p>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalNuevoCiclo = false">        CANCELAR      </button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarNuevoCiclo()">        GUARDAR      </button>    </div>  </div></div><!-- Modal Editar Ciclo --><div *ngIf="mostrarModalEditarCiclo" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4">    <h5 class="text-white fw-bold mb-4">EDITAR CICLO FORMATIVO</h5>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia        Profesional</label>      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarFamilia">    </div>    <div class="d-flex justify-content-end gap-3 mt-5">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalEditarCiclo = false">        CANCELAR      </button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarEditarCiclo()">        GUARDAR      </button>    </div>  </div></div><!-- Modal Editar Curso --><div *ngIf="mostrarModalEditarCurso" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4">    <h5 class="text-white fw-bold mb-1">EDITAR CURSO</h5>    <p class="text-secondary x-small text-uppercase fw-bold mb-4" style="letter-spacing: 0.03rem;">      Ciclo: {{ cicloSeleccionado?.siglas }}    </p>    <div class="mb-4">      <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre Curso</label>      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso">    </div>    <div class="d-flex justify-content-end gap-3 mt-5">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="mostrarModalEditarCurso = false">        CANCELAR      </button>      <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="guardarEditarCurso()">        GUARDAR      </button>    </div>  </div></div><!-- Modal Confirmar Eliminación --><div *ngIf="mostrarModalConfirmar" class="modal-overlay d-flex align-items-center justify-content-center">  <div class="custom-modal rounded-3 shadow-lg p-4" style="max-width: 420px;">    <div class="d-flex align-items-center gap-3 mb-3">      <div class="rounded-circle d-flex align-items-center justify-content-center"        style="width:42px;height:42px;background:rgba(220,53,69,0.15);flex-shrink:0;">        <i class="bi bi-trash-fill text-danger"></i>      </div>      <h5 class="text-white fw-bold m-0">Confirmar eliminación</h5>    </div>    <p class="text-secondary mb-5" style="font-size: 0.93rem;">{{ confirmarMensaje }}</p>    <div class="d-flex justify-content-end gap-3">      <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"        (click)="cancelarConfirmacion()">        CANCELAR      </button>      <button class="btn btn-danger fw-bold text-uppercase px-4" (click)="confirmarAccion()">        ELIMINAR      </button>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'ActasAsistenciaComponent', 'selector': 'app-actas-asistencia'},{'name': 'ActasHistorialComponent', 'selector': 'app-actas-historial'},{'name': 'ActasInicioCoordinadorComponent', 'selector': 'app-actas-inicio'},{'name': 'ActasInicioProfesorComponent', 'selector': 'app-actas-inicio-profesor'},{'name': 'ActasPlantillaComponent', 'selector': 'app-actas-plantilla'},{'name': 'ActasRedaccionComponent', 'selector': 'app-actas-redaccion'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BuscadorComponent', 'selector': 'app-buscador'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'CiclosCursosComponent', 'selector': 'app-ciclos-cursos'},{'name': 'ConvocatoriasCanceladasComponent', 'selector': 'app-convocatorias-canceladas'},{'name': 'ConvocatoriasComponent', 'selector': 'app-convocatorias-coordinador'},{'name': 'CoordinadorLayoutComponent', 'selector': 'app-coordinador-layout'},{'name': 'InicioComponent', 'selector': 'app-inicio-coordinador'},{'name': 'InicioComponent', 'selector': 'app-inicio-profesor'},{'name': 'LandingComponent', 'selector': 'app-landing'},{'name': 'ProfesorConvocatoriasComponent', 'selector': 'app-convocatorias-profesor'},{'name': 'ProfesorLayoutComponent', 'selector': 'app-profesor-layout'},{'name': 'RecursoDetalleCompartidoComponent', 'selector': 'app-recurso-detalle-compartido'},{'name': 'RecursoFormularioMockComponent', 'selector': 'app-recurso-formulario-mock'},{'name': 'RecursoFormularioPaginaComponent', 'selector': 'app-recurso-formulario-pagina'},{'name': 'RecursoItemComponent', 'selector': 'app-recurso-item'},{'name': 'RecursoListadoCategoriaCoordinadorComponent', 'selector': 'app-recurso-listado-categoria-coordinador'},{'name': 'RecursoListadoCategoriaProfesorComponent', 'selector': 'app-recurso-listado-categoria-profesor'},{'name': 'RecursoListadoCoordinadorComponent', 'selector': 'app-recurso-listado-coordinador'},{'name': 'SidebarCoordinadorComponent', 'selector': 'app-sidebar-coordinador'},{'name': 'SidebarProfesorComponent', 'selector': 'app-sidebar-profesor'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CiclosCursosComponent-1'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CiclosCursosComponent-1.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -3,10 +3,18 @@
 /rincon_web/node_modules
 /rincon_web/dist
 /rincon_web/.angular/cache
+/rincon_back/vendor
+/rincon_back/uploads
+/rincon_back/.phpdoc
+/docs/frontend
+/docs/backend
 /rincon_back/storage/*.log
 /backups/
-/rincon_web/public/assets/sql/*.sql
-!/rincon_web/public/assets/sql/.gitkeep
+/SQL.sql
+/SQL_inserts_test.sql
+
+# Convocatorias backend deshabilitado en desarrollo
+/rincon_back/vic_back
 
 # Secrets
 .env

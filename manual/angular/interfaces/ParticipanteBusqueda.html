@@ -1,0 +1,1253 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Rincon de Ciclos - Frontend</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/material.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">Rincon de Ciclos - Frontend</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Escribe para buscar"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Interfaces</li>
+  <li class="breadcrumb-item"
+  >
+  ParticipanteBusqueda</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+        <p class="comment">
+            <h3>Fichero</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/pages/coordinador/convocatorias/convocatorias.component.ts</code>
+        </p>
+
+
+
+
+        <section data-compodoc="block-index">
+            <h3 id="index">Índice</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Propiedades</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#idParticipante" 
+>
+                                            idParticipante
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#nombre" 
+>
+                                            nombre
+                                        </a>
+                                </li>
+                                <li>
+                                            <span class="modifier">Opcional</span>
+                                        <a href="#seleccionado" 
+>
+                                            seleccionado
+                                        </a>
+                                </li>
+                                <li>
+                                        <a href="#tipo" 
+>
+                                            tipo
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section data-compodoc="block-properties">
+                <h3 id="inputs">Propiedades</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="idParticipante"></a>
+                                        <span class="name "><b>idParticipante</b>
+                                            <a href="#idParticipante">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>idParticipante:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="nombre"></a>
+                                        <span class="name "><b>nombre</b>
+                                            <a href="#nombre">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>nombre:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="seleccionado"></a>
+                                        <span class="name "><b>seleccionado</b>
+                                            <a href="#seleccionado">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>seleccionado:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Opcional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="tipo"></a>
+                                        <span class="name "><b>tipo</b>
+                                            <a href="#tipo">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>tipo:     <code>&quot;profesor&quot; | &quot;grupo&quot;</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Tipo : </i>    <code>&quot;profesor&quot; | &quot;grupo&quot;</code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { CommonModule } from &#x27;@angular/common&#x27;;
+import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+import { ActivatedRoute, Router, RouterModule } from &#x27;@angular/router&#x27;;
+import { ConvocatoriaDetalleDto } from &#x27;../../../dto/convocatoria-detalle.dto&#x27;;
+import { ConvocatoriaListaItemDto } from &#x27;../../../dto/convocatoria-lista-item.dto&#x27;;
+import { CursoOptionDto } from &#x27;../../../dto/curso-option.dto&#x27;;
+import { GrupoOptionDto } from &#x27;../../../dto/grupo-option.dto&#x27;;
+import { LugarOptionDto } from &#x27;../../../dto/lugar-option.dto&#x27;;
+import { OrdenDiaCoordinadorDto } from &#x27;../../../dto/orden-dia-coordinador.dto&#x27;;
+import { ParticipanteDto } from &#x27;../../../dto/participante.dto&#x27;;
+import { ProfesorField } from &#x27;../../../dto/profesor-field.type&#x27;;
+import { ProfesorOptionDto } from &#x27;../../../dto/profesor-option.dto&#x27;;
+import { ConvocatoriaService } from &#x27;../../../services/convocatoria.service&#x27;;
+
+type VistaConvocatoria &#x3D; &#x27;listado&#x27; | &#x27;formulario&#x27; | &#x27;detalle&#x27;;
+type EstadoConvocatoriaFormulario &#x3D; &#x27;a&#x27; | &#x27;p&#x27; | &#x27;b&#x27;;
+
+interface ParticipanteBusqueda {
+  idParticipante: number;
+  tipo: &#x27;profesor&#x27; | &#x27;grupo&#x27;;
+  nombre: string;
+  seleccionado?: boolean;
+}
+
+type FiltroParticipantesModal &#x3D; &#x27;todos&#x27; | &#x27;profesor&#x27; | &#x27;grupo&#x27;;
+
+@Component({
+  selector: &#x27;app-convocatorias-coordinador&#x27;,
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: &#x27;./convocatorias.component.html&#x27;,
+  styleUrl: &#x27;./convocatorias.component.css&#x27;
+})
+export class ConvocatoriasComponent implements OnInit {
+  vista: VistaConvocatoria &#x3D; &#x27;listado&#x27;;
+  convocatorias: ConvocatoriaListaItemDto[] &#x3D; [];
+  cargandoListado &#x3D; true;
+  convocatoriaSeleccionada: ConvocatoriaDetalleDto | null &#x3D; null;
+
+  convocatoria &#x3D; {
+    idConvocatoria: null as number | null,
+    estado: &#x27;a&#x27; as EstadoConvocatoriaFormulario,
+    titulo: &#x27;Nueva convocatoria&#x27;,
+    subtitulo: &#x27;Configura y publica una convocatoria activa.&#x27;,
+    fechaHora: &#x27;&#x27;,
+    lugarId: null as number | null,
+    redactaId: null as number | null,
+    iniciaId: null as number | null,
+    cursoId: null as number | null
+  };
+
+  cursosAcademicos: CursoOptionDto[] &#x3D; [];
+  lugares: LugarOptionDto[] &#x3D; [];
+  profesores: ProfesorOptionDto[] &#x3D; [];
+  grupos: GrupoOptionDto[] &#x3D; [];
+
+  cargandoFormulario &#x3D; true;
+  guardando &#x3D; false;
+  errorFormulario &#x3D; &#x27;&#x27;;
+  feedback &#x3D; &#x27;&#x27;;
+  feedbackError &#x3D; false;
+
+  redactaOpen &#x3D; false;
+  redactaQuery &#x3D; &#x27;&#x27;;
+  iniciaOpen &#x3D; false;
+  iniciaQuery &#x3D; &#x27;&#x27;;
+
+  modalParticipantesAbierto &#x3D; false;
+  modalParticipantesFilaIndex: number | null &#x3D; null;
+  modalParticipantesFilaActiva: OrdenDiaCoordinadorDto | null &#x3D; null;
+  modalParticipantesQuery &#x3D; &#x27;&#x27;;
+  modalParticipantesFiltro: FiltroParticipantesModal &#x3D; &#x27;todos&#x27;;
+  modalParticipantesSeleccionados: ParticipanteDto[] &#x3D; [];
+  modalPublicacionAbierto &#x3D; false;
+  modalPublicacionCargando &#x3D; false;
+  modalPublicacionProcesando &#x3D; false;
+  convocatoriasActivasPendientes: ConvocatoriaListaItemDto[] &#x3D; [];
+
+  ordenDia: OrdenDiaCoordinadorDto[] &#x3D; [this.createEmptyFila()];
+
+  constructor(
+    private convocatoriaService: ConvocatoriaService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarFormulario();
+
+    this.route.paramMap.subscribe((params) &#x3D;&gt; {
+      const idParam &#x3D; params.get(&#x27;id&#x27;);
+      const url &#x3D; this.router.url;
+
+      if (url.includes(&#x27;/crear&#x27;)) {
+        this.iniciarCreacion();
+        return;
+      }
+
+      if (idParam) {
+        const id &#x3D; Number(idParam);
+        if (url.endsWith(&#x27;/editar&#x27;)) {
+          this.iniciarEdicion(id);
+        } else {
+          this.iniciarDetalle(id);
+        }
+        return;
+      }
+
+      this.vista &#x3D; &#x27;listado&#x27;;
+      this.cargarConvocatorias();
+    });
+  }
+
+  cargarFormulario(): void {
+    this.cargandoFormulario &#x3D; true;
+    this.errorFormulario &#x3D; &#x27;&#x27;;
+
+    this.convocatoriaService.getFormulario().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.cursosAcademicos &#x3D; data.cursos;
+        this.lugares &#x3D; data.lugares;
+        this.profesores &#x3D; data.profesores;
+        this.grupos &#x3D; data.grupos;
+
+        if (!this.convocatoria.cursoId) {
+          this.convocatoria.cursoId &#x3D; data.cursoActualId ?? this.cursosAcademicos[0]?.idCurso ?? null;
+        }
+
+        if (this.convocatoria.idConvocatoria &#x3D;&#x3D;&#x3D; null &amp;&amp; this.convocatoria.lugarId &#x3D;&#x3D;&#x3D; null) {
+          this.convocatoria.lugarId &#x3D; this.lugares[0]?.idLugar ?? null;
+        }
+
+        this.cargandoFormulario &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoFormulario &#x3D; false;
+        this.errorFormulario &#x3D; error?.error?.message || &#x27;No se pudieron cargar los datos del formulario.&#x27;;
+      }
+    });
+  }
+
+  cargarConvocatorias(): void {
+    this.cargandoListado &#x3D; true;
+    this.convocatoriaService.listarConvocatoriasCoordinador().subscribe({
+      next: (data) &#x3D;&gt; {
+        this.convocatorias &#x3D; this.ordenarListado(data);
+        this.cargandoListado &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoListado &#x3D; false;
+        this.errorFormulario &#x3D; error?.error?.message || &#x27;Error al cargar el listado de convocatorias.&#x27;;
+      }
+    });
+  }
+
+  crearNueva(): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias/crear&#x27;]);
+  }
+
+  editarConvocatoria(id: number): void {
+    const convocatoria &#x3D; this.convocatorias.find((item) &#x3D;&gt; item.idConvocatoria &#x3D;&#x3D;&#x3D; id) || this.convocatoriaSeleccionada;
+    if (convocatoria?.estado &#x3D;&#x3D;&#x3D; &#x27;p&#x27;) {
+      this.feedback &#x3D; &#x27;No se puede modificar una convocatoria pasada.&#x27;;
+      this.feedbackError &#x3D; true;
+      return;
+    }
+
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;, id, &#x27;editar&#x27;]);
+  }
+
+  verConvocatoria(id: number): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;, id]);
+  }
+
+  volverAlListado(): void {
+    this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;]);
+  }
+
+  iniciarCreacion(): void {
+    this.convocatoria &#x3D; {
+      idConvocatoria: null,
+      estado: &#x27;a&#x27;,
+      titulo: &#x27;Nueva convocatoria&#x27;,
+      subtitulo: &#x27;Completa los datos y publica una convocatoria activa.&#x27;,
+      fechaHora: &#x27;&#x27;,
+      lugarId: this.lugares[0]?.idLugar ?? null,
+      redactaId: null,
+      iniciaId: null,
+      cursoId: this.cursosAcademicos[0]?.idCurso ?? null
+    };
+    this.ordenDia &#x3D; [this.createEmptyFila()];
+    this.vista &#x3D; &#x27;formulario&#x27;;
+    this.feedback &#x3D; &#x27;&#x27;;
+    this.feedbackError &#x3D; false;
+    this.errorFormulario &#x3D; &#x27;&#x27;;
+  }
+
+  iniciarEdicion(id: number): void {
+    this.cargandoFormulario &#x3D; true;
+    this.errorFormulario &#x3D; &#x27;&#x27;;
+    this.vista &#x3D; &#x27;formulario&#x27;;
+    this.feedback &#x3D; &#x27;&#x27;;
+    this.feedbackError &#x3D; false;
+
+    this.convocatoriaService.getConvocatoria(id).subscribe({
+      next: (data) &#x3D;&gt; {
+        if (data.estado &#x3D;&#x3D;&#x3D; &#x27;p&#x27;) {
+          this.feedback &#x3D; &#x27;No se puede modificar una convocatoria pasada.&#x27;;
+          this.feedbackError &#x3D; true;
+          this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias/historico&#x27;, id]);
+          return;
+        }
+
+        this.convocatoria &#x3D; {
+          idConvocatoria: data.idConvocatoria,
+          estado: data.estado ?? &#x27;a&#x27;,
+          titulo: &#x27;Editar convocatoria&#x27;,
+          subtitulo: &#x27;Actualiza la convocatoria activa y vuelve a publicarla.&#x27;,
+          fechaHora: data.fecha ? data.fecha.substring(0, 16) : &#x27;&#x27;,
+          lugarId: data.idLugar ? Number(data.idLugar) : null,
+          redactaId: data.idProfesorRedactaActa ? Number(data.idProfesorRedactaActa) : null,
+          iniciaId: data.idProfesorIniciaReunion ? Number(data.idProfesorIniciaReunion) : null,
+          cursoId: data.idCurso ? Number(data.idCurso) : null
+        };
+
+        this.ordenDia &#x3D; (data.ordenDia || []).length &gt; 0
+          ? data.ordenDia.map((item) &#x3D;&gt; ({
+              minutos: item.minutos ? Number(item.minutos) : null,
+              ordenDia: item.descripcion || &#x27;&#x27;,
+              objetivo: item.objetivo || &#x27;&#x27;,
+              dinamizaId: item.idProfesorDinamiza ? Number(item.idProfesorDinamiza) : null,
+              lugarId: item.idLugar ? Number(item.idLugar) : null,
+              participantes: (item.participantes || []).map((participante) &#x3D;&gt; ({ ...participante })),
+              dinamizaQuery: &#x27;&#x27;,
+              dinamizaOpen: false,
+              lugarQuery: &#x27;&#x27;,
+              lugarOpen: false,
+              participantesExpandido: false,
+              participaQuery: &#x27;&#x27;,
+              participaOpen: false
+            }))
+          : [this.createEmptyFila()];
+
+        this.cargandoFormulario &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoFormulario &#x3D; false;
+        this.errorFormulario &#x3D; error?.error?.message || &#x27;Error al cargar los detalles de la convocatoria.&#x27;;
+      }
+    });
+  }
+
+  iniciarDetalle(id: number): void {
+    this.cargandoListado &#x3D; true;
+    this.errorFormulario &#x3D; &#x27;&#x27;;
+    this.convocatoriaSeleccionada &#x3D; null;
+
+    this.convocatoriaService.getConvocatoria(id).subscribe({
+      next: (data) &#x3D;&gt; {
+        this.convocatoriaSeleccionada &#x3D; data;
+        this.cargandoListado &#x3D; false;
+        this.vista &#x3D; &#x27;detalle&#x27;;
+      },
+      error: (error) &#x3D;&gt; {
+        this.cargandoListado &#x3D; false;
+        this.errorFormulario &#x3D; error?.error?.message || &#x27;Error al cargar los detalles de la convocatoria.&#x27;;
+      }
+    });
+  }
+
+  addFila(): void {
+    this.ordenDia.push(this.createEmptyFila());
+  }
+
+  removeFila(index: number): void {
+    if (this.ordenDia.length &gt; 1) {
+      this.ordenDia.splice(index, 1);
+    }
+  }
+
+  toggleFilaDropdown(item: OrdenDiaCoordinadorDto, field: &#x27;dinamiza&#x27; | &#x27;lugar&#x27;): void {
+    this.ordenDia.forEach((fila) &#x3D;&gt; {
+      if (fila !&#x3D;&#x3D; item) {
+        fila.dinamizaOpen &#x3D; false;
+        fila.lugarOpen &#x3D; false;
+      }
+    });
+
+    if (field &#x3D;&#x3D;&#x3D; &#x27;dinamiza&#x27;) {
+      item.dinamizaOpen &#x3D; !item.dinamizaOpen;
+      item.lugarOpen &#x3D; false;
+      return;
+    }
+
+    item.lugarOpen &#x3D; !item.lugarOpen;
+    item.dinamizaOpen &#x3D; false;
+  }
+
+  toggleProfesorDropdown(field: ProfesorField): void {
+    if (field &#x3D;&#x3D;&#x3D; &#x27;redacta&#x27;) {
+      this.redactaOpen &#x3D; !this.redactaOpen;
+      this.iniciaOpen &#x3D; false;
+      return;
+    }
+
+    this.iniciaOpen &#x3D; !this.iniciaOpen;
+    this.redactaOpen &#x3D; false;
+  }
+
+  getProfesoresFieldFiltrados(field: ProfesorField): ProfesorOptionDto[] {
+    const query &#x3D; this.normalizarTexto(field &#x3D;&#x3D;&#x3D; &#x27;redacta&#x27; ? this.redactaQuery : this.iniciaQuery);
+
+    return this.profesores
+      .filter((profesor) &#x3D;&gt; !query || this.normalizarTexto(profesor.nombre).includes(query))
+      .slice(0, 8);
+  }
+
+  selectProfesor(field: ProfesorField, profesorId: number): void {
+    if (field &#x3D;&#x3D;&#x3D; &#x27;redacta&#x27;) {
+      this.convocatoria.redactaId &#x3D; profesorId;
+      this.redactaQuery &#x3D; &#x27;&#x27;;
+      this.redactaOpen &#x3D; false;
+      return;
+    }
+
+    this.convocatoria.iniciaId &#x3D; profesorId;
+    this.iniciaQuery &#x3D; &#x27;&#x27;;
+    this.iniciaOpen &#x3D; false;
+  }
+
+  getProfesoresFilaFiltrados(item: OrdenDiaCoordinadorDto): ProfesorOptionDto[] {
+    const query &#x3D; this.normalizarTexto(item.dinamizaQuery);
+
+    return this.profesores
+      .filter((profesor) &#x3D;&gt; !query || this.normalizarTexto(profesor.nombre).includes(query))
+      .slice(0, 8);
+  }
+
+  getLugaresFilaFiltrados(item: OrdenDiaCoordinadorDto): LugarOptionDto[] {
+    const query &#x3D; this.normalizarTexto(item.lugarQuery);
+
+    return this.lugares
+      .filter((lugar) &#x3D;&gt; !query || this.normalizarTexto(lugar.nombre).includes(query))
+      .slice(0, 8);
+  }
+
+  selectDinamizaFila(item: OrdenDiaCoordinadorDto, profesorId: number): void {
+    item.dinamizaId &#x3D; profesorId;
+    item.dinamizaQuery &#x3D; &#x27;&#x27;;
+    item.dinamizaOpen &#x3D; false;
+  }
+
+  selectLugarFila(item: OrdenDiaCoordinadorDto, lugarId: number): void {
+    item.lugarId &#x3D; lugarId;
+    item.lugarQuery &#x3D; &#x27;&#x27;;
+    item.lugarOpen &#x3D; false;
+  }
+
+  abrirModalParticipantes(item: OrdenDiaCoordinadorDto): void {
+    this.modalParticipantesFilaActiva &#x3D; item;
+    this.modalParticipantesFilaIndex &#x3D; this.ordenDia.indexOf(item);
+    this.modalParticipantesAbierto &#x3D; true;
+    this.modalParticipantesQuery &#x3D; &#x27;&#x27;;
+    this.modalParticipantesFiltro &#x3D; &#x27;todos&#x27;;
+    this.modalParticipantesSeleccionados &#x3D; item.participantes.map((participante) &#x3D;&gt; ({ ...participante }));
+  }
+
+  cerrarModalParticipantes(): void {
+    this.modalParticipantesAbierto &#x3D; false;
+    this.modalParticipantesFilaIndex &#x3D; null;
+    this.modalParticipantesFilaActiva &#x3D; null;
+    this.modalParticipantesQuery &#x3D; &#x27;&#x27;;
+    this.modalParticipantesFiltro &#x3D; &#x27;todos&#x27;;
+    this.modalParticipantesSeleccionados &#x3D; [];
+  }
+
+  aplicarModalParticipantes(): void {
+    if (!this.modalParticipantesFilaActiva) {
+      this.cerrarModalParticipantes();
+      return;
+    }
+
+    this.modalParticipantesFilaActiva.participantes &#x3D; this.modalParticipantesSeleccionados.map((participante) &#x3D;&gt; ({ ...participante }));
+
+    this.cerrarModalParticipantes();
+  }
+
+  toggleParticipanteModal(participante: ParticipanteBusqueda): void {
+    const existe &#x3D; this.modalParticipantesSeleccionados.some(
+      (actual) &#x3D;&gt; actual.tipo &#x3D;&#x3D;&#x3D; participante.tipo &amp;&amp; actual.idParticipante &#x3D;&#x3D;&#x3D; participante.idParticipante
+    );
+
+    if (!existe) {
+      this.modalParticipantesSeleccionados &#x3D; [
+        ...this.modalParticipantesSeleccionados,
+        {
+          idParticipante: participante.idParticipante,
+          tipo: participante.tipo,
+          nombre: participante.nombre
+        }
+      ];
+      return;
+    }
+
+    this.modalParticipantesSeleccionados &#x3D; this.modalParticipantesSeleccionados.filter(
+      (actual) &#x3D;&gt; actual.tipo !&#x3D;&#x3D; participante.tipo || actual.idParticipante !&#x3D;&#x3D; participante.idParticipante
+    );
+  }
+
+  quitarParticipanteModal(participante: ParticipanteDto): void {
+    this.modalParticipantesSeleccionados &#x3D; this.modalParticipantesSeleccionados.filter(
+      (actual) &#x3D;&gt; actual.tipo !&#x3D;&#x3D; participante.tipo || actual.idParticipante !&#x3D;&#x3D; participante.idParticipante
+    );
+  }
+
+  esParticipanteSeleccionadoModal(participante: ParticipanteBusqueda): boolean {
+    return this.modalParticipantesSeleccionados.some(
+      (actual) &#x3D;&gt; actual.tipo &#x3D;&#x3D;&#x3D; participante.tipo &amp;&amp; actual.idParticipante &#x3D;&#x3D;&#x3D; participante.idParticipante
+    );
+  }
+
+  getParticipantesModalFiltrados(): ParticipanteBusqueda[] {
+    const query &#x3D; this.normalizarTexto(this.modalParticipantesQuery);
+    const filtro &#x3D; this.modalParticipantesFiltro;
+    const seleccionados &#x3D; new Set(
+      this.modalParticipantesSeleccionados.map((participante) &#x3D;&gt; &#x60;${participante.tipo}:${participante.idParticipante}&#x60;)
+    );
+
+    return this.obtenerParticipantesDisponibles()
+      .filter((participante) &#x3D;&gt; filtro &#x3D;&#x3D;&#x3D; &#x27;todos&#x27; || participante.tipo &#x3D;&#x3D;&#x3D; filtro)
+      .filter((participante) &#x3D;&gt; !query || this.normalizarTexto(participante.nombre).includes(query))
+      .map((participante) &#x3D;&gt; ({
+        ...participante,
+        seleccionado: seleccionados.has(&#x60;${participante.tipo}:${participante.idParticipante}&#x60;)
+      }))
+      .sort((a, b) &#x3D;&gt; Number(b.seleccionado) - Number(a.seleccionado) || a.nombre.localeCompare(b.nombre, &#x27;es&#x27;));
+  }
+
+  guardarConvocatoria(estadoDestino: &#x27;b&#x27; | &#x27;a&#x27;): void {
+    this.convocatoria.estado &#x3D; estadoDestino;
+    this.feedback &#x3D; &#x27;&#x27;;
+    this.feedbackError &#x3D; false;
+
+    if (this.esFechaPasada(this.convocatoria.fechaHora)) {
+      this.feedback &#x3D; estadoDestino &#x3D;&#x3D;&#x3D; &#x27;b&#x27;
+        ? &#x27;No se puede guardar un borrador con una fecha pasada.&#x27;
+        : &#x27;No se puede crear o publicar una convocatoria con una fecha pasada.&#x27;;
+      this.feedbackError &#x3D; true;
+      return;
+    }
+
+    if (estadoDestino &#x3D;&#x3D;&#x3D; &#x27;b&#x27;) {
+      this.ejecutarGuardado(estadoDestino);
+      return;
+    }
+
+    if (this.convocatoria.idConvocatoria &#x3D;&#x3D;&#x3D; null) {
+      this.prepararPublicacionNueva();
+      return;
+    }
+
+    this.ejecutarGuardado(estadoDestino);
+  }
+
+  cerrarModalPublicacion(): void {
+    this.modalPublicacionAbierto &#x3D; false;
+    this.modalPublicacionCargando &#x3D; false;
+    this.modalPublicacionProcesando &#x3D; false;
+    this.convocatoriasActivasPendientes &#x3D; [];
+  }
+
+  marcarConvocatoriaActivaComoPasada(idConvocatoria: number): void {
+    if (this.modalPublicacionProcesando) {
+      return;
+    }
+
+    this.modalPublicacionProcesando &#x3D; true;
+
+    this.convocatoriaService.marcarComoPasada(idConvocatoria).subscribe({
+      next: () &#x3D;&gt; {
+        this.convocatoriasActivasPendientes &#x3D; this.convocatoriasActivasPendientes.filter(
+          (convocatoria) &#x3D;&gt; convocatoria.idConvocatoria !&#x3D;&#x3D; idConvocatoria
+        );
+        this.modalPublicacionProcesando &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.modalPublicacionProcesando &#x3D; false;
+        this.feedback &#x3D; error?.error?.message || &#x27;No se pudo marcar la convocatoria como pasada.&#x27;;
+        this.feedbackError &#x3D; true;
+      }
+    });
+  }
+
+  marcarTodasActivasComoPasadas(): void {
+    if (this.modalPublicacionProcesando || this.convocatoriasActivasPendientes.length &#x3D;&#x3D;&#x3D; 0) {
+      return;
+    }
+
+    this.modalPublicacionProcesando &#x3D; true;
+
+    this.convocatoriaService.marcarTodasComoPasadas().subscribe({
+      next: () &#x3D;&gt; {
+        this.convocatoriasActivasPendientes &#x3D; [];
+        this.modalPublicacionProcesando &#x3D; false;
+      },
+      error: (error) &#x3D;&gt; {
+        this.modalPublicacionProcesando &#x3D; false;
+        this.feedback &#x3D; error?.error?.message || &#x27;No se pudieron marcar las convocatorias como pasadas.&#x27;;
+        this.feedbackError &#x3D; true;
+      }
+    });
+  }
+
+  continuarPublicacionNueva(): void {
+    this.cerrarModalPublicacion();
+    this.ejecutarGuardado(&#x27;a&#x27;);
+  }
+
+  private prepararPublicacionNueva(): void {
+    this.guardando &#x3D; true;
+    this.modalPublicacionCargando &#x3D; true;
+    this.modalPublicacionAbierto &#x3D; true;
+    this.convocatoriasActivasPendientes &#x3D; [];
+
+    this.convocatoriaService.listarConvocatorias().subscribe({
+      next: (data) &#x3D;&gt; {
+        const activas &#x3D; this.ordenarListado(data).filter(
+          (convocatoria) &#x3D;&gt; convocatoria.idConvocatoria !&#x3D;&#x3D; this.convocatoria.idConvocatoria
+        );
+
+        this.modalPublicacionCargando &#x3D; false;
+        this.guardando &#x3D; false;
+
+        if (activas.length &#x3D;&#x3D;&#x3D; 0) {
+          this.cerrarModalPublicacion();
+          this.ejecutarGuardado(&#x27;a&#x27;);
+          return;
+        }
+
+        this.convocatoriasActivasPendientes &#x3D; activas;
+      },
+      error: (error) &#x3D;&gt; {
+        this.modalPublicacionCargando &#x3D; false;
+        this.modalPublicacionAbierto &#x3D; false;
+        this.guardando &#x3D; false;
+        this.feedback &#x3D; error?.error?.message || &#x27;No se pudieron comprobar las convocatorias activas.&#x27;;
+        this.feedbackError &#x3D; true;
+      }
+    });
+  }
+
+  private ejecutarGuardado(estadoDestino: &#x27;a&#x27; | &#x27;b&#x27;): void {
+    this.guardando &#x3D; true;
+
+    const payload &#x3D; this.construirPayload(estadoDestino);
+
+    this.convocatoriaService.guardar(payload).subscribe({
+      next: (response) &#x3D;&gt; {
+        this.guardando &#x3D; false;
+        this.feedback &#x3D; response.message;
+        this.feedbackError &#x3D; false;
+        this.router.navigate([&#x27;/coordinador/reuniones-de-equipo/convocatorias&#x27;, response.idConvocatoria]);
+      },
+      error: (error) &#x3D;&gt; {
+        this.guardando &#x3D; false;
+        this.feedback &#x3D; error?.error?.message || &#x27;No se pudo guardar la convocatoria.&#x27;;
+        this.feedbackError &#x3D; true;
+      }
+    });
+  }
+
+  private construirPayload(estadoDestino: &#x27;a&#x27; | &#x27;b&#x27;) {
+    return {
+      idConvocatoria: this.convocatoria.idConvocatoria ?? undefined,
+      estado: estadoDestino,
+      fechaHora: this.convocatoria.fechaHora,
+      lugarId: this.convocatoria.lugarId,
+      redactaId: this.convocatoria.redactaId,
+      iniciaId: this.convocatoria.iniciaId,
+      cursoId: this.convocatoria.cursoId,
+      ordenDia: this.ordenDia.map((item) &#x3D;&gt; ({
+        minutos: item.minutos,
+        ordenDia: item.ordenDia,
+        objetivo: item.objetivo,
+        dinamizaId: item.dinamizaId,
+        lugarId: item.lugarId,
+        participantes: item.participantes.map((participante) &#x3D;&gt; ({ ...participante }))
+      }))
+    };
+  }
+
+  cancelarConvocatoria(): void {
+    if (!this.convocatoria.idConvocatoria) {
+      this.feedback &#x3D; &#x27;La convocatoria se cancelará cuando exista en el listado.&#x27;;
+      this.feedbackError &#x3D; false;
+      return;
+    }
+
+    this.convocatoriaService.cancelarConvocatoria(this.convocatoria.idConvocatoria).subscribe({
+      next: (response: { message: string }) &#x3D;&gt; {
+        this.feedback &#x3D; response.message;
+        this.feedbackError &#x3D; false;
+        this.router.navigate(
+          [&#x27;/coordinador/reuniones-de-equipo/convocatorias/historico&#x27;],
+          { queryParams: { tab: &#x27;pasadas&#x27; } }
+        );
+      },
+      error: (error: { error?: { message?: string } }) &#x3D;&gt; {
+        this.feedback &#x3D; error?.error?.message || &#x27;No se pudo cancelar la convocatoria.&#x27;;
+        this.feedbackError &#x3D; true;
+      }
+    });
+  }
+
+  esFechaPasada(fechaStr: string): boolean {
+    if (!fechaStr) return false;
+    const fechaConvocatoria &#x3D; new Date(fechaStr);
+    return fechaConvocatoria.getTime() &lt;&#x3D; Date.now();
+  }
+
+  formatFecha(fechaStr: string): string {
+    if (!fechaStr) return &#x27;&#x27;;
+    const fecha &#x3D; new Date(fechaStr);
+    if (isNaN(fecha.getTime())) return fechaStr;
+    return fecha.toLocaleString(&#x27;es-ES&#x27;, {
+      day: &#x27;2-digit&#x27;,
+      month: &#x27;2-digit&#x27;,
+      year: &#x27;numeric&#x27;,
+      hour: &#x27;2-digit&#x27;,
+      minute: &#x27;2-digit&#x27;
+    });
+  }
+
+  get minutosTotales(): number {
+    return this.ordenDia.reduce((total, item) &#x3D;&gt; total + Number(item.minutos || 0), 0);
+  }
+
+  get minutosTotalesDetalle(): number {
+    if (!this.convocatoriaSeleccionada || !this.convocatoriaSeleccionada.ordenDia) return 0;
+    return this.convocatoriaSeleccionada.ordenDia.reduce((total: number, item: any) &#x3D;&gt; total + Number(item.minutos || 0), 0);
+  }
+
+  get cursoActualLabel(): string {
+    return this.cursosAcademicos.find((curso) &#x3D;&gt; curso.idCurso &#x3D;&#x3D;&#x3D; this.convocatoria.cursoId)
+      ? this.getCursoLabel(this.convocatoria.cursoId)
+      : &#x27;Sin curso&#x27;;
+  }
+
+  get fechaHoraResumen(): string {
+    if (!this.convocatoria.fechaHora) {
+      return &#x27;Sin programar&#x27;;
+    }
+
+    const fecha &#x3D; new Date(this.convocatoria.fechaHora);
+
+    if (Number.isNaN(fecha.getTime())) {
+      return this.convocatoria.fechaHora;
+    }
+
+    return fecha.toLocaleString(&#x27;es-ES&#x27;, {
+      day: &#x27;2-digit&#x27;,
+      month: &#x27;2-digit&#x27;,
+      year: &#x27;numeric&#x27;,
+      hour: &#x27;2-digit&#x27;,
+      minute: &#x27;2-digit&#x27;
+    });
+  }
+
+  get redactaLabel(): string {
+    return this.getProfesorNombre(this.convocatoria.redactaId) || &#x27;Selecciona un profesor&#x27;;
+  }
+
+  get iniciaLabel(): string {
+    return this.getProfesorNombre(this.convocatoria.iniciaId) || &#x27;Selecciona un profesor&#x27;;
+  }
+
+  getCursoLabel(cursoId: number | null): string {
+    const curso &#x3D; this.cursosAcademicos.find((item) &#x3D;&gt; item.idCurso &#x3D;&#x3D;&#x3D; cursoId);
+    return curso ? &#x60;${curso.anioInicio}/${curso.anioFin}&#x60; : &#x27;Sin curso&#x27;;
+  }
+
+  getLugarNombre(lugarId: number | null): string {
+    return this.lugares.find((item) &#x3D;&gt; item.idLugar &#x3D;&#x3D;&#x3D; lugarId)?.nombre || &#x27;&#x27;;
+  }
+
+  getProfesorNombre(profesorId: number | null): string {
+    return this.profesores.find((item) &#x3D;&gt; item.idProfesor &#x3D;&#x3D;&#x3D; profesorId)?.nombre || &#x27;&#x27;;
+  }
+
+  getGrupoNombre(grupoId: number | null): string {
+    return this.grupos.find((item) &#x3D;&gt; item.idGrupo &#x3D;&#x3D;&#x3D; grupoId)?.nombre || &#x27;&#x27;;
+  }
+
+  getParticipanteEtiqueta(participante: ParticipanteDto): string {
+    return participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;Grupo&#x27; : &#x27;Profesor&#x27;;
+  }
+
+  getParticipanteClase(participante: ParticipanteDto): string {
+    return participante.tipo &#x3D;&#x3D;&#x3D; &#x27;grupo&#x27; ? &#x27;chip-tipo-grupo&#x27; : &#x27;chip-tipo-profesor&#x27;;
+  }
+
+  getParticipanteNombres(participantes: ParticipanteDto[]): string[] {
+    return participantes.map((participante) &#x3D;&gt; &#x60;${this.getParticipanteEtiqueta(participante)}: ${participante.nombre}&#x60;);
+  }
+
+  getEstadoLabel(estado?: string | null): string {
+    switch (estado) {
+      case &#x27;a&#x27;:
+        return &#x27;Activa&#x27;;
+      case &#x27;b&#x27;:
+        return &#x27;Borrador&#x27;;
+      case &#x27;p&#x27;:
+        return &#x27;Pasada&#x27;;
+      default:
+        return &#x27;Sin estado&#x27;;
+    }
+  }
+
+  getEstadoClase(estado?: string | null): string {
+    switch (estado) {
+      case &#x27;a&#x27;:
+        return &#x27;status-badge-activa&#x27;;
+      case &#x27;b&#x27;:
+        return &#x27;status-badge-borrador&#x27;;
+      case &#x27;p&#x27;:
+        return &#x27;status-badge-historica&#x27;;
+      default:
+        return &#x27;status-badge-historica&#x27;;
+    }
+  }
+
+  puedeEditar(estado?: string | null): boolean {
+    return estado !&#x3D;&#x3D; &#x27;p&#x27;;
+  }
+
+  get convocatoriasActivas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) &#x3D;&gt; convocatoria.estado &#x3D;&#x3D;&#x3D; &#x27;a&#x27;);
+  }
+
+  get convocatoriasPasadas(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) &#x3D;&gt; convocatoria.estado &#x3D;&#x3D;&#x3D; &#x27;p&#x27;);
+  }
+
+  get convocatoriasBorradores(): ConvocatoriaListaItemDto[] {
+    return this.convocatorias.filter((convocatoria) &#x3D;&gt; convocatoria.estado &#x3D;&#x3D;&#x3D; &#x27;b&#x27;);
+  }
+
+  getParticipantesResumen(item: OrdenDiaCoordinadorDto): string {
+    if (item.participantes.length &#x3D;&#x3D;&#x3D; 0) {
+      return &#x27;Seleccionar participantes&#x27;;
+    }
+
+    return &#x60;${item.participantes.length} participante${item.participantes.length &#x3D;&#x3D;&#x3D; 1 ? &#x27;&#x27; : &#x27;s&#x27;}&#x60;;
+  }
+
+  getParticipantesSeleccionados(item: OrdenDiaCoordinadorDto): ParticipanteDto[] {
+    return item.participantes;
+  }
+
+  getParticipantesPreview(item: OrdenDiaCoordinadorDto, limite &#x3D; 4): ParticipanteDto[] {
+    return item.participantesExpandido ? item.participantes : item.participantes.slice(0, limite);
+  }
+
+  getParticipantesRestantes(item: OrdenDiaCoordinadorDto, limite &#x3D; 4): number {
+    return Math.max(item.participantes.length - limite, 0);
+  }
+
+  toggleParticipantesExpandido(item: OrdenDiaCoordinadorDto): void {
+    item.participantesExpandido &#x3D; !item.participantesExpandido;
+  }
+
+  getDinamizaLabelFila(item: OrdenDiaCoordinadorDto): string {
+    return this.getProfesorNombre(item.dinamizaId) || &#x27;Selecciona&#x27;;
+  }
+
+  getLugarLabelFila(item: OrdenDiaCoordinadorDto): string {
+    return this.getLugarNombre(item.lugarId) || &#x27;Selecciona&#x27;;
+  }
+
+  getTodasOpcionesParticipantes(): ParticipanteBusqueda[] {
+    return this.obtenerParticipantesDisponibles();
+  }
+
+  private obtenerParticipantesDisponibles(): ParticipanteBusqueda[] {
+    return [
+      ...this.profesores.map((profesor) &#x3D;&gt; ({
+        idParticipante: profesor.idProfesor,
+        tipo: &#x27;profesor&#x27; as const,
+        nombre: profesor.nombre
+      })),
+      ...this.grupos.map((grupo) &#x3D;&gt; ({
+        idParticipante: grupo.idGrupo,
+        tipo: &#x27;grupo&#x27; as const,
+        nombre: grupo.nombre
+      }))
+    ];
+  }
+
+  private ordenarListado(convocatorias: ConvocatoriaListaItemDto[]): ConvocatoriaListaItemDto[] {
+    return [...convocatorias].sort((a, b) &#x3D;&gt; {
+      return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
+    });
+  }
+
+  private normalizarTexto(valor: string | null | undefined): string {
+    return (valor || &#x27;&#x27;)
+      .toLowerCase()
+      .normalize(&#x27;NFD&#x27;)
+      .replace(/[\u0300-\u036f]/g, &#x27;&#x27;)
+      .replace(/\s+/g, &#x27; &#x27;)
+      .trim();
+  }
+
+  private createEmptyFila(): OrdenDiaCoordinadorDto {
+    return {
+      minutos: null,
+      ordenDia: &#x27;&#x27;,
+      objetivo: &#x27;&#x27;,
+      dinamizaId: null,
+      lugarId: null,
+      participantes: [],
+      dinamizaQuery: &#x27;&#x27;,
+      dinamizaOpen: false,
+      lugarQuery: &#x27;&#x27;,
+      lugarOpen: false,
+      participantesExpandido: false,
+      participaQuery: &#x27;&#x27;,
+      participaOpen: false
+    };
+  }
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> comparación de resultados "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No hay resultados que coincidan "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'ParticipanteBusqueda.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
