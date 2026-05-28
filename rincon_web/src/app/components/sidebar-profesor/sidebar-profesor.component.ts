@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
+import { AccesoAppService } from '../../services/acceso-app.service';
 
 interface CategoriaSidebar extends CategoriaDto {
   icono: string;
@@ -24,10 +25,16 @@ export class SidebarProfesorComponent implements OnInit {
   @Output() requestClose = new EventEmitter<void>();
 
   public categorias: CategoriaSidebar[] = [];
+  public mostrarAccesoCoordinador = false;
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(
+    private categoriaService: CategoriaService,
+    private accesoAppService: AccesoAppService
+  ) {}
 
   ngOnInit(): void {
+    this.accesoAppService.inicializarDesdeUbicacionActual();
+    this.mostrarAccesoCoordinador = this.accesoAppService.puedeAccederCoordinador();
     this.obtenerCategorias();
   }
 
