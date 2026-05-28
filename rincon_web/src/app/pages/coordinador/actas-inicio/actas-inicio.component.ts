@@ -92,7 +92,18 @@ export class ActasInicioCoordinadorComponent implements OnInit {
   }
 
   generarPlantilla(id: number) {
-    this.mostrarModal = false;
-    alert('¡Plantilla Generada con Éxito! El profesor encargado ya tiene esta convocatoria desbloqueada en su panel para redactar los acuerdos.');
+    this.cargando = true;
+    this.procesoActasService.habilitarPlantilla(id).subscribe({
+      next: () => {
+        this.cargando = false;
+        this.mostrarModal = false;
+        alert('¡Plantilla Generada con Éxito! El profesor encargado ya tiene esta convocatoria desbloqueada en su panel para redactar los acuerdos.');
+      },
+      error: (err) => {
+        this.cargando = false;
+        alert('Hubo un error al habilitar la plantilla. Por favor inténtalo de nuevo.');
+        console.error(err);
+      }
+    });
   }
 }

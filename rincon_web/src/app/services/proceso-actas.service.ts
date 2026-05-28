@@ -135,4 +135,9 @@ export class ProcesoActasService {
         tap(() => this.limpiarEstado())
       );
   }
+
+  // Habilita una convocatoria pendiente para convertirla en acta
+  habilitarPlantilla(idConvocatoria: number): Observable<any> {
+    return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=habilitarPlantilla`, { idConvocatoria });
+  }
 }

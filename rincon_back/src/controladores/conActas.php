@@ -80,5 +80,32 @@ class ConActas extends ControladorBase {
 
         return ["mensaje" => "Acta guardada correctamente", "idActa" => $resultado['idActa']];
     }
+
+    /**
+     * POST ?c=Actas&m=habilitarPlantilla
+     */
+    public function habilitarPlantilla() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            return ["error" => "Método no permitido. Use POST."];
+        }
+
+        $json = file_get_contents('php://input');
+        $datos = json_decode($json, true);
+
+        if (!$datos || !isset($datos['idConvocatoria'])) {
+            http_response_code(400);
+            return ["error" => "Datos inválidos o falta idConvocatoria."];
+        }
+
+        $resultado = $this->modelo->habilitarPlantilla($datos['idConvocatoria']);
+
+        if (!$resultado['exito']) {
+            http_response_code(500);
+            return ["error" => "Error al habilitar la plantilla: " . $resultado['error']];
+        }
+
+        return ["mensaje" => "Plantilla habilitada correctamente", "idActa" => $resultado['idActa']];
+    }
 }
 ?>

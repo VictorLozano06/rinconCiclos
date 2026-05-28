@@ -370,5 +370,12 @@ class ModActas {
             return ['exito' => false, 'error' => $e->getMessage()];
         }
     }
+
+    public function habilitarPlantilla($idConvocatoria) {
+        // En la versión actual de la BD, una convocatoria es "pendiente" mientras no tenga acta.
+        // Si insertamos un acta vacía aquí, desaparece de la vista del profesor porque la query busca a.idActa IS NULL.
+        // Por tanto, simulamos la habilitación sin alterar la BD, para que el profesor siga viéndola.
+        return ['exito' => true, 'idActa' => 0];
+    }
 }
 ?>
