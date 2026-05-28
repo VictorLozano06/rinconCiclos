@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 export class CiclosCursosComponent {
   public mostrarModalNuevoCiclo = false;
   public mostrarModalEditarCiclo = false;
-  public mostrarModalEditarCurso = false;
   public mostrarModalConfirmar = false;
   public confirmarMensaje: string = '';
 
@@ -20,8 +19,6 @@ export class CiclosCursosComponent {
   public nuevaFamilia: string = '';
   public cicloSeleccionado: any = null;
   public editarFamilia: string = '';
-  public cursoSeleccionado: any = null;
-  public editarNombreCurso: string = '';
   public errorMensaje: string = '';
 
   public ciclos = [
@@ -99,29 +96,6 @@ export class CiclosCursosComponent {
 
   eliminarCiclo(ciclo: any): void {
     this.confirmarMensaje = `¿Eliminar el ciclo "${ciclo.siglas}" y todos sus cursos?`;
-    this.mostrarModalConfirmar = true;
-  }
-
-  abrirEditarCurso(ciclo: any, curso: any): void {
-    this.errorMensaje = '';
-    this.cicloSeleccionado = ciclo;
-    this.cursoSeleccionado = curso;
-    this.editarNombreCurso = curso.nombre;
-    this.mostrarModalEditarCurso = true;
-  }
-
-  guardarEditarCurso(): void {
-    this.errorMensaje = '';
-    if (!this.editarNombreCurso.trim()) {
-      this.errorMensaje = 'El nombre del curso no puede estar vacío';
-      return;
-    }
-    this.cursoSeleccionado.nombre = this.editarNombreCurso.trim();
-    this.mostrarModalEditarCurso = false;
-  }
-
-  eliminarCurso(curso: any): void {
-    this.confirmarMensaje = `¿Eliminar el curso "${curso.nombre}"?`;
     this.mostrarModalConfirmar = true;
   }
 
