@@ -49,7 +49,10 @@
     <div class="mb-5">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre del Grupo <span class="text-danger">*</span></label>
       <input type="text" class="form-control custom-input py-2" [class.is-invalid]="errorMensaje" placeholder="Ej. 1º GAD o Alumnos 2º DAW" [(ngModel)]="nuevoNombre" (ngModelChange)="errorMensaje = ''" (keyup.enter)="guardarNuevo()">
-      <div *ngIf="errorMensaje" class="text-danger mt-2 small">{{ errorMensaje }}</div>
+      <div *ngIf="errorMensaje" class="p-3 mt-3 rounded-2 d-flex align-items-center" style="background-color: #f8d7da; color: #58151c; font-weight: 600; font-size: 0.9rem;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMensaje }}
+      </div>
     </div>
 
     <div class="d-flex justify-content-end gap-3 mt-4">
@@ -72,7 +75,10 @@
     <div class="mb-5">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre del Grupo <span class="text-danger">*</span></label>
       <input type="text" class="form-control custom-input py-2" [class.is-invalid]="errorMensaje" [(ngModel)]="editarNombre" (ngModelChange)="errorMensaje = ''" (keyup.enter)="guardarEditar()">
-      <div *ngIf="errorMensaje" class="text-danger mt-2 small">{{ errorMensaje }}</div>
+      <div *ngIf="errorMensaje" class="p-3 mt-3 rounded-2 d-flex align-items-center" style="background-color: #f8d7da; color: #58151c; font-weight: 600; font-size: 0.9rem;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMensaje }}
+      </div>
     </div>
 
     <div class="d-flex justify-content-end gap-3 mt-4">
