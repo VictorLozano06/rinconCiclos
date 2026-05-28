@@ -150,8 +150,10 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
   }
 
   private construirVista(recursos: RecursoDto[], categorias: CategoriaDto[]): void {
-    const nombresPorCategoria = new Map<number, string>();
-    this.recorrerCategorias(categorias, nombresPorCategoria);
+    const categoriasRecurso = this.obtenerCategoriasRecurso(categorias);
+    const nombresPorCategoria = new Map<number, string>(
+      categoriasRecurso.map((categoria) => [categoria.idCategoria, categoria.nombre])
+    );
 
     const recursosOrdenados = [...recursos].sort((primero, segundo) => {
       const fechaPrimero = new Date(primero.fechaPublicacion).getTime();
@@ -159,26 +161,41 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
       return fechaSegundo - fechaPrimero || primero.categoriaNombre.localeCompare(segundo.categoriaNombre) || primero.nombre.localeCompare(segundo.nombre);
     });
 
-    const gruposPorCategoria = new Map<number, RecursoGrupo>();
+    const gruposPorCategoria = new Map<number, RecursoGrupo>(
+      categoriasRecurso.map((categoria) => [
+        categoria.idCategoria,
+        {
+          categoriaNombre: categoria.nombre,
+          idCategoria: categoria.idCategoria,
+          recursos: []
+        }
+      ])
+    );
 
     for (const recurso of recursosOrdenados) {
       const nombreCategoria = nombresPorCategoria.get(recurso.idCategoria) || recurso.categoriaNombre;
+      const grupoExistente = gruposPorCategoria.get(recurso.idCategoria);
 
-      if (!gruposPorCategoria.has(recurso.idCategoria)) {
+      if (!grupoExistente) {
         gruposPorCategoria.set(recurso.idCategoria, {
           categoriaNombre: nombreCategoria,
           idCategoria: recurso.idCategoria,
-          recursos: []
+          recursos: [{
+            ...recurso,
+            categoriaNombre: nombreCategoria
+          }]
         });
+        continue;
       }
 
-      gruposPorCategoria.get(recurso.idCategoria)!.recursos.push({
+      grupoExistente.recursos.push({
         ...recurso,
         categoriaNombre: nombreCategoria
       });
     }
 
-    this.grupos = Array.from(gruposPorCategoria.values());
+    this.grupos = Array.from(gruposPorCategoria.values())
+      .sort((a, b) => a.categoriaNombre.localeCompare(b.categoriaNombre));
     this.filtros = ['Todos', ...this.grupos.map((grupo) => grupo.categoriaNombre)];
     this.filtroActivo = 'Todos';
     this.cursosFiltro = this.construirCursosFiltro(recursos);
@@ -187,15 +204,25 @@ export class RecursoListadoCoordinadorComponent implements OnInit {
     this.filtroCiclo = 'Todos';
   }
 
-  // Recorre el arbol de categorias para tener un mapa rapido id -> nombre.
-  private recorrerCategorias(categorias: CategoriaDto[], nombresPorCategoria: Map<number, string>): void {
-    for (const categoria of categorias) {
-      nombresPorCategoria.set(categoria.idCategoria, categoria.nombre);
+  // Solo usamos categorias finales de recursos. Excluimos toda la rama de reuniones.
+  private obtenerCategoriasRecurso(categorias: CategoriaDto[]): CategoriaDto[] {
+    const resultado: CategoriaDto[] = [];
 
-      if (categoria.subcategorias && categoria.subcategorias.length > 0) {
-        this.recorrerCategorias(categoria.subcategorias, nombresPorCategoria);
+    for (const categoria of categorias) {
+      if (categoria.nombre === 'Reuniones de Equipo') {
+        continue;
       }
+
+      const tieneHijos = !!(categoria.subcategorias && categoria.subcategorias.length > 0);
+      if (tieneHijos) {
+        resultado.push(...this.obtenerCategoriasRecurso(categoria.subcategorias || []));
+        continue;
+      }
+
+      resultado.push(categoria);
     }
+
+    return resultado;
   }
 
   private construirCursosFiltro(recursos: RecursoDto[]): CursoFiltro[] {

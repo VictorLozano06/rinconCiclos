@@ -72,12 +72,8 @@ export class RecursoFormularioComponent {
   public opcionesFilePond: FilePondOptions;
 
   constructor(private apiService: ApiService) {
-    const urlSubidaTemporal = `${this.apiService.baseUrl}?c=Recursos&m=subirArchivoTemporal`;
-    const urlBorradoTemporal = `${this.apiService.baseUrl}?c=Recursos&m=eliminarArchivoTemporal`;
-
-    // FilePond gestiona la subida provisional:
-    // el archivo se sube nada mas seleccionarlo y el backend devuelve
-    // un identificador temporal que luego usaremos al guardar el recurso.
+    // En modo mock no hay backend real: simulamos la subida temporal
+    // para mantener la misma UX del formulario sin tocar la pagina.
     this.opcionesFilePond = {
       allowMultiple: true,
       maxFiles: 10,
@@ -98,19 +94,17 @@ export class RecursoFormularioComponent {
       labelMaxFileSize: 'Tamano maximo por archivo: 10 MB',
       credits: false,
       server: {
-        process: {
-          // "process" sube el archivo a la carpeta temporal del backend.
-          url: urlSubidaTemporal,
-          method: 'POST',
-          onload: (respuesta) => {
-            const dato = JSON.parse(respuesta);
-            return dato.idTemporal || '';
-          }
+        process: (_fieldName, file, _metadata, load, _error, progress) => {
+          const archivo = file as File;
+          const idTemporal = this.crearIdentificadorTemporal(archivo);
+          progress(true, archivo.size, archivo.size);
+          load(idTemporal);
+          return {
+            abort: () => undefined
+          };
         },
-        revert: {
-          // "revert" borra el archivo temporal si el usuario lo quita.
-          url: urlBorradoTemporal,
-          method: 'DELETE'
+        revert: (_uniqueFileId, load) => {
+          load();
         }
       }
     };
@@ -160,10 +154,15 @@ export class RecursoFormularioComponent {
   // A partir del identificador temporal montamos la URL publica temporal
   // que se muestra en pantalla hasta que el recurso se guarde del todo.
   private construirRutaPublica(identificadorTemporal: string): string {
-    return `/api/uploads/${identificadorTemporal}`;
+    return `${this.apiService.uploadsBaseUrl}/${identificadorTemporal}`;
   }
 
   private quitarExtension(nombreArchivo: string): string {
     return nombreArchivo.replace(/\.[^/.]+$/, '');
+  }
+
+  private crearIdentificadorTemporal(archivo: File): string {
+    const nombreSeguro = archivo.name.replace(/[^a-zA-Z0-9.-]/g, '-').toLowerCase();
+    return `${Date.now()}-${nombreSeguro}`;
   }
 }

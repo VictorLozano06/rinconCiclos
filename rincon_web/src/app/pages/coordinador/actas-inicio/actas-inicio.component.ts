@@ -8,7 +8,7 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="container py-4">
+    <div class="container py-4 position-relative">
       <h2 class="mb-4">Proceso de Actas</h2>
       <div class="row g-4">
         <div class="col-md-6">
@@ -21,8 +21,8 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" routerLink="/coordinador/reuniones-de-equipo/actas/historial">
-            <div class="card-body text-center p-5">
+          <div class="card h-100 shadow-sm border-0 bg-light" style="cursor: pointer;" routerLink="/coordinador/reuniones-de-equipo/actas/historial">
+            <div class="card-body text-center p-5 opacity-75 hover-opacity-100 transition-all">
               <i class="bi bi-archive text-success mb-3" style="font-size: 3rem;"></i>
               <h4 class="card-title">Historial de Actas</h4>
               <p class="card-text text-muted">Consultar el registro histórico de actas redactadas.</p>
@@ -65,7 +65,11 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
         </div>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .hover-opacity-100:hover { opacity: 1 !important; }
+    .transition-all { transition: all 0.3s ease; }
+  `]
 })
 export class ActasInicioCoordinadorComponent implements OnInit {
   public mostrarModal = false;

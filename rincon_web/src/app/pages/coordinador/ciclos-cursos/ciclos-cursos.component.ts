@@ -20,26 +20,57 @@ export class CiclosCursosComponent implements OnInit {
   public nuevaFamilia: string = '';
   public cicloSeleccionado: any = null;
   public editarFamilia: string = '';
+  public errorMensaje: string = '';
 
-  public errorNuevoCiclo: string = '';
-  
-  public accionConfirmar: 'eliminarCiclo' | null = null;
-  public itemAEliminar: any = null;
+  public ciclos = [
+    {
+      siglas: 'DAW',
+      familia: 'Desarrollo de Aplicaciones Web',
+      abierto: false,
+      cursos: [
+        { nombre: '1DAW', familia: 'Desarrollo de Aplicaciones Web' },
+        { nombre: '2DAW', familia: 'Desarrollo de Aplicaciones Web' }
+      ]
+    },
+    {
+      siglas: 'DAM',
+      familia: 'Desarrollo de Aplicaciones Multiplataforma',
+      abierto: false,
+      cursos: [
+        { nombre: '1DAM', familia: 'Desarrollo de Aplicaciones Multiplataforma' },
+        { nombre: '2DAM', familia: 'Desarrollo de Aplicaciones Multiplataforma' }
+      ]
+    },
+    {
+      siglas: 'SMR',
+      familia: 'Sistemas Microinformáticos y Redes',
+      abierto: false,
+      cursos: [
+        { nombre: '1SMR', familia: 'Sistemas Microinformáticos y Redes' },
+        { nombre: '2SMR', familia: 'Sistemas Microinformáticos y Redes' }
+      ]
+    }
+  ];
 
-  public ciclos: any[] = [];
-
-  constructor(private ciclosService: CiclosService) {}
-
-  ngOnInit(): void {
-    this.cargarCiclos();
-  }
-
-  cargarCiclos(): void {
-    this.ciclosService.getCiclos().subscribe({
-      next: (data: any) => {
-        this.ciclos = data;
-      },
-      error: (err) => console.error('Error al cargar ciclos', err)
+  guardarNuevoCiclo(): void {
+    this.errorMensaje = '';
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) {
+      this.errorMensaje = 'No puedes dejar campos vacíos al crear un ciclo';
+      return;
+    }
+    const existe = this.ciclos.find(c => c.siglas.toLowerCase() === this.nuevoNombre.trim().toLowerCase());
+    if (existe) {
+      this.errorMensaje = 'No se puede introducir el mismo ciclo';
+      return;
+    }
+    this.ciclos.push({
+      siglas: this.nuevoNombre.trim(),
+      familia: this.nuevaFamilia.trim(),
+      abierto: false,
+      cursos: [
+        { nombre: '1' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() },
+        { nombre: '2' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() }
+      ]
     });
   }
 
@@ -73,20 +104,21 @@ export class CiclosCursosComponent implements OnInit {
   }
 
   abrirEditarCiclo(ciclo: any): void {
+    this.errorMensaje = '';
     this.cicloSeleccionado = ciclo;
     this.editarFamilia = ciclo.familia;
     this.mostrarModalEditarCiclo = true;
   }
 
   guardarEditarCiclo(): void {
-    if (!this.editarFamilia.trim()) return;
-    this.ciclosService.editarCiclo(this.cicloSeleccionado.idCiclo, this.cicloSeleccionado.siglas, this.editarFamilia.trim()).subscribe({
-      next: () => {
-        this.cargarCiclos();
-        this.mostrarModalEditarCiclo = false;
-      },
-      error: (err) => console.error('Error al editar ciclo', err)
-    });
+    this.errorMensaje = '';
+    if (!this.editarFamilia.trim()) {
+      this.errorMensaje = 'La familia profesional no puede estar vacía';
+      return;
+    }
+    this.cicloSeleccionado.familia = this.editarFamilia.trim();
+    this.cicloSeleccionado.cursos.forEach((c: any) => c.familia = this.editarFamilia.trim());
+    this.mostrarModalEditarCiclo = false;
   }
 
   eliminarCiclo(ciclo: any): void {
