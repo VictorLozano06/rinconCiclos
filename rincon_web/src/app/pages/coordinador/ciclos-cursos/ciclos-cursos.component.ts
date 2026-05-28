@@ -52,7 +52,10 @@ export class CiclosCursosComponent implements OnInit {
 
   guardarNuevoCiclo(): void {
     this.errorNuevoCiclo = '';
-    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) {
+      this.errorNuevoCiclo = 'No puedes dejar campos vacíos al crear un ciclo';
+      return;
+    }
 
     // Validar duplicidad
     const existe = this.ciclos.some(c => c.siglas.toLowerCase() === this.nuevoNombre.trim().toLowerCase());
@@ -79,7 +82,11 @@ export class CiclosCursosComponent implements OnInit {
   }
 
   guardarEditarCiclo(): void {
-    if (!this.editarFamilia.trim()) return;
+    this.errorNuevoCiclo = '';
+    if (!this.editarFamilia.trim()) {
+      this.errorNuevoCiclo = 'La familia profesional no puede estar vacía';
+      return;
+    }
     this.ciclosService.editarCiclo(this.cicloSeleccionado.idCiclo, this.cicloSeleccionado.siglas, this.editarFamilia.trim()).subscribe({
       next: () => {
         this.cargarCiclos();
