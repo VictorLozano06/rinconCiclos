@@ -1,88 +1,176 @@
-# Rincon de Ciclos - Guia Tecnica del Monorepositorio
+# Rincon de Ciclos - Guia Tecnica del Proyecto
 
-Este proyecto contiene la aplicacion docente Rincon de Ciclos, dividida en dos capas:
+Este repositorio contiene la aplicacion docente `Rincon de Ciclos`, separada en dos capas:
 
-1. **rincon_back**: Servidor de datos desarrollado en PHP con arquitectura de controladores y modelos.
-2. **rincon_web**: Interfaz de usuario interactiva desarrollada en Angular 19.
+1. `rincon_back`: backend en PHP con controladores y modelos.
+2. `rincon_web`: frontend en Angular 19.
 
----
+## Estructura general
 
-## Estructura General del Proyecto
-
-Rincon de ciclos/
-├── SQL.sql # Base de datos e inicializacion
-├── rincon_back/ # Capa de Backend (PHP)
-│ ├── .env # Parametros confidenciales de conexion
-│ ├── index.php # Punto de acceso y enrutador unico
-│ └── src/
-│ ├── configuracion/
-│ │ ├── conexionBD.php # Conexiones seguras via PDO
-│ │ ├── ControladorBase.php # Respuestas JSON y traductor de errores
-│ │ └── rutas.php # Constantes de directorios
-│ ├── controladores/
-│ │ └── conCategorias.php # Controlador de categorias
-│ └── modelos/
-│ └── modCategorias.php # Consultas y estructuracion en arbol
-└── rincon_web/ # Capa de Frontend (Angular 19)
-├── src/
-│ ├── app/
-│ │ ├── components/ # Componentes comunes (Sidebars, buscador)
-│ │ ├── dto/ # Objetos de transferencia de datos
-│ │ ├── pages/ # Vistas por roles (Profesor / Coordinador)
-│ │ └── services/ # Consumo de la API en PHP
-│ └── assets/ # Iconos y estilos globales
-└── angular.json # Workspace de Angular
-
-## Flujo de Datos y Ciclo de Vida (Secuencia)
-
-Ejemplo con como traemos las categorias del backend a angular.
-
-**Backend (PHP + MySQL)**
-MySQL: Guarda las categorías y subcategorías.
-Ejemplo: Tutorías es la categoría padre y PAT la hija.
-Modelo (PHP): Obtiene los datos y organiza las categorías en forma de árbol.
-Controlador (PHP): Convierte los datos a JSON y los envía al frontend.
-
-**Frontend (Angular)**
-Servicio: Hace la petición HTTP y recibe las categorías en JSON.
-Sidebar:
-Procesa las categorías.
-Asigna iconos automáticamente.
-Genera las rutas según el rol del usuario.
-HTML: Muestra las categorías y despliega las subcategorías sin recargar la página.
-
-## Guia de Desarrollo Rapido
-
-### Como crear una nueva pagina en el Frontend
-
-1. **Crear el componente**: Generar la carpeta y archivos bajo `src/app/pages/profesor/nombre-pagina/` o `src/app/pages/coordinador/nombre-pagina/`.
-2. **Definir el codigo de la vista**: En el archivo HTML, estructurar el diseno utilizando el sistema de rejillas de Bootstrap 5.
-3. **Configurar la ruta**: Registrar el componente importandolo en `profesor.routes.ts` o `coordinador.routes.ts`
-
-### Integracion de Bootstrap 5
-
-El framework Bootstrap 5 y su libreria de iconos estan integrados de manera global.
-
-- **Configuracion global**: Declarados en `angular.json` en las secciones de estilos y scripts.
-- **Uso**: Compatible de forma directa en las plantillas HTML de cualquier componente del sistema sin necesidad de declaraciones adicionales.
-
-Para ser consistentes con los disenos utilizamos las clases para grid de bootstrap como: contenedores (`.container-fluid`), filas (`.row`) y columnas (`.col-12`, `.col-md-6`).
-
-### DTOs (Data Transfer Objects)
-
-**Las interfaces que se usan en múltiples componentes DEBEN estar en la carpeta `src/app/dto/`**
-
-Esto evita duplicación de código y mantiene el proyecto escalable. Los archivos de tipos reutilizables van en `dto/` con la extensión `.dto.ts`.
-
-#### Ejemplo:
+```text
+rinconCiclos/
+├── SQL.sql
+├── README.md
+├── docs/
+│   └── manual-programador.md
+├── rincon_back/
+│   ├── .env
+│   ├── index.php
+│   ├── uploads/
+│   │   └── recursos/
+│   └── src/
+│       ├── configuracion/
+│       │   ├── conexionBD.php
+│       │   ├── ControladorBase.php
+│       │   └── rutas.php
+│       ├── controladores/
+│       │   ├── conActas.php
+│       │   ├── conCategorias.php
+│       │   ├── conCiclos.php
+│       │   ├── conConvocatorias.php
+│       │   ├── conPlantillas.php
+│       │   └── conRecursos.php
+│       └── modelos/
+│           ├── modActas.php
+│           ├── modCategorias.php
+│           ├── modCiclos.php
+│           ├── modConvocatorias.php
+│           ├── modPlantillas.php
+│           └── modRecursos.php
+└── rincon_web/
+    ├── angular.json
+    └── src/
+        ├── assets/
+        └── app/
+            ├── components/
+            │   ├── buscador/
+            │   ├── recurso-detalle-compartido/
+            │   ├── recurso-formulario/
+            │   ├── recurso-item/
+            │   ├── recurso-listado-categoria-compartido/
+            │   ├── sidebar-coordinador/
+            │   └── sidebar-profesor/
+            ├── dto/
+            ├── pages/
+            │   ├── coordinador/
+            │   │   ├── actas-historial/
+            │   │   ├── actas-inicio/
+            │   │   ├── categorias/
+            │   │   ├── ciclos-cursos/
+            │   │   ├── convocatorias/
+            │   │   ├── convocatorias-canceladas/
+            │   │   ├── inicio/
+            │   │   ├── layout/
+            │   │   ├── lugares/
+            │   │   ├── recurso-formulario/
+            │   │   ├── recurso-listado/
+            │   │   └── recurso-listado-categoria/
+            │   └── profesor/
+            │       ├── inicio/
+            │       ├── layout/
+            │       └── recurso-listado-categoria/
+            └── services/
 ```
-en src/app/dto/convocatoria.dto.ts
+
+## Backend
+
+El backend expone respuestas JSON desde `index.php` y reparte la logica por controlador y modelo.
+
+- `ControladorBase.php`: respuestas JSON y errores HTTP comunes.
+- `conexionBD.php`: conexion PDO.
+- `rutas.php`: rutas internas del backend.
+
+Modulos ya presentes:
+
+- `Categorias`
+- `Ciclos`
+- `Convocatorias`
+- `Actas`
+- `Recursos`
+- `Plantillas`
+
+### Recursos
+
+El modulo de recursos ha crecido respecto a la version inicial:
+
+- subida de archivos con FilePond
+- carpeta temporal en `rincon_back/uploads/recursos/temp`
+- carpeta final por recurso dentro de `rincon_back/uploads/recursos/`
+- gestion de enlaces y archivos por separado en base de datos
+
+## Frontend
+
+El frontend esta organizado por:
+
+- `components/`: piezas reutilizables
+- `dto/`: interfaces compartidas
+- `pages/`: vistas por rol
+- `services/`: acceso HTTP al backend
+
+### Componentes reutilizables importantes
+
+- `buscador`: buscador global de recursos con sugerencias
+- `recurso-item`: tarjeta comun de recurso
+- `recurso-detalle-compartido`: detalle comun de recurso
+- `recurso-formulario`: formulario de creacion y edicion de recursos
+- `recurso-listado-categoria-compartido`: listado compartido por categoria
+- `sidebar-profesor` y `sidebar-coordinador`
+
+### Paginas de coordinador añadidas o relevantes
+
+- `categorias/`
+- `lugares/`
+- `recurso-formulario/`
+- `recurso-listado/`
+- `recurso-listado-categoria/`
+- `convocatorias/`
+- `convocatorias-canceladas/`
+- `actas-inicio/`
+- `actas-historial/`
+
+## Flujo de datos basico
+
+Ejemplo simple con categorias:
+
+1. Angular llama a `CategoriaService`.
+2. El servicio hace una peticion HTTP a `index.php?c=Categorias&m=listar`.
+3. `conCategorias.php` recibe la peticion.
+4. `modCategorias.php` consulta la base de datos y monta el arbol.
+5. El controlador devuelve JSON.
+6. Angular pinta el resultado en sidebar o en la pagina de categorias.
+
+## Desarrollo rapido
+
+### Crear una nueva pagina en Angular
+
+1. Crear carpeta dentro de `src/app/pages/profesor/` o `src/app/pages/coordinador/`.
+2. Crear `.ts`, `.html` y `.css`.
+3. Registrar la ruta en `profesor.routes.ts` o `coordinador.routes.ts`.
+4. Si la pagina necesita datos, crear o reutilizar un servicio en `services/`.
+
+### DTOs
+
+Las interfaces compartidas deben ir en `src/app/dto/`.
+
+Ejemplo:
+
+```ts
 export interface ConvocatoriaDetalle {
   idConvocatoria: number;
   fecha: string;
-  // ... más propiedades
 }
-
-// En componentes, importar desde dto:
-import { ConvocatoriaDetalle } from '../../../dto/convocatoria.dto';
 ```
+
+### Bootstrap y estilos globales
+
+Bootstrap 5 sigue integrado globalmente desde `angular.json`.
+
+Se usa sobre todo para:
+
+- grid
+- utilidades de espaciado
+- estructura base de layout
+
+## Documentacion adicional
+
+- [manual-programador.md](C:/Users/EQUIPO/Desktop/rinconCiclos/docs/manual-programador.md)
