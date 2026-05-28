@@ -13,6 +13,7 @@ import { ActasHistorialComponent } from './actas-historial/actas-historial.compo
 import { ActasInicioCoordinadorComponent } from './actas-inicio/actas-inicio.component';
 import { CategoriasComponent } from './categorias/categorias.component';
 import { LugaresComponent } from './lugares/lugares.component';
+import { GruposParticipantesComponent } from './grupos-participantes/grupos-participantes.component';
 
 export const COORDINADOR_ROUTES: Routes = [
   {
@@ -31,6 +32,7 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
       { path: 'gestion-de-cursos', component: CiclosCursosComponent },
+      { path: 'gestion-de-grupos', component: GruposParticipantesComponent },
       { path: 'categorias', component: CategoriasComponent },
       { path: 'lugares', component: LugaresComponent },
       { path: 'reuniones-de-equipo/actas', component: ActasInicioCoordinadorComponent },

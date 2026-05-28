@@ -79,9 +79,14 @@
       <input type="text" class="form-control custom-input py-2" placeholder="ej: Desarrollo de Aplicaciones Web" [(ngModel)]="nuevaFamilia">
     </div>
 
-    <p class="text-secondary small mb-5 modal-helper-text">
+    <p class="text-secondary small mb-3 modal-helper-text">
       se crearán automáticamente los cursos 1º y 2º al guardar
     </p>
+
+    <div *ngIf="errorMensaje" class="p-3 mb-4 rounded-2 d-flex align-items-center" style="background-color: #f8d7da; color: #58151c; font-weight: 600; font-size: 0.9rem;">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMensaje }}
+    </div>
 
     <div class="d-flex justify-content-end gap-3">
       <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
@@ -103,7 +108,12 @@
     <div class="mb-4">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Familia
         Profesional</label>
-      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarFamilia">
+      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarFamilia" (ngModelChange)="errorMensaje = ''" (keyup.enter)="guardarEditarCiclo()">
+    </div>
+
+    <div *ngIf="errorMensaje" class="p-3 mt-3 rounded-2 d-flex align-items-center" style="background-color: #f8d7da; color: #58151c; font-weight: 600; font-size: 0.9rem;">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMensaje }}
     </div>
 
     <div class="d-flex justify-content-end gap-3 mt-5">
@@ -128,7 +138,12 @@
 
     <div class="mb-4">
       <label class="text-secondary x-small fw-bold text-uppercase mb-2 d-block label-spacing">Nombre Curso</label>
-      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso">
+      <input type="text" class="form-control custom-input py-2" [(ngModel)]="editarNombreCurso" (ngModelChange)="errorMensaje = ''" (keyup.enter)="guardarEditarCurso()">
+    </div>
+
+    <div *ngIf="errorMensaje" class="p-3 mt-3 rounded-2 d-flex align-items-center" style="background-color: #f8d7da; color: #58151c; font-weight: 600; font-size: 0.9rem;">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      {{ errorMensaje }}
     </div>
 
     <div class="d-flex justify-content-end gap-3 mt-5">

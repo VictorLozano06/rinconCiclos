@@ -22,6 +22,7 @@ export class CiclosCursosComponent {
   public editarFamilia: string = '';
   public cursoSeleccionado: any = null;
   public editarNombreCurso: string = '';
+  public errorMensaje: string = '';
 
   public ciclos = [
     {
@@ -54,7 +55,16 @@ export class CiclosCursosComponent {
   ];
 
   guardarNuevoCiclo(): void {
-    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
+    this.errorMensaje = '';
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) {
+      this.errorMensaje = 'No puedes dejar campos vacíos al crear un ciclo';
+      return;
+    }
+    const existe = this.ciclos.find(c => c.siglas.toLowerCase() === this.nuevoNombre.trim().toLowerCase());
+    if (existe) {
+      this.errorMensaje = 'No se puede introducir el mismo ciclo';
+      return;
+    }
     this.ciclos.push({
       siglas: this.nuevoNombre.trim(),
       familia: this.nuevaFamilia.trim(),
@@ -70,13 +80,18 @@ export class CiclosCursosComponent {
   }
 
   abrirEditarCiclo(ciclo: any): void {
+    this.errorMensaje = '';
     this.cicloSeleccionado = ciclo;
     this.editarFamilia = ciclo.familia;
     this.mostrarModalEditarCiclo = true;
   }
 
   guardarEditarCiclo(): void {
-    if (!this.editarFamilia.trim()) return;
+    this.errorMensaje = '';
+    if (!this.editarFamilia.trim()) {
+      this.errorMensaje = 'La familia profesional no puede estar vacía';
+      return;
+    }
     this.cicloSeleccionado.familia = this.editarFamilia.trim();
     this.cicloSeleccionado.cursos.forEach((c: any) => c.familia = this.editarFamilia.trim());
     this.mostrarModalEditarCiclo = false;
@@ -88,6 +103,7 @@ export class CiclosCursosComponent {
   }
 
   abrirEditarCurso(ciclo: any, curso: any): void {
+    this.errorMensaje = '';
     this.cicloSeleccionado = ciclo;
     this.cursoSeleccionado = curso;
     this.editarNombreCurso = curso.nombre;
@@ -95,7 +111,11 @@ export class CiclosCursosComponent {
   }
 
   guardarEditarCurso(): void {
-    if (!this.editarNombreCurso.trim()) return;
+    this.errorMensaje = '';
+    if (!this.editarNombreCurso.trim()) {
+      this.errorMensaje = 'El nombre del curso no puede estar vacío';
+      return;
+    }
     this.cursoSeleccionado.nombre = this.editarNombreCurso.trim();
     this.mostrarModalEditarCurso = false;
   }
