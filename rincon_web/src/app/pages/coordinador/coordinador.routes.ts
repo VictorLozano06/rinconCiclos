@@ -8,9 +8,10 @@ import { RecursoListadoCoordinadorComponent } from './recurso-listado/recurso-li
 import { RecursoFormularioPageComponent } from './recurso-formulario/recurso-formulario.component';
 import { RecursoDetalleCompartidoComponent } from '../../components/recurso-detalle-compartido/recurso-detalle-compartido.component';
 import { CiclosCursosComponent } from './ciclos-cursos/ciclos-cursos.component';
-import { ActasPlantillaComponent } from './actas-plantilla/actas-plantilla.component';
 import { ActasHistorialComponent } from './actas-historial/actas-historial.component';
 import { ActasInicioCoordinadorComponent } from './actas-inicio/actas-inicio.component';
+import { CategoriasComponent } from './categorias/categorias.component';
+import { LugaresComponent } from './lugares/lugares.component';
 
 export const COORDINADOR_ROUTES: Routes = [
   {
@@ -29,8 +30,9 @@ export const COORDINADOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/convocatorias/:id', component: ConvocatoriasComponent },
       { path: 'gestion-de-ciclos', component: CiclosCursosComponent },
       { path: 'gestion-de-cursos', component: CiclosCursosComponent },
+      { path: 'categorias', component: CategoriasComponent },
+      { path: 'lugares', component: LugaresComponent },
       { path: 'reuniones-de-equipo/actas', component: ActasInicioCoordinadorComponent },
-      { path: 'reuniones-de-equipo/actas/plantillas', component: ActasPlantillaComponent },
       { path: 'reuniones-de-equipo/actas/historial', component: ActasHistorialComponent },
       { path: 'recursos', component: RecursoListadoCoordinadorComponent, data: { rutaBase: '/coordinador', rutaInicio: '/coordinador/recursos' } },
       { path: 'recursos/crear', component: RecursoFormularioPageComponent, data: { modoFormulario: 'crear' } },

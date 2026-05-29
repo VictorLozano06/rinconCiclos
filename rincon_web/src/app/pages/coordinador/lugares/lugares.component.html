@@ -1,0 +1,78 @@
+<section class="seccion-gestion">
+  <div class="cabecera-gestion">
+    <div>
+      <h2 class="titulo-seccion">Lugares</h2>
+      <p class="texto-intro">{{ textoIntro }}</p>
+    </div>
+  </div>
+
+  <p *ngIf="feedback" class="feedback-accion">{{ feedback }}</p>
+
+  <div class="contenido-gestion">
+    <section class="panel-gestion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Listado</h3>
+          <p>{{ lugares.length }} lugares</p>
+        </div>
+      </div>
+
+      <div class="lista-items">
+        <article *ngFor="let lugar of lugares" class="fila-item" [class.fila-item-activa]="esLugarActivo(lugar)">
+          <div>
+            <div class="fila-meta">Lugar</div>
+            <strong>{{ lugar.nombre }}</strong>
+          </div>
+
+          <div class="fila-acciones">
+            <button type="button" class="boton-secundario" (click)="editarLugar(lugar)">Editar</button>
+            <button type="button" class="boton-peligro" (click)="eliminarLugar(lugar)">Eliminar</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel-gestion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Crear lugar</h3>
+          <p>Formulario</p>
+        </div>
+      </div>
+
+      <form class="formulario-simple" (ngSubmit)="guardarLugarNuevo()">
+        <label class="campo-formulario">
+          <span>Nombre</span>
+          <input type="text" [(ngModel)]="formularioCrear.nombre" name="nombreCrear" placeholder="Ej. Recuperaciones">
+        </label>
+
+        <div class="acciones-formulario">
+          <button type="submit" class="boton-primario">Crear lugar</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div *ngIf="modalEdicionAbierto" class="modal-overlay">
+    <div class="modal-edicion">
+      <div class="panel-cabecera">
+        <div>
+          <h3>Editar lugar</h3>
+          <p>{{ lugarEditando?.nombre }}</p>
+        </div>
+      </div>
+
+      <form class="formulario-simple" (ngSubmit)="guardarLugarEditado()">
+        <label class="campo-formulario">
+          <span>Nombre</span>
+          <input type="text" [(ngModel)]="formularioEditar.nombre" name="nombreEditar">
+        </label>
+
+        <div class="acciones-formulario">
+          <button type="button" class="boton-secundario" (click)="cerrarModalEdicion()">Cancelar</button>
+          <button type="submit" class="boton-primario">Guardar lugar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -22,6 +22,7 @@ export const PROFESOR_ROUTES: Routes = [
       { path: 'reuniones-de-equipo/actas', component: ActasInicioProfesorComponent },
       { path: 'reuniones-de-equipo/actas/asistencia', component: ActasAsistenciaComponent },
       { path: 'reuniones-de-equipo/actas/redaccion', component: ActasRedaccionComponent },
+      { path: 'reuniones-de-equipo/actas/historial', component: ActasHistorialComponent },
       { path: 'recurso/:idCategoria/:numRecurso', component: RecursoDetalleCompartidoComponent, data: { rutaBase: '/profesor', rutaInicio: '/profesor/inicio' } },
       { path: ':section', component: RecursoListadoCategoriaProfesorComponent },
       { path: ':section/:subsection', component: RecursoListadoCategoriaProfesorComponent }

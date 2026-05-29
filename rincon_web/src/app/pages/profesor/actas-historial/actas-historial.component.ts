@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ActasService, ActaHistorial, Informacion } from '../../../services/actas.service';
 import { PdfService } from '../../../services/pdf.service';
-
+import { ProcesoActasService } from '../../../services/proceso-actas.service';
 
 @Component({
   selector: 'app-actas-historial',
@@ -23,37 +24,23 @@ export class ActasHistorialComponent implements OnInit {
 
   constructor(
     private actasService: ActasService,
-    private pdfService: PdfService
+    private pdfService: PdfService,
+    private procesoActasService: ProcesoActasService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.actasService.getAniosDisponibles().subscribe({
-      next: (anios) => {
-        this.aniosDisponibles = anios;
-        if (anios.length > 0) {
-          this.anioSeleccionado = anios[0];
-        }
-      },
-      error: (err) => console.error('Error cargando años disponibles', err)
-    });
-  }
-
-  get cursoSeleccionado(): string {
-    const anio = this.aniosDisponibles.find(a => a === this.anioSeleccionado);
-    return anio ? `${anio}/${anio + 1}` : '';
-  }
-
-  buscar(): void {
-    if (!this.anioSeleccionado) return;
+    const idProfesorActual = 1;
     this.buscando = true;
-    this.actasService.getHistorialPorAnio(this.anioSeleccionado).subscribe({
+    
+    this.actasService.getHistorialPorProfesor(idProfesorActual).subscribe({
       next: (actas) => {
         this.actasFiltradas = actas;
         this.buscando = false;
         this.busquedaRealizada = true;
       },
       error: (err) => {
-        console.error('Error buscando actas', err);
+        console.error('Error cargando historial de actas del profesor', err);
         this.buscando = false;
         this.busquedaRealizada = true;
         this.actasFiltradas = [];
@@ -63,6 +50,11 @@ export class ActasHistorialComponent implements OnInit {
 
   verActa(acta: ActaHistorial): void {
     this.actaVisualizando = acta;
+  }
+
+  editarActa(acta: ActaHistorial): void {
+    this.procesoActasService.cargarActaParaEdicion(acta);
+    this.router.navigate(['/profesor/reuniones-de-equipo/actas/redaccion']);
   }
 
   cerrarModal(): void {

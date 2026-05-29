@@ -25,4 +25,12 @@ export class CiclosService {
   eliminarCiclo(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiService.baseUrl}?c=Ciclos&m=eliminar&id=${id}`);
   }
+
+  editarCurso(idCiclo: number, nombre: string): Observable<any> {
+    return this.http.put<any>(`${this.apiService.baseUrl}?c=Ciclos&m=editarCurso`, { idCiclo, nombre });
+  }
+
+  eliminarCurso(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiService.baseUrl}?c=Ciclos&m=eliminarCurso&id=${id}`);
+  }
 }

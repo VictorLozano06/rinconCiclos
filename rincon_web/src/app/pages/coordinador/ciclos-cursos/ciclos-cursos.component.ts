@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CiclosService } from '../../../services/ciclos.service';
 
 @Component({
   selector: 'app-ciclos-cursos',
@@ -9,10 +10,9 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './ciclos-cursos.component.html',
   styleUrl: './ciclos-cursos.component.css'
 })
-export class CiclosCursosComponent {
+export class CiclosCursosComponent implements OnInit {
   public mostrarModalNuevoCiclo = false;
   public mostrarModalEditarCiclo = false;
-  public mostrarModalEditarCurso = false;
   public mostrarModalConfirmar = false;
   public confirmarMensaje: string = '';
 
@@ -20,53 +20,59 @@ export class CiclosCursosComponent {
   public nuevaFamilia: string = '';
   public cicloSeleccionado: any = null;
   public editarFamilia: string = '';
-  public cursoSeleccionado: any = null;
-  public editarNombreCurso: string = '';
 
-  public ciclos = [
-    {
-      siglas: 'DAW',
-      familia: 'Desarrollo de Aplicaciones Web',
-      abierto: false,
-      cursos: [
-        { nombre: '1DAW', familia: 'Desarrollo de Aplicaciones Web' },
-        { nombre: '2DAW', familia: 'Desarrollo de Aplicaciones Web' }
-      ]
-    },
-    {
-      siglas: 'DAM',
-      familia: 'Desarrollo de Aplicaciones Multiplataforma',
-      abierto: false,
-      cursos: [
-        { nombre: '1DAM', familia: 'Desarrollo de Aplicaciones Multiplataforma' },
-        { nombre: '2DAM', familia: 'Desarrollo de Aplicaciones Multiplataforma' }
-      ]
-    },
-    {
-      siglas: 'SMR',
-      familia: 'Sistemas Microinformáticos y Redes',
-      abierto: false,
-      cursos: [
-        { nombre: '1SMR', familia: 'Sistemas Microinformáticos y Redes' },
-        { nombre: '2SMR', familia: 'Sistemas Microinformáticos y Redes' }
-      ]
-    }
-  ];
+  public errorNuevoCiclo: string = '';
+  
+  public accionConfirmar: 'eliminarCiclo' | null = null;
+  public itemAEliminar: any = null;
 
-  guardarNuevoCiclo(): void {
-    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) return;
-    this.ciclos.push({
-      siglas: this.nuevoNombre.trim(),
-      familia: this.nuevaFamilia.trim(),
-      abierto: false,
-      cursos: [
-        { nombre: '1' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() },
-        { nombre: '2' + this.nuevoNombre.trim(), familia: this.nuevaFamilia.trim() }
-      ]
+  public ciclos: any[] = [];
+
+  constructor(private ciclosService: CiclosService) {}
+
+  ngOnInit(): void {
+    this.cargarCiclos();
+  }
+
+  cargarCiclos(): void {
+    this.ciclosService.getCiclos().subscribe({
+      next: (data: any) => {
+        this.ciclos = data;
+      },
+      error: (err) => console.error('Error al cargar ciclos', err)
     });
-    this.mostrarModalNuevoCiclo = false;
+  }
+
+  abrirModalNuevoCiclo(): void {
     this.nuevoNombre = '';
     this.nuevaFamilia = '';
+    this.errorNuevoCiclo = '';
+    this.mostrarModalNuevoCiclo = true;
+  }
+
+  guardarNuevoCiclo(): void {
+    this.errorNuevoCiclo = '';
+    if (!this.nuevoNombre.trim() || !this.nuevaFamilia.trim()) {
+      this.errorNuevoCiclo = 'No puedes dejar campos vacíos al crear un ciclo';
+      return;
+    }
+
+    // Validar duplicidad
+    const existe = this.ciclos.some(c => c.siglas.toLowerCase() === this.nuevoNombre.trim().toLowerCase());
+    if (existe) {
+      this.errorNuevoCiclo = 'No se puede introducir el mismo ciclo';
+      return;
+    }
+
+    this.ciclosService.crearCiclo(this.nuevoNombre.trim(), this.nuevaFamilia.trim()).subscribe({
+      next: () => {
+        this.cargarCiclos();
+        this.mostrarModalNuevoCiclo = false;
+        this.nuevoNombre = '';
+        this.nuevaFamilia = '';
+      },
+      error: (err) => console.error('Error al crear ciclo', err)
+    });
   }
 
   abrirEditarCiclo(ciclo: any): void {
@@ -76,41 +82,43 @@ export class CiclosCursosComponent {
   }
 
   guardarEditarCiclo(): void {
-    if (!this.editarFamilia.trim()) return;
-    this.cicloSeleccionado.familia = this.editarFamilia.trim();
-    this.cicloSeleccionado.cursos.forEach((c: any) => c.familia = this.editarFamilia.trim());
-    this.mostrarModalEditarCiclo = false;
+    this.errorNuevoCiclo = '';
+    if (!this.editarFamilia.trim()) {
+      this.errorNuevoCiclo = 'La familia profesional no puede estar vacía';
+      return;
+    }
+    this.ciclosService.editarCiclo(this.cicloSeleccionado.idCiclo, this.cicloSeleccionado.siglas, this.editarFamilia.trim()).subscribe({
+      next: () => {
+        this.cargarCiclos();
+        this.mostrarModalEditarCiclo = false;
+      },
+      error: (err) => console.error('Error al editar ciclo', err)
+    });
   }
 
   eliminarCiclo(ciclo: any): void {
     this.confirmarMensaje = `¿Eliminar el ciclo "${ciclo.siglas}" y todos sus cursos?`;
-    this.mostrarModalConfirmar = true;
-  }
-
-  abrirEditarCurso(ciclo: any, curso: any): void {
-    this.cicloSeleccionado = ciclo;
-    this.cursoSeleccionado = curso;
-    this.editarNombreCurso = curso.nombre;
-    this.mostrarModalEditarCurso = true;
-  }
-
-  guardarEditarCurso(): void {
-    if (!this.editarNombreCurso.trim()) return;
-    this.cursoSeleccionado.nombre = this.editarNombreCurso.trim();
-    this.mostrarModalEditarCurso = false;
-  }
-
-  eliminarCurso(curso: any): void {
-    this.confirmarMensaje = `¿Eliminar el curso "${curso.nombre}"?`;
+    this.accionConfirmar = 'eliminarCiclo';
+    this.itemAEliminar = ciclo;
     this.mostrarModalConfirmar = true;
   }
 
   confirmarAccion(): void {
-    this.mostrarModalConfirmar = false;
+    if (this.accionConfirmar === 'eliminarCiclo' && this.itemAEliminar) {
+      this.ciclosService.eliminarCiclo(this.itemAEliminar.idCiclo).subscribe({
+        next: () => {
+          this.cargarCiclos();
+          this.mostrarModalConfirmar = false;
+        },
+        error: (err) => console.error('Error al eliminar ciclo', err)
+      });
+    }
   }
 
   cancelarConfirmacion(): void {
     this.mostrarModalConfirmar = false;
+    this.accionConfirmar = null;
+    this.itemAEliminar = null;
   }
 
   toggleCiclo(ciclo: any): void {

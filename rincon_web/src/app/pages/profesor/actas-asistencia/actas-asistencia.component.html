@@ -3,7 +3,7 @@
     <h2 class="fw-bold text-dark m-0">Control de Asistencia</h2>
     <p class="text-secondary small">Registra la asistencia antes de iniciar la reunión.</p>
   </div>
-  <span class="badge-estado" [ngClass]="{
+  <span *ngIf="['previo', 'en-progreso', 'confirmado'].includes(estado)" class="badge-estado" [ngClass]="{
     'badge-previo': estado === 'previo',
     'badge-progreso': estado === 'en-progreso',
     'badge-confirmado': estado === 'confirmado'
@@ -17,6 +17,8 @@
   </span>
 </div>
 
+<!-- Mostrar solo cuando hay convocatoria cargada -->
+<ng-container *ngIf="estado !== 'cargando' && estado !== 'error' && convocatoria">
 <!-- Tarjeta de convocatoria — campos reales de BD -->
 <div class="card border-0 shadow-sm rounded-3 mb-4 convocatoria-card">
   <div class="card-body p-4">
@@ -38,7 +40,7 @@
         <div class="orden-dia-lista">
           <p class="text-secondary x-small fw-bold text-uppercase mb-2" style="letter-spacing: 0.05rem;">Orden del Día</p>
           <ol class="orden-del-dia-ol ps-3 mb-0">
-            <li *ngFor="let punto of ordenDelDia" class="text-dark small mb-1">
+            <li *ngFor="let punto of convocatoria.ordenDia" class="text-dark small mb-1">
               <span class="fw-semibold">{{ punto.objetivo }}</span>
               <span *ngIf="punto.descripcion" class="text-secondary"> — {{ punto.descripcion }}</span>
               <span *ngIf="punto.minutos" class="text-secondary x-small ms-1">({{ punto.minutos }} min)</span>
@@ -70,12 +72,12 @@
       <p class="text-secondary x-small mb-0">Desmarca a los participantes que no están presentes.</p>
     </div>
     <span class="conteo-badge">
-      {{ asistentes.length }} / {{ participantes.length }} presentes
+      {{ asistentes.length }} / {{ convocatoria.profesores.length }} presentes
     </span>
   </div>
 
   <div class="participantes-list mb-4">
-    <div *ngFor="let p of participantes"
+    <div *ngFor="let p of convocatoria.profesores"
       class="participante-row d-flex align-items-center justify-content-between"
       [class.participante-ausente]="!p.asiste">
       <div class="d-flex align-items-center gap-3">
@@ -155,9 +157,25 @@
     <button class="btn btn-outline-secondary btn-sm fw-bold text-uppercase px-4" (click)="reiniciar()">
       <i class="bi bi-arrow-counterclockwise me-1"></i> REINICIAR
     </button>
-    <a routerLink="/profesor/proceso-de-actas/redaccion"
+    <a routerLink="/profesor/reuniones-de-equipo/actas/redaccion"
       class="btn btn-dark fw-bold text-uppercase px-5 btn-ir-redactar">
       <i class="bi bi-pencil-fill me-2"></i>Ir a Redactar Acta
     </a>
   </div>
+</div>
+</ng-container>
+
+<!-- ESTADO: CARGANDO -->
+<div *ngIf="estado === 'cargando'" class="text-center py-5">
+  <div class="spinner-border text-primary mb-3" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+  <h5 class="text-secondary">Buscando reuniones pendientes...</h5>
+</div>
+
+<!-- ESTADO: ERROR -->
+<div *ngIf="estado === 'error'" class="card border-0 shadow-sm rounded-3 p-5 text-center mt-4">
+  <i class="bi bi-check2-all text-success fs-1 mb-3"></i>
+  <h5 class="text-dark fw-bold">No hay reuniones pendientes</h5>
+  <p class="text-secondary small">{{ mensajeError }}</p>
 </div>

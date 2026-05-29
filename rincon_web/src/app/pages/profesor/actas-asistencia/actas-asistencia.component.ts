@@ -1,22 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
-/** Refleja la tabla `profesor` + `participantes` */
-interface Profesor {
-  idProfesor: number;
-  nombre: string;     // participantes.nombre
-  asiste: boolean;    // se convertirá en fila en profesor_asiste(idActa, idProfesor)
-}
-
-/** Refleja ordenDia: objetivo (obligatorio) + descripcion (opcional) */
-interface PuntoOrdenDia {
-  numOrden: number;
-  objetivo: string;
-  descripcion: string | null;
-  minutos: number | null;
-}
+import { ProcesoActasService, ConvocatoriaPendiente, PuntoOrdenDia, ProfesorAsistente } from '../../../services/proceso-actas.service';
 
 @Component({
   selector: 'app-actas-asistencia',
@@ -25,71 +11,64 @@ interface PuntoOrdenDia {
   templateUrl: './actas-asistencia.component.html',
   styleUrl: './actas-asistencia.component.css'
 })
-export class ActasAsistenciaComponent {
-  // Estados: 'previo' | 'en-progreso' | 'confirmado'
-  public estado: 'previo' | 'en-progreso' | 'confirmado' = 'previo';
+export class ActasAsistenciaComponent implements OnInit {
+  // Flags de UI para manejar el loader y alertas
+  estado: 'cargando' | 'error' | 'previo' | 'en-progreso' | 'confirmado' = 'cargando';
+  public mensajeError = '';
 
-  /**
-   * Mock de convocatoria (tabla convocatoria):
-   * - fecha: DATETIME
-   * - lugar: nombre del lugar (tabla lugar)
-   * - cursoAcademico: anioInicio/anioFin (tabla cursoAcademico)
-   * - idProfesorRedactaActa / idProfesorIniciaReunion: referencias a profesor
-   * No existe campo "titulo" en BD — se muestra como fecha + lugar
-   */
-  public convocatoria = {
-    idConvocatoria: 1,
-    fecha: new Date('2026-05-23T10:00:00'),
-    lugar: 'Sala de Reuniones B-04',       // lugar.nombre
-    anioInicio: 2025,                       // cursoAcademico.anioInicio
-    anioFin: 2026,                          // cursoAcademico.anioFin
-    idProfesorRedactaActa: 2,
-    idProfesorIniciaReunion: 1
-  };
+  public convocatoria: ConvocatoriaPendiente | null = null;
+  public fechaObj: Date | null = null;
 
-  /** Mock de ordenDia: objetivo (NOT NULL) + descripcion (NULL) */
-  public ordenDelDia: PuntoOrdenDia[] = [
-    { numOrden: 1, objetivo: 'Lectura y aprobación del acta anterior',       descripcion: null,                                              minutos: 10 },
-    { numOrden: 2, objetivo: 'Revisión de resultados de evaluación final',    descripcion: 'Análisis por módulos y grupos',                   minutos: 30 },
-    { numOrden: 3, objetivo: 'Coordinación de actividades de recuperación',   descripcion: null,                                              minutos: 20 },
-    { numOrden: 4, objetivo: 'Planificación del próximo curso académico',     descripcion: 'Calendario, programaciones y distribución horaria', minutos: 25 },
-    { numOrden: 5, objetivo: 'Ruegos y preguntas',                           descripcion: null,                                              minutos: null }
-  ];
+  constructor(private procesoActasService: ProcesoActasService) {}
 
-  /**
-   * Mock de participantes convocados.
-   * La asistencia real se guarda en profesor_asiste(idActa, idProfesor).
-   * El campo `asiste` aquí determina qué filas se insertarán.
-   */
-  public participantes: Profesor[] = [
-    { idProfesor: 1, nombre: 'Ana García López',      asiste: true },
-    { idProfesor: 2, nombre: 'Carlos Martínez Ruiz',  asiste: true },
-    { idProfesor: 3, nombre: 'Laura Sánchez Pérez',   asiste: true },
-    { idProfesor: 4, nombre: 'Miguel Torres Herrero',  asiste: true },
-    { idProfesor: 5, nombre: 'Elena Rodríguez Vega',  asiste: true },
-    { idProfesor: 6, nombre: 'David Fernández Mora',  asiste: true },
-  ];
-
-  get asistentes(): Profesor[] {
-    return this.participantes.filter(p => p.asiste);
+  ngOnInit(): void {
+    // Rescatamos datos del servicio temporal por si el profe le ha dado atrás
+    const convMemoria = this.procesoActasService.getConvocatoriaActiva();
+    if (convMemoria) {
+      this.asignarConvocatoria(convMemoria);
+    } else {
+      this.procesoActasService.getConvocatoriaPendiente().subscribe({
+        next: (conv) => {
+          this.asignarConvocatoria(conv);
+        },
+        error: (err) => {
+          console.error(err);
+          this.estado = 'error';
+          this.mensajeError = err.error?.error || 'Error al cargar la convocatoria.';
+        }
+      });
+    }
   }
 
-  get ausentes(): Profesor[] {
-    return this.participantes.filter(p => !p.asiste);
+  private asignarConvocatoria(conv: ConvocatoriaPendiente): void {
+    this.convocatoria = conv;
+    // Evitar problemas de zona horaria al printarlo
+    this.fechaObj = new Date(conv.fechaOriginal.replace(' ', 'T'));
+    this.estado = 'previo';
+  }
+
+  get asistentes(): ProfesorAsistente[] {
+    return this.convocatoria?.profesores.filter(p => p.asiste) || [];
+  }
+
+  get ausentes(): ProfesorAsistente[] {
+    return this.convocatoria?.profesores.filter(p => !p.asiste) || [];
   }
 
   get cursoAcademico(): string {
-    return `${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}`;
+    return this.convocatoria ? `${this.convocatoria.anioInicio}/${this.convocatoria.anioFin}` : '';
   }
 
   get fechaFormateada(): string {
-    return this.convocatoria.fecha.toLocaleDateString('es-ES', {
+    if (!this.fechaObj) return '';
+    return this.fechaObj.toLocaleDateString('es-ES', {
       weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
     });
   }
 
   get horaFormateada(): string {
-    return this.convocatoria.fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) + ' h';
+    if (!this.fechaObj) return '';
+    return this.fechaObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) + ' h';
   }
 
   iniciarControlAsistencia(): void {
@@ -97,11 +76,17 @@ export class ActasAsistenciaComponent {
   }
 
   confirmarAsistencia(): void {
-    this.estado = 'confirmado';
+    if (this.convocatoria) {
+      // Almacenamos para la pantalla 2 (Redacción)
+      this.procesoActasService.guardarAsistencia(this.convocatoria.profesores);
+      this.estado = 'confirmado';
+    }
   }
 
   reiniciar(): void {
     this.estado = 'previo';
-    this.participantes.forEach(p => p.asiste = true);
+    if (this.convocatoria) {
+      this.convocatoria.profesores.forEach(p => p.asiste = true);
+    }
   }
 }
