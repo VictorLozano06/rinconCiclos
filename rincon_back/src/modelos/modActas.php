@@ -149,10 +149,12 @@ class ModActas {
                 JOIN convocatoria co ON a.idConvocatoria = co.idConvocatoria
                 JOIN lugar l ON co.idLugar = l.idLugar
                 JOIN cursoAcademico c ON co.idCurso = c.idCurso
+                WHERE a.idActa IN (SELECT idActa FROM profesor_asiste WHERE idProfesor = :idProfesor)
+                   OR co.idProfesorRedactaActa = :idProfesor
                 ORDER BY a.fecha DESC, co.fecha DESC";
                 
         $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+        $stmt->execute([':idProfesor' => $idProfesor]);
         $actas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Reutilizamos la misma lógica de anidado (copiada de listarHistorialPorAnio)
