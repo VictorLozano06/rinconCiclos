@@ -74,6 +74,14 @@ export class SidebarCoordinadorComponent implements OnInit {
         deshabilitado: false
       },
       {
+        nombre: 'Gestión de Grupos',
+        icono: 'categorias',
+        ruta: '/coordinador/grupos-participantes',
+        abierto: false,
+        subcategorias: [],
+        deshabilitado: false
+      },
+      {
         nombre: 'Categorías',
         icono: 'categorias',
         ruta: '/coordinador/categorias',

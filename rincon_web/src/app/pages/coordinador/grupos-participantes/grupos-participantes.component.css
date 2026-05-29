@@ -1,0 +1,99 @@
+.header-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.list-container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.btn-nuevo {
+  font-size: 0.75rem;
+  letter-spacing: 0.05rem;
+}
+
+.action-btn {
+  border-color: #dee2e6;
+  color: #495057;
+  padding: 0.4rem 0.75rem;
+}
+
+.action-btn:hover {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.delete-btn {
+  color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #fff5f5;
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.card {
+  transition: all 0.2s ease;
+}
+
+.bi-pencil-fill, .bi-trash-fill {
+  font-size: 0.8rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.custom-modal {
+  background-color: #2d2d2d;
+  width: 100%;
+  max-width: 31.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.label-spacing {
+  letter-spacing: 0.05rem;
+}
+
+.custom-input {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.custom-input::placeholder {
+  color: #adb5bd;
+}
+
+.btn-white {
+  background-color: #fff;
+  color: #2d2d2d;
+  border-radius: 0.5rem;
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.x-small {
+  font-size: 0.7rem;
+}
