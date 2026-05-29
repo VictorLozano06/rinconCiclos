@@ -1,24 +1,44 @@
 <?php
 require_once MODELO . 'modRecursos.php';
 
-// Controlador para la gestion de recursos del profesorado
+/**
+ * Controlador HTTP para la gestión de recursos del profesorado.
+ *
+ * Expone endpoints de lectura, guardado, borrado y subida temporal de
+ * archivos. Su responsabilidad es validar la petición HTTP y delegar la
+ * persistencia real en {@see ModRecursos}.
+ */
 class ConRecursos extends ControladorBase {
-    // El controlador no hace SQL.
-    // Solo valida la peticion, llama al modelo y devuelve JSON al frontend.
+    /**
+     * Modelo especializado en la persistencia y validación de recursos.
+     *
+     * @var ModRecursos
+     */
     private $modelo;
 
+    /**
+     * Inicializa el controlador y su modelo asociado.
+     *
+     * @param PDO $db Conexión PDO compartida por la aplicación.
+     * @param mixed|null $usuario Usuario autenticado si existe contexto de sesión.
+     */
     public function __construct($db, $usuario = null) {
         parent::__construct($db, $usuario);
         $this->modelo = new ModRecursos($db);
     }
 
-    // Devuelve los recursos mas recientes para la portada del profesor.
+    /**
+     * Devuelve los recursos más recientes para la portada del profesor.
+     *
+     * Acepta un parámetro opcional `limite` por query string y lo acota entre
+     * 1 y 20 para evitar lecturas absurdas o abusivas.
+     *
+     * @return void
+     */
     public function listarRecientesProfesor() {
         try {
-            // Si no llega limite, usamos 5 por defecto.
             $limite = 5;
 
-            // Si llega por URL, lo convertimos a numero y lo dejamos entre 1 y 20.
             if (isset($_GET['limite'])) {
                 $limite = (int)$_GET['limite'];
                 if ($limite < 1) {
@@ -29,17 +49,18 @@ class ConRecursos extends ControladorBase {
                 }
             }
 
-            // El modelo devuelve un array de recursos listo para Angular.
             $datos = $this->modelo->listarRecientesProfesor($limite);
-
-            // ControladorBase es quien envia el JSON final al navegador.
             $this->responderJson($datos);
         } catch (Exception $e) {
             $this->responderError('No se han podido cargar los recursos.');
         }
     }
 
-    // Devuelve todos los recursos para la vista centralizada del coordinador.
+    /**
+     * Devuelve el listado completo de recursos para coordinación.
+     *
+     * @return void
+     */
     public function listarTodos() {
         try {
             $datos = $this->modelo->listarTodos();
@@ -49,7 +70,13 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Devuelve los combos base del formulario de recursos.
+    /**
+     * Devuelve los datos base necesarios para renderizar el formulario.
+     *
+     * Incluye cursos, ciclos y el curso sugerido como actual.
+     *
+     * @return void
+     */
     public function obtenerFormulario() {
         try {
             $this->responderJson($this->modelo->obtenerFormulario());
@@ -58,10 +85,15 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Filtra recursos por la categoria seleccionada en el sidebar.
+    /**
+     * Filtra recursos por la categoría elegida en el sidebar.
+     *
+     * Espera `idCategoria` en query string.
+     *
+     * @return void
+     */
     public function listarPorCategoria() {
         try {
-            // Este endpoint necesita el id de la categoria en la URL.
             if (!isset($_GET['idCategoria'])) {
                 $this->responderError('Falta el parametro idCategoria.');
             }
@@ -71,7 +103,6 @@ class ConRecursos extends ControladorBase {
                 $this->responderError('El parametro idCategoria no es valido.');
             }
 
-            // El modelo filtra por categoria y devuelve la lista ya montada.
             $datos = $this->modelo->listarPorCategoria($idCategoria);
             $this->responderJson($datos);
         } catch (Exception $e) {
@@ -79,11 +110,15 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Carga la ficha detallada del recurso individual.
+    /**
+     * Recupera el detalle completo de un recurso concreto.
+     *
+     * Espera la clave compuesta `idCategoria + numRecurso` en query string.
+     *
+     * @return void
+     */
     public function detalle() {
         try {
-            // Para el detalle hacen falta dos claves:
-            // la categoria y el numero del recurso dentro de esa categoria.
             if (!isset($_GET['idCategoria']) || !isset($_GET['numRecurso'])) {
                 $this->responderError('Faltan los parametros idCategoria y numRecurso.');
             }
@@ -95,7 +130,6 @@ class ConRecursos extends ControladorBase {
                 $this->responderError('Los parametros del recurso no son validos.');
             }
 
-            // Devuelve un solo recurso o null si no existe.
             $dato = $this->modelo->obtenerDetalle($idCategoria, $numRecurso);
             if (!$dato) {
                 $this->responderError('No se ha encontrado el recurso solicitado.', 404);
@@ -107,21 +141,24 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Guarda un recurso nuevo o actualiza uno existente.
+    /**
+     * Guarda un recurso nuevo o actualiza uno existente.
+     *
+     * El backend distingue entre alta y edición por el valor de `numRecurso`.
+     *
+     * @return void
+     */
     public function guardar() {
         try {
-            // Este endpoint solo acepta POST porque modifica datos.
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 $this->responderError('Metodo no permitido.', 405);
             }
 
-            // Leemos el cuerpo JSON que manda Angular.
             $json = json_decode(file_get_contents('php://input'), true);
             if (!is_array($json)) {
                 $this->responderError('El cuerpo JSON no es valido.');
             }
 
-            // El modelo decide si es insercion o edicion segun numRecurso.
             $respuesta = $this->modelo->guardar($json);
             $codigo = !empty($json['numRecurso']) ? 200 : 201;
             $this->responderJson($respuesta, $codigo);
@@ -134,15 +171,17 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Elimina un recurso completo.
+    /**
+     * Elimina un recurso completo por su clave compuesta.
+     *
+     * @return void
+     */
     public function eliminar() {
         try {
-            // Aqui tambien exigimos POST para evitar borrados por URL.
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 $this->responderError('Metodo no permitido.', 405);
             }
 
-            // Llegan idCategoria y numRecurso en el body JSON.
             $json = json_decode(file_get_contents('php://input'), true);
             if (!is_array($json)) {
                 $this->responderError('El cuerpo JSON no es valido.');
@@ -155,7 +194,6 @@ class ConRecursos extends ControladorBase {
                 $this->responderError('Los parametros del recurso no son validos.');
             }
 
-            // El modelo borra el recurso y sus archivos fisicos asociados.
             $this->responderJson($this->modelo->eliminar($idCategoria, $numRecurso));
         } catch (RuntimeException $e) {
             $this->responderError($e->getMessage(), 404);
@@ -164,8 +202,14 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Recibe un archivo desde FilePond, lo guarda en la carpeta temporal
-    // y devuelve el identificador que el frontend necesita para referenciarlo.
+    /**
+     * Recibe un archivo desde FilePond y lo guarda en la carpeta temporal.
+     *
+     * Devuelve un identificador corto que el frontend almacena hasta que el
+     * usuario guarda definitivamente el recurso.
+     *
+     * @return void
+     */
     public function subirArchivoTemporal() {
         try {
             if (!empty($_SERVER['CONTENT_LENGTH']) && empty($_FILES)) {
@@ -175,7 +219,6 @@ class ConRecursos extends ControladorBase {
                 );
             }
 
-            // FilePond manda el archivo con la clave "filepond".
             if (!isset($_FILES['filepond'])) {
                 $this->responderError('No se ha recibido ningun archivo.', 400);
             }
@@ -186,13 +229,11 @@ class ConRecursos extends ControladorBase {
                 $this->responderError($this->obtenerMensajeErrorSubida((int)$archivo['error']), 400);
             }
 
-            // Limite de peso por archivo: 10 MB.
             $tamanoMaximo = 10 * 1024 * 1024; // 10 MB
             if (($archivo['size'] ?? 0) > $tamanoMaximo) {
                 $this->responderError('El archivo supera el tamano maximo permitido de 10 MB.', 400);
             }
 
-            // Formatos admitidos en recursos.
             $extension = strtolower(pathinfo($archivo['name'] ?? '', PATHINFO_EXTENSION));
             $extensionesPermitidas = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 
@@ -212,7 +253,6 @@ class ConRecursos extends ControladorBase {
                 $this->responderError('No se ha podido mover el archivo al servidor.', 500);
             }
 
-            // Esto es lo que el frontend guarda temporalmente para luego asociarlo al recurso.
             $identificadorTemporal = 'recursos/temp/' . $nombreSeguro;
 
             $this->responderJson([
@@ -223,11 +263,13 @@ class ConRecursos extends ControladorBase {
         }
     }
 
-    // Borra de la carpeta temporal un archivo que el usuario ya no quiere adjuntar.
-    // Esto evita dejar basura si el usuario lo quita antes de guardar el recurso final.
+    /**
+     * Borra de la carpeta temporal un archivo que el usuario descartó.
+     *
+     * @return void
+     */
     public function eliminarArchivoTemporal() {
         try {
-            // El frontend manda solo el identificador del archivo temporal.
             $identificadorTemporal = trim(file_get_contents('php://input') ?: '');
 
             if ($identificadorTemporal === '') {
@@ -238,7 +280,6 @@ class ConRecursos extends ControladorBase {
                 $this->responderError('El identificador del archivo temporal no es valido.', 400);
             }
 
-            // Construimos la ruta fisica real del archivo temporal para borrarlo del disco.
             $rutaFisica = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $identificadorTemporal);
 
             if (is_file($rutaFisica) && !unlink($rutaFisica)) {
@@ -251,6 +292,13 @@ class ConRecursos extends ControladorBase {
         }
     }
 
+    /**
+     * Traduce los códigos de error nativos de subida PHP a mensajes legibles.
+     *
+     * @param int $codigoError Código `UPLOAD_ERR_*` recibido desde `$_FILES`.
+     *
+     * @return string
+     */
     private function obtenerMensajeErrorSubida($codigoError) {
         switch ($codigoError) {
             case UPLOAD_ERR_INI_SIZE:

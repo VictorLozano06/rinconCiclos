@@ -4,10 +4,17 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BusquedaService, SugerenciaBusqueda } from '../../services/busqueda.service';
 
-// Este componente solo hace 3 cosas:
-// 1. escucha lo que escribe el usuario
-// 2. pide sugerencias al servicio
-// 3. navega cuando el usuario elige una
+/**
+ * Componente visual del buscador global de recursos.
+ *
+ * Su responsabilidad es deliberadamente pequeña:
+ * - leer lo que escribe el usuario
+ * - delegar la búsqueda al servicio compartido
+ * - pintar el desplegable de sugerencias
+ * - navegar a la ruta elegida
+ *
+ * Toda la lógica de filtrado real vive en {@see BusquedaService}.
+ */
 @Component({
   selector: 'app-buscador',
   standalone: true,
@@ -16,28 +23,38 @@ import { BusquedaService, SugerenciaBusqueda } from '../../services/busqueda.ser
   styleUrl: './buscador.component.css'
 })
 export class BuscadorComponent {
-  // Lista que se pinta debajo del input.
+  /**
+   * Lista de sugerencias visibles debajo del input.
+   */
   sugerencias: SugerenciaBusqueda[] = [];
 
-  // Muestra el texto "Buscando..." mientras el servicio consulta o filtra.
+  /**
+   * Activa el estado "Buscando..." mientras el servicio procesa datos.
+   */
   buscando = false;
 
-  // Controla si la caja desplegable debe verse o no.
+  /**
+   * Controla si el desplegable debe mostrarse o no.
+   */
   mostrarSugerencias = false;
 
+  /**
+   * Referencia de destrucción usada para limpiar suscripciones automáticamente.
+   */
   private referenciaDestruccion = inject(DestroyRef);
 
   constructor(
     private servicioBusqueda: BusquedaService,
     private router: Router
   ) {
-    // Mantiene la caja de sugerencias sincronizada con el servicio compartido.
+    // Mantiene la lista local sincronizada con el servicio compartido.
     this.servicioBusqueda.sugerenciasBusqueda$
       .pipe(takeUntilDestroyed(this.referenciaDestruccion))
       .subscribe((sugerencias) => {
         this.sugerencias = sugerencias;
       });
 
+    // Mantiene el estado visual de carga sincronizado con el servicio.
     this.servicioBusqueda.cargandoBusqueda$
       .pipe(takeUntilDestroyed(this.referenciaDestruccion))
       .subscribe((cargando) => {
@@ -45,24 +62,40 @@ export class BuscadorComponent {
       });
   }
 
-  // Recupera el texto actual para rellenar el input.
+  /**
+   * Devuelve el texto actual guardado por el servicio.
+   *
+   * Se usa para rellenar el input cuando el componente vuelve a renderizarse.
+   */
   get terminoBusquedaActual(): string {
     return this.servicioBusqueda.obtenerTerminoBusquedaActual();
   }
 
-  // Se ejecuta en cada pulsacion del teclado dentro del input.
+  /**
+   * Se ejecuta en cada pulsación de teclado dentro del input.
+   *
+   * El componente no filtra nada por su cuenta. Solo recoge el texto y se lo
+   * pasa al servicio junto al rol actual para que construya rutas correctas.
+   *
+   * @param evento Evento `input` del navegador.
+   *
+   * @returns void
+   */
   alEscribir(evento: Event): void {
     const entrada = evento.target as HTMLInputElement | null;
     const termino = entrada?.value || '';
 
-    // El componente no filtra nada por su cuenta.
-    // Solo delega la busqueda al servicio.
     this.servicioBusqueda.buscarSugerencias(termino, this.obtenerRolActual());
     this.mostrarSugerencias = termino.trim().length > 0;
   }
 
-  // Si el usuario vuelve a enfocar el input con texto escrito,
-  // reabre la caja y recalcula sugerencias.
+  /**
+   * Reabre la caja de sugerencias cuando el usuario vuelve a entrar al input.
+   *
+   * Si ya había un término escrito, vuelve a pedir sugerencias con ese valor.
+   *
+   * @returns void
+   */
   alEntrarEnElBuscador(): void {
     if (!this.terminoBusquedaActual) {
       return;
@@ -72,7 +105,13 @@ export class BuscadorComponent {
     this.servicioBusqueda.buscarSugerencias(this.terminoBusquedaActual, this.obtenerRolActual());
   }
 
-  // Al pulsar Enter o la lupa, vamos a la primera sugerencia disponible.
+  /**
+   * Navega directamente a la primera sugerencia disponible.
+   *
+   * Se usa al pulsar Enter o al activar la lupa con el teclado.
+   *
+   * @returns void
+   */
   ejecutarPrimeraSugerencia(): void {
     const primera = this.sugerencias[0];
 
@@ -83,8 +122,13 @@ export class BuscadorComponent {
     this.irASugerencia(primera);
   }
 
-  // Cierra el desplegable, limpia el estado del buscador
-  // y navega a la pantalla del recurso elegido.
+  /**
+   * Navega al recurso seleccionado y limpia el estado del buscador.
+   *
+   * @param sugerencia Fila elegida en el desplegable.
+   *
+   * @returns void
+   */
   irASugerencia(sugerencia: SugerenciaBusqueda): void {
     this.mostrarSugerencias = false;
     this.servicioBusqueda.actualizarTerminoBusqueda('');
@@ -92,15 +136,25 @@ export class BuscadorComponent {
     this.router.navigateByUrl(sugerencia.ruta);
   }
 
-  // Se usa en el blur del input.
-  // El pequeño retraso evita que el blur cierre la caja antes de registrar el click.
+  /**
+   * Cierra la caja de sugerencias con un pequeño retraso.
+   *
+   * Ese retraso evita que el `blur` del input cierre el desplegable antes de
+   * que el click sobre una sugerencia llegue a ejecutarse.
+   *
+   * @returns void
+   */
   ocultarSugerencias(): void {
     setTimeout(() => {
       this.mostrarSugerencias = false;
     }, 150);
   }
 
-  // Decide si la ruta final del recurso debe ser de profesor o de coordinador.
+  /**
+   * Decide si la navegación final debe construirse como profesor o coordinador.
+   *
+   * @returns Rol actual inferido a partir de la URL activa.
+   */
   private obtenerRolActual(): 'profesor' | 'coordinador' {
     return this.router.url.startsWith('/coordinador') ? 'coordinador' : 'profesor';
   }
