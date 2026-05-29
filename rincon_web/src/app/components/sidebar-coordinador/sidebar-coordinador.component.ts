@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CategoriaDto } from '../../dto/categoria.dto';
 import { AccesoAppService } from '../../services/acceso-app.service';
+import { CategoriaService } from '../../services/categoria.service';
 
 interface SidebarItem {
   nombre: string;
@@ -46,7 +47,7 @@ export class SidebarCoordinadorComponent implements OnInit {
         this.errorCarga = false;
         this.menuItems = this.construirMenu(data);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         this.errorCarga = true;
         console.error('Error al obtener categorias para el sidebar de coordinador:', err);
       }
