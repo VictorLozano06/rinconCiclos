@@ -893,11 +893,14 @@ class ModConvocatorias extends ConexionBD {
                     p.id AS idProfesor,
                     TRIM(CONCAT_WS(' ', p.nombre, p.apellidos)) AS nombre
                 FROM personal p
-                INNER JOIN personal_roles pr ON pr.personal_id = p.id
-                INNER JOIN tm_roles r ON r.id = pr.rol_id
+                INNER JOIN profesores pf ON pf.personal_id = p.id
+                LEFT JOIN tm_clases tc ON tc.codigo = pf.clase_tutoria_codigo
                 WHERE p.activo = 1
                   AND p.tipo_personal_id = 1
-                  AND r.nombre LIKE 'profesor%'
+                  AND (
+                    pf.etapa_id = 4
+                    OR tc.etapa_id = 4
+                  )
                 ORDER BY nombre ASC, p.id ASC";
 
         $stmt = $this->dbProfesores->query($sql);
