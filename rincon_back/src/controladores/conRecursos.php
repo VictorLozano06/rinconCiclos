@@ -168,6 +168,13 @@ class ConRecursos extends ControladorBase {
     // y devuelve el identificador que el frontend necesita para referenciarlo.
     public function subirArchivoTemporal() {
         try {
+            if (!empty($_SERVER['CONTENT_LENGTH']) && empty($_FILES)) {
+                $this->responderError(
+                    'El servidor ha rechazado la subida antes de procesarla. Revisa upload_max_filesize y post_max_size en PHP.',
+                    400
+                );
+            }
+
             // FilePond manda el archivo con la clave "filepond".
             if (!isset($_FILES['filepond'])) {
                 $this->responderError('No se ha recibido ningun archivo.', 400);
@@ -176,7 +183,7 @@ class ConRecursos extends ControladorBase {
             $archivo = $_FILES['filepond'];
 
             if (($archivo['error'] ?? UPLOAD_ERR_OK) !== UPLOAD_ERR_OK) {
-                $this->responderError('El archivo no se ha podido subir.', 400);
+                $this->responderError($this->obtenerMensajeErrorSubida((int)$archivo['error']), 400);
             }
 
             // Limite de peso por archivo: 10 MB.
@@ -212,7 +219,7 @@ class ConRecursos extends ControladorBase {
                 'idTemporal' => $identificadorTemporal
             ]);
         } catch (Exception $e) {
-            $this->responderError('No se ha podido subir el archivo temporal.', 500);
+            $this->responderError('No se ha podido subir el archivo temporal: ' . $e->getMessage(), 500);
         }
     }
 
@@ -241,6 +248,27 @@ class ConRecursos extends ControladorBase {
             $this->responderJson(['ok' => true]);
         } catch (Exception $e) {
             $this->responderError('No se ha podido borrar el archivo temporal.', 500);
+        }
+    }
+
+    private function obtenerMensajeErrorSubida($codigoError) {
+        switch ($codigoError) {
+            case UPLOAD_ERR_INI_SIZE:
+                return 'El archivo supera el limite de subida del servidor PHP.';
+            case UPLOAD_ERR_FORM_SIZE:
+                return 'El archivo supera el limite permitido por el formulario.';
+            case UPLOAD_ERR_PARTIAL:
+                return 'La subida del archivo se ha quedado incompleta.';
+            case UPLOAD_ERR_NO_FILE:
+                return 'No se ha seleccionado ningun archivo.';
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return 'Falta la carpeta temporal de PHP en el servidor.';
+            case UPLOAD_ERR_CANT_WRITE:
+                return 'PHP no ha podido escribir el archivo en disco.';
+            case UPLOAD_ERR_EXTENSION:
+                return 'Una extension de PHP ha bloqueado la subida del archivo.';
+            default:
+                return 'El archivo no se ha podido subir.';
         }
     }
 }
