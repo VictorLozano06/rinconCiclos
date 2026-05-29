@@ -1,11 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface LugarVista {
-  idLugar: number;
-  nombre: string;
-}
+import { LugarDto, LugarService } from '../../../services/lugar.service';
 
 interface LugarFormulario {
   idLugar: number | null;
@@ -19,19 +16,14 @@ interface LugarFormulario {
   templateUrl: './lugares.component.html',
   styleUrl: './lugares.component.css'
 })
-export class LugaresComponent {
-  public lugares: LugarVista[] = [
-    { idLugar: 1, nombre: 'Aula 1' },
-    { idLugar: 2, nombre: 'Aula 2' },
-    { idLugar: 3, nombre: 'Sala de profesorado' },
-    { idLugar: 4, nombre: 'Biblioteca' },
-    { idLugar: 5, nombre: 'Salon de actos' },
-    { idLugar: 6, nombre: 'Departamento' }
-  ];
-
+export class LugaresComponent implements OnInit {
+  public lugares: LugarDto[] = [];
+  public cargando = true;
+  public errorCarga = false;
   public feedback = '';
+  public feedbackError = false;
   public modalEdicionAbierto = false;
-  public lugarEditando: LugarVista | null = null;
+  public lugarEditando: LugarDto | null = null;
 
   public formularioCrear: LugarFormulario = {
     idLugar: null,
@@ -43,8 +35,30 @@ export class LugaresComponent {
     nombre: ''
   };
 
+  constructor(private lugarService: LugarService) {}
+
+  ngOnInit(): void {
+    this.cargarLugares();
+  }
+
   get textoIntro(): string {
     return 'Listado de lugares para coordinacion.';
+  }
+
+  cargarLugares(): void {
+    this.cargando = true;
+    this.errorCarga = false;
+
+    this.lugarService.getLugares().subscribe({
+      next: (lugares) => {
+        this.lugares = lugares;
+        this.cargando = false;
+      },
+      error: () => {
+        this.errorCarga = true;
+        this.cargando = false;
+      }
+    });
   }
 
   guardarLugarNuevo(): void {
@@ -52,17 +66,31 @@ export class LugaresComponent {
 
     if (!nombre) {
       this.feedback = 'El nombre es obligatorio.';
+      this.feedbackError = true;
       return;
     }
 
-    this.formularioCrear = {
+    this.lugarService.guardarLugar({
       idLugar: null,
-      nombre: ''
-    };
-    this.feedback = '';
+      nombre
+    }).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.formularioCrear = {
+          idLugar: null,
+          nombre: ''
+        };
+        this.cargarLugares();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido crear el lugar.');
+        this.feedbackError = true;
+      }
+    });
   }
 
-  editarLugar(lugar: LugarVista): void {
+  editarLugar(lugar: LugarDto): void {
     this.lugarEditando = lugar;
     this.formularioEditar = {
       idLugar: lugar.idLugar,
@@ -70,26 +98,55 @@ export class LugaresComponent {
     };
     this.modalEdicionAbierto = true;
     this.feedback = '';
+    this.feedbackError = false;
   }
 
   guardarLugarEditado(): void {
     const nombre = this.formularioEditar.nombre.trim();
 
     if (!nombre || this.formularioEditar.idLugar === null) {
+      this.feedback = 'El nombre es obligatorio.';
+      this.feedbackError = true;
       return;
     }
 
-    this.cerrarModalEdicion();
+    this.lugarService.guardarLugar({
+      idLugar: this.formularioEditar.idLugar,
+      nombre
+    }).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.cerrarModalEdicion();
+        this.cargarLugares();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido guardar el lugar.');
+        this.feedbackError = true;
+      }
+    });
   }
 
-  eliminarLugar(lugar: LugarVista): void {
+  eliminarLugar(lugar: LugarDto): void {
     const confirmado = window.confirm(`Borrar el lugar "${lugar.nombre}"?`);
     if (!confirmado) {
       return;
     }
+
+    this.lugarService.eliminarLugar(lugar.idLugar).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.cargarLugares();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido borrar el lugar.');
+        this.feedbackError = true;
+      }
+    });
   }
 
-  esLugarActivo(lugar: LugarVista): boolean {
+  esLugarActivo(lugar: LugarDto): boolean {
     return this.lugarEditando?.idLugar === lugar.idLugar;
   }
 
@@ -100,5 +157,9 @@ export class LugaresComponent {
       idLugar: null,
       nombre: ''
     };
+  }
+
+  private obtenerMensajeError(error: HttpErrorResponse, mensajePorDefecto: string): string {
+    return error.error?.message ?? mensajePorDefecto;
   }
 }

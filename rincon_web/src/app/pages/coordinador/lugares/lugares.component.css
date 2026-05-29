@@ -30,6 +30,24 @@
   color: #1f4e79;
 }
 
+.feedback-error {
+  border-color: #f3c4c4;
+  background: #fff4f4;
+  color: #b42318;
+}
+
+.estado-carga {
+  padding: 1rem;
+  border: 0.0625rem solid #e4e7ec;
+  border-radius: 0.9rem;
+  background: #fff;
+  color: #667085;
+}
+
+.estado-carga p {
+  margin: 0;
+}
+
 .contenido-gestion {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.95fr);
