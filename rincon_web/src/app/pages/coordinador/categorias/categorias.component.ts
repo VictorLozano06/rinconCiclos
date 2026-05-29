@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -97,8 +98,6 @@ export class CategoriasComponent implements OnInit {
       nombre: '',
       idCategoriaPadre: null
     };
-    this.feedback = '';
-    this.feedbackError = false;
   }
 
   editarCategoria(categoria: CategoriaVista): void {
@@ -134,21 +133,55 @@ export class CategoriasComponent implements OnInit {
       return;
     }
 
-    this.nuevaCategoria();
+    this.categoriaService.guardarCategoria({
+      idCategoria: null,
+      nombre,
+      idCategoriaPadre: this.formularioCrear.idCategoriaPadre
+    }).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.nuevaCategoria();
+        this.cargarCategorias();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido crear la categoria.');
+        this.feedbackError = true;
+      }
+    });
   }
 
   guardarCategoriaEditada(): void {
     const nombre = this.formularioEditar.nombre.trim();
 
     if (!nombre || this.formularioEditar.idCategoria === null) {
+      this.feedback = 'El nombre es obligatorio.';
+      this.feedbackError = true;
       return;
     }
 
     if (this.formularioEditar.idCategoriaPadre !== null && !this.esCategoriaRaiz(this.formularioEditar.idCategoriaPadre)) {
+      this.feedback = 'La categoria padre tiene que ser una categoria raiz.';
+      this.feedbackError = true;
       return;
     }
 
-    this.cerrarModalEdicion();
+    this.categoriaService.guardarCategoria({
+      idCategoria: this.formularioEditar.idCategoria,
+      nombre,
+      idCategoriaPadre: this.formularioEditar.idCategoriaPadre
+    }).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.cerrarModalEdicion();
+        this.cargarCategorias();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido guardar la categoria.');
+        this.feedbackError = true;
+      }
+    });
   }
 
   eliminarCategoria(categoria: CategoriaVista): void {
@@ -159,11 +192,23 @@ export class CategoriasComponent implements OnInit {
     }
 
     const confirmado = window.confirm(
-      `¿Borrar la categoria "${categoria.nombre}"?\n\nSegun el SQL, al borrar esta categoria tambien se borran sus subcategorias y sus recursos asociados.`
+      `Borrar la categoria "${categoria.nombre}"?\n\nAl borrar esta categoria tambien se borran sus subcategorias y sus recursos asociados.`
     );
     if (!confirmado) {
       return;
     }
+
+    this.categoriaService.eliminarCategoria(categoria.idCategoria).subscribe({
+      next: (respuesta) => {
+        this.feedback = respuesta.message;
+        this.feedbackError = false;
+        this.cargarCategorias();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.feedback = this.obtenerMensajeError(error, 'No se ha podido borrar la categoria.');
+        this.feedbackError = true;
+      }
+    });
   }
 
   getHijos(idCategoria: number): CategoriaVista[] {
@@ -196,6 +241,10 @@ export class CategoriasComponent implements OnInit {
 
   private esCategoriaEspecial(nombre: string): boolean {
     return this.categoriasEspeciales.includes(nombre);
+  }
+
+  private obtenerMensajeError(error: HttpErrorResponse, mensajePorDefecto: string): string {
+    return error.error?.message ?? mensajePorDefecto;
   }
 
   private aplanarCategorias(

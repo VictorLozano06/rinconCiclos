@@ -6,9 +6,17 @@
     </div>
   </div>
 
-  <p *ngIf="feedback" class="feedback-accion">{{ feedback }}</p>
+  <p *ngIf="feedback" class="feedback-accion" [class.feedback-error]="feedbackError">{{ feedback }}</p>
 
-  <div class="contenido-gestion">
+  <div *ngIf="cargando" class="estado-carga">
+    <p>Cargando lugares...</p>
+  </div>
+
+  <div *ngIf="errorCarga" class="estado-carga">
+    <p>No se pudieron cargar los lugares.</p>
+  </div>
+
+  <div *ngIf="!cargando && !errorCarga" class="contenido-gestion">
     <section class="panel-gestion">
       <div class="panel-cabecera">
         <div>
@@ -18,6 +26,8 @@
       </div>
 
       <div class="lista-items">
+        <p *ngIf="!lugares.length" class="fila-meta">No hay lugares disponibles.</p>
+
         <article *ngFor="let lugar of lugares" class="fila-item" [class.fila-item-activa]="esLugarActivo(lugar)">
           <div>
             <div class="fila-meta">Lugar</div>

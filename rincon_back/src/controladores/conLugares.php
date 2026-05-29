@@ -1,20 +1,20 @@
 <?php
-require_once MODELO . 'modCategorias.php';
+require_once MODELO . 'modLugares.php';
 
-// Controlador de categorias.
-class ConCategorias extends ControladorBase {
+// Controlador de lugares.
+class ConLugares extends ControladorBase {
     private $modelo;
 
     public function __construct($db, $usuario = null) {
         parent::__construct($db, $usuario);
-        $this->modelo = new ModCategorias($db);
+        $this->modelo = new ModLugares($db);
     }
 
     public function listar() {
         try {
             $this->responderJson($this->modelo->listar());
         } catch (Exception $e) {
-            $this->responderError('No se han podido cargar las categorias.');
+            $this->responderError('No se han podido cargar los lugares.');
         }
     }
 
@@ -30,14 +30,14 @@ class ConCategorias extends ControladorBase {
             }
 
             $respuesta = $this->modelo->guardar($json);
-            $codigo = !empty($json['idCategoria']) ? 200 : 201;
+            $codigo = !empty($json['idLugar']) ? 200 : 201;
             $this->responderJson($respuesta, $codigo);
         } catch (InvalidArgumentException $e) {
             $this->responderError($e->getMessage());
         } catch (RuntimeException $e) {
             $this->responderError($e->getMessage(), 404);
         } catch (Exception $e) {
-            $this->responderError('No se ha podido guardar la categoria.');
+            $this->responderError('No se ha podido guardar el lugar.');
         }
     }
 
@@ -52,18 +52,18 @@ class ConCategorias extends ControladorBase {
                 $this->responderError('El cuerpo JSON no es valido.');
             }
 
-            $idCategoria = (int)($json['idCategoria'] ?? 0);
-            if ($idCategoria <= 0) {
-                $this->responderError('El idCategoria no es valido.');
+            $idLugar = (int)($json['idLugar'] ?? 0);
+            if ($idLugar <= 0) {
+                $this->responderError('El idLugar no es valido.');
             }
 
-            $this->responderJson($this->modelo->eliminar($idCategoria));
+            $this->responderJson($this->modelo->eliminar($idLugar));
         } catch (InvalidArgumentException $e) {
             $this->responderError($e->getMessage());
         } catch (RuntimeException $e) {
             $this->responderError($e->getMessage(), 404);
         } catch (Exception $e) {
-            $this->responderError('No se ha podido eliminar la categoria.');
+            $this->responderError('No se ha podido eliminar el lugar.');
         }
     }
 }

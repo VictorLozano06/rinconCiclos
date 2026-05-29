@@ -26,6 +26,8 @@
       </div>
 
       <div class="lista-grupos">
+        <p *ngIf="!categoriasRaiz.length" class="fila-meta">No hay categorias disponibles.</p>
+
         <section *ngFor="let categoria of categoriasRaiz" class="grupo-categorias">
           <div class="grupo-titulo">
             <div>
