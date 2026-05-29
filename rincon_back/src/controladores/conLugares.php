@@ -1,15 +1,41 @@
 <?php
 require_once MODELO . 'modLugares.php';
 
-// Controlador de lugares.
+/**
+ * Controlador HTTP para la gestión de lugares.
+ *
+ * Se encarga de recibir las peticiones JSON que hace Angular para:
+ * - listar lugares
+ * - crear o editar un lugar
+ * - eliminar un lugar
+ *
+ * Toda la lógica de negocio queda delegada en {@see ModLugares}. El
+ * controlador solo valida lo mínimo a nivel HTTP y responde con JSON.
+ */
 class ConLugares extends ControladorBase {
+    /**
+     * Modelo especializado en la persistencia y validación de lugares.
+     *
+     * @var ModLugares
+     */
     private $modelo;
 
+    /**
+     * Inicializa el controlador y el modelo asociado.
+     *
+     * @param PDO $db Conexión PDO compartida por la aplicación.
+     * @param mixed|null $usuario Usuario autenticado si existe contexto de sesión.
+     */
     public function __construct($db, $usuario = null) {
         parent::__construct($db, $usuario);
         $this->modelo = new ModLugares($db);
     }
 
+    /**
+     * Devuelve el listado completo de lugares ordenado por nombre.
+     *
+     * @return void
+     */
     public function listar() {
         try {
             $this->responderJson($this->modelo->listar());
@@ -18,6 +44,14 @@ class ConLugares extends ControladorBase {
         }
     }
 
+    /**
+     * Crea un lugar nuevo o actualiza uno ya existente.
+     *
+     * Si el payload trae `idLugar` se interpreta como edición. Si no lo trae,
+     * se crea una fila nueva en la tabla `lugar`.
+     *
+     * @return void
+     */
     public function guardar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -41,6 +75,14 @@ class ConLugares extends ControladorBase {
         }
     }
 
+    /**
+     * Elimina un lugar siempre que no tenga dependencias activas en la BD.
+     *
+     * Si el lugar está siendo usado por convocatorias u órdenes del día, el
+     * modelo devuelve un error legible para el frontend.
+     *
+     * @return void
+     */
     public function eliminar() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

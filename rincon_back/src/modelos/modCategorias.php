@@ -1,10 +1,26 @@
 <?php
 require_once __DIR__ . '/../configuracion/conexionBD.php';
 
-// Modelo de categorias.
+/**
+ * Modelo de acceso a datos y reglas de negocio de categorías.
+ *
+ * Gestiona tanto el árbol visible de categorías como las operaciones de alta,
+ * edición y borrado. También protege las categorías especiales y se encarga
+ * de limpiar los recursos asociados antes de borrar ramas del árbol.
+ */
 class ModCategorias extends ConexionBD {
+    /**
+     * Nombres de categorías especiales que la aplicación no permite gestionar.
+     *
+     * @var array<int,string>
+     */
     private $categoriasEspeciales = ['Convocatorias', 'Actas', 'BOCC'];
 
+    /**
+     * Inicializa el modelo usando la conexión compartida o una nueva.
+     *
+     * @param PDO|null $db Conexión PDO opcional compartida por el controlador.
+     */
     public function __construct($db = null) {
         if ($db instanceof PDO) {
             $this->conexion = $db;
@@ -13,8 +29,15 @@ class ModCategorias extends ConexionBD {
         }
     }
 
-    // Devuelve el arbol visible de categorias.
-    // La categoria 1 es una raiz tecnica y no se pinta en Angular.
+    /**
+     * Devuelve el árbol visible de categorías para Angular.
+     *
+     * La categoría `RAIZ` existe en base de datos solo como apoyo técnico para
+     * colgar el primer nivel. El frontend no la pinta, así que aquí se omite y
+     * se devuelven directamente sus hijas como raíces visibles.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listar() {
         $categorias = $this->obtenerCategoriasIndexadas();
         $arbol = [];
@@ -39,7 +62,13 @@ class ModCategorias extends ConexionBD {
         return $arbol;
     }
 
-    // Crea una categoria nueva o actualiza una existente.
+    /**
+     * Crea una categoría nueva o actualiza una ya existente.
+     *
+     * @param array<string,mixed> $json
+     *
+     * @return array<string,string>
+     */
     public function guardar($json) {
         $datos = $this->normalizarDatos($json);
 
@@ -59,7 +88,18 @@ class ModCategorias extends ConexionBD {
         return ['message' => 'Categoria creada correctamente.'];
     }
 
-    // Borra una categoria, sus subcategorias y los recursos que cuelgan de ellas.
+    /**
+     * Elimina una categoría editable junto a sus recursos colgados.
+     *
+     * Antes de borrar la rama de categorías se limpian:
+     * - relaciones en `cicloRecurso`
+     * - recursos principales
+     * - archivos físicos asociados
+     *
+     * @param int $idCategoria
+     *
+     * @return array<string,string>
+     */
     public function eliminar($idCategoria) {
         $categoria = $this->obtenerCategoriaPorId($idCategoria);
         if (!$categoria) {
@@ -95,10 +135,16 @@ class ModCategorias extends ConexionBD {
         return ['message' => 'Categoria eliminada correctamente.'];
     }
 
-    // =========================
-    // LECTURA BASE
-    // =========================
-
+    /**
+     * Lee todas las categorías y las deja indexadas por id.
+     *
+     * Esta estructura es la base para:
+     * - construir el árbol
+     * - buscar una categoría concreta
+     * - recorrer descendientes en cascada
+     *
+     * @return array<int,array<string,mixed>>
+     */
     private function obtenerCategoriasIndexadas() {
         $sql = "SELECT idCategoria, nombre, predeterminada, idCategoriaPadre
                 FROM categoria
@@ -121,6 +167,13 @@ class ModCategorias extends ConexionBD {
         return $resultado;
     }
 
+    /**
+     * Recupera una categoría concreta por id.
+     *
+     * @param int $idCategoria
+     *
+     * @return array<string,mixed>|null
+     */
     private function obtenerCategoriaPorId($idCategoria) {
         $sql = "SELECT idCategoria, nombre, predeterminada, idCategoriaPadre
                 FROM categoria
@@ -141,10 +194,17 @@ class ModCategorias extends ConexionBD {
         ];
     }
 
-    // =========================
-    // VALIDACION
-    // =========================
-
+    /**
+     * Valida y limpia los datos básicos del formulario de categorías.
+     *
+     * En la interfaz, "sin categoría padre" significa crear una raíz visible.
+     * En base de datos eso no se guarda como `NULL`, sino colgando de la raíz
+     * técnica `1`.
+     *
+     * @param mixed $json
+     *
+     * @return array<string,int|string>
+     */
     private function normalizarDatos($json) {
         if (!is_array($json)) {
             throw new InvalidArgumentException('El cuerpo JSON no es valido.');
@@ -162,8 +222,6 @@ class ModCategorias extends ConexionBD {
             throw new InvalidArgumentException('El nombre no puede superar los 150 caracteres.');
         }
 
-        // En la UI "sin categoria padre" significa categoria raiz visible.
-        // En BD eso se guarda colgando de la raiz tecnica 1.
         if ($idCategoriaPadre === null || $idCategoriaPadre === '' || (int)$idCategoriaPadre === 0) {
             $idCategoriaPadre = 1;
         } else {
@@ -178,8 +236,6 @@ class ModCategorias extends ConexionBD {
             throw new InvalidArgumentException('Una categoria no puede ser padre de si misma.');
         }
 
-        // Solo dejamos colgar hijas de categorias raiz visibles.
-        // O sea: categorias cuyo padre real es la raiz tecnica 1.
         if ($idCategoriaPadre !== 1) {
             $categoriaPadre = $this->obtenerCategoriaPorId($idCategoriaPadre);
 
@@ -199,6 +255,18 @@ class ModCategorias extends ConexionBD {
         ];
     }
 
+    /**
+     * Comprueba si una categoría puede gestionarse desde el CRUD.
+     *
+     * Bloquea:
+     * - la raíz técnica
+     * - las predeterminadas
+     * - las categorías especiales
+     *
+     * @param array<string,mixed> $categoria
+     *
+     * @return void
+     */
     private function comprobarQuePuedeGestionarse($categoria) {
         if ((int)$categoria['idCategoria'] === 1) {
             throw new InvalidArgumentException('La categoria raiz no se puede modificar.');
@@ -213,10 +281,13 @@ class ModCategorias extends ConexionBD {
         }
     }
 
-    // =========================
-    // ESCRITURA
-    // =========================
-
+    /**
+     * Inserta una categoría nueva siempre como no predeterminada.
+     *
+     * @param array<string,int|string> $datos
+     *
+     * @return void
+     */
     private function insertarCategoria($datos) {
         $sql = "INSERT INTO categoria (nombre, predeterminada, idCategoriaPadre)
                 VALUES (:nombre, b'0', :idCategoriaPadre)";
@@ -227,6 +298,13 @@ class ModCategorias extends ConexionBD {
         ]);
     }
 
+    /**
+     * Actualiza nombre y padre de una categoría editable.
+     *
+     * @param array<string,int|string> $datos
+     *
+     * @return void
+     */
     private function actualizarCategoria($datos) {
         $sql = "UPDATE categoria
                 SET nombre = :nombre,
@@ -240,10 +318,13 @@ class ModCategorias extends ConexionBD {
         ]);
     }
 
-    // =========================
-    // BORRADO DE CATEGORIAS
-    // =========================
-
+    /**
+     * Devuelve la categoría pedida y todas sus hijas recursivamente.
+     *
+     * @param int $idCategoria
+     *
+     * @return array<int,int>
+     */
     private function obtenerIdsCategoriaYDescendientes($idCategoria) {
         $categorias = $this->obtenerCategoriasIndexadas();
         $ids = [$idCategoria];
@@ -270,6 +351,15 @@ class ModCategorias extends ConexionBD {
         return $ids;
     }
 
+    /**
+     * Recupera las rutas públicas de todos los archivos de una rama.
+     *
+     * Se necesitan para borrar después los ficheros físicos del disco.
+     *
+     * @param array<int,int> $idsCategorias
+     *
+     * @return array<int,string>
+     */
     private function obtenerRutasArchivosCategorias($idsCategorias) {
         if (empty($idsCategorias)) {
             return [];
@@ -292,6 +382,13 @@ class ModCategorias extends ConexionBD {
         return $rutas;
     }
 
+    /**
+     * Limpia la tabla intermedia `cicloRecurso` antes de borrar recursos.
+     *
+     * @param array<int,int> $idsCategorias
+     *
+     * @return void
+     */
     private function borrarCiclosRecursosPorCategorias($idsCategorias) {
         if (empty($idsCategorias)) {
             return;
@@ -303,18 +400,34 @@ class ModCategorias extends ConexionBD {
         $stmt->execute($idsCategorias);
     }
 
+    /**
+     * Borra los recursos principales de las categorías indicadas.
+     *
+     * `recursoUrl` y `recursoArchivo` caen por cascada desde la FK de
+     * `recurso`, así que no hace falta borrarlos a mano aquí.
+     *
+     * @param array<int,int> $idsCategorias
+     *
+     * @return void
+     */
     private function borrarRecursosPorCategorias($idsCategorias) {
         if (empty($idsCategorias)) {
             return;
         }
 
-        // recursoUrl y recursoArchivo caen por cascada desde recurso.
         $marcas = implode(',', array_fill(0, count($idsCategorias), '?'));
         $sql = "DELETE FROM recurso WHERE idCategoria IN ($marcas)";
         $stmt = $this->conexion->prepare($sql);
         $stmt->execute($idsCategorias);
     }
 
+    /**
+     * Borra del disco los ficheros asociados a una rama de categorías.
+     *
+     * @param array<int,string> $rutasPublicas
+     *
+     * @return void
+     */
     private function borrarArchivosFisicos($rutasPublicas) {
         foreach ($rutasPublicas as $rutaPublica) {
             $rutaFisica = $this->rutaFisicaDesdePublica($rutaPublica);
@@ -325,6 +438,13 @@ class ModCategorias extends ConexionBD {
         }
     }
 
+    /**
+     * Convierte una ruta pública `/api/uploads/...` a su ruta física real.
+     *
+     * @param string $rutaPublica
+     *
+     * @return string
+     */
     private function rutaFisicaDesdePublica($rutaPublica) {
         $rutaPublica = trim((string)$rutaPublica);
         $rutaPublica = preg_replace('#^/api/uploads/#', '', $rutaPublica);
