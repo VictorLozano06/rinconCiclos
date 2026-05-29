@@ -12,6 +12,21 @@
       No se pudieron cargar las categorias del backend.
     </p>
 
+    <div *ngIf="mostrarAccesoProfesor" class="grupo-navegacion grupo-acceso-portal">
+      <a
+        [routerLink]="'/profesor/inicio'"
+        (click)="cerrarSidebar()"
+        routerLinkActive="enlace-activo"
+        class="item-menu item-menu-enlace acceso-portal-enlace">
+        <div class="contenido-item">
+          <span class="icono-item">
+            <img src="assets/icons/home.svg" alt="Profesor" class="imagen-icono">
+          </span>
+          <span class="texto-item">Profesor</span>
+        </div>
+      </a>
+    </div>
+
     <div *ngFor="let item of menuItems" class="grupo-navegacion">
       <a
         *ngIf="!tieneHijos(item)"

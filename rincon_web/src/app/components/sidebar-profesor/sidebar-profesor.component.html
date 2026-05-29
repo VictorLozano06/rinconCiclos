@@ -8,6 +8,17 @@
   </div>
 
   <nav class="navegacion-sidebar">
+    <div *ngIf="mostrarAccesoCoordinador" class="grupo-navegacion grupo-acceso-coordinador">
+      <a
+        routerLink="/coordinador/inicio"
+        routerLinkActive="enlace-activo"
+        class="item-menu item-menu-coordinador"
+        (click)="cerrarSidebar()">
+        <img src="assets/icons/categoria-generica.svg" alt="Coordinador" class="imagen-icono">
+        <span class="texto-item">COORDINADOR</span>
+      </a>
+    </div>
+
     <div *ngFor="let cat of categorias" class="grupo-navegacion">
       <button
         class="item-menu"

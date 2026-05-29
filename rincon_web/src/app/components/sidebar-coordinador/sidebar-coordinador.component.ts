@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CategoriaDto } from '../../dto/categoria.dto';
+import { AccesoAppService } from '../../services/acceso-app.service';
 import { CategoriaService } from '../../services/categoria.service';
 
 interface SidebarItem {
@@ -26,10 +27,16 @@ export class SidebarCoordinadorComponent implements OnInit {
 
   public menuItems: SidebarItem[] = [];
   public errorCarga = false;
+  public mostrarAccesoProfesor = false;
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(
+    private categoriaService: CategoriaService,
+    private accesoAppService: AccesoAppService
+  ) {}
 
   ngOnInit(): void {
+    this.accesoAppService.inicializarDesdeUbicacionActual();
+    this.mostrarAccesoProfesor = this.accesoAppService.puedeAccederProfesor();
     this.obtenerCategorias();
   }
 
@@ -40,7 +47,7 @@ export class SidebarCoordinadorComponent implements OnInit {
         this.errorCarga = false;
         this.menuItems = this.construirMenu(data);
       },
-      error: (err) => {
+      error: (err: unknown) => {
         this.errorCarga = true;
         console.error('Error al obtener categorias para el sidebar de coordinador:', err);
       }

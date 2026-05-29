@@ -57,6 +57,12 @@
   margin-bottom: 0.25rem;
 }
 
+.grupo-acceso-coordinador {
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 0.0625rem solid #e2e8f0;
+}
+
 .item-menu {
   width: 100%;
   padding: 0.625rem 1.25rem;
@@ -70,8 +76,19 @@
   color: #475569;
 }
 
+.item-menu-coordinador {
+  text-decoration: none;
+  background: #eef4ff;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
 .item-menu:hover {
   background: #f1f5f9;
+}
+
+.item-menu-coordinador:hover {
+  background: #dbeafe;
 }
 
 .imagen-icono {
