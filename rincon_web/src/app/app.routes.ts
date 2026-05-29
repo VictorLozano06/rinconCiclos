@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
-import { LandingComponent } from './components/landing/landing.component';
+import { RedirectInicialComponent } from './components/redirect-inicial/redirect-inicial.component';
+import { coordinadorGuard } from './guards/coordinador.guard';
+import { SinAccesoComponent } from './components/sin-acceso/sin-acceso.component';
 
 export const routes: Routes = [
   {
@@ -8,15 +10,20 @@ export const routes: Routes = [
   },
   {
     path: 'coordinador',
+    canActivate: [coordinadorGuard],
     loadChildren: () => import('./pages/coordinador/coordinador.routes').then(m => m.COORDINADOR_ROUTES)
   },
   {
     path: '',
-    component: LandingComponent, /*Aqui iria la movida de aitor*/
+    component: RedirectInicialComponent,
     pathMatch: 'full'
   },
   {
+    path: 'sin-acceso',
+    component: SinAccesoComponent
+  },
+  {
     path: '**',
-    redirectTo: ''
+    redirectTo: '/profesor/inicio'
   }
 ];

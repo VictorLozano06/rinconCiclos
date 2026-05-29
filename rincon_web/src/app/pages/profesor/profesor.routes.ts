@@ -7,11 +7,12 @@ import { RecursoDetalleCompartidoComponent } from '../../components/recurso-deta
 import { ActasAsistenciaComponent } from './actas-asistencia/actas-asistencia.component';
 import { ActasRedaccionComponent } from './actas-redaccion/actas-redaccion.component';
 import { ActasInicioProfesorComponent } from './actas-inicio/actas-inicio.component';
-import { ActasHistorialComponent } from './actas-historial/actas-historial.component';
+import { profesorGuard } from '../../guards/profesor.guard';
 
 export const PROFESOR_ROUTES: Routes = [
   {
     path: '',
+    canActivate: [profesorGuard],
     component: ProfesorLayoutComponent,
     children: [
       { path: '', component: InicioComponent },

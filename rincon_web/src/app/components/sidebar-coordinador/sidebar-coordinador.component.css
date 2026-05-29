@@ -60,6 +60,16 @@
   font-size: 13px;
 }
 
+.grupo-acceso-portal {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.acceso-portal-enlace {
+  color: #1d4ed8;
+}
+
 .item-menu {
   width: 100%;
   padding: 10px 20px;
