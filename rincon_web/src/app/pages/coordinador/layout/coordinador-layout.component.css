@@ -1,8 +1,11 @@
 .diseno-app {
   display: flex;
+  align-items: stretch;
   min-height: 100vh;
   background-color: #f8fafc;
   position: relative;
+  overflow-x: hidden;
+  --sidebar-width: 17.5rem;
 }
 
 .sidebar-overlay {
@@ -12,18 +15,22 @@
 .sidebar-shell {
   width: 0;
   flex: 0 0 0;
+  display: flex;
+  align-self: stretch;
   overflow: hidden;
   transition: width 0.22s ease, flex-basis 0.22s ease;
 }
 
 .sidebar-shell-open {
-  width: 260px;
-  flex-basis: 260px;
+  width: var(--sidebar-width);
+  flex-basis: var(--sidebar-width);
 }
 
 .sidebar-shell app-sidebar-coordinador {
   display: block;
-  width: 260px;
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  height: 100%;
 }
 
 .sidebar-overlay-visible {
@@ -36,6 +43,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  padding-bottom: 42px;
 }
 
 .barra-superior {
