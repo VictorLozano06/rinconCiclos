@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { RedirectInicialComponent } from './components/redirect-inicial/redirect-inicial.component';
 import { coordinadorGuard } from './guards/coordinador.guard';
-import { SinAccesoComponent } from './components/sin-acceso/sin-acceso.component';
 
 export const routes: Routes = [
   {
@@ -20,10 +19,11 @@ export const routes: Routes = [
   },
   {
     path: 'sin-acceso',
-    component: SinAccesoComponent
+    pathMatch: 'full',
+    redirectTo: ''
   },
   {
     path: '**',
-    redirectTo: '/profesor/inicio'
+    redirectTo: ''
   }
 ];

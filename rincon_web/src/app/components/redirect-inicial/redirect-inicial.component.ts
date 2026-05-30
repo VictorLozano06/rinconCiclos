@@ -24,6 +24,6 @@ export class RedirectInicialComponent implements OnInit {
       return;
     }
 
-    void this.router.navigate(['/sin-acceso'], { replaceUrl: true });
+    window.location.replace('https://17.daw.esvirgua.com');
   }
 }

@@ -4,6 +4,7 @@ const CLAVE_ROLES = 'rinconCiclos.roles';
 const CLAVE_USUARIO = 'rinconCiclos.usuario';
 const ROL_PROFESOR = 'profesor';
 const ROL_COORDINADOR = 'coordinador_rinconciclos';
+const URL_PORTAL_INICIO = 'https://17.daw.esvirgua.com';
 
 interface UsuarioAcceso {
   id: number | null;
@@ -60,6 +61,11 @@ export class AccesoAppService {
   puedeEntrarEnLaApp(): boolean {
     this.inicializarDesdeUbicacionActual();
     return this.puedeAccederProfesor() || this.puedeAccederCoordinador();
+  }
+
+  salir(): void {
+    this.limpiarEstado();
+    window.location.replace(URL_PORTAL_INICIO);
   }
 
   obtenerRoles(): string[] {
@@ -215,5 +221,15 @@ export class AccesoAppService {
       sessionStorage.setItem(CLAVE_USUARIO, serializadoUsuario);
       localStorage.setItem(CLAVE_USUARIO, serializadoUsuario);
     }
+  }
+
+  private limpiarEstado(): void {
+    sessionStorage.removeItem(CLAVE_ROLES);
+    localStorage.removeItem(CLAVE_ROLES);
+    sessionStorage.removeItem(CLAVE_USUARIO);
+    localStorage.removeItem(CLAVE_USUARIO);
+    this.roles = [];
+    this.usuario = null;
+    this.inicializado = false;
   }
 }
