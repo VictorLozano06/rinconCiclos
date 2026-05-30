@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 
 const CLAVE_ROLES = 'rinconCiclos.roles';
 const CLAVE_USUARIO = 'rinconCiclos.usuario';
+const CLAVE_ROLES_DEV = 'rinconCiclos.dev_roles';
+const CLAVE_USUARIO_DEV = 'rinconCiclos.dev_usuario';
 const ROL_PROFESOR = 'profesor';
 const ROL_COORDINADOR = 'coordinador_rinconciclos';
-const URL_PORTAL_INICIO = 'https://17.daw.esvirgua.com';
+const URL_PORTAL_INICIO = 'https://17.daw.esvirgua.com/dashboard-inicio';
 
-interface UsuarioAcceso {
+export interface UsuarioAcceso {
   id: number | null;
   nombre: string;
   apellidos: string;
@@ -87,7 +89,9 @@ export class AccesoAppService {
   }
 
   private leerUsuarioDesdeStorage(storage: Storage): UsuarioAcceso | null {
-    const claves = [CLAVE_USUARIO, 'usuario', 'user', 'auth_user', 'user_data', 'session_user'];
+    const claves = this.esEntornoLocal()
+      ? [CLAVE_USUARIO, CLAVE_USUARIO_DEV, 'usuario', 'user', 'auth_user', 'user_data', 'session_user', 'dev_usuario', 'dev_user']
+      : [CLAVE_USUARIO, 'usuario', 'user', 'auth_user', 'user_data', 'session_user'];
 
     for (const clave of claves) {
       const usuario = this.extraerUsuario(storage.getItem(clave));
@@ -101,7 +105,9 @@ export class AccesoAppService {
 
   private leerUsuarioDesdeQueryString(queryString: string): UsuarioAcceso | null {
     const params = new URLSearchParams(queryString);
-    const claves = ['usuario', 'user', 'auth_user', 'user_data', 'session_user'];
+    const claves = this.esEntornoLocal()
+      ? ['usuario', 'user', 'auth_user', 'user_data', 'session_user', 'dev_usuario', 'dev_user']
+      : ['usuario', 'user', 'auth_user', 'user_data', 'session_user'];
 
     for (const clave of claves) {
       const valores = params.getAll(clave);
@@ -117,19 +123,32 @@ export class AccesoAppService {
   }
 
   private leerRolesDesdeStorage(storage: Storage): string[] {
-    const rolesCrudos = [
-      storage.getItem(CLAVE_ROLES),
-      storage.getItem('roles'),
-      storage.getItem('role'),
-      storage.getItem('rol')
-    ];
+    const rolesCrudos = this.esEntornoLocal()
+      ? [
+          storage.getItem(CLAVE_ROLES),
+          storage.getItem(CLAVE_ROLES_DEV),
+          storage.getItem('roles'),
+          storage.getItem('role'),
+          storage.getItem('rol'),
+          storage.getItem('dev_roles'),
+          storage.getItem('dev_role'),
+          storage.getItem('dev_rol')
+        ]
+      : [
+          storage.getItem(CLAVE_ROLES),
+          storage.getItem('roles'),
+          storage.getItem('role'),
+          storage.getItem('rol')
+        ];
 
     return rolesCrudos.flatMap((valor) => this.extraerRoles(valor));
   }
 
   private leerRolesDesdeQueryString(queryString: string): string[] {
     const params = new URLSearchParams(queryString);
-    const claves = ['roles', 'role', 'rol', 'user_roles', 'user_role'];
+    const claves = this.esEntornoLocal()
+      ? ['roles', 'role', 'rol', 'user_roles', 'user_role', 'dev_roles', 'dev_role', 'dev_rol']
+      : ['roles', 'role', 'rol', 'user_roles', 'user_role'];
     const roles: string[] = [];
 
     claves.forEach((clave) => {
@@ -231,5 +250,14 @@ export class AccesoAppService {
     this.roles = [];
     this.usuario = null;
     this.inicializado = false;
+  }
+
+  private esEntornoLocal(): boolean {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    const host = window.location.hostname.toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1';
   }
 }

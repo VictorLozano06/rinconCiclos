@@ -24,6 +24,6 @@ export class RedirectInicialComponent implements OnInit {
       return;
     }
 
-    window.location.replace('https://17.daw.esvirgua.com');
+    window.location.replace('https://17.daw.esvirgua.com/dashboard-inicio');
   }
 }
