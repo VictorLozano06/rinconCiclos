@@ -197,4 +197,8 @@ export class SidebarCoordinadorComponent implements OnInit {
   cerrarSidebar(): void {
     this.requestClose.emit();
   }
+
+  salir(): void {
+    this.accesoAppService.salir();
+  }
 }

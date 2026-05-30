@@ -53,6 +53,11 @@
   padding: 0.75rem 0;
 }
 
+.pie-sidebar {
+  padding: 0.75rem 0 1rem;
+  border-top: 0.0625rem solid #e2e8f0;
+}
+
 .grupo-navegacion {
   margin-bottom: 0.25rem;
 }
@@ -85,6 +90,14 @@
 
 .item-menu:hover {
   background: #f1f5f9;
+}
+
+.item-menu-salir {
+  color: #b91c1c;
+}
+
+.item-menu-salir:hover {
+  background: #fef2f2;
 }
 
 .item-menu-coordinador:hover {

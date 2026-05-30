@@ -172,6 +172,10 @@ export class SidebarProfesorComponent implements OnInit {
     this.requestClose.emit();
   }
 
+  salir(): void {
+    this.accesoAppService.salir();
+  }
+
   /**
    * Responde al clic de una categoría en el sidebar.
    *

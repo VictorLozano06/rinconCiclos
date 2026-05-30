@@ -16,5 +16,6 @@ export const profesorGuard: CanActivateFn = () => {
     return router.createUrlTree(['/coordinador/inicio']);
   }
 
-  return router.createUrlTree(['/sin-acceso']);
+  window.location.replace('https://17.daw.esvirgua.com');
+  return false;
 };

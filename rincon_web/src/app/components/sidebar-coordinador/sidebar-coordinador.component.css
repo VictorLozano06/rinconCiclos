@@ -53,6 +53,11 @@
   padding: 15px 0;
 }
 
+.pie-sidebar {
+  padding: 12px 0 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
 .estado-sidebar {
   margin: 0;
   padding: 0 20px;
@@ -91,6 +96,14 @@
 
 .item-menu:hover {
   background-color: #f1f5f9;
+}
+
+.item-menu-salir {
+  color: #b91c1c;
+}
+
+.item-menu-salir:hover {
+  background-color: #fef2f2;
 }
 
 .contenido-item {
