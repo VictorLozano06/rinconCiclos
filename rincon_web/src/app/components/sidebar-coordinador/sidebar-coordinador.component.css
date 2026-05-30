@@ -1,6 +1,7 @@
 .barra-lateral {
   width: 260px;
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   background-color: #fff;
   border-right: 1px solid #ddd;
   display: flex;
@@ -12,13 +13,19 @@
 }
 
 .cabecera-sidebar {
-  height: 90px;
+  min-height: 144px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 25px;
+  gap: 16px;
+  padding: 20px 25px;
   border-bottom: 1px solid #e2e8f0;
   position: relative;
+}
+
+.marca-sidebar {
+  display: flex;
+  flex-direction: column;
 }
 
 .titulo-web {
@@ -32,6 +39,56 @@
   font-size: 12px;
   color: #64748b;
   margin: 0;
+}
+
+.perfil-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.avatar-perfil {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #e8f4fb;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f4fb;
+  color: #0070ab;
+  font-size: 16px;
+}
+
+.datos-perfil {
+  min-width: 0;
+}
+
+.nombre-perfil,
+.meta-perfil {
+  margin: 0;
+}
+
+.nombre-perfil {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.meta-perfil {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cerrar-sidebar {
@@ -222,8 +279,7 @@
   }
 
   .cabecera-sidebar {
-    height: auto;
-    min-height: 90px;
+    min-height: 132px;
     padding: 18px 56px 18px 20px;
   }
 
