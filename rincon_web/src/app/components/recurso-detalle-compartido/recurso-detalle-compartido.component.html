@@ -1,4 +1,5 @@
 <section class="recurso-detalle" *ngIf="!cargando && recurso">
+  <button type="button" class="btn-back" (click)="volver()"><i class="bi bi-arrow-left"></i> Volver</button>
   <p class="ruta-detalle" *ngIf="textoRutaNavegacion">{{ textoRutaNavegacion }}</p>
 
   <header class="hero-detalle">

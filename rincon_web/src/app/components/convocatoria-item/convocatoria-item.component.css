@@ -1,0 +1,42 @@
+.convocatoria-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.875rem;
+  border: 0.0625rem solid #d8d8d8;
+  border-radius: 0.625rem;
+  background: #ffe5e5;
+  margin-bottom: 0.625rem;
+}
+
+.recurso-dato {
+  margin: 0 0 0.375rem;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.recurso-titulo {
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
+  color: #222;
+}
+
+.recurso-texto {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.recurso-enlace {
+  display: inline-block;
+  padding: 0.4375rem 0.625rem;
+  border-radius: 0.3125rem;
+  background: #ededed;
+  color: #222;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.recurso-enlace:hover {
+  background: #e2e2e2;
+}

@@ -28,9 +28,7 @@ class ConexionBD {
 
         $configuracion = $this->obtenerConfiguracionPerfil($perfilNormalizado);
         if (!$configuracion['nombre_bd'] || !$configuracion['usuario']) {
-            http_response_code(500);
-            echo json_encode(["error" => "Configuracion de base de datos incompleta para el perfil '" . $perfilNormalizado . "'."]);
-            exit;
+            throw new \RuntimeException("Configuracion de base de datos incompleta para el perfil '" . $perfilNormalizado . "'.");
         }
 
         try {
@@ -52,9 +50,7 @@ class ConexionBD {
             );
             $this->conexion = self::$conexiones[$perfilNormalizado];
         } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(["error" => "Error de conexion a la base de datos (" . $perfilNormalizado . "): " . $e->getMessage()]);
-            exit;
+            throw new \RuntimeException("Error de conexion a la base de datos (" . $perfilNormalizado . "): " . $e->getMessage());
         }
 
         return $this->conexion;

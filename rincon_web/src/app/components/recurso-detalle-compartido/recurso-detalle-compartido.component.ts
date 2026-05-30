@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -36,7 +36,8 @@ export class RecursoDetalleCompartidoComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private categoriaService: CategoriaService,
-    private recursoService: RecursoService
+    private recursoService: RecursoService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -199,5 +200,9 @@ export class RecursoDetalleCompartidoComponent implements OnInit {
     }
 
     return [];
+  }
+
+  volver(): void {
+    this.location.back();
   }
 }

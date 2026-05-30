@@ -1,47 +1,55 @@
 <section class="seccion-recursos">
   <div class="cabecera-inicio">
     <div>
-      <h2 class="titulo-seccion">Recursos recientes</h2>
+      <h2 class="titulo-seccion">Últimas novedades</h2>
       <p class="texto-descripcion">
-        Ultimos recursos cargados desde la base de datos para coordinacion.
+        Ultimos recursos y convocatorias registradas.
       </p>
     </div>
 
-    <a routerLink="/coordinador/recursos" class="enlace-ver-todos">Ver todos</a>
+    <a routerLink="/coordinador/recursos" class="enlace-ver-todos">Ver todos los recursos</a>
   </div>
 
-  <div *ngIf="cargandoRecursos" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+  <div *ngIf="cargandoRecursos || cargandoConvocatorias" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
     <div class="card-body">
-      <p class="text-muted mb-0">Cargando recursos...</p>
+      <p class="text-muted mb-0">Cargando...</p>
     </div>
   </div>
 
-  <div *ngIf="errorRecursos" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
+  <div *ngIf="!cargandoRecursos && !cargandoConvocatorias && errorRecursos && errorConvocatorias" class="card shadow-sm border-0 p-4 text-center bg-white rounded-4">
     <div class="card-body">
-      <h4 class="card-title text-secondary">No se han podido cargar los recursos</h4>
+      <h4 class="card-title text-secondary">No se han podido cargar los datos</h4>
       <p class="card-text text-muted mb-0">Revisa la conexion con la API de PHP y vuelve a intentarlo.</p>
     </div>
   </div>
 
-  <div *ngIf="!cargandoRecursos && !errorRecursos && recursosRecientes.length; else sinRecursos" class="lista-recursos">
-    <app-recurso-item
-      *ngFor="let recurso of recursosRecientes"
-      [categoria]="recurso.categoriaNombre"
-      [fechaPublicacion]="recurso.fechaPublicacion"
-      [nombre]="recurso.nombre"
-      [descripcion]="recurso.descripcion"
-      [curso]="formatearCurso(recurso)"
-      [ciclos]="formatearCiclos(recurso)"
-      [detalleRuta]="['/coordinador', 'recursos', recurso.idCategoria, recurso.numRecurso]">
-    </app-recurso-item>
+  <div *ngIf="!cargandoRecursos && !cargandoConvocatorias && itemsRecientes.length; else sinItems" class="lista-recursos">
+    <ng-container *ngFor="let item of itemsRecientes">
+      <app-recurso-item *ngIf="item.tipo === 'recurso'"
+        [categoria]="item.categoria"
+        [fechaPublicacion]="item.fecha"
+        [nombre]="item.nombre"
+        [descripcion]="item.descripcion"
+        [curso]="item.curso"
+        [ciclos]="item.ciclos"
+        [detalleRuta]="item.detalleRuta">
+      </app-recurso-item>
+      <app-convocatoria-item *ngIf="item.tipo === 'convocatoria'"
+        [fecha]="item.fecha"
+        [lugar]="item.lugar"
+        [inicia]="item.inicia"
+        [redacta]="item.redacta"
+        [detalleRuta]="item.detalleRuta">
+      </app-convocatoria-item>
+    </ng-container>
   </div>
 
-  <ng-template #sinRecursos>
-    <div *ngIf="!cargandoRecursos && !errorRecursos" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
+  <ng-template #sinItems>
+    <div *ngIf="!cargandoRecursos && !cargandoConvocatorias" class="card shadow-sm border-0 p-5 text-center bg-white rounded-4">
       <div class="card-body">
         <i class="bi bi-folder2-open text-muted fs-1 mb-3"></i>
-        <h4 class="card-title text-secondary">No hay recursos publicados</h4>
-        <p class="card-text text-muted mb-0">Cuando haya recursos cargados en la base de datos apareceran aqui.</p>
+        <h4 class="card-title text-secondary">No hay novedades</h4>
+        <p class="card-text text-muted mb-0">Cuando haya recursos o convocatorias publicadas apareceran aqui.</p>
       </div>
     </div>
   </ng-template>

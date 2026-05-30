@@ -169,6 +169,23 @@
   color: #475467;
 }
 
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border: 0.0625rem solid #d8d8d8;
+  border-radius: 0.3125rem;
+  background: #ededed;
+  color: #222;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: #e2e2e2;
+}
+
 @media (max-width: 48em) {
   .item-recurso-detalle {
     display: block;

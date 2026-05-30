@@ -69,7 +69,11 @@ class ModConvocatorias extends ConexionBD {
     public function __construct($db = null) {
         parent::__construct();
         $this->db = $db ?: $this->obtenerConexion();
-        $this->dbProfesores = $this->obtenerConexion('nueva');
+        try {
+            $this->dbProfesores = $this->obtenerConexion('nueva');
+        } catch (\Exception $e) {
+            $this->dbProfesores = null;
+        }
         $this->profesoresSeleccionables = null;
     }
 
@@ -889,6 +893,11 @@ class ModConvocatorias extends ConexionBD {
             return array_values($this->profesoresSeleccionables);
         }
 
+        if ($this->dbProfesores === null) {
+            $this->profesoresSeleccionables = [];
+            return [];
+        }
+
         $sql = "SELECT DISTINCT
                     p.id AS idProfesor,
                     TRIM(CONCAT_WS(' ', p.nombre, p.apellidos)) AS nombre
@@ -1095,23 +1104,25 @@ class ModConvocatorias extends ConexionBD {
 
         if (!empty($idsFaltantes)) {
             // Primera fuente de verdad: catálogo externo de personal.
-            $consultaIds = $this->crearConsultaIds($idsFaltantes, 'profesorId');
-            $sql = "SELECT
-                        p.id AS idProfesor,
-                        TRIM(CONCAT_WS(' ', p.nombre, p.apellidos)) AS nombre
-                    FROM personal p
-                    WHERE p.id IN (" . $consultaIds['marcadores'] . ")";
+            if ($this->dbProfesores !== null) {
+                $consultaIds = $this->crearConsultaIds($idsFaltantes, 'profesorId');
+                $sql = "SELECT
+                            p.id AS idProfesor,
+                            TRIM(CONCAT_WS(' ', p.nombre, p.apellidos)) AS nombre
+                        FROM personal p
+                        WHERE p.id IN (" . $consultaIds['marcadores'] . ")";
 
-            $stmt = $this->dbProfesores->prepare($sql);
-            foreach ($consultaIds['parametros'] as $marcador => $valor) {
-                $stmt->bindValue($marcador, $valor, PDO::PARAM_INT);
-            }
-            $stmt->execute();
+                $stmt = $this->dbProfesores->prepare($sql);
+                foreach ($consultaIds['parametros'] as $marcador => $valor) {
+                    $stmt->bindValue($marcador, $valor, PDO::PARAM_INT);
+                }
+                $stmt->execute();
 
-            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $fila) {
-                $idProfesor = (int)$fila['idProfesor'];
-                $nombre = $fila['nombre'] !== '' ? $fila['nombre'] : ('Profesor #' . $idProfesor);
-                $this->nombresProfesores[$idProfesor] = $nombre;
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $fila) {
+                    $idProfesor = (int)$fila['idProfesor'];
+                    $nombre = $fila['nombre'] !== '' ? $fila['nombre'] : ('Profesor #' . $idProfesor);
+                    $this->nombresProfesores[$idProfesor] = $nombre;
+                }
             }
 
             $idsLocalesPendientes = [];

@@ -31,7 +31,14 @@ require_once CONFIGURACION . 'conexionBD.php';
 require_once CONFIGURACION . 'ControladorBase.php';
 
 // Establecer la conexión con la base de datos MySQL
-$base_datos = (new ConexionBD())->obtenerConexion();
+try {
+    $base_datos = (new ConexionBD())->obtenerConexion();
+} catch (\RuntimeException $e) {
+    http_response_code(500);
+    echo json_encode(["error" => $e->getMessage()]);
+    ob_end_flush();
+    exit;
+}
 
 // Obtener el controlador y método a llamar por medio de parámetros de URL (?c=Categorias&m=listar)
 $c = $_GET["c"] ?? null;

@@ -1,0 +1,10 @@
+<div class="convocatoria-item">
+  <div>
+    <div class="recurso-dato">Convocatoria reunión - {{ fecha | date:'dd/MM/yyyy' }}</div>
+    <h3 class="recurso-titulo">Convocatoria - {{ lugar || 'Sin lugar' }}</h3>
+    <p class="recurso-texto">Inicia: {{ inicia || 'Sin asignar' }} &middot; Redacta: {{ redacta || 'Sin asignar' }}</p>
+  </div>
+  <div>
+    <a *ngIf="detalleRuta" [routerLink]="detalleRuta" class="recurso-enlace">Ver convocatoria</a>
+  </div>
+</div>

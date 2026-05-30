@@ -8,7 +8,11 @@ class ModActas {
     public function __construct($db) {
         $this->db = $db;
         $conexionBD = new ConexionBD();
-        $this->dbProfesores = $conexionBD->obtenerConexion('nueva');
+        try {
+            $this->dbProfesores = $conexionBD->obtenerConexion('nueva');
+        } catch (\RuntimeException $e) {
+            $this->dbProfesores = null;
+        }
     }
 
     public function obtenerAniosConActas() {
