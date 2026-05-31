@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * Modelo de acceso a datos y reglas de negocio para las Actas.
+ *
+ * Encargado de la persistencia local de las actas de reuniones, 
+ * obtención del historial, control de borradores, y firmas de cierre.
+ */
 class ModActas {
+    /** @var PDO Conexión a la base de datos principal local */
     private $db;
+    /** @var PDO|null Conexión a la base de datos externa de profesores */
     private $dbProfesores;
+    /** @var array Caché de nombres de profesores consultados */
     private $nombresProfesores = [];
 
     public function __construct($db) {
@@ -15,6 +24,11 @@ class ModActas {
         }
     }
 
+    /**
+     * Obtiene una lista de años únicos (anioInicio) en los que existen actas cerradas.
+     *
+     * @return array<int> Lista de años de inicio disponibles
+     */
     public function obtenerAniosConActas() {
         $sql = "SELECT DISTINCT c.anioInicio 
                 FROM acta a
@@ -32,6 +46,12 @@ class ModActas {
         return $anios;
     }
 
+    /**
+     * Lista todas las actas cerradas correspondientes a un curso académico específico.
+     *
+     * @param int $anioInicio Año de inicio del curso académico (ej. 2025 para 2025/2026)
+     * @return array Lista de actas cerradas procesadas
+     */
     public function listarHistorialPorAnio($anioInicio) {
         $sql = "SELECT 
                     a.idActa, 
@@ -60,6 +80,13 @@ class ModActas {
         return $this->procesarActasConNombresExternos($actas);
     }
 
+    /**
+     * Lista el historial de actas cerradas en las que un profesor ha participado
+     * (ya sea porque fue asistente, las redactó o las inició).
+     *
+     * @param int $idProfesor Identificador numérico del profesor
+     * @return array Lista de actas procesadas asociadas al profesor
+     */
     public function listarHistorialPorProfesor($idProfesor) {
         $sql = "SELECT 
                     a.idActa, 
@@ -92,6 +119,14 @@ class ModActas {
         return $this->procesarActasConNombresExternos($actas);
     }
 
+    /**
+     * Procesa un listado crudo de actas y lo hidrata con nombres externos 
+     * resolviendo IDs locales frente a la base de datos externa de profesores.
+     * Calcula dinámicamente horas de fin, ausentes y participantes.
+     *
+     * @param array $actas Matriz con los registros de actas extraídos de SQL
+     * @return array Actas procesadas y listas para su consumo en JSON
+     */
     private function procesarActasConNombresExternos($actas) {
         foreach ($actas as &$acta) {
             $acta['idActa'] = (int) $acta['idActa'];
@@ -210,6 +245,12 @@ class ModActas {
         return $actas;
     }
 
+    /**
+     * Obtiene la próxima convocatoria activa que no tiene un acta abierta o cerrada.
+     * Esto se utiliza para iniciar la fase de control de asistencia.
+     *
+     * @return array|null Datos de la convocatoria pendiente o nulo si no hay ninguna
+     */
     public function obtenerConvocatoriaPendiente() {
         $sql = "SELECT 
                     co.idConvocatoria,
