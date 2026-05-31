@@ -1,42 +1,60 @@
 # Manual de programador
 
-Este proyecto tiene documentacion tecnica autogenerada para frontend y backend.
+Este manual se genera con las herramientas reales del proyecto:
 
-## Herramientas
+- `TypeDoc` para el frontend Angular.
+- `phpDocumentor` para el backend PHP.
 
-- Frontend: `TypeDoc`
-- Backend: `phpDocumentor`
+## Salidas generadas
 
-## Generar toda la documentacion
+- Frontend: [docs/frontend](/c:/laragon/www/rinconCiclos/docs/frontend/index.html)
+- Backend: [docs/backend](/c:/laragon/www/rinconCiclos/docs/backend/index.html)
+
+## Comandos
+
+Generar toda la documentacion:
 
 ```powershell
 npm run docs
 ```
 
-## Generar solo la documentacion del frontend
+Generar solo el frontend:
 
 ```powershell
 npm run docs:web
 ```
 
-## Generar solo la documentacion del backend
+Generar solo el backend:
 
 ```powershell
 npm run docs:back
 ```
 
-## Salidas generadas
+## Estructura de la documentacion
 
-- Frontend: `docs/frontend`
-- Backend: `docs/backend`
+### Frontend
 
-## Requisitos
+La documentacion del frontend cubre:
 
-- Node.js con dependencias instaladas en la raiz del proyecto
-- Composer instalado
+- componentes reutilizables
+- paginas por rol
+- servicios
+- guards
+- DTOs
+- rutas principales
+
+### Backend
+
+La documentacion del backend cubre:
+
+- configuracion
+- controladores
+- modelos
+- rutas internas
+- clases base
 
 ## Notas
 
-- `TypeDoc` documenta el codigo TypeScript de `rincon_web/src/app`
-- `phpDocumentor` documenta el codigo PHP de `rincon_back/src`
-- Para que el resultado sea util, conviene anadir comentarios `TSDoc` y `PHPDoc` en clases, metodos y propiedades importantes
+- La generacion ya esta configurada en `typedoc.json` y `rincon_back/phpdoc.xml`.
+- Si cambian rutas, servicios o controladores, vuelve a ejecutar `npm run docs`.
+- La version detallada del programador esta en los HTML autogenerados; este archivo actua como indice rapido.

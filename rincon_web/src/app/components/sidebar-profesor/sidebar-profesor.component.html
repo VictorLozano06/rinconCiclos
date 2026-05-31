@@ -1,7 +1,28 @@
 <aside class="barra-lateral" [class.barra-lateral-abierta]="mobileOpen">
   <div class="cabecera-sidebar">
-    <h1 class="titulo-web">Rincón de Ciclos</h1>
-    <p class="subtitulo-web">Portal Docente</p>
+    <div class="marca-sidebar">
+      <h1 class="titulo-web">Rincon de Ciclos</h1>
+      <p class="subtitulo-web">Portal Docente</p>
+    </div>
+
+    <div class="perfil-sidebar">
+      <img
+        *ngIf="fotoPerfil"
+        [src]="fotoPerfil"
+        alt=""
+        class="avatar-perfil"
+        referrerpolicy="no-referrer">
+
+      <div *ngIf="!fotoPerfil" class="avatar-perfil avatar-placeholder" aria-hidden="true">
+        <i class="bi bi-person-fill"></i>
+      </div>
+
+      <div class="datos-perfil">
+        <p class="nombre-perfil">{{ nombreVisible }}</p>
+        <p class="meta-perfil">{{ descripcionPerfil }}</p>
+      </div>
+    </div>
+
     <button type="button" class="cerrar-sidebar" (click)="cerrarSidebar()" aria-label="Cerrar menu">
       <i class="bi bi-x-lg"></i>
     </button>

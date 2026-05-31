@@ -1,0 +1,19 @@
+<footer class="intranet-footer" role="contentinfo">
+  <div class="if-user">
+
+    @if(user?.name) {
+      <span class="if-nombre">{{ user.name }}</span>
+    }
+    @if(!user?.name) {
+      <span class="fst-italic">Sin sesión</span>
+    }
+
+    @if(rolLabel) {
+      <span class="if-badge" [ngClass]="rolClass">{{ rolLabel }}</span>
+    }
+  </div>
+
+  <div class="if-right">
+    <span class="if-clock">{{ fechaHora }}</span>
+  </div>
+</footer>

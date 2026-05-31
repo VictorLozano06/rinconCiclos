@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CategoriaDto } from '../../dto/categoria.dto';
-import { AccesoAppService } from '../../services/acceso-app.service';
+import { AccesoAppService, UsuarioAcceso } from '../../services/acceso-app.service';
 import { CategoriaService } from '../../services/categoria.service';
 
 interface SidebarItem {
@@ -28,6 +28,9 @@ export class SidebarCoordinadorComponent implements OnInit {
   public menuItems: SidebarItem[] = [];
   public errorCarga = false;
   public mostrarAccesoProfesor = false;
+  public nombreVisible = 'Usuario';
+  public descripcionPerfil = 'Sin informacion de perfil';
+  public fotoPerfil = '';
 
   constructor(
     private categoriaService: CategoriaService,
@@ -37,6 +40,7 @@ export class SidebarCoordinadorComponent implements OnInit {
   ngOnInit(): void {
     this.accesoAppService.inicializarDesdeUbicacionActual();
     this.mostrarAccesoProfesor = this.accesoAppService.puedeAccederProfesor();
+    this.inicializarPerfil(this.accesoAppService.obtenerUsuario());
     this.obtenerCategorias();
   }
 
@@ -200,5 +204,16 @@ export class SidebarCoordinadorComponent implements OnInit {
 
   salir(): void {
     this.accesoAppService.salir();
+  }
+
+  private inicializarPerfil(usuario: UsuarioAcceso | null): void {
+    const nombreCompleto = [usuario?.nombre, usuario?.apellidos]
+      .map((valor) => (valor ?? '').trim())
+      .filter(Boolean)
+      .join(' ');
+
+    this.nombreVisible = nombreCompleto || usuario?.email?.trim() || 'Usuario';
+    this.descripcionPerfil = usuario?.email?.trim() || 'Perfil de coordinacion';
+    this.fotoPerfil = usuario?.foto?.trim() || '';
   }
 }

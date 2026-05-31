@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BuscadorComponent } from '../../../components/buscador/buscador.component';
+import { IntranetFooterComponent } from '../../../components/intranet-footer/intranet-footer.component';
 import { SidebarProfesorComponent } from '../../../components/sidebar-profesor/sidebar-profesor.component';
 
 @Component({
   selector: 'app-profesor-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarProfesorComponent, BuscadorComponent],
+  imports: [CommonModule, RouterOutlet, SidebarProfesorComponent, BuscadorComponent, IntranetFooterComponent],
   templateUrl: './profesor-layout.component.html',
   styleUrl: './profesor-layout.component.css'
 })
