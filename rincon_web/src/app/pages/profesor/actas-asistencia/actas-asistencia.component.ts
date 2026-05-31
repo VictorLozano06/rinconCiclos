@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProcesoActasService, ConvocatoriaPendiente, PuntoOrdenDia, ProfesorAsistente } from '../../../services/proceso-actas.service';
@@ -19,7 +19,13 @@ export class ActasAsistenciaComponent implements OnInit {
   public convocatoria: ConvocatoriaPendiente | null = null;
   public fechaObj: Date | null = null;
 
+  private location = inject(Location);
+
   constructor(private procesoActasService: ProcesoActasService) {}
+
+  volver(): void {
+    this.location.back();
+  }
 
   ngOnInit(): void {
     // Rescatamos datos del servicio temporal por si el profe le ha dado atrás
@@ -77,9 +83,19 @@ export class ActasAsistenciaComponent implements OnInit {
 
   confirmarAsistencia(): void {
     if (this.convocatoria) {
-      // Almacenamos para la pantalla 2 (Redacción)
-      this.procesoActasService.guardarAsistencia(this.convocatoria.profesores);
-      this.estado = 'confirmado';
+      this.estado = 'cargando';
+      const asistentes = this.asistentes.map(p => p.idProfesor);
+      
+      this.procesoActasService.crearBorrador(this.convocatoria.idConvocatoria, asistentes).subscribe({
+        next: () => {
+          this.estado = 'confirmado';
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Hubo un error al guardar la asistencia y crear el borrador.');
+          this.estado = 'en-progreso';
+        }
+      });
     }
   }
 
