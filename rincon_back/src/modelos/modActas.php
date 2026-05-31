@@ -24,6 +24,26 @@ class ModActas {
         }
     }
 
+    private function asegurarProfesorLocal($idProfesor) {
+        if (!$idProfesor) return;
+        $id = (int)$idProfesor;
+        // Verify if exists in participantes
+        $stmtPart = $this->db->prepare("SELECT idParticipante FROM participantes WHERE idParticipante = :id");
+        $stmtPart->execute([':id' => $id]);
+        if (!$stmtPart->fetchColumn()) {
+            $nombre = $this->resolverNombreProfesor($id) ?: "Profesor $id";
+            $stmtInsPart = $this->db->prepare("INSERT INTO participantes (idParticipante, nombre) VALUES (:id, :nombre)");
+            $stmtInsPart->execute([':id' => $id, ':nombre' => $nombre]);
+        }
+        // Verify if exists in profesor
+        $stmtProf = $this->db->prepare("SELECT idProfesor FROM profesor WHERE idProfesor = :id");
+        $stmtProf->execute([':id' => $id]);
+        if (!$stmtProf->fetchColumn()) {
+            $stmtInsProf = $this->db->prepare("INSERT INTO profesor (idProfesor) VALUES (:id)");
+            $stmtInsProf->execute([':id' => $id]);
+        }
+    }
+
     /**
      * Obtiene una lista de años únicos (anioInicio) en los que existen actas cerradas.
      *
@@ -499,6 +519,7 @@ class ModActas {
                     $sqlAsiste = "INSERT INTO profesor_asiste (idActa, idProfesor) VALUES (:idActa, :idProfesor)";
                     $stmtAsiste = $this->db->prepare($sqlAsiste);
                     foreach ($datos['asistentes'] as $idProf) {
+                        $this->asegurarProfesorLocal($idProf);
                         $stmtAsiste->execute([
                             ':idActa' => $idActa,
                             ':idProfesor' => $idProf
@@ -557,6 +578,7 @@ class ModActas {
                 $sqlAsiste = "INSERT INTO profesor_asiste (idActa, idProfesor) VALUES (:idActa, :idProfesor)";
                 $stmtAsiste = $this->db->prepare($sqlAsiste);
                 foreach ($datos['asistentes'] as $idProf) {
+                    $this->asegurarProfesorLocal($idProf);
                     $stmtAsiste->execute([
                         ':idActa' => $idActa,
                         ':idProfesor' => $idProf
