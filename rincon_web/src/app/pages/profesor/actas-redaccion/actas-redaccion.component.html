@@ -1,12 +1,25 @@
 <div class="header-container d-flex justify-content-between align-items-start mb-4">
-  <div>
-    <h2 class="fw-bold text-dark m-0">Redacción de Acta</h2>
-    <p class="text-secondary small">Redacta los acuerdos de cada punto del orden del día.</p>
+  <div class="d-flex align-items-center gap-3">
+    <button class="btn btn-outline-secondary" onclick="window.history.back()">
+      <i class="bi bi-arrow-left"></i> Volver
+    </button>
+    <div>
+      <h2 class="fw-bold text-dark m-0">Redacción de Acta</h2>
+      <p class="text-secondary small">Redacta los acuerdos de cada punto del orden del día.</p>
+    </div>
   </div>
   <span class="badge-estado" [ngClass]="estado === 'bloqueada' ? 'badge-bloqueada' : 'badge-redactando'">
     <i class="bi" [ngClass]="estado === 'bloqueada' ? 'bi-lock-fill' : 'bi-pencil-square'"></i>
     {{ estado === 'bloqueada' ? 'Acta Oficial Cerrada' : 'En redacción' }}
   </span>
+</div>
+
+<!-- ESTADO: CARGANDO -->
+<div *ngIf="estado === 'cargando'" class="text-center py-5">
+  <div class="spinner-border text-primary mb-3" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+  <h5 class="text-secondary">Buscando borrador de acta...</h5>
 </div>
 
 <!-- INFO CONVOCATORIA -->
@@ -134,16 +147,15 @@
 
 <!-- BOTONES DE ACCIÓN -->
 <div *ngIf="estado === 'redactando' || estado === 'guardando'" class="d-flex justify-content-between align-items-center">
-  <a routerLink="/profesor/reuniones-de-equipo/actas/asistencia"
-    class="btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small"
-    [class.disabled]="estado === 'guardando'">
-    <i class="bi bi-arrow-left me-1"></i> Volver a asistencia
-  </a>
+  <button class="btn btn-link text-secondary text-decoration-none fw-bold text-uppercase small"
+    (click)="volver()" [disabled]="estado === 'guardando'">
+    <i class="bi bi-arrow-left me-1"></i> Volver a inicio
+  </button>
   <div class="d-flex gap-3">
     <button class="btn btn-dark fw-bold text-uppercase px-5 btn-sm-accion" (click)="abrirModalFinalizar()" [disabled]="estado === 'guardando'">
-      <i class="bi bi-lock-fill me-2" *ngIf="estado !== 'guardando'"></i>
+      <i class="bi bi-save-fill me-2" *ngIf="estado !== 'guardando'"></i>
       <span *ngIf="estado === 'guardando'" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      {{ estado === 'guardando' ? 'Guardando...' : 'Guardar y Finalizar Acta' }}
+      {{ estado === 'guardando' ? 'Guardando...' : 'Guardar Acta' }}
     </button>
   </div>
 </div>
@@ -168,12 +180,11 @@
         style="width:44px;height:44px;background:rgba(33,37,41,0.12);flex-shrink:0;">
         <i class="bi bi-lock-fill text-dark fs-5"></i>
       </div>
-      <h5 class="text-white fw-bold m-0">Finalizar y bloquear acta</h5>
+      <h5 class="text-white fw-bold m-0">Guardar Acta</h5>
     </div>
 
     <p class="text-secondary mb-3" style="font-size: 0.9rem;">
-      Se guardará el acta con la fecha de hoy y quedará
-      <strong class="text-white">bloqueada permanentemente</strong>. ¿Deseas continuar?
+      Se guardará el acta en el historial. <strong class="text-white">Podrás seguir editándola</strong> desde el historial de actas si los asistentes solicitan cambios antes de su publicación definitiva.
     </p>
 
 
@@ -191,7 +202,7 @@
       <button class="btn btn-link text-white text-decoration-none fw-bold text-uppercase px-4 btn-cancel"
         (click)="mostrarModalFinalizar = false">CANCELAR</button>
       <button class="btn btn-white fw-bold text-uppercase px-4 btn-save" (click)="finalizarActa()">
-        <i class="bi bi-lock-fill me-1"></i>FINALIZAR
+        <i class="bi bi-save-fill me-1"></i>GUARDAR
       </button>
     </div>
   </div>

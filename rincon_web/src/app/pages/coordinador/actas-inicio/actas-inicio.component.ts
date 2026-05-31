@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/proceso-actas.service';
 
 @Component({
@@ -12,11 +12,11 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
       <h2 class="mb-4">Proceso de Actas</h2>
       <div class="row g-4">
         <div class="col-md-6">
-          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" (click)="abrirModalGenerar()">
+          <div class="card h-100 shadow-sm border-0" style="cursor: pointer;" (click)="abrirModalAsistencia()">
             <div class="card-body text-center p-5">
-              <i class="bi bi-file-earmark-text text-primary mb-3" style="font-size: 3rem;"></i>
-              <h4 class="card-title">Generar Plantilla de Acta</h4>
-              <p class="card-text text-muted">Extrae las órdenes del día de una convocatoria existente para que el profesor pueda redactar el acta.</p>
+              <i class="bi bi-person-check text-primary mb-3" style="font-size: 3rem;"></i>
+              <h4 class="card-title">Tomar Asistencia y Crear Acta</h4>
+              <p class="card-text text-muted">Selecciona una convocatoria para marcar la asistencia e inicializar el borrador del acta.</p>
             </div>
           </div>
         </div>
@@ -32,16 +32,16 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
       </div>
     </div>
 
-    <!-- Modal Generar Plantilla -->
+    <!-- Modal Seleccionar Convocatoria -->
     <div *ngIf="mostrarModal" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title fw-bold">Generar Plantilla de Acta</h5>
+            <h5 class="modal-title fw-bold">Seleccionar Convocatoria</h5>
             <button type="button" class="btn-close" (click)="mostrarModal = false"></button>
           </div>
           <div class="modal-body">
-            <p class="text-secondary small mb-3">Selecciona una convocatoria pendiente en la base de datos para habilitarla como acta al profesor.</p>
+            <p class="text-secondary small mb-3">Selecciona una convocatoria pendiente para iniciar la toma de asistencia.</p>
             
             <div *ngIf="cargando" class="text-center py-3">
               <div class="spinner-border text-primary" role="status"></div>
@@ -53,12 +53,12 @@ import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/pr
 
             <div *ngIf="!cargando && convocatoriaPendiente" class="list-group">
               <button class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                      (click)="generarPlantilla(convocatoriaPendiente.idConvocatoria)">
+                      (click)="irAsistencia()">
                 <div>
                   <h6 class="mb-0 fw-bold">Convocatoria #{{ convocatoriaPendiente.idConvocatoria }}</h6>
                   <small class="text-muted">{{ convocatoriaPendiente.fecha }} - {{ convocatoriaPendiente.lugar }}</small>
                 </div>
-                <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                <i class="bi bi-arrow-right-circle-fill text-primary fs-4"></i>
               </button>
             </div>
           </div>
@@ -72,11 +72,11 @@ export class ActasInicioCoordinadorComponent implements OnInit {
   public cargando = false;
   public convocatoriaPendiente: ConvocatoriaPendiente | null = null;
   
-  constructor(private procesoActasService: ProcesoActasService) {}
+  constructor(private procesoActasService: ProcesoActasService, private router: Router) {}
 
   ngOnInit() {}
 
-  abrirModalGenerar() {
+  abrirModalAsistencia() {
     this.mostrarModal = true;
     this.cargando = true;
     this.procesoActasService.getConvocatoriaPendiente().subscribe({
@@ -91,19 +91,8 @@ export class ActasInicioCoordinadorComponent implements OnInit {
     });
   }
 
-  generarPlantilla(id: number) {
-    this.cargando = true;
-    this.procesoActasService.habilitarPlantilla(id).subscribe({
-      next: () => {
-        this.cargando = false;
-        this.mostrarModal = false;
-        alert('¡Plantilla Generada con Éxito! El profesor encargado ya tiene esta convocatoria desbloqueada en su panel para redactar los acuerdos.');
-      },
-      error: (err) => {
-        this.cargando = false;
-        alert('Hubo un error al habilitar la plantilla. Por favor inténtalo de nuevo.');
-        console.error(err);
-      }
-    });
+  irAsistencia() {
+    this.mostrarModal = false;
+    this.router.navigate(['/coordinador/reuniones-de-equipo/actas/asistencia']);
   }
 }

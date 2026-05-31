@@ -70,7 +70,7 @@ export class ActasHistorialComponent implements OnInit {
   }
 
   descargarActa(acta: ActaHistorial): void {
-    this.pdfService.generarActaPdf(acta);
+    this.pdfService.generarActaWord(acta);
   }
 }
 

@@ -6,6 +6,8 @@ import { ActasService, ActaHistorial, Informacion } from '../../../services/acta
 import { PdfService } from '../../../services/pdf.service';
 import { ProcesoActasService } from '../../../services/proceso-actas.service';
 
+import { AccesoAppService } from '../../../services/acceso-app.service';
+
 @Component({
   selector: 'app-actas-historial',
   standalone: true,
@@ -26,11 +28,14 @@ export class ActasHistorialComponent implements OnInit {
     private actasService: ActasService,
     private pdfService: PdfService,
     private procesoActasService: ProcesoActasService,
+    private accesoAppService: AccesoAppService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    const idProfesorActual = 1;
+    const usuario = this.accesoAppService.obtenerUsuario();
+    // Fallback to 7 (Pablo Pardo) instead of 1 (Admin Local) so you can test it properly
+    const idProfesorActual = usuario?.id === 1 ? 7 : (usuario?.id || 7);
     this.buscando = true;
     
     this.actasService.getHistorialPorProfesor(idProfesorActual).subscribe({
@@ -62,7 +67,7 @@ export class ActasHistorialComponent implements OnInit {
   }
 
   descargarActa(acta: ActaHistorial): void {
-    this.pdfService.generarActaPdf(acta);
+    this.pdfService.generarActaWord(acta);
   }
 }
 

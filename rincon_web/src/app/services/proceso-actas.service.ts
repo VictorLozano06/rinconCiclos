@@ -26,6 +26,7 @@ export interface ConvocatoriaPendiente {
   anioFin: number;
   idProfesorRedactaActa: number;
   idProfesorIniciaReunion: number;
+  idActa?: number; // Include the idActa for drafts
   ordenDia: PuntoOrdenDia[];
   profesores: ProfesorAsistente[];
 }
@@ -39,9 +40,17 @@ export class ProcesoActasService {
   
   constructor(private http: HttpClient, private apiService: ApiService) {}
 
-  // Recuperamos los datos del servidor para pintar la pantalla
+  // Recuperamos los datos del servidor para pintar la pantalla (Coordinador)
   getConvocatoriaPendiente(): Observable<ConvocatoriaPendiente> {
     return this.http.get<ConvocatoriaPendiente>(`${this.apiService.baseUrl}?c=Actas&m=pendiente`)
+      .pipe(
+        tap(convocatoria => this.convocatoriaActiva = convocatoria)
+      );
+  }
+
+  // Recuperamos el borrador para redacción (Profesor)
+  getConvocatoriaPendienteRedaccion(): Observable<ConvocatoriaPendiente> {
+    return this.http.get<ConvocatoriaPendiente>(`${this.apiService.baseUrl}?c=Actas&m=pendienteRedaccion`)
       .pipe(
         tap(convocatoria => this.convocatoriaActiva = convocatoria)
       );
@@ -124,6 +133,8 @@ export class ProcesoActasService {
 
     if (this.actaEnEdicion) {
       payload.idActa = this.actaEnEdicion.idActa;
+    } else if (this.convocatoriaActiva && this.convocatoriaActiva.idActa) {
+      payload.idActa = this.convocatoriaActiva.idActa;
     } else {
       payload.asistentes = this.convocatoriaActiva.profesores
         .filter(p => p.asiste)
@@ -136,8 +147,11 @@ export class ProcesoActasService {
       );
   }
 
-  // Habilita una convocatoria pendiente para convertirla en acta
-  habilitarPlantilla(idConvocatoria: number): Observable<any> {
-    return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=habilitarPlantilla`, { idConvocatoria });
+  // Habilita una convocatoria pendiente para convertirla en acta (Borrador) guardando la asistencia
+  crearBorrador(idConvocatoria: number, asistentes: number[]): Observable<any> {
+    return this.http.post(`${this.apiService.baseUrl}?c=Actas&m=crearBorrador`, { 
+      idConvocatoria,
+      asistentes
+    });
   }
 }

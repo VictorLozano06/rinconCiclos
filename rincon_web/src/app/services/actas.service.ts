@@ -15,9 +15,11 @@ export interface ActaHistorial {
   idConvocatoria: number;
   fechaConvocatoria: string;
   horaConvocatoria: string;
+  horaFin: string;
   lugar: string;
   anioInicio: number;
   anioFin: number;
+  grupoNombre: string;
   asistentes: number;
   totalConvocados: number;
   informacion: Informacion[];

@@ -10,125 +10,78 @@ export class PdfService {
 
   constructor() { }
 
-  generarActaPdf(acta: ActaHistorial): void {
-    const doc = new jsPDF();
-    
-    // Título Principal
-    doc.setFontSize(18);
-    doc.setFont("helvetica", "bold");
-    doc.text(`Acta Oficial - Convocatoria #${acta.idConvocatoria}`, 14, 20);
-
-    // Metadatos
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Fecha de la reunión: ${acta.fechaConvocatoria} a las ${acta.horaConvocatoria}h`, 14, 30);
-    doc.text(`Lugar: ${acta.lugar}`, 14, 36);
-    doc.text(`Curso Académico: ${acta.anioInicio}/${acta.anioFin}`, 14, 42);
-    doc.text(`Asistencia: ${acta.asistentes} de ${acta.totalConvocados} convocados`, 14, 48);
-
-    // Listas de Asistencia
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text("1. Asistentes", 14, 60);
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    let yPos = 66;
-    acta.listaAsistentes.forEach(asistente => {
-      doc.text(`• ${asistente}`, 14, yPos);
-      yPos += 5;
-    });
-
-    if (acta.listaAusentes.length > 0) {
-      yPos += 5;
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("Ausentes", 14, yPos);
-      yPos += 6;
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      acta.listaAusentes.forEach(ausente => {
-        doc.text(`• ${ausente}`, 14, yPos);
-        yPos += 5;
-      });
-    }
-
-    // Orden del día / Información
-    yPos += 10;
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text("2. Desarrollo de la Reunión y Acuerdos", 14, yPos);
-    yPos += 8;
-
-    const tableData = acta.informacion.map(info => [
-      info.numInformacion.toString(),
-      info.titulo_OrdenDia,
-      info.informacion
-    ]);
-
-    autoTable(doc, {
-      startY: yPos,
-      head: [['#', 'Punto', 'Acuerdos / Desarrollo']],
-      body: tableData,
-      theme: 'striped',
-      headStyles: { fillColor: [41, 128, 185] },
-      styles: { fontSize: 10, cellPadding: 4 },
-      columnStyles: {
-        0: { cellWidth: 10 },
-        1: { cellWidth: 50 },
-        2: { cellWidth: 'auto' }
-      }
-    });
-
-    yPos = (doc as any).lastAutoTable.finalY + 10;
-
-    // Ruegos y Preguntas
-    if (acta.ruegosPregunta && acta.ruegosPregunta.length > 0) {
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.text("3. Ruegos y Preguntas", 14, yPos);
-      yPos += 6;
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
+  generarActaWord(acta: ActaHistorial): void {
+    const htmlContent = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head><meta charset='utf-8'><title>Acta Oficial</title>
+    <style>
+      body { font-family: 'Arial', sans-serif; }
+      table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+      th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+      th { background-color: #2980b9; color: white; }
+    </style>
+    </head><body>
+      <h1 style="text-align: center;">Acta de la reunión del equipo docente del grupo ${acta.grupoNombre}</h1>
+      <h3 style="text-align: center; color: #555;">Convocatoria #${acta.idConvocatoria}</h3>
+      <hr>
+      <p><b>Fecha de la reunión:</b> ${acta.fechaConvocatoria} de ${acta.horaConvocatoria}h a ${acta.horaFin}h</p>
+      <p><b>Lugar:</b> ${acta.lugar}</p>
+      <p><b>Curso Académico:</b> ${acta.anioInicio}/${acta.anioFin}</p>
+      <p><b>Asistencia:</b> ${acta.asistentes} de ${acta.totalConvocados} convocados</p>
       
-      acta.ruegosPregunta.forEach(ruego => {
-        const lines = doc.splitTextToSize(`• ${ruego}`, 180);
-        doc.text(lines, 14, yPos);
-        yPos += (lines.length * 5) + 2;
-      });
-    }
+      <h3>1. Asistentes</h3>
+      <ul>
+        ${acta.listaAsistentes.map(a => `<li>${a}</li>`).join('')}
+      </ul>
+      ${acta.listaAusentes.length > 0 ? `<h4>Ausentes</h4><ul>${acta.listaAusentes.map(a => `<li>${a}</li>`).join('')}</ul>` : ''}
+      
+      <h3>2. Desarrollo de la Reunión y Acuerdos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 30%">Punto</th>
+            <th style="width: 65%">Acuerdos / Desarrollo</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${acta.informacion.map(info => `
+            <tr>
+              <td>${info.numInformacion}</td>
+              <td>${info.titulo_OrdenDia}</td>
+              <td>${info.informacion}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
 
-    // Firmas
-    yPos += 20;
-    if (yPos > 270) {
-      doc.addPage();
-      yPos = 20;
-    }
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "italic");
-    doc.text("Firmado:", 14, yPos);
-    
-    doc.setFont("helvetica", "bold");
-    doc.text("Redacta el Acta:", 14, yPos + 10);
-    doc.setFont("helvetica", "normal");
-    doc.text(acta.nombreRedacta || 'No especificado', 14, yPos + 15);
+      ${acta.ruegosPregunta && acta.ruegosPregunta.length > 0 ? `
+        <h3>3. Ruegos y Preguntas</h3>
+        <ul>
+          ${acta.ruegosPregunta.map(r => `<li>${r}</li>`).join('')}
+        </ul>
+      ` : ''}
+      
+      <br><br><br>
+      <table style="border: none;">
+        <tr style="border: none;">
+          <td style="border: none;"><b>Redacta el Acta:</b><br>${acta.nombreRedacta || 'No especificado'}</td>
+          <td style="border: none;"><b>Convoca / Vº Bº:</b><br>${acta.nombreConvoca || 'No especificado'}</td>
+        </tr>
+      </table>
+      <br>
+      <p style="color: gray; font-size: 10px; text-align: center;">Acta cerrada oficialmente el ${acta.fecha}</p>
+    </body></html>
+    `;
 
-    doc.setFont("helvetica", "bold");
-    doc.text("Convoca / Vº Bº:", 100, yPos + 10);
-    doc.setFont("helvetica", "normal");
-    doc.text(acta.nombreConvoca || 'No especificado', 100, yPos + 15);
-
-    // Pie de página con fecha de cierre
-    const pageCount = (doc as any).internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(8);
-      doc.setTextColor(150);
-      doc.text(`Acta cerrada oficialmente el ${acta.fecha} - Página ${i} de ${pageCount}`, 14, 290);
-    }
-
-    // Guardar el documento
-    doc.save(`Acta_${acta.idConvocatoria}_${acta.fecha.replace(/\//g, '-')}.pdf`);
+    const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Acta_${acta.idConvocatoria}_${acta.fecha.replace(/\//g, '-')}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 }

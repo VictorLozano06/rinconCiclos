@@ -1,7 +1,12 @@
 <div class="header-container d-flex justify-content-between align-items-start mb-4">
-  <div>
-    <h2 class="fw-bold text-dark m-0">Control de Asistencia</h2>
-    <p class="text-secondary small">Registra la asistencia antes de iniciar la reunión.</p>
+  <div class="d-flex align-items-center gap-3">
+    <button class="btn btn-outline-secondary" (click)="volver()">
+      <i class="bi bi-arrow-left"></i> Volver
+    </button>
+    <div>
+      <h2 class="fw-bold text-dark m-0">Control de Asistencia</h2>
+      <p class="text-secondary small">Registra la asistencia antes de iniciar la reunión.</p>
+    </div>
   </div>
   <span *ngIf="['previo', 'en-progreso', 'confirmado'].includes(estado)" class="badge-estado" [ngClass]="{
     'badge-previo': estado === 'previo',
@@ -157,10 +162,9 @@
     <button class="btn btn-outline-secondary btn-sm fw-bold text-uppercase px-4" (click)="reiniciar()">
       <i class="bi bi-arrow-counterclockwise me-1"></i> REINICIAR
     </button>
-    <a routerLink="/profesor/reuniones-de-equipo/actas/redaccion"
-      class="btn btn-dark fw-bold text-uppercase px-5 btn-ir-redactar">
-      <i class="bi bi-pencil-fill me-2"></i>Ir a Redactar Acta
-    </a>
+    <button class="btn btn-dark fw-bold text-uppercase px-5 btn-ir-redactar" (click)="volver()">
+      <i class="bi bi-arrow-left-circle-fill me-2"></i>Volver a Inicio
+    </button>
   </div>
 </div>
 </ng-container>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ProcesoActasService, ConvocatoriaPendiente } from '../../../services/proceso-actas.service';
@@ -19,7 +19,7 @@ interface PuntoInformacion {
   styleUrl: './actas-redaccion.component.css'
 })
 export class ActasRedaccionComponent implements OnInit {
-  public estado: 'redactando' | 'bloqueada' | 'guardando' = 'redactando';
+  public estado: 'redactando' | 'bloqueada' | 'guardando' | 'cargando' = 'cargando';
   public mostrarModalFinalizar = false;
   
   public acta = {
@@ -33,20 +33,40 @@ export class ActasRedaccionComponent implements OnInit {
   public ruegosPreguntas: { id: number, texto: string }[] = [];
   public nuevoRuego: string = '';
 
+  private location = inject(Location);
+
   constructor(
     private procesoActasService: ProcesoActasService,
     private router: Router
   ) {}
 
+  volver(): void {
+    this.location.back();
+  }
+
   ngOnInit(): void {
     const conv = this.procesoActasService.getConvocatoriaActiva();
     
-    if (!conv) {
-      // Seguridad: Si recarga F5 se pierde la memoria, lo devolvemos al check de asistencia
-      this.router.navigate(['/profesor/reuniones-de-equipo/actas/asistencia']);
-      return;
+    if (conv) {
+      this.estado = 'redactando';
+      this.inicializarDatos(conv);
+    } else {
+      this.estado = 'cargando'; // Mostramos loader o estado intermedio
+      this.procesoActasService.getConvocatoriaPendienteRedaccion().subscribe({
+        next: (convocatoria) => {
+          this.estado = 'redactando';
+          this.inicializarDatos(convocatoria);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('No hay ninguna acta pendiente de redacción o ya ha sido finalizada.');
+          this.router.navigate(['/profesor/reuniones-de-equipo/actas']);
+        }
+      });
     }
+  }
 
+  private inicializarDatos(conv: ConvocatoriaPendiente): void {
     this.convocatoria = conv;
     this.acta.idConvocatoria = conv.idConvocatoria;
 

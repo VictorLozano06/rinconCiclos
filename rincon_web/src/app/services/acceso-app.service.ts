@@ -6,7 +6,7 @@ const CLAVE_ROLES_DEV = 'rinconCiclos.dev_roles';
 const CLAVE_USUARIO_DEV = 'rinconCiclos.dev_usuario';
 const ROL_PROFESOR = 'profesor';
 const ROL_COORDINADOR = 'coordinador_rinconciclos';
-const URL_PORTAL_INICIO = 'https://17.daw.esvirgua.com/dashboard-inicio';
+const URL_PORTAL_INICIO = '/dashboard-inicio';
 
 export interface UsuarioAcceso {
   id: number | null;
