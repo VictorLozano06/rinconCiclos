@@ -241,26 +241,26 @@
 
         <tbody>
           <tr *ngFor="let item of convocatoriaSeleccionada.ordenDia">
-            <td class="minutos-cell" data-label="Min.">
-              <span class="badge bg-secondary px-2 py-1 fs-6">{{ item.minutos || '0' }} min</span>
+            <td class="minutos-cell agenda-cell agenda-cell-minutos" data-label="Min.">
+              <span class="badge bg-secondary px-2 py-1 agenda-badge-minutos">{{ item.minutos || '0' }} min</span>
             </td>
-            <td data-label="Punto / Descripción">
-              <p class="mb-0 fs-6 text-wrap">{{ item.descripcion || 'Sin descripción' }}</p>
+            <td class="agenda-cell agenda-cell-descripcion" data-label="Punto / Descripción">
+              <p class="mb-0 agenda-line-text">{{ item.descripcion || 'Sin descripción' }}</p>
             </td>
-            <td data-label="Objetivo">
-              <p class="mb-0 fs-6 text-wrap text-muted">{{ item.objetivo || 'Sin objetivo' }}</p>
+            <td class="agenda-cell agenda-cell-objetivo" data-label="Objetivo">
+              <p class="mb-0 agenda-line-text agenda-line-muted">{{ item.objetivo || 'Sin objetivo' }}</p>
             </td>
-            <td data-label="Dinamiza">
-              <span class="text-secondary font-weight-bold">{{ item.dinamiza || 'Sin asignar' }}</span>
+            <td class="agenda-cell agenda-cell-dinamiza" data-label="Dinamiza">
+              <span class="agenda-name-truncate text-secondary font-weight-bold" [title]="item.dinamiza || 'Sin asignar'">{{ item.dinamiza || 'Sin asignar' }}</span>
             </td>
-            <td data-label="Lugar">
+            <td class="agenda-cell agenda-cell-lugar" data-label="Lugar">
               <span>{{ item.lugar || 'Sin asignar' }}</span>
             </td>
-            <td data-label="Participa">
+            <td class="agenda-cell agenda-cell-participa" data-label="Participa">
               <div class="participants-list row-participants">
                 <span *ngIf="item.participantes.length === 0" class="text-muted fs-6">Nadie asignado</span>
                 <article *ngFor="let participante of item.participantes" class="participant-chip chip-view">
-                  <strong>{{ participante.nombre }}</strong>
+                  <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
                 </article>
               </div>
             </td>
@@ -303,7 +303,7 @@
               <span class="participant-type" [ngClass]="getParticipanteClase(participante)">
                 {{ getParticipanteEtiqueta(participante) }}
               </span>
-              <strong>{{ participante.nombre }}</strong>
+              <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
               <button type="button" class="chip-remove" (click)="quitarParticipanteModal(participante)" aria-label="Quitar participante">
                 <i class="bi bi-x-lg"></i>
               </button>
@@ -333,7 +333,7 @@
             [class.is-selected]="esParticipanteSeleccionadoModal(participante)"
             (click)="toggleParticipanteModal(participante)">
             <span class="participants-modal-item-main">
-              <strong>{{ participante.nombre }}</strong>
+              <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
               <small>{{ getParticipanteEtiqueta(participante) }}</small>
             </span>
 
@@ -522,13 +522,13 @@
             <td class="minutos-cell" data-label="Min.">
               <input type="number" min="0" [(ngModel)]="item.minutos" placeholder="0">
             </td>
-            <td data-label="Orden del día">
-              <textarea rows="2" [(ngModel)]="item.ordenDia" placeholder="Descripción del tema"></textarea>
+            <td class="agenda-cell agenda-cell-descripcion" data-label="Orden del día">
+              <textarea class="agenda-textarea agenda-textarea-orden" rows="2" [(ngModel)]="item.ordenDia" placeholder="Descripción del tema"></textarea>
             </td>
-            <td data-label="Objetivo">
-              <textarea rows="2" [(ngModel)]="item.objetivo" placeholder="Qué se espera conseguir"></textarea>
+            <td class="agenda-cell agenda-cell-objetivo" data-label="Objetivo">
+              <textarea class="agenda-textarea agenda-textarea-objetivo" rows="2" [(ngModel)]="item.objetivo" placeholder="Qué se espera conseguir"></textarea>
             </td>
-            <td data-label="Dinamiza">
+            <td class="agenda-cell agenda-cell-dinamiza" data-label="Dinamiza">
               <div class="single-select single-select-cell">
                 <button
                   type="button"
@@ -554,7 +554,7 @@
                 </div>
               </div>
             </td>
-            <td data-label="Lugar">
+            <td class="agenda-cell agenda-cell-lugar" data-label="Lugar">
               <div class="single-select single-select-cell">
                 <button
                   type="button"
@@ -580,7 +580,7 @@
                 </div>
               </div>
             </td>
-            <td data-label="Participa">
+            <td class="agenda-cell agenda-cell-participa" data-label="Participa">
               <div class="participa-cell">
                 <div class="participants-summary" *ngIf="item.participantes.length > 0">
                   <span class="participants-count">{{ item.participantes.length }} participantes</span>
@@ -593,7 +593,7 @@
                   <article
                     *ngFor="let participante of getParticipantesPreview(item)"
                     class="participant-chip chip-view">
-                    <strong>{{ participante.nombre }}</strong>
+                    <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
                   </article>
 
                   <button
@@ -694,7 +694,7 @@
             <span class="participant-type" [ngClass]="getParticipanteClase(participante)">
               {{ getParticipanteEtiqueta(participante) }}
             </span>
-            <strong>{{ participante.nombre }}</strong>
+            <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
             <button type="button" class="chip-remove" (click)="quitarParticipanteModal(participante)" aria-label="Quitar participante">
               <i class="bi bi-x-lg"></i>
             </button>
@@ -724,7 +724,7 @@
           [class.is-selected]="esParticipanteSeleccionadoModal(participante)"
           (click)="toggleParticipanteModal(participante)">
           <span class="participants-modal-item-main">
-            <strong>{{ participante.nombre }}</strong>
+            <strong class="participant-chip-label" [title]="participante.nombre">{{ participante.nombre }}</strong>
             <small>{{ getParticipanteEtiqueta(participante) }}</small>
           </span>
 

@@ -49,7 +49,19 @@ class ConActas extends ControladorBase {
         $convocatoria = $this->modelo->obtenerConvocatoriaPendiente();
         if (!$convocatoria) {
             http_response_code(404);
-            return ["error" => "No hay convocatorias pendientes."];
+            return ["error" => "No hay convocatorias pendientes de asistencia."];
+        }
+        return $convocatoria;
+    }
+
+    /**
+     * GET ?c=Actas&m=pendienteRedaccion
+     */
+    public function pendienteRedaccion() {
+        $convocatoria = $this->modelo->obtenerConvocatoriaPendienteRedaccion();
+        if (!$convocatoria) {
+            http_response_code(404);
+            return ["error" => "No hay borradores pendientes de redacción."];
         }
         return $convocatoria;
     }
@@ -82,9 +94,9 @@ class ConActas extends ControladorBase {
     }
 
     /**
-     * POST ?c=Actas&m=habilitarPlantilla
+     * POST ?c=Actas&m=crearBorrador
      */
-    public function habilitarPlantilla() {
+    public function crearBorrador() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             return ["error" => "Método no permitido. Use POST."];
@@ -98,14 +110,14 @@ class ConActas extends ControladorBase {
             return ["error" => "Datos inválidos o falta idConvocatoria."];
         }
 
-        $resultado = $this->modelo->habilitarPlantilla($datos['idConvocatoria']);
+        $resultado = $this->modelo->guardarAsistenciaYCrearBorrador($datos);
 
         if (!$resultado['exito']) {
             http_response_code(500);
-            return ["error" => "Error al habilitar la plantilla: " . $resultado['error']];
+            return ["error" => "Error al crear el borrador: " . $resultado['error']];
         }
 
-        return ["mensaje" => "Plantilla habilitada correctamente", "idActa" => $resultado['idActa']];
+        return ["mensaje" => "Borrador de acta creado correctamente", "idActa" => $resultado['idActa']];
     }
 }
 ?>

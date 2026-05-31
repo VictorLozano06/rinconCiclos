@@ -10,6 +10,96 @@ body {
   box-sizing: border-box;
 }
 
+app-convocatorias-profesor .group-summary,
+app-convocatorias-coordinador .group-summary{align-items:stretch}
+app-convocatorias-profesor .participants-list,
+app-convocatorias-coordinador .participants-list{display:flex;flex-wrap:wrap;gap:8px}
+app-convocatorias-profesor .participant-chip,
+app-convocatorias-coordinador .participant-chip{display:inline-flex;align-items:center;gap:8px;max-width:190px;padding:7px 10px;border-radius:12px}
+app-convocatorias-profesor .participant-chip strong,
+app-convocatorias-profesor .participant-chip-label,
+app-convocatorias-coordinador .participant-chip strong,
+app-convocatorias-coordinador .participant-chip-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8rem;font-weight:600}
+app-convocatorias-profesor .agenda-table,
+app-convocatorias-coordinador .agenda-table{width:100%;min-width:940px;border-collapse:separate;border-spacing:0;table-layout:fixed}
+app-convocatorias-profesor .agenda-table thead th,
+app-convocatorias-coordinador .agenda-table thead th{padding:11px 12px;background:#f3f6fc;color:#526279;font-size:.69rem;font-weight:800;text-transform:uppercase}
+app-convocatorias-profesor .agenda-table tbody td,
+app-convocatorias-coordinador .agenda-table tbody td{padding:12px 10px;border-top:1px solid #edf1f7;vertical-align:top}
+app-convocatorias-profesor .agenda-cell-minutos,
+app-convocatorias-profesor .agenda-table th:nth-child(1),
+app-convocatorias-profesor .agenda-table td.minutos-cell,
+app-convocatorias-coordinador .agenda-cell-minutos,
+app-convocatorias-coordinador .agenda-table th:nth-child(1),
+app-convocatorias-coordinador .agenda-table td.minutos-cell{width:72px}
+app-convocatorias-profesor .agenda-cell-descripcion,
+app-convocatorias-profesor .agenda-table th:nth-child(2),
+app-convocatorias-coordinador .agenda-cell-descripcion,
+app-convocatorias-coordinador .agenda-table th:nth-child(2){width:30%}
+app-convocatorias-profesor .agenda-cell-objetivo,
+app-convocatorias-profesor .agenda-table th:nth-child(3),
+app-convocatorias-coordinador .agenda-cell-objetivo,
+app-convocatorias-coordinador .agenda-table th:nth-child(3){width:25%}
+app-convocatorias-profesor .agenda-cell-dinamiza,
+app-convocatorias-profesor .agenda-table th:nth-child(4),
+app-convocatorias-coordinador .agenda-cell-dinamiza,
+app-convocatorias-coordinador .agenda-table th:nth-child(4){width:13%}
+app-convocatorias-profesor .agenda-cell-lugar,
+app-convocatorias-profesor .agenda-table th:nth-child(5),
+app-convocatorias-coordinador .agenda-cell-lugar,
+app-convocatorias-coordinador .agenda-table th:nth-child(5){width:12%}
+app-convocatorias-profesor .agenda-cell-participa,
+app-convocatorias-profesor .agenda-table th:nth-child(6),
+app-convocatorias-coordinador .agenda-cell-participa,
+app-convocatorias-coordinador .agenda-table th:nth-child(6){width:18%}
+app-convocatorias-profesor .agenda-badge-minutos,
+app-convocatorias-coordinador .agenda-badge-minutos{font-size:.72rem;font-weight:700;letter-spacing:.01em}
+app-convocatorias-profesor .agenda-line-text,
+app-convocatorias-coordinador .agenda-line-text{font-size:.92rem;line-height:1.45;overflow-wrap:anywhere}
+app-convocatorias-profesor .agenda-line-muted,
+app-convocatorias-coordinador .agenda-line-muted{color:#5f6f87}
+app-convocatorias-profesor .agenda-name-truncate,
+app-convocatorias-coordinador .agenda-name-truncate{display:inline-block;max-width:132px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem;line-height:1.3}
+app-convocatorias-coordinador .summary-meta,
+app-convocatorias-coordinador .info-grid-detail,
+app-convocatorias-coordinador .info-grid-form,
+app-convocatorias-coordinador .form-summary-strip{display:grid;gap:14px}
+app-convocatorias-coordinador .summary-meta{grid-template-columns:repeat(3,minmax(120px,1fr));min-width:320px}
+app-convocatorias-coordinador .summary-meta>div,
+app-convocatorias-coordinador .total-badge{padding:15px;border-radius:14px;background:#f5f8ff}
+app-convocatorias-coordinador .summary-meta span,
+app-convocatorias-coordinador .total-badge span{display:block;color:#6f7d93;font-size:.78rem}
+app-convocatorias-coordinador .info-grid-detail,
+app-convocatorias-coordinador .info-grid-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+app-convocatorias-coordinador .info-item{padding:16px;border-radius:14px;background:#f8fafc;border:1px solid #e7edf6}
+app-convocatorias-coordinador .info-item strong{display:block;margin-bottom:6px;font-size:.75rem;font-weight:800;text-transform:uppercase;color:#6f7d93}
+app-convocatorias-coordinador .info-item p{margin:0;font-weight:700;color:#243043}
+app-convocatorias-coordinador .form-summary-strip{grid-template-columns:minmax(140px,.8fr) repeat(2,minmax(220px,1fr));align-items:end}
+app-convocatorias-coordinador .form-summary-item,
+app-convocatorias-coordinador .field{display:flex;flex-direction:column;gap:8px}
+app-convocatorias-coordinador .form-summary-item span,
+app-convocatorias-coordinador .field span{font-size:.75rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6f7d93}
+app-convocatorias-coordinador .form-summary-item strong{font-size:1rem;color:#243043}
+app-convocatorias-coordinador .field input,
+app-convocatorias-coordinador .field select,
+app-convocatorias-coordinador .participa-dropdown input,
+app-convocatorias-coordinador .agenda-textarea{width:100%;border:1px solid #d9e2f0;border-radius:14px;background:#f8fbff;color:#243043;font:inherit;box-shadow:none}
+app-convocatorias-coordinador .field input,
+app-convocatorias-coordinador .field select,
+app-convocatorias-coordinador .participa-dropdown input{min-height:44px;padding:10px 12px}
+app-convocatorias-coordinador .single-select,
+app-convocatorias-coordinador .single-select-cell,
+app-convocatorias-coordinador .participa-cell{min-width:0}
+app-convocatorias-coordinador .participa-toggle{width:100%;min-height:44px;padding:10px 12px;border:1px solid #d9e2f0;border-radius:14px;background:#f8fbff;color:#243043;display:flex;align-items:center;justify-content:space-between;gap:10px;font:inherit;text-align:left}
+app-convocatorias-coordinador .participa-toggle-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.9rem;font-weight:600}
+app-convocatorias-coordinador .participa-dropdown{margin-top:8px;padding:10px;border:1px solid #dbe4f0;border-radius:16px;background:#fff;box-shadow:0 16px 40px rgba(15,23,42,.1)}
+app-convocatorias-coordinador .search-results{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:220px;overflow:auto}
+app-convocatorias-coordinador .search-result{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fbff;color:#243043;font:inherit;text-align:left}
+app-convocatorias-coordinador .agenda-textarea{min-height:84px;padding:14px 16px;font-size:.94rem;line-height:1.45;resize:vertical}
+app-convocatorias-coordinador .participants-list-compact{max-height:88px}
+app-convocatorias-coordinador .participant-action{padding:7px 11px;font-size:.8rem}
+@media (max-width:768px){app-convocatorias-profesor .agenda-table,app-convocatorias-coordinador .agenda-table{min-width:0}app-convocatorias-profesor .agenda-name-truncate,app-convocatorias-profesor .participant-chip,app-convocatorias-coordinador .agenda-name-truncate,app-convocatorias-coordinador .participant-chip{max-width:none}app-convocatorias-coordinador .summary-meta,app-convocatorias-coordinador .info-grid-detail,app-convocatorias-coordinador .info-grid-form,app-convocatorias-coordinador .form-summary-strip{grid-template-columns:1fr;min-width:0}}
+
 .convocatorias-accordion{display:flex;flex-direction:column;gap:18px}.estado-panel{border:1px solid #dbe4f0;border-radius:24px;background:#fff;box-shadow:0 18px 42px rgba(15,23,42,.08);overflow:hidden}.estado-summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;cursor:pointer;list-style:none;font-weight:800;color:#243043}.estado-summary::-webkit-details-marker{display:none}.estado-summary::after{content:'\F282';font-family:bootstrap-icons;font-size:1rem;color:#516178;transition:transform .2s ease}.estado-panel[open] .estado-summary::after{transform:rotate(180deg)}.estado-summary-title{font-size:1.2rem}.estado-panel-body{padding:0 22px 22px}.estado-empty{margin:0;color:#6f7d93;font-size:.95rem}
 
 /* Convocatorias */

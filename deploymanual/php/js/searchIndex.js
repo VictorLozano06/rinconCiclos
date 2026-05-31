@@ -483,7 +483,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ModActas",
             "name": "ModActas",
-            "summary": "",
+            "summary": "Modelo\u0020de\u0020acceso\u0020a\u0020datos\u0020y\u0020reglas\u0020de\u0020negocio\u0020para\u0020las\u0020Actas.",
             "url": "classes/ModActas.html"
         },                {
             "fqsen": "\\ModActas\u003A\u003A__construct\u0028\u0029",
@@ -493,27 +493,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ModActas\u003A\u003AobtenerAniosConActas\u0028\u0029",
             "name": "obtenerAniosConActas",
-            "summary": "",
+            "summary": "Obtiene\u0020una\u0020lista\u0020de\u0020a\u00F1os\u0020\u00FAnicos\u0020\u0028anioInicio\u0029\u0020en\u0020los\u0020que\u0020existen\u0020actas\u0020cerradas.",
             "url": "classes/ModActas.html#method_obtenerAniosConActas"
         },                {
             "fqsen": "\\ModActas\u003A\u003AlistarHistorialPorAnio\u0028\u0029",
             "name": "listarHistorialPorAnio",
-            "summary": "",
+            "summary": "Lista\u0020todas\u0020las\u0020actas\u0020cerradas\u0020correspondientes\u0020a\u0020un\u0020curso\u0020acad\u00E9mico\u0020espec\u00EDfico.",
             "url": "classes/ModActas.html#method_listarHistorialPorAnio"
         },                {
             "fqsen": "\\ModActas\u003A\u003AlistarHistorialPorProfesor\u0028\u0029",
             "name": "listarHistorialPorProfesor",
-            "summary": "",
+            "summary": "Lista\u0020el\u0020historial\u0020de\u0020actas\u0020cerradas\u0020en\u0020las\u0020que\u0020un\u0020profesor\u0020ha\u0020participado\n\u0028ya\u0020sea\u0020porque\u0020fue\u0020asistente,\u0020las\u0020redact\u00F3\u0020o\u0020las\u0020inici\u00F3\u0029.",
             "url": "classes/ModActas.html#method_listarHistorialPorProfesor"
         },                {
             "fqsen": "\\ModActas\u003A\u003AprocesarActasConNombresExternos\u0028\u0029",
             "name": "procesarActasConNombresExternos",
-            "summary": "",
+            "summary": "Procesa\u0020un\u0020listado\u0020crudo\u0020de\u0020actas\u0020y\u0020lo\u0020hidrata\u0020con\u0020nombres\u0020externos\nresolviendo\u0020IDs\u0020locales\u0020frente\u0020a\u0020la\u0020base\u0020de\u0020datos\u0020externa\u0020de\u0020profesores.",
             "url": "classes/ModActas.html#method_procesarActasConNombresExternos"
         },                {
             "fqsen": "\\ModActas\u003A\u003AobtenerConvocatoriaPendiente\u0028\u0029",
             "name": "obtenerConvocatoriaPendiente",
-            "summary": "",
+            "summary": "Obtiene\u0020la\u0020pr\u00F3xima\u0020convocatoria\u0020activa\u0020que\u0020no\u0020tiene\u0020un\u0020acta\u0020abierta\u0020o\u0020cerrada.",
             "url": "classes/ModActas.html#method_obtenerConvocatoriaPendiente"
         },                {
             "fqsen": "\\ModActas\u003A\u003AobtenerConvocatoriaPendienteRedaccion\u0028\u0029",
@@ -658,32 +658,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ModCiclos",
             "name": "ModCiclos",
-            "summary": "",
+            "summary": "Modelo\u0020de\u0020acceso\u0020a\u0020datos\u0020y\u0020reglas\u0020de\u0020negocio\u0020para\u0020los\u0020Ciclos\u0020Formativos.",
             "url": "classes/ModCiclos.html"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Constructor\u0020del\u0020modelo\u0020de\u0020ciclos\u0020formativos.",
             "url": "classes/ModCiclos.html#method___construct"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003Alistar\u0028\u0029",
             "name": "listar",
-            "summary": "",
+            "summary": "Obtiene\u0020y\u0020estructura\u0020todos\u0020los\u0020ciclos\u0020formativos\u0020agrupados\u0020por\u0020familia.",
             "url": "classes/ModCiclos.html#method_listar"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003Acrear\u0028\u0029",
             "name": "crear",
-            "summary": "Crea\u0020un\u0020ciclo\u0020formativo\u0020insertando\u0020autom\u00E1ticamente\u0020los\u0020cursos\u00201\u0020y\u00202",
+            "summary": "Crea\u0020un\u0020ciclo\u0020formativo\u0020insertando\u0020autom\u00E1ticamente\u0020los\u0020cursos\u00201\u0020y\u00202.",
             "url": "classes/ModCiclos.html#method_crear"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003AeditarCiclo\u0028\u0029",
             "name": "editarCiclo",
-            "summary": "Modifica\u0020la\u0020familia\u0020de\u0020todos\u0020los\u0020cursos\u0020que\u0020componen\u0020un\u0020ciclo\u0020\u0028CU\u00201.3\u0029",
+            "summary": "Modifica\u0020la\u0020familia\u0020de\u0020todos\u0020los\u0020cursos\u0020que\u0020componen\u0020un\u0020ciclo\u0020\u0028CU\u00201.3\u0029.",
             "url": "classes/ModCiclos.html#method_editarCiclo"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003AeliminarCiclo\u0028\u0029",
             "name": "eliminarCiclo",
-            "summary": "Elimina\u0020todos\u0020los\u0020cursos\u0020pertenecientes\u0020a\u0020un\u0020ciclo,\u0020borrando\u0020el\u0020ciclo\u0020por\u0020completo\u0020\u0028CU\u00201.4\u0029",
+            "summary": "Elimina\u0020todos\u0020los\u0020cursos\u0020pertenecientes\u0020a\u0020un\u0020ciclo\u0020\u0028CU\u00201.4\u0029.",
             "url": "classes/ModCiclos.html#method_eliminarCiclo"
         },                {
             "fqsen": "\\ModCiclos\u003A\u003A\u0024db",
@@ -923,32 +923,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\ModGrupos",
             "name": "ModGrupos",
-            "summary": "",
+            "summary": "Modelo\u0020de\u0020acceso\u0020a\u0020datos\u0020y\u0020reglas\u0020de\u0020negocio\u0020para\u0020los\u0020Grupos.",
             "url": "classes/ModGrupos.html"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Constructor\u0020del\u0020modelo\u0020de\u0020grupos.",
             "url": "classes/ModGrupos.html#method___construct"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003AlistarGrupos\u0028\u0029",
             "name": "listarGrupos",
-            "summary": "",
+            "summary": "Lista\u0020todos\u0020los\u0020grupos\u0020ordenados\u0020alfab\u00E9ticamente.",
             "url": "classes/ModGrupos.html#method_listarGrupos"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003AcrearGrupo\u0028\u0029",
             "name": "crearGrupo",
-            "summary": "",
+            "summary": "Crea\u0020un\u0020nuevo\u0020grupo\u0020insert\u00E1ndolo\u0020tambi\u00E9n\u0020como\u0020participante.",
             "url": "classes/ModGrupos.html#method_crearGrupo"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003AeditarGrupo\u0028\u0029",
             "name": "editarGrupo",
-            "summary": "",
+            "summary": "Modifica\u0020el\u0020nombre\u0020de\u0020un\u0020grupo\u0020existente.",
             "url": "classes/ModGrupos.html#method_editarGrupo"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003AeliminarGrupo\u0028\u0029",
             "name": "eliminarGrupo",
-            "summary": "",
+            "summary": "Elimina\u0020un\u0020grupo\u0020y\u0020su\u0020registro\u0020en\u0020la\u0020tabla\u0020participantes.",
             "url": "classes/ModGrupos.html#method_eliminarGrupo"
         },                {
             "fqsen": "\\ModGrupos\u003A\u003A\u0024db",
