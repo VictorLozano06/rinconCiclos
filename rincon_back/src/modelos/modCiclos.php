@@ -1,12 +1,33 @@
 <?php
-// Clase para CRUD de ciclos y cursos
+/**
+ * Modelo de acceso a datos y reglas de negocio para los Ciclos Formativos.
+ *
+ * Se encarga de la agrupación, creación y modificación en bloque de los cursos 
+ * que conforman una familia profesional o ciclo.
+ */
 class ModCiclos {
+    /**
+     * @var PDO Conexión a la base de datos principal
+     */
     private $db;
 
+    /**
+     * Constructor del modelo de ciclos formativos.
+     *
+     * @param PDO $db Instancia de la base de datos principal
+     */
     public function __construct($db) {
         $this->db = $db;
     }
 
+    /**
+     * Obtiene y estructura todos los ciclos formativos agrupados por familia.
+     *
+     * Transforma las filas SQL individuales de cursos en un DTO agrupado donde 
+     * cada ciclo aglutina sus correspondientes cursos (ej. 1º y 2º).
+     *
+     * @return array Lista de ciclos formativos agrupados y formateados
+     */
     public function listar() {
         $sql = "SELECT idCiclo, nombre, familia FROM cicloFormativo ORDER BY familia, nombre";
         $stmt = $this->db->prepare($sql);
@@ -38,7 +59,11 @@ class ModCiclos {
     }
 
     /**
-     * Crea un ciclo formativo insertando automáticamente los cursos 1 y 2
+     * Crea un ciclo formativo insertando automáticamente los cursos 1 y 2.
+     *
+     * @param string $siglas Nombre o siglas genéricas del ciclo (ej. "DAW")
+     * @param string $familia Identificador de la familia profesional asociada
+     * @return array Resultado de la operación: success o error
      */
     public function crear($siglas, $familia) {
         $sqlCheck = "SELECT COUNT(*) FROM cicloFormativo WHERE familia = :familia";
@@ -66,10 +91,12 @@ class ModCiclos {
         }
     }
 
-
-
     /**
-     * Modifica la familia de todos los cursos que componen un ciclo (CU 1.3)
+     * Modifica la familia de todos los cursos que componen un ciclo (CU 1.3).
+     *
+     * @param int $idCicloRepresentativo Identificador de cualquier curso dentro del ciclo
+     * @param string $nuevaFamilia Nueva clave de familia profesional
+     * @return array Resultado de la operación: success o error
      */
     public function editarCiclo($idCicloRepresentativo, $nuevaFamilia) {
         // Sacamos la familia antigua por el ID recibido
@@ -96,7 +123,12 @@ class ModCiclos {
     }
 
     /**
-     * Elimina todos los cursos pertenecientes a un ciclo, borrando el ciclo por completo (CU 1.4)
+     * Elimina todos los cursos pertenecientes a un ciclo (CU 1.4).
+     *
+     * Esta acción borrará el ciclo completo debido a las FK o a la lógica agrupada.
+     *
+     * @param int $idCicloRepresentativo Identificador de cualquier curso dentro del ciclo a borrar
+     * @return array Resultado de la operación: success o error
      */
     public function eliminarCiclo($idCicloRepresentativo) {
         $sqlGet = "SELECT familia FROM cicloFormativo WHERE idCiclo = :id";
@@ -117,6 +149,5 @@ class ModCiclos {
             return ["error" => "Error al eliminar el ciclo: " . $e->getMessage()];
         }
     }
-
 }
 ?>
