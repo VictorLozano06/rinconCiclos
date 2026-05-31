@@ -3,15 +3,16 @@ Sube el contenido de esta carpeta al document root del hosting.
 Estructura esperada:
 - /index.html y ficheros compilados de Angular en la raiz
 - /api/index.php para el backend
-- /acceso.php como puente de entrada por POST desde la app externa
+- /acceso.php como puente de entrada desde la app externa
 
 Puntos importantes:
-- El backend ya apunta a /api/index.php desde el frontend.
-- El archivo /api/.env va incluido y debe contener credenciales validas en hosting.
-- Si el hosting usa Apache, deja tambien el archivo /.htaccess para que las rutas de Angular funcionen.
+- El frontend compilado ya apunta al backend bajo /api.
+- El archivo /api/.env va incluido y debe tener credenciales validas en hosting.
+- El archivo /api/.user.ini incluye los limites de subida usados por recursos.
+- No se incluye /api/vendor. Si el hosting lo necesita, habra que instalar dependencias alli o subirlas aparte.
+- Si el hosting usa Apache, deja tambien /.htaccess para que las rutas de Angular funcionen.
 
 Entrada desde la app externa:
 - POST a /acceso.php
-- Puede enviar "user" o "usuario" con el JSON completo del usuario
-- O campos separados: id, nombre, apellidos, email, foto, roles[]
-- Opcional: redirect=/profesor/inicio
+- El puente reenvia a /rincon_back/acceso.php en desarrollo y a /api/acceso.php en despliegue.
+- Puede enviar token JWT o user/usuario con el JSON completo del usuario.

@@ -1,12 +1,9 @@
 RewriteEngine On
 
-# Sirve archivos y carpetas existentes sin tocar nada.
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# El backend vive bajo /api y no debe entrar en el fallback del frontend.
 RewriteRule ^api/ - [L]
 
-# Angular gestiona el resto de rutas.
 RewriteRule ^ index.html [L]

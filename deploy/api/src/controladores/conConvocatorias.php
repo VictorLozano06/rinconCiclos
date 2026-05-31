@@ -5,9 +5,14 @@ require_once MODELO . 'modConvocatorias.php';
  * Controlador HTTP para la gestión de convocatorias de reuniones.
  *
  * Expone los endpoints de lectura y escritura de convocatorias y delega la
- * lógica de negocio en {@see ModConvocatorias}. Su responsabilidad principal
- * es validar el método HTTP, leer parámetros o JSON de entrada y devolver las
- * respuestas en formato JSON usando la infraestructura de {@see ControladorBase}.
+ * lógica de negocio en {@see ModConvocatorias}. Este archivo no hace acceso a
+ * base de datos ni compone SQL: actúa como una capa fina entre HTTP y modelo.
+ *
+ * Responsabilidades principales:
+ * - validar el método HTTP esperado por cada endpoint;
+ * - leer parámetros de `$_GET` o el cuerpo JSON de entrada;
+ * - traducir errores de dominio a respuestas JSON coherentes;
+ * - mantener un contrato estable para el frontend Angular.
  */
 class ConConvocatorias extends ControladorBase {
     /**
@@ -34,6 +39,9 @@ class ConConvocatorias extends ControladorBase {
      * La respuesta incluye cursos, lugares, profesores, grupos y el curso
      * académico que debe aparecer preseleccionado en el frontend.
      *
+     * Este endpoint se consume al abrir el formulario de alta/edición y evita
+     * que Angular tenga que montar varias peticiones pequeñas en paralelo.
+     *
      * @return void
      */
     public function formulario() {
@@ -51,6 +59,10 @@ class ConConvocatorias extends ControladorBase {
      * Si el payload incluye `idConvocatoria` se interpreta como actualización.
      * En caso contrario se crea una nueva convocatoria. La respuesta mantiene
      * el mismo contrato consumido por Angular.
+     *
+     * El controlador solo valida el canal de entrada y deja al modelo la
+     * normalización profunda de la cabecera, del orden del día y de los
+     * participantes asociados a cada punto.
      *
      * @return void
      */
@@ -151,6 +163,9 @@ class ConConvocatorias extends ControladorBase {
      * Devuelve el detalle completo de una convocatoria concreta.
      *
      * Lee el identificador desde la query string bajo el parámetro `id`.
+     * El resultado no es una fila plana de base de datos: el modelo reconstruye
+     * también el `ordenDia`, los participantes y los nombres mostrables de
+     * profesorado para que el frontend pueda rellenar el formulario de edición.
      *
      * @return void
      */
@@ -180,6 +195,8 @@ class ConConvocatorias extends ControladorBase {
      * Marca una convocatoria activa concreta como pasada.
      *
      * Espera un JSON con `idConvocatoria`.
+     * Se usa como transición explícita de estado cuando una convocatoria deja
+     * de estar vigente sin necesidad de reescribir el resto de la información.
      *
      * @return void
      */
@@ -225,6 +242,9 @@ class ConConvocatorias extends ControladorBase {
      * Cancela una convocatoria activa o borrador moviéndola a estado pasado.
      *
      * Espera un JSON con `idConvocatoria`.
+     * A nivel de datos no existe un estado "cancelada" independiente: el modelo
+     * reutiliza la marca de convocatoria pasada para retirarla de los listados
+     * activos y conservarla en histórico.
      *
      * @return void
      */
@@ -255,6 +275,10 @@ class ConConvocatorias extends ControladorBase {
      * Si el método no coincide, el controlador corta la ejecución devolviendo
      * un error JSON 405.
      *
+     * Estos helpers privados documentan el patrón estándar del controlador,
+     * aunque algunos endpoints todavía validan manualmente por evolución
+     * incremental del código.
+     *
      * @param string $metodoEsperado Método HTTP permitido, por ejemplo `POST`.
      *
      * @return void
@@ -271,6 +295,7 @@ class ConConvocatorias extends ControladorBase {
      *
      * Si el cuerpo no contiene un JSON válido se devuelve un error JSON 400
      * mediante {@see ControladorBase::montarMensajes()}.
+     * Centraliza el mismo patrón de validación repetido en varios endpoints.
      *
      * @return array<string,mixed>
      */
@@ -285,6 +310,9 @@ class ConConvocatorias extends ControladorBase {
 
     /**
      * Lee y valida un parámetro entero positivo de la query string.
+     *
+     * Se usa cuando el modelo necesita un identificador simple y el endpoint no
+     * requiere más estructura que `?id=...` o parámetros equivalentes.
      *
      * @param string $nombre Nombre del parámetro esperado en `$_GET`.
      *
@@ -305,6 +333,9 @@ class ConConvocatorias extends ControladorBase {
 
     /**
      * Lee y valida un entero positivo dentro del payload JSON.
+     *
+     * Útil para acciones de cambio de estado donde el body solo contiene un
+     * identificador y no hace falta mapear un DTO más rico.
      *
      * @param string $nombre Nombre de la clave esperada dentro del payload.
      *

@@ -1,0 +1,27 @@
+<header class="app-header">
+  <div class="header-inner">
+
+    <a routerLink="/dashboard-inicio" class="header-brand">
+      <img src="assets/logo.png" alt="Logo EVG" class="header-logo">
+      <div class="header-titles">
+        <span class="header-main-title">Intranet EVG</span>
+        <span class="header-sub-title">Escuela Virgen de Guadalupe</span>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      @if (user) {
+        <img [src]="user.picture || 'assets/default-user.png'"
+             [alt]="user.name"
+             class="header-avatar"
+             referrerpolicy="no-referrer">
+        <span class="header-user-name">{{ user.name }}</span>
+      }
+      <button class="header-logout" (click)="logout()" title="Cerrar sesión">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Salir</span>
+      </button>
+    </div>
+
+  </div>
+</header>

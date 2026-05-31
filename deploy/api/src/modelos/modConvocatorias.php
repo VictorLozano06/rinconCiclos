@@ -1,6 +1,14 @@
 <?php
 /**
  * Modelo de acceso a datos y reglas de negocio de convocatorias.
+ *
+ * Este modelo concentra dos tipos de trabajo:
+ * - persistencia local de convocatorias, orden del día y participantes;
+ * - resolución de profesorado en una base externa usada como catálogo.
+ *
+ * La salida del modelo no intenta reflejar exactamente las tablas SQL, sino el
+ * DTO que necesita Angular para listar, editar y volver a guardar una
+ * convocatoria sin lógica adicional en el frontend.
  */
 class ModConvocatorias extends ConexionBD {
     /**
@@ -34,6 +42,10 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Consulta base reutilizable para listados.
      *
+     * Se comparte entre listados de activas, históricas, visibles para
+     * profesorado y listados completos. Los filtros concretos se añaden en
+     * {@see self::listarPorEstados()} para evitar duplicar joins y formato.
+     *
      * @var string
      */
     private const SQL_LISTADO_BASE = "SELECT
@@ -64,6 +76,11 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Devuelve los datos base necesarios para construir el formulario.
      *
+     * El formulario de convocatorias necesita varias fuentes heterogéneas:
+     * cursos y lugares locales, profesorado del catálogo externo y grupos de la
+     * propia aplicación. Se agrupan aquí para que Angular reciba un único DTO
+     * autocontenido al abrir la pantalla.
+     *
      * @return array<string,mixed>
      */
     public function obtenerFormulario() {
@@ -79,6 +96,15 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Crea o actualiza una convocatoria y su orden del dia en una transaccion.
      *
+     * Flujo interno:
+     * - normaliza y valida la cabecera;
+     * - normaliza y valida las líneas del orden del día;
+     * - guarda o actualiza la cabecera en `convocatoria`;
+     * - sustituye por completo el detalle en `ordenDia` y `participanteParticipa`.
+     *
+     * La transacción evita dejar convocatorias "a medias" cuando se modifica la
+     * cabecera pero falla la reescritura del detalle.
+     *
      * @param array<string,mixed> $payload
      *
      * @return array<string,mixed>
@@ -87,6 +113,7 @@ class ModConvocatorias extends ConexionBD {
         $cabecera = $this->normalizarCabecera($payload);
         $lineas = $this->normalizarOrdenDia($payload['ordenDia'] ?? []);
 
+        // Cabecera y detalle forman una única unidad lógica de escritura.
         $this->db->beginTransaction();
 
         try {
@@ -160,6 +187,11 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Recupera el detalle completo de una convocatoria.
+     *
+     * Este método recompone un objeto rico para edición:
+     * - cabecera principal de la convocatoria;
+     * - nombres legibles de profesorado aunque el dato persistido sea un id;
+     * - orden del día con participantes agrupados por punto.
      *
      * @param int $idConvocatoria
      *
@@ -272,6 +304,10 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Extrae y valida la cabecera principal del payload de convocatoria.
      *
+     * Traduce los nombres de campo que maneja Angular (`cursoId`, `lugarId`,
+     * `redactaId`, `fechaHora`, etc.) al formato interno del modelo, y además
+     * aplica reglas de dominio antes de tocar la base de datos.
+     *
      * @param array<string,mixed> $payload
      *
      * @return array<string,mixed>
@@ -307,6 +343,8 @@ class ModConvocatorias extends ConexionBD {
             throw new InvalidArgumentException('Faltan datos obligatorios de la convocatoria.');
         }
 
+        // El frontend puede enviar un formato ISO/local; aquí se unifica al
+        // formato SQL que utilizan los inserts y updates posteriores.
         $datos['fecha'] = $this->normalizarFechaHora($datos['fecha']);
         if ($this->esFechaHoraPasada($datos['fecha'])) {
             throw new InvalidArgumentException('No se puede crear o publicar una convocatoria con una fecha pasada.');
@@ -318,6 +356,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Normaliza el orden del dia recibido desde el frontend.
+     *
+     * Cada entrada del array representa un punto del orden del día. Se limpian
+     * valores vacíos, se fuerzan tipos escalares y se descartan filas
+     * completamente vacías que suelen aparecer mientras el usuario edita.
      *
      * @param mixed $ordenDia
      *
@@ -346,6 +388,8 @@ class ModConvocatorias extends ConexionBD {
                 $minutos === null &&
                 empty($participantes);
 
+            // Permite ignorar filas temporales vacías del formulario sin
+            // tratarlas como error de validación.
             if ($estaVacia) {
                 continue;
             }
@@ -382,6 +426,9 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Normaliza y deduplica los participantes de un punto del orden del dia.
+     *
+     * La clave `tipo:id` evita insertar el mismo profesor o grupo varias veces
+     * en el mismo punto, incluso si el frontend lo repite por error.
      *
      * @param mixed $participantes
      *
@@ -422,6 +469,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Inserta una cabecera nueva o actualiza una convocatoria existente.
+     *
+     * El campo `cancelada` funciona en la práctica como estado de convocatoria:
+     * `a` activa, `b` borrador y `p` pasada. El nombre de columna viene del
+     * esquema heredado, pero el modelo lo trata como una máquina de estados.
      *
      * @param array<string,mixed> $datos
      *
@@ -486,12 +537,19 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Sustituye el detalle completo de una convocatoria.
      *
+     * El detalle no se actualiza punto por punto. La estrategia es borrar el
+     * orden del día actual y volverlo a insertar entero con su numeración y sus
+     * participantes. Es más simple de mantener y evita sincronizaciones
+     * complejas entre frontend y backend.
+     *
      * @param int $idConvocatoria
      * @param array<int,array<string,mixed>> $lineas
      *
      * @return void
      */
     private function reemplazarOrdenDia($idConvocatoria, $lineas) {
+        // Se borra primero el detalle porque Angular envía el orden completo
+        // reindexado y no una lista de operaciones incrementales.
         $this->borrarOrdenDia($idConvocatoria);
 
         $stmtOrden = $this->db->prepare(
@@ -553,6 +611,9 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Elimina primero el detalle dependiente de una convocatoria.
      *
+     * El borrado respeta el orden de dependencias: primero la tabla puente de
+     * participantes y después las líneas del orden del día.
+     *
      * @param int $idConvocatoria
      *
      * @return void
@@ -569,6 +630,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Recupera el orden del dia y lo reconstruye en el DTO esperado por Angular.
+     *
+     * La base de datos guarda ids y relaciones normalizadas; este método las
+     * recompone en una estructura orientada a edición con nombre de lugar,
+     * nombre del profesor que dinamiza y lista de participantes por punto.
      *
      * @param int $idConvocatoria
      *
@@ -593,6 +658,8 @@ class ModConvocatorias extends ConexionBD {
         $stmt->execute();
         $filas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        // Los participantes se leen aparte porque su cardinalidad es 1:N por
+        // línea y el frontend los espera ya agrupados por `numOrden`.
         $participantesPorOrden = $this->obtenerParticipantesPorOrden($idConvocatoria);
         $idsProfesores = [];
         foreach ($filas as $fila) {
@@ -623,6 +690,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Reconstruye el listado de participantes agrupado por numero de orden.
+     *
+     * Para grupos el nombre sale de tablas locales. Para profesorado primero se
+     * intenta resolver el nombre contra el catálogo externo y, si no existe, se
+     * usa el fallback local o un identificador textual de reserva.
      *
      * @param int $idConvocatoria
      *
@@ -684,6 +755,10 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Convierte un conjunto de filas SQL al DTO de listado del frontend.
      *
+     * Los listados de Angular no necesitan todo el detalle del orden del día,
+     * pero sí nombres legibles de profesorado y los metadatos básicos para
+     * pintar tablas, tarjetas y filtros.
+     *
      * @param array<int,array<string,mixed>> $filas
      *
      * @return array<int,array<string,mixed>>
@@ -720,6 +795,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Ejecuta un listado reutilizando la consulta base de convocatorias.
+     *
+     * Si no se indican estados, devuelve todas las convocatorias. Cuando sí se
+     * indican, construye dinámicamente la cláusula `IN (...)` y mantiene una
+     * única ruta de formateo de salida.
      *
      * @param array<int,string>|null $estados
      * @param bool $ordenDescendente
@@ -797,6 +876,12 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Devuelve el profesorado seleccionable en la convocatoria.
      *
+     * Esta información vive en una base de datos externa distinta de la local.
+     * Se cachea en memoria durante la vida del modelo porque se reutiliza para:
+     * - rellenar el selector del formulario;
+     * - validar ids de profesorado recibidos desde Angular;
+     * - resolver nombres en listados y detalles.
+     *
      * @return array<int,array<string,int|string>>
      */
     private function obtenerProfesores() {
@@ -808,11 +893,14 @@ class ModConvocatorias extends ConexionBD {
                     p.id AS idProfesor,
                     TRIM(CONCAT_WS(' ', p.nombre, p.apellidos)) AS nombre
                 FROM personal p
-                INNER JOIN personal_roles pr ON pr.personal_id = p.id
-                INNER JOIN tm_roles r ON r.id = pr.rol_id
+                INNER JOIN profesores pf ON pf.personal_id = p.id
+                LEFT JOIN tm_clases tc ON tc.codigo = pf.clase_tutoria_codigo
                 WHERE p.activo = 1
                   AND p.tipo_personal_id = 1
-                  AND r.nombre LIKE 'profesor%'
+                  AND (
+                    pf.etapa_id = 4
+                    OR tc.etapa_id = 4
+                  )
                 ORDER BY nombre ASC, p.id ASC";
 
         $stmt = $this->dbProfesores->query($sql);
@@ -878,6 +966,9 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Verifica que las referencias de cabecera apunten a registros existentes.
+     *
+     * Aquí se valida la integridad referencial a nivel de aplicación antes de
+     * llegar a un posible error SQL menos expresivo para el frontend.
      *
      * @param array<string,mixed> $datos
      *
@@ -969,6 +1060,15 @@ class ModConvocatorias extends ConexionBD {
     /**
      * Resuelve nombres externos para un conjunto de ids.
      *
+     * Estrategia de resolución:
+     * - usa primero la cache ya cargada;
+     * - consulta la base externa `personal` para los ids que falten;
+     * - intenta un fallback local en la tabla `profesor`;
+     * - si sigue faltando información, fabrica un literal `Profesor #id`.
+     *
+     * Esto permite listar convocatorias antiguas aunque parte del profesorado
+     * ya no aparezca en el catálogo principal.
+     *
      * @param array<int,int|null> $ids
      *
      * @return array<int,string>
@@ -994,6 +1094,7 @@ class ModConvocatorias extends ConexionBD {
         }
 
         if (!empty($idsFaltantes)) {
+            // Primera fuente de verdad: catálogo externo de personal.
             $consultaIds = $this->crearConsultaIds($idsFaltantes, 'profesorId');
             $sql = "SELECT
                         p.id AS idProfesor,
@@ -1021,6 +1122,8 @@ class ModConvocatorias extends ConexionBD {
             }
 
             if (!empty($idsLocalesPendientes)) {
+                // Fallback local para datos heredados o ids que solo existan en
+                // la base propia de la aplicación.
                 $consultaIdsLocales = $this->crearConsultaIds($idsLocalesPendientes, 'profesorLocalId');
                 $sqlLocal = "SELECT
                                 p.idProfesor,
@@ -1061,6 +1164,9 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Actualiza el estado de una convocatoria si su estado actual esta permitido.
+     *
+     * Centraliza la transición de estados para evitar repetir la misma lógica
+     * en `marcarComoPasada()` y `cancelarConvocatoria()`.
      *
      * @param int $idConvocatoria
      * @param array<int,string> $estadosPermitidos
@@ -1107,6 +1213,10 @@ class ModConvocatorias extends ConexionBD {
 
     /**
      * Verifica que una convocatoria existente sigue siendo editable.
+     *
+     * Hoy la restricción de edición relevante es no modificar convocatorias
+     * pasadas. Este método concentra esa regla para que cualquier cambio futuro
+     * de negocio se aplique en un único sitio.
      *
      * @param int $idConvocatoria
      *

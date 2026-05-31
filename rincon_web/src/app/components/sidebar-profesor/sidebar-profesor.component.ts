@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { CategoriaService } from '../../services/categoria.service';
 import { CategoriaDto } from '../../dto/categoria.dto';
-import { AccesoAppService } from '../../services/acceso-app.service';
+import { AccesoAppService, UsuarioAcceso } from '../../services/acceso-app.service';
 
 /**
  * DTO visual específico del sidebar de profesor.
@@ -59,6 +59,9 @@ export class SidebarProfesorComponent implements OnInit {
    * Controla si se muestra el atajo hacia el área de coordinador.
    */
   public mostrarAccesoCoordinador = false;
+  public nombreVisible = 'Usuario';
+  public descripcionPerfil = 'Sin informacion de perfil';
+  public fotoPerfil = '';
 
   constructor(
     private categoriaService: CategoriaService,
@@ -73,6 +76,7 @@ export class SidebarProfesorComponent implements OnInit {
   ngOnInit(): void {
     this.accesoAppService.inicializarDesdeUbicacionActual();
     this.mostrarAccesoCoordinador = this.accesoAppService.puedeAccederCoordinador();
+    this.inicializarPerfil(this.accesoAppService.obtenerUsuario());
     this.obtenerCategorias();
   }
 
@@ -174,6 +178,17 @@ export class SidebarProfesorComponent implements OnInit {
 
   salir(): void {
     this.accesoAppService.salir();
+  }
+
+  private inicializarPerfil(usuario: UsuarioAcceso | null): void {
+    const nombreCompleto = [usuario?.nombre, usuario?.apellidos]
+      .map((valor) => (valor ?? '').trim())
+      .filter(Boolean)
+      .join(' ');
+
+    this.nombreVisible = nombreCompleto || usuario?.email?.trim() || 'Usuario';
+    this.descripcionPerfil = usuario?.email?.trim() || 'Perfil docente';
+    this.fotoPerfil = usuario?.foto?.trim() || '';
   }
 
   /**

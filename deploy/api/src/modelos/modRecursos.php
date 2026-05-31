@@ -1,9 +1,23 @@
 <?php
 require_once __DIR__ . '/../configuracion/conexionBD.php';
 
-// Modelo de recursos.
+/**
+ * Modelo de acceso a datos y reglas de negocio de recursos.
+ *
+ * Se encarga de:
+ * - listar recursos en distintos formatos
+ * - reconstruir enlaces, archivos y ciclos desde tablas separadas
+ * - validar formularios de creación y edición
+ * - guardar relaciones auxiliares
+ * - mover archivos desde la carpeta temporal a su destino final
+ * - borrar recursos y sus ficheros físicos asociados
+ */
 class ModRecursos extends ConexionBD {
-    // El modelo solo necesita una conexion a BD.
+    /**
+     * Inicializa el modelo usando la conexión compartida o una nueva.
+     *
+     * @param PDO|null $db Conexión PDO opcional compartida por el controlador.
+     */
     public function __construct($db = null) {
         if ($db instanceof PDO) {
             $this->conexion = $db;
@@ -12,7 +26,11 @@ class ModRecursos extends ConexionBD {
         }
     }
 
-    // Devuelve los datos base del formulario de recursos.
+    /**
+     * Devuelve los datos base necesarios para el formulario de recursos.
+     *
+     * @return array<string,mixed>
+     */
     public function obtenerFormulario() {
         return [
             'cursos' => $this->obtenerCursos(),
@@ -212,22 +230,49 @@ class ModRecursos extends ConexionBD {
     // LISTADOS Y DETALLE
     // =========================
 
+    /**
+     * Lista los recursos recientes mostrados en la portada del profesorado.
+     *
+     * @param int $limite Número máximo de recursos a devolver.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarRecientesProfesor($limite = 5) {
         // No pone filtros extra.
         // Solo usa el LIMIT para traer pocos.
         return $this->listarRecursos('', [], $limite);
     }
 
+    /**
+     * Lista todos los recursos sin filtrar por categoría.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarTodos() {
         return $this->listarRecursos();
     }
 
+    /**
+     * Lista los recursos asociados a una categoría concreta.
+     *
+     * @param int $idCategoria Identificador de la categoría.
+     *
+     * @return array<int,array<string,mixed>>
+     */
     public function listarPorCategoria($idCategoria) {
         return $this->listarRecursos(' WHERE recurso.idCategoria = :idCategoria', [
             ':idCategoria' => $idCategoria
         ]);
     }
 
+    /**
+     * Recupera el detalle completo de un recurso a partir de su clave compuesta.
+     *
+     * @param int $idCategoria Categoría del recurso.
+     * @param int $numRecurso Número del recurso dentro de la categoría.
+     *
+     * @return array<string,mixed>|null
+     */
     public function obtenerDetalle($idCategoria, $numRecurso) {
         // Reutiliza la misma consulta general pero con WHERE por clave compuesta.
         $recursos = $this->listarRecursos(
@@ -254,6 +299,13 @@ class ModRecursos extends ConexionBD {
     // 4. guardar recurso, enlaces, archivos y ciclos
     // 5. cerrar transaccion
     // 6. borrar ficheros antiguos sobrantes si era edicion
+    /**
+     * Guarda un recurso nuevo o actualiza uno ya existente.
+     *
+     * @param array<string,mixed> $json
+     *
+     * @return array<string,int|string>
+     */
     public function guardar($json) {
         $datos = $this->normalizarDatos($json);
         $esEdicion = $datos['numRecurso'] > 0;
@@ -318,6 +370,14 @@ class ModRecursos extends ConexionBD {
         }
     }
 
+    /**
+     * Elimina un recurso completo y sus archivos físicos asociados.
+     *
+     * @param int $idCategoria Categoría del recurso.
+     * @param int $numRecurso Número del recurso dentro de la categoría.
+     *
+     * @return array<string,string>
+     */
     public function eliminar($idCategoria, $numRecurso) {
         // Primero cargamos el detalle para saber si existe
         // y para quedarnos con las rutas fisicas de archivo.
